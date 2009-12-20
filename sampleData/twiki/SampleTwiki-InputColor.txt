@@ -1,0 +1,8 @@
+Sample file for color handling
+
+This text should be %RED%red%ENDCOLOR%. 
+This text should be %BLUE%blue%ENDCOLOR%. 
+This text should be %YELLOW%yellow%ENDCOLOR%. 
+This text should be %GREEN%green%ENDCOLOR%. 
+This text should be %ORANGE%orange%ENDCOLOR%. 
+

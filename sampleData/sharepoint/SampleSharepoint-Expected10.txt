@@ -1,0 +1,23 @@
+
+This is for testing backslashes
+*\1*
+*\2.99*
+_\3_
+_\4_
++\5+
+{quote}
+Sometimes we use \ backslashes.
+{quote}
+[I has \\\\?|http://www.google.com]
+{color:red}\\\\!!!{color}
+h3. \6
+h6. \7
+
+* \1
+* \2
+
+
+|| \8 || \8 ||
+| \8 | \8 |
+!http://something.com/image.jpg|alt="back \\\"!
+

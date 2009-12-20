@@ -1,0 +1,16 @@
+This is a sample page for tables containing newlines. See UWC-376
+
+{|
+|-
+!hello 
+I'm the header
+number 1 
+! I'm the
+header 2
+|-
+| line 1
+and box 1 again
+| line 1 
+and box 2
+|}
+

@@ -1,0 +1,43 @@
+#!/bin/bash
+
+echo "Headers"
+./compare.sh Headers
+echo "Lists"
+./compare.sh Lists
+echo "CleanXml"
+./compare.sh CleanXml
+echo "Bold"
+./compare.sh Bold
+echo "Under"
+./compare.sh Under
+echo "Italics"
+./compare.sh Italics
+echo "Strike"
+./compare.sh Strike
+echo "Mono"
+./compare.sh Mono
+echo "Sup"
+./compare.sh Sup
+echo "Sub"
+./compare.sh Sub
+echo "Quote"
+./compare.sh Quote
+echo "Links"
+./compare.sh Links
+echo "Tables"
+./compare.sh Tables
+echo "Images"
+./compare.sh Images
+echo "Pre"
+./compare.sh Pre
+echo "Code"
+./compare.sh Code
+echo "Warning"
+./compare.sh Warning
+echo "Anchors"
+./compare.sh Anchors
+echo "HR"
+./compare.sh HR
+echo "BackSl"
+./compare.sh BackSl
+

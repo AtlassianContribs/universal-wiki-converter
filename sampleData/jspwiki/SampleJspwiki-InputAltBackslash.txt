@@ -1,0 +1,14 @@
+This is a sample file for alt syntax with backslashes (as newlines) see UWC-342
+
+%%(color: red)
+    resolutionmanager=15.2.113.21\\
+    ZMASTER_ZIPADDR=15.2.113.21\\
+    SAP_URI=tcp://15.2.113.21:3464
+%%
+
+%%(text-decoration: underline)
+    resolutionmanager=15.2.113.21\\
+    ZMASTER_ZIPADDR=15.2.113.21\\
+    SAP_URI=tcp://15.2.113.21:3464
+%%
+

@@ -1,0 +1,6 @@
+Deals with Escaping Pipes in Tables
+
+|\|  |pipe: {{a\|b}} matches a or b |
+| Normal row | in table |
+
+After the table

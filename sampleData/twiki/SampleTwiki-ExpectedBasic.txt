@@ -1,0 +1,29 @@
+
+*Bold*
+
+{{Mono}} 
+NoBoundaries {{Mono}} 
+Boundaries {{Mono}} 
+
+{{*Bold Mono*}}
+
+_Italic_
+
+*_Bold and Italics_*
+
+\-EscapeStrike\-
+\-\-EscapeStrike--
+{{\-EscapeThisToo\-}} 
+
+
+HR
+----
+foo
+----
+bar
+----
+----
+test
+----
+LoremIpsum?
+

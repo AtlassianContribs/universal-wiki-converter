@@ -1,0 +1,119 @@
+4;#vti_parserversion:SR|12.0.0.6219 ContentType:SW|Wiki Page ContentTypeId:SW|0x010108008586D6569CB93B489CBCF8B01B47B952 vti_charset:SR|utf-8 vti_metatags:VR|CollaborationServer SharePoint\\ Team\\ Web\\ Site vti_author:SR| vti_setuppath:SX|DocumentTemplates\\wkpstd.aspx vti_cachedzones:VR|Bottom vti_cachedneedsrewrite:BR|false WikiField:SW|<div class=ExternalClass13F61637E5854FA485ACD9F1A04C8657>
+<div class=ExternalClass090DE927E8E447E79574456886B6B63A>
+<div class=ExternalClass491B02EFDD94443EAD8FEB8F9959360D>
+<div class=ExternalClassA90FCB28191447798E54AF9630A387C7>
+<div class=ExternalClass092801140FA14EFE800C1C8409FE582F>
+<div class=ExternalClass734A488FC71F4D5FB6A3D3FA9B4A7009>
+<div class=ExternalClassF6BBA484EE374A5DA714B173D61AAEDB>
+<div class=ExternalClass6326FBE3DC0E46818A48A81057351C01>
+<div class=ExternalClassD6E735C670CE45ADBE6372ED96807CF6>
+<div class=ExternalClassEC1AD7361D6D4FED8EDB2C7A447879FD>
+<div class=ExternalClass4EB764AAC83A4CF38A18128299D552AC>
+Testing 123<br>
+<br>
+<font size=5>
+Links<br>
+<font size=2>
+<a href="http://www.google.com" title="Search Engine Extraordinaire">
+Google</a>
+<br>
+<a href="#Lorem Ipsum 2">
+Lorem Ipsum 2 in page</a>
+<br>
+How are you supposed to link internally? Link UI implies http link?<br>
+<a href="/my%20test%20wiki/Test%20Page%2072.aspx">
+Test Page 72</a>
+<br>
+<a href="/my%20test%20wiki/Sharepoint%20Converter%20Links.aspx">
+Sharepoint Converter Links</a>
+<br>
+<br>
+<font size=7>
+Lorem Ipsum 1</font>
+<br>
+<br>
+</font>
+</font>
+<p>
+Lorem ipsum dolor sit amet, consectetuer\r\nadipiscing elit. Aliquam fermentum vestibulum est. Cras rhoncus.\r\nPellentesque habitant morbi tristique senectus et netus et malesuada\r\nfames ac turpis egestas. Sed quis tortor. Donec non ipsum. Mauris\r\ncondimentum, odio nec porta tristique, ante neque malesuada massa, in\r\ndignissim eros velit at tellus. Donec et risus in ligula eleifend\r\nconsectetuer. Donec volutpat eleifend augue. Integer gravida sodales\r\nleo. Nunc vehicula neque ac erat. Vivamus non nisl. Fusce ac magna.\r\nSuspendisse euismod libero eget mauris.</p>
+\r\n<p>
+Ut ligula. Maecenas consequat. Aliquam placerat. Cum sociis natoque\r\npenatibus et magnis dis parturient montes, nascetur ridiculus mus.\r\nNulla convallis. Ut quis tortor. Vestibulum a lectus at diam fermentum\r\nvehicula. Mauris sed turpis a nisl ultricies facilisis. Fusce ornare,\r\nmi vitae hendrerit eleifend, augue erat cursus nunc, a aliquam elit leo\r\nsed est. Donec eget sapien sit amet eros vehicula mollis. In\r\nsollicitudin libero in felis. Phasellus metus sem, pulvinar in, porta\r\nnec, faucibus in, ipsum. Nam a tellus. Aliquam erat volutpat.</p>
+\r\n<p>
+Sed id velit ut orci feugiat tempus. Pellentesque accumsan augue at\r\nlibero elementum vestibulum. Maecenas sit amet metus. Etiam molestie\r\nmassa sed erat. Aenean tincidunt. Mauris id eros. Quisque eu ante.\r\nFusce eu dolor. Aenean ultricies ante ut diam. Donec iaculis, pede eu\r\naliquet lobortis, wisi est dignissim diam, ut fringilla eros magna a\r\nmi. Nulla vel lorem. Donec placerat, lectus quis molestie hendrerit,\r\nante tortor pharetra risus, ac rutrum arcu odio eu tortor. In dapibus\r\nlacus nec ligula. Aenean vel metus. Nunc mattis lorem posuere felis. In\r\nvehicula tempus lacus. Phasellus arcu. Nam ut arcu. Duis eget elit id\r\neros adipiscing dignissim.</p>
+\r\n                            \r\n\r\n                            \r\n\r\n                                \r\n                                \r\n\r\n\r\n\r\n\r\n\r\n\r\n    \r\n    \r\n\r\n\r\n    \r\n    \r\n    \r\n    \r\n                                        <br>
+<font size=5>
+<font size=2>
+<br>
+<a href="#" name="Lorem Ipsum 2">
+(anchor here)<br>
+<br>
+</font>
+</font>
+<font size=5>
+<font size=2>
+<font size=7>
+Lorem Ipsum 2</font>
+<br>
+</font>
+</font>
+<p>
+Lorem ipsum dolor sit amet, consectetuer\r\nadipiscing elit. Aliquam fermentum vestibulum est. Cras rhoncus.\r\nPellentesque habitant morbi tristique senectus et netus et malesuada\r\nfames ac turpis egestas. Sed quis tortor. Donec non ipsum. Mauris\r\ncondimentum, odio nec porta tristique, ante neque malesuada massa, in\r\ndignissim eros velit at tellus. Donec et risus in ligula eleifend\r\nconsectetuer. Donec volutpat eleifend augue. Integer gravida sodales\r\nleo. Nunc vehicula neque ac erat. Vivamus non nisl. Fusce ac magna.\r\nSuspendisse euismod libero eget mauris.</p>
+\r\n<p>
+Ut ligula. Maecenas consequat. Aliquam placerat. Cum sociis natoque\r\npenatibus et magnis dis parturient montes, nascetur ridiculus mus.\r\nNulla convallis. Ut quis tortor. Vestibulum a lectus at diam fermentum\r\nvehicula. Mauris sed turpis a nisl ultricies facilisis. Fusce ornare,\r\nmi vitae hendrerit eleifend, augue erat cursus nunc, a aliquam elit leo\r\nsed est. Donec eget sapien sit amet eros vehicula mollis. In\r\nsollicitudin libero in felis. Phasellus metus sem, pulvinar in, porta\r\nnec, faucibus in, ipsum. Nam a tellus. Aliquam erat volutpat.</p>
+\r\n<p>
+Sed id velit ut orci feugiat tempus. Pellentesque accumsan augue at\r\nlibero elementum vestibulum. Maecenas sit amet metus. Etiam molestie\r\nmassa sed erat. Aenean tincidunt. Mauris id eros. Quisque eu ante.\r\nFusce eu dolor. Aenean ultricies ante ut diam. Donec iaculis, pede eu\r\naliquet lobortis, wisi est dignissim diam, ut fringilla eros magna a\r\nmi. Nulla vel lorem. Donec placerat, lectus quis molestie hendrerit,\r\nante tortor pharetra risus, ac rutrum arcu odio eu tortor. In dapibus\r\nlacus nec ligula. Aenean vel metus. Nunc mattis lorem posuere felis. In\r\nvehicula tempus lacus. Phasellus arcu. Nam ut arcu. Duis eget elit id\r\neros adipiscing dignissim.</p>
+\r\n\r\n                            \r\n\r\n                                \r\n                                \r\n\r\n\r\n\r\n\r\n\r\n\r\n    \r\n    \r\n\r\n\r\n    \r\n    \r\n    \r\n    \r\n                                        <br>
+<font size=7>
+Lorem Ipsum 3</font>
+<br>
+<br>
+<br>
+<p>
+Lorem ipsum dolor sit amet, consectetuer\r\nadipiscing elit. Aliquam fermentum vestibulum est. Cras rhoncus.\r\nPellentesque habitant morbi tristique senectus et netus et malesuada\r\nfames ac turpis egestas. Sed quis tortor. Donec non ipsum. Mauris\r\ncondimentum, odio nec porta tristique, ante neque malesuada massa, in\r\ndignissim eros velit at tellus. Donec et risus in ligula eleifend\r\nconsectetuer. Donec volutpat eleifend augue. Integer gravida sodales\r\nleo. Nunc vehicula neque ac erat. Vivamus non nisl. Fusce ac magna.\r\nSuspendisse euismod libero eget mauris.</p>
+\r\n<p>
+Ut ligula. Maecenas consequat. Aliquam placerat. Cum sociis natoque\r\npenatibus et magnis dis parturient montes, nascetur ridiculus mus.\r\nNulla convallis. Ut quis tortor. Vestibulum a lectus at diam fermentum\r\nvehicula. Mauris sed turpis a nisl ultricies facilisis. Fusce ornare,\r\nmi vitae hendrerit eleifend, augue erat cursus nunc, a aliquam elit leo\r\nsed est. Donec eget sapien sit amet eros vehicula mollis. In\r\nsollicitudin libero in felis. Phasellus metus sem, pulvinar in, porta\r\nnec, faucibus in, ipsum. Nam a tellus. Aliquam erat volutpat.</p>
+\r\n<p>
+Sed id velit ut orci feugiat tempus. Pellentesque accumsan augue at\r\nlibero elementum vestibulum. Maecenas sit amet metus. Etiam molestie\r\nmassa sed erat. Aenean tincidunt. Mauris id eros. Quisque eu ante.\r\nFusce eu dolor. Aenean ultricies ante ut diam. Donec iaculis, pede eu\r\naliquet lobortis, wisi est dignissim diam, ut fringilla eros magna a\r\nmi. Nulla vel lorem. Donec placerat, lectus quis molestie hendrerit,\r\nante tortor pharetra risus, ac rutrum arcu odio eu tortor. In dapibus\r\nlacus nec ligula. Aenean vel metus. Nunc mattis lorem posuere felis. In\r\nvehicula tempus lacus. Phasellus arcu. Nam ut arcu. Duis eget elit id\r\neros adipiscing dignissim.</p>
+<p>
+<p>
+<br>
+</p>
+\r\n\r\n                            \r\n\r\n                                \r\n                                \r\n\r\n\r\n\r\n\r\n\r\n\r\n    \r\n    \r\n\r\n\r\n    \r\n    \r\n    \r\n    \r\n                                        </div>
+</div>
+</div>
+</div>
+</div>
+\r\n<p>
+\r\nTesting Basic Syntax Syntax</p>
+<p>
+<strong>
+Bold text here</strong>
+</p>
+<p>
+<em>
+Italics here</em>
+</p>
+<p>
+<u>
+Underline</u>
+</p>
+<p>
+<u>
+<em>
+<strong>
+All of the above</strong>
+</em>
+</u>
+</p>
+<p>
+Testing annoying characters in text</p>
+<p>
+Here is a pipe | it's an important delimiter in the raw sharepoint output.<br>
+\r\n</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+ vti_modifiedby:SR|PUBLIC36\\brendanpatterson vti_cachedhastheme:BR|false 

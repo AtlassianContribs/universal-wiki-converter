@@ -1,0 +1,5 @@
+This is a sample page for handling links to pages with dots in the name as described in UWC-349
+
+*[a.link.to.a.page|SampleJspwiki-Input.WithDots]
+*[a.link.to.a.page|a.page]
+

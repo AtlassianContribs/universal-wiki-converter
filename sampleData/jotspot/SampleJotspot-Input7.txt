@@ -1,0 +1,33 @@
+<node xmlns="http://www.foopee.com/ns/s3" serialization="flat-1.0" path="/WikiHome/Sun Facts" revision="2" editTime="2006-12-07 13:44:40.814" modificationTime="2006-12-07 13:44:40.84" user="liquid" nodeId="1113" name="Sun Facts" parentNodeId="10" scopeId="0" parentScopeId="0"><content><property name="main/text" type="element"><html xmlns="http://www.w3.org/1999/xhtml" xmlns:s3="http://www.foopee.com/ns/s3/srvtmpl/"><h2>Sun Facts</h2>
+<h2><img src="/System/TmpImageUpload/270px-Sun920607.jpg" /><br /></h2>
+<ul>
+<li class="toclevel-1"><a href="http://en.wikipedia.org/wiki/Sun#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1"><a href="http://en.wikipedia.org/wiki/Sun#Life_cycle"><span class="tocnumber">2</span> <span class="toctext">Life cycle</span></a></li>
+<li class="toclevel-1"><a href="http://en.wikipedia.org/wiki/Sun#Structure"><span class="tocnumber">3</span> <span class="toctext">Structure</span></a>
+<ul>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Core"><span class="tocnumber">3.1</span> <span class="toctext">Core</span></a></li>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Radiation_zone"><span class="tocnumber">3.2</span> <span class="toctext">Radiation zone</span></a></li>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Convection_zone"><span class="tocnumber">3.3</span> <span class="toctext">Convection zone</span></a></li>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Photosphere"><span class="tocnumber">3.4</span> <span class="toctext">Photosphere</span></a></li>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Atmosphere"><span class="tocnumber">3.5</span> <span class="toctext">Atmosphere</span></a></li></ul></li>
+<li class="toclevel-1"><a href="http://en.wikipedia.org/wiki/Sun#Solar_activity"><span class="tocnumber">4</span> <span class="toctext">Solar activity</span></a>
+<ul>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Sunspots_and_the_solar_cycle"><span class="tocnumber">4.1</span> <span class="toctext">Sunspots and the solar cycle</span></a></li>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Effects_on_Earth"><span class="tocnumber">4.2</span> <span class="toctext">Effects on Earth</span></a></li></ul></li>
+<li class="toclevel-1"><a href="http://en.wikipedia.org/wiki/Sun#Theoretical_problems"><span class="tocnumber">5</span> <span class="toctext">Theoretical problems</span></a>
+<ul>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Solar_neutrino_problem"><span class="tocnumber">5.1</span> <span class="toctext">Solar neutrino problem</span></a></li>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Coronal_heating_problem"><span class="tocnumber">5.2</span> <span class="toctext">Coronal heating problem</span></a></li>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Ultraviolet_rays"><span class="tocnumber">5.3</span> <span class="toctext">Ultraviolet rays</span></a></li>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Faint_young_Sun_problem"><span class="tocnumber">5.4</span> <span class="toctext">Faint young Sun problem</span></a></li></ul></li>
+<li class="toclevel-1"><a href="http://en.wikipedia.org/wiki/Sun#Magnetic_field"><span class="tocnumber">6</span> <span class="toctext">Magnetic field</span></a></li>
+<li class="toclevel-1"><a href="http://en.wikipedia.org/wiki/Sun#History_of_solar_observation"><span class="tocnumber">7</span> <span class="toctext">History of solar observation</span></a>
+<ul>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Early_understanding_of_the_Sun"><span class="tocnumber">7.1</span> <span class="toctext">Early understanding of the Sun</span></a></li>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Development_of_modern_scientific_understanding"><span class="tocnumber">7.2</span> <span class="toctext">Development of modern scientific understanding</span></a></li>
+<li class="toclevel-2"><a href="http://en.wikipedia.org/wiki/Sun#Solar_space_missions"><span class="tocnumber">7.3</span> <span class="toctext">Solar space missions</span></a></li></ul></li>
+<li class="toclevel-1"><a href="http://en.wikipedia.org/wiki/Sun#Sun_observation_and_eye_damage"><span class="tocnumber">8</span> <span class="toctext">Sun observation and eye damage</span></a></li>
+<li class="toclevel-1"><a href="http://en.wikipedia.org/wiki/Sun#Sun_in_human_culture"><span class="tocnumber">9</span> <span class="toctext">Sun in human culture</span></a></li>
+<li class="toclevel-1"><a href="http://en.wikipedia.org/wiki/Sun#See_also"><span class="tocnumber">10</span> <span class="toctext">See also</span></a></li>
+<li class="toclevel-1"><a href="http://en.wikipedia.org/wiki/Sun#References"><span class="tocnumber">11</span> <span class="toctext">References</span></a></li>
+<li class="toclevel-1"><a href="http://en.wikipedia.org/wiki/Sun#External_links"><span class="tocnumber">12</span> <span class="toctext">External links</span></a></li></ul></html></property></content></node>

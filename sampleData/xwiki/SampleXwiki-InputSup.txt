@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<content>This sample is for testing superscript text.
+
+Superscript:
+<sup>superscript</sup>
+
+This <sup>word and a few others</sup> is in superscript.
+
+</content></xwikidoc>

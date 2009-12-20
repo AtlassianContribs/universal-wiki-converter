@@ -1,0 +1,9 @@
+This is a sample file for maintaining the params only for user and date macros:
+
+someuser
+abc@def.com
+
+2009-09-01 12:00:59 GMT
+
+_contributed by lorem@ipsum.com on 2000-01-23 04:56:59 GMT_
+

@@ -1,0 +1,5 @@
+This is for testing Interwiki linking with the WikiWikiWeb wiki
+
+wiki [does work|WikiWikiWeb:WhyWikiWorks]. 
+
+After link

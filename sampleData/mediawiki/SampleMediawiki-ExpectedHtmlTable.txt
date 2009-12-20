@@ -1,0 +1,7 @@
+This is sample page for html tables. See UWC-359.
+
+(The whitespace handling is a little weird, but displays ok in confluence)
+ | r1c1 | r1c2 |
+| r2c1 | r2c2 |
+
+

@@ -1,0 +1,10 @@
+This is a sample file for testing issues involving page names with spaces which a user is reporting is allowed. See UWC-349.
+
+* [a link to a page|SampleJspwiki-Input WithSpace]
+* [SampleJspwiki-Input WithSpace]
+* [a link to a page with (parens)|nospacepage]
+* [a link to a page with (parens)|SampleJspwiki-Input WithSpace]
+* [Client Automation 7.5|ClientAutomation7.5]
+* [Client Automation 7.2|CA 7.2]
+* [Client Automation Standard 7.21 |CAS 7.21]
+

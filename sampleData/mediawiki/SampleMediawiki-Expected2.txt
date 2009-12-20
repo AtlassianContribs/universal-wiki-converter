@@ -1,0 +1,113 @@
+Monospace 
+{{mono}}
+
+No wiki formatting
+{noformat}*No* formatting{noformat}
+
+Italicise text
+_italic_
+
+Bold text
+*bold*
+
+Bold and italic
+*_bold & italic_* 
+
+Internal link (within Wikipedia)
+[name of page]
+[display text|name of page]
+[#section in this page]
+[Section in another page|Main Page#Some Editing Resources]
+[Main Page#Some Editing Resources]
+
+
+External link (to other websites)
+[http://www.example.com]
+[display text|http://www.example.com]
+http://www.example.com
+[Secure|https://security.com]
+
+Applies only at the beginning of the line
+Headings
+of different sizes
+
+h1. Level 1
+h2. Level 2
+h3. Level 3
+h4. Level 4
+
+Bullet list
+
+* one
+* two
+** two point one
+* three
+
+Numbered list
+
+# one
+# two
+## two point one
+# three
+
+Thumbnail image
+
+!Wiki.png|thumbnail!
+
+{toc:outline=true|printable=false|style=none|indent=20px}
+
+Tables
+
+{panel:title=caption|borderStyle=dashed|borderColor=#ccc|bgColor=#fff}
+|| Header1 || Header2 || Header3 ||
+| r1c1 | r1c2 | r1c3 |
+| r2c1 | r2c2 | r2c3 |
+{panel}
+
+{panel:title=caption|borderStyle=dashed|borderColor=#ccc|bgColor=#fff}
+|| Header1 || Header2 || Header3 ||
+|| Row1 Header | r1c2 | r1c3 |
+|| Row2 Header | r2c2 | r2c3 |
+{panel}
+
+{panel:title=*An example table*|borderStyle=dashed|borderColor=#ccc|bgColor=#fff}
+|| First header || Second header ||
+| upper left | | right side |
+| lower left | lower middle |
+| _A table in a table_ |
+| !Wiki.png! | !Wiki.png! |
+| Two Wikipedia logos |
+{panel}
+
+
+
+|| Column 1 || Column 2 || Column 3 ||
+| A | B |
+| C | D |
+| E | F |
+| G | H | I |
+| J | K |
+| L |
+
+|| Service || Host || Admin || URL || Description ||
+| SVN | SourceForge | [WicketCore] | http://svn.sourceforge.net/viewvc/wicket/ | Subversion |
+| Woogle | [Frankbille] | [Frankbille] | http://woogle.billen.dk/ | Wicket search engine |
+
+Pre tags
+{code}System.out.println("This is code");{code}
+{code}This {might} have some [[Wiki syntax]]. That's ignored.{code}
+
+Code tags
+{code}Object{code}
+
+
+{panel}
+ And what does this white-space starting line mean?
+ Is this like a pre tag?
+ How does it treat [Wiki syntax]?
+{panel}
+ 
+[Help__Editing]
+Indenting is stripped out.
+Includes double indenting
+ 

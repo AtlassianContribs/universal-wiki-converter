@@ -1,0 +1,23 @@
+h1. Task List for Foo
+
+[Release calendar|Project Foo Calendar]
+
+A list of tasks we've agreed we need to do 
+
+
+
+
+|| Task || Priority || Estimate ||
+| Design | S | |
+| Write | S | |
+| Dev | M | |
+| Integration | M | |
+| Test plan | M | |
+| Test | | |
+| upgrade db | | |
+| launch planning | | |
+| PR | M | |
+| marketing | M | |
+| Set optimization | S | |
+| Quality checking | S | |
+

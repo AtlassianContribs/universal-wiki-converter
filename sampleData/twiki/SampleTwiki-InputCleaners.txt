@@ -1,0 +1,12 @@
+This is a sample page of possible 'cleaner' syntax conversions.
+
+<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">
+
+<code><!DOCTYPE html PUBLIC ...></code>
+<pre><!DOCTYPE html TEST...></pre>
+<verbatim><!DOCTYPE html TEST2...></verbatim>
+<test><!DOCTYPE html TEST3...></test>
+
+---+ Heading 1
+---++ Heading 2
+---++++++ Heading 6

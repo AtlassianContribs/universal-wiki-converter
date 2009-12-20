@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<content>This sample is for testing conversion of italics.
+
+Italics:
+~~italics~~
+
+This ~~word~~ is in italics.
+
+</content></xwikidoc>

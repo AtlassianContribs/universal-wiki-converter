@@ -1,0 +1,5 @@
+This is a sample page for handling links with extra ws:
+
+[[Photo_Research:_Copyright_before_1978 | Copyright before 1978]]
+
+

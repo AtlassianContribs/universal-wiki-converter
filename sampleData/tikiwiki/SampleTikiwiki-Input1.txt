@@ -1,0 +1,103 @@
+Monospace 
+ mono
+
+No wiki formatting
+~np~__No__ formatting~/np~
+
+Italicise text
+''italic''
+
+Bold text
+__bold__
+
+Bold and italic
+__''bold & italic''__
+
+Internal link (within Wikipedia)
+((name of page))
+((name of page|display text))
+{ALINK(aname=section in this page)}label in this page{ALINK}
+
+External link (to other websites)
+[http://www.example.com]
+[http://www.example.com|display text]
+[http://www.example.com|display text|nocache]
+[https://security.com|Secure]
+
+Applies only at the beginning of the line
+Headings
+of different sizes
+
+! Level 1
+!! Level 2
+!!! Level 3
+!!!! Level 4
+
+Bullet list
+
+* one
+* two
+** two point one
+* three
+
+Numbered list
+
+# one
+# two
+## two point one
+# three
+
+Thumbnail image
+
+{img src="img/wiki_up/hobbespounce.gif" width="200"}
+{img src=show_image.php?name=Wiki.png }
+
+^{maketoc}^
+
+Tables
+
+|| __Header1__ | __Header2__ | __Header3__ || r1c1 | r1c2 | r1c3 || r2c1 | r2c2 | r2c3 ||
+
+|| __Header1__ | __Header2__ | __Header3__ || __Row1 Header__ | r1c2 | r1c3 || __Row2 Header__ | r2c2 | r2c3 ||
+
+
+No headers:
+
+||r1c1|r1c2||r2c1|r2c2||
+
+Row and Col spans:
+
+||row1-column1|row1-column2|row1-column3||row2-columns123||row3-column1|row3-columns23||
+
+Preformatted:
+~pp~This __might__ have some ((Wiki syntax)). That's ignored.~/pp~
+
+Code:
+{CODE()}System.out.println("This is code");{CODE}
+
+
+^
+ And what does this white-space starting line mean?
+ Is this like a pre tag?
+ How does it treat ((Wiki syntax))?
+^
+
+Colored text:
+~~#FFEE33:some text~~
+
+Underlined:
+===underlined===
+
+Title bar:
+-=title=-
+
+Centered text
+::Centered::
+
+^
+Just a panel?
+^
+
+{ANAME()}section in this page{ANAME}
+
+Mostly from [http://tikiwiki.org/tiki-index.php?page=WikiSyntax|WikiSyntax]

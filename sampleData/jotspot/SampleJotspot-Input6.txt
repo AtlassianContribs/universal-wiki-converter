@@ -1,0 +1,9 @@
+<node xmlns="http://www.foopee.com/ns/s3" serialization="flat-1.0" path="/WikiHome/SunCase" revision="5" editTime="2006-12-07 14:16:28.606" modificationTime="2006-12-07 14:16:28.62" user="liquid" nodeId="1124" name="SunCase" parentNodeId="10" scopeId="0" parentScopeId="0"><content><property name="main/text" type="element"><html xmlns="http://www.w3.org/1999/xhtml" xmlns:s3="http://www.foopee.com/ns/s3/srvtmpl/"><ul>
+<li><font color="#006600">The sun....our shinier brother celestial body (test edit history).</font></li>
+<li><font color="#006600">Gives off a warm warming glow...just like TV </font>
+<ul>
+<li><font color="#006600">But not LCDs </font></li></ul></li>
+<li><font color="#000099">Is <font color="#ffcc00">yellowish </font>in color</font></li></ul>
+<hr />
+
+<p>?| <a href="wiki:///WikiHome/SunCase/SubSubPage">SubSubPage</a></p></html></property></content></node>

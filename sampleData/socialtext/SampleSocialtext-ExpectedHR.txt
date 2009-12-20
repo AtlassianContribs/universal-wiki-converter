@@ -1,0 +1,5 @@
+This is a sample file for socialtext hr syntax, which is pretty mucht the same as Confluence syntax, but we're still having a test file so that we can make sure other converters don't interfere
+
+
+----
+

@@ -1,0 +1,7 @@
+from: test@test.com
+subject: cow.jpg
+db_filename: cow.jpg
+date: 2009-08-11 12:00:00 gmt
+received: from 127.0.0.1
+content-md5: testing123==
+content-length: 1234

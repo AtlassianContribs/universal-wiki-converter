@@ -1,0 +1,9 @@
+Sample page with Table containing curly brace syntax  - see UWC-399
+
+{| border="1" cellspacing="0" cellpadding="5" align="left"
+|+ Caption in {color:red}color{color}
+! {color:blue}header1{color} !! header 2
+|- 
+| {color:green}r1c1{color} || {color:orange}r1c2{color}
+|}
+

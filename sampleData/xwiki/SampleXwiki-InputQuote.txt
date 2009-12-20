@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<content>This sample is for testing quote conversion
+
+{quote:http://www.xwiki.org}
+Here is some text with a quote
+{quote}
+
+&lt;blockquote&gt;
+Another type of quote syntax
+&lt;/blockquote&gt;
+
+</content></xwikidoc>

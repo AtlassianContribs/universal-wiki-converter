@@ -1,0 +1,31 @@
+
+h4. This is a sample file for testing socialtext header syntax
+
+h1. heading 1
+h2. heading 2
+h3. heading 3
+h4. heading 4
+h5. heading 5
+h6. heading 6
+
+h2. [With a Link]
+h2. *With Bold:*
+h2. {anchor:anchor} With Anchor
+
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+[#anchor]
+
+h4. _foo bar hrm 'testing ?_
+

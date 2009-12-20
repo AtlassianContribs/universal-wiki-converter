@@ -1,0 +1,13 @@
+Sample of a simple table
+
+|| L || C || R ||
+| A2 |  B2  |  C2 |
+| A3 |  B3  |  C3 |
+
+||L||C||R||
+| A2 |  B2  |  C2 |
+
+UWC-368
+|| Works || C || R ||
+||Nope||C||R||
+

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<content>This sample file is for testing lists.
+
+Bulleted Lists
+
+* Item 1
+** Item 2
+*** Item 3
+* Item 4
+
+Numbered Lists
+
+1. Item 1
+11. Item 2
+111. Item 3
+1. Item 4
+
+Mixed Lists
+
+1. Item 1
+1*. Item 2
+1*. Item 3
+1. Item 4
+
+* Item 1
+*1. Item 2
+*1. Item 3
+* Item 4
+
+a. Alphabetical enumerated list
+a. Alphabetical enumerated list
+
+A. Uppercase alphabetical enumerated list
+A. Uppercase alphabetical enumerated list
+
+i. Roman enumerated list
+i. Roman enumerated list
+
+I. Uppercase roman enumerated list
+I. Uppercase roman enumerated list
+
+g. Greek enumerated list
+g. Greek enumerated list
+
+h. Hirigana (jap.) enumerated list
+h. Hirigana (jap.) enumerated list
+
+k. Katakana (jap.) enumerated list
+k. Katakana (jap.) enumerated list
+
+Definition Lists
+
+<dl>
+  <dt>Term</dt>
+  <dd>Definition</dd>
+  <dt>Term 2</dt>
+  <dd>some wordy definition of wordiness.</dd>
+</dl>
+
+</content></xwikidoc>

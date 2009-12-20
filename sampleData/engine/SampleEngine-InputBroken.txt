@@ -1,0 +1,6 @@
+This sample page should break a converter in test ConverterEngineTest.testConvertPages_ErrorHandling()
+
+Testing $4 - use a regex with no 4th group to force an exception
+Or $other $/problematic $dollar $-constructs $! $_ $@
+
+

@@ -1,0 +1,36 @@
+Headers were a little annoying to control.
+
+h1. Header 1
+Some text
+
+h2. Header 2
+Tralala
+
+h3. Header 3
+Foo bar
+
+h4. Header 4
+Testing
+
+h5. Header 5
+Lorem Ipsum
+
+What about Fonts?
+Testing Courier
+Times
+Verdana
+
+and Font size?
+xxsmall
+xsmall
+small
+medium
+large
+xlarge
+xxlarge
+
+What happens when we mix and match different stuff
+{{*bold indent code*}}
+Courier xlarge
+
+

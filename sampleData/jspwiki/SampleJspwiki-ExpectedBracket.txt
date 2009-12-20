@@ -1,0 +1,6 @@
+This is a sample file to test escaping bracket literals
+
+\[testing\]
+
+{toc}\[testing\]
+

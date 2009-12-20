@@ -1,0 +1,27 @@
+%META:TOPICINFO{author="LauraKolker" date="1244476022" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICPARENT{name="Home"}%
+*Link:*
+
+(using puburl and web variables)
+[[%PUBURL%/%WEB%/SampleFooBar/cow.jpg]]
+[[%PUBURL%/Sandbox/SampleFooBar/cow.jpg]]
+
+attachurl: %ATTACHURL%
+attachurl path: %ATTACHURLPATH%
+puburl: %PUBURL%
+web: %WEB%
+
+*Inline1:*
+(with hardcoded url and params)
+http://192.168.2.104/twiki/bin/viewfile/Sandbox/SampleFooBar?rev=1;filename=cow.jpg
+
+*Inline2:*
+(with PUBURL, hand writted web)
+%PUBURL%/Sandbox/SampleFooBar/cow.jpg
+
+*Inline3:*
+(with img tag, puburl)
+<img src="%PUBURL%/Sandbox/SampleFooBar/cow.jpg" width="88" height="31" border="0" alt="logo" />
+
+*Inline 4:
+<img src="%PUBURLPATH%/Sandbox/SampleFooBar/cow.jpg" width="88" height="31" border="0" alt="logo" />

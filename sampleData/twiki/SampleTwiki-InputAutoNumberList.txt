@@ -1,0 +1,22 @@
+This is a sample for automatically choosing numbers for a twiki numbered list syntax as described in UWC-339 and here:
+http://www.the-data-mine.com/bin/view/TWiki/TextFormattingRules
+
+   1. Sushi
+   1. Dim Sum
+   1. Fondue
+
+   A. Sushi
+   A. Dim Sum
+   A. Fondue
+
+   i. Sushi
+   i. Dim Sum
+   i. Fondue
+
+   1. Provide means to allow for a configurable IUnknown.
+   a. Unsafe but fast reference counting
+   a. Thread safe reference counting via spin locks
+   a. No reference counting.
+   1. Support enumeration of factories supporting a given interface.
+   1. "Slicing" of components.
+

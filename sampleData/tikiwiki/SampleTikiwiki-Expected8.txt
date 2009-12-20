@@ -1,0 +1,7 @@
+This is to test converting and attaching image syntax that uses URLs
+
+This image is located on my local apache server
+
+!hobbespounce.gif!
+
+Does it convert and attach?

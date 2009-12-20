@@ -1,0 +1,6 @@
+*Original Poster:* [~admin]
+*Original Timestamp:* 2009-06-22 14:44:24
+
+This if for testing pages with same names
+
+{gallery:title=Attached Images}

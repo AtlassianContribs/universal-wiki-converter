@@ -1,0 +1,5 @@
+This is for testing alternate image syntax.
+1. convert syntax
+2. attach file
+
+[[Media:Wiki.png]]

@@ -1,0 +1,4 @@
+This is for testing list conversions with no whitespace
+*one
+*two
+**three

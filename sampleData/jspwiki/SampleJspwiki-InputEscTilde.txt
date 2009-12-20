@@ -1,0 +1,6 @@
+This is a sample file for tildes used as escape syntax. See UWC-402.
+
+Local location: {{~\\server\dir1\dir2\dir3}}
+
+~\\foo\bar
+

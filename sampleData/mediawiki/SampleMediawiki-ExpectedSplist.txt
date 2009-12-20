@@ -1,0 +1,8 @@
+Test file for subpagelist3 (splist) to children macro conversions
+
+sortby title - parent=SampleMediawiki-InputSplist/Test
+{children:sort=title|page=SampleMediawiki-InputSplist Test}
+
+sortby title as default param - parent=SampleMediawiki-InputSplist
+{children:sort=title|page=SampleMediawiki-InputSplist}
+

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pages>
+	<page id="1000" title="testing attributes" parentid="1234">
+		<content>
+			Testing <b>123</b>
+		</content>
+		<label>testlabel</label>
+	</page>
+</pages>

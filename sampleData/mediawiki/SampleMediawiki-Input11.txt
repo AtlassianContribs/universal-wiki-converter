@@ -1,0 +1,4 @@
+This is for testing br tags
+
+
+Line 1<br>Line 2<br/>Line 3<br />Line 4<br clear="all"/>Line 5

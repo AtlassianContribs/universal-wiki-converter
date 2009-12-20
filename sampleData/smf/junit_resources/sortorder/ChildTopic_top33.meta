@@ -1,0 +1,13 @@
+id=33
+type=top
+title=Child Board topic
+parentid=1
+parenttype=brd3
+ancestors=cat1:brd1:brd3
+time=1245692231
+userid=0
+username=Testing
+useremail=info@simplemachines.org
+attachments.location=
+attachments.name=
+attachments.delim=,

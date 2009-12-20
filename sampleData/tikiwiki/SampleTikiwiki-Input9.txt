@@ -1,0 +1,31 @@
+Date: Tue, 10 Jan 2006 20:24:55+00:00
+Mime-Version: 1.0 (Produced by Tiki)
+Content-Type: application/x-tikiwiki;
+  pagename=testPage;
+  flags="";
+  author=xxxxxxxx;
+  version=1;
+  lastmodified=1090418964;
+  author_id=xxx.xxx.xxx.xxx;
+  summary="";
+  hits=22;
+  description="";
+  charset=iso-8859-1
+Content-Transfer-Encoding: binary
+
+There will be a file here...
+
+Monospace 
+ mono
+
+No wiki formatting
+~np~__No__ formatting~/np~
+
+Italicise text
+''italic''
+
+Bold text
+__bold__
+
+Bold and italic
+

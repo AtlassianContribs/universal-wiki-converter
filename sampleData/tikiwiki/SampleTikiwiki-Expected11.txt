@@ -1,0 +1,3 @@
+download syntax: (this is a local test - change the url to your tikiwiki location)
+!cow.jpg!
+!warmdrink_sm.jpg!

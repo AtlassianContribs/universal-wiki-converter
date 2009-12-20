@@ -1,0 +1,2 @@
+{{mono}}
+This is just to test that the escaping curly braces respect beginning of the string

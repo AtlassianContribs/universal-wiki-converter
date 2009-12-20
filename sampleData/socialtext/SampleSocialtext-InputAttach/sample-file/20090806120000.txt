@@ -1,0 +1,43 @@
+Subject: SampleSocialtext-InputAttach
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+
+*Inline Images*
+{image: cow.jpg}
+{image: [pagename] cow.jpg}
+{image: workspace [pagename] cow.jpg}
+{image: Utah.png}
+
+*Size constraints*
+{image: ed.jpeg size=scaled}
+{image: ed.jpeg size=large}
+{image: ed.jpeg size=small}
+{image: ed.jpeg size=medium}
+{image: ed.jpeg size=200}
+{image: ed.jpeg size=0x10}
+
+*File links*
+{file: cow.jpg}
+{file: [pagename] cow.jpg}
+{file: workspace [pagename] cow.jpg}
+
+*Allows whitespace in filename*
+{image: double facepalm.jpg}
+{file: double facepalm.jpg}
+
+*Allows whitespace in filename, but file on system uses %20 for whitespace*
+{image: foo bar.gif}
+{file: foo bar.gif}
+
+*Alias for file links*
+"Alias"{file: cow.jpg}
+
+*Everything at once*
+"Alias"{file: workspace [pagename] double facepalm.jpg}
+{image: workspace [pagename] double facepalm.jpg size=medium}
+
+*External*
+<http://localhost:8082/download/attachments/426023/double+facepalm.jpg>
+

@@ -1,0 +1,8 @@
+Test file for subpagelist3 (splist) to children macro conversions
+
+sortby title - parent=SampleMediawiki-InputSplist/Test
+<splist parent="SampleMediawiki-InputSplist/Test" showparent="no" sort="asc" sortby="title" liststyle="unordered" showpath="no" kidsonly="yes" debug="0"></splist>
+
+sortby title as default param - parent=SampleMediawiki-InputSplist
+<splist parent="SampleMediawiki-InputSplist" showparent="no" sort="asc" liststyle="unordered" showpath="no" kidsonly="yes" debug="0"></splist>
+

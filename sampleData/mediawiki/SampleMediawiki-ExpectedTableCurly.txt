@@ -1,0 +1,7 @@
+Sample page with Table containing curly brace syntax  - see UWC-399
+
+{panel:title= Caption in color|borderStyle=dashed|borderColor=#ccc|bgColor=#fff}
+|| {color:blue}header1{color} || header 2 ||
+| {color:green}r1c1{color} | {color:orange}r1c2{color} |
+{panel}
+

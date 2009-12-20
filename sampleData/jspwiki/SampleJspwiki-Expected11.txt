@@ -1,0 +1,10 @@
+this is for testing code block conversion
+
+{code}
+---- Horizontal ruler
+\\ Forced line break
+[link] Create hyperlink to "link", where "link" can be either an internal
+                 WikiName or an external link (http://)
+{code} 
+
+after code block

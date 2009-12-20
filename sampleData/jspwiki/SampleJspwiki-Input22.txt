@@ -1,0 +1,18 @@
+This is a test case for uwc-143, attachments problem
+
+[{Image src='Wiki.png' align='center'}]
+[{Image src='ed.gif' align='center'}]
+
+UWC-332 (images with whitespace)
+[{Image src='foo0 bar.jpg'}]
+[{Image src='qc login small.JPG'}]
+[{Image src='foo+bar.jpg'}]
+[{Image src='foo2+bar.jpg'}]
+[{Image src='foo3 bar.jpg'}]
+
+UWC-346
+[a link to another page attachment|awikipage/a wiki attachment.xls]
+
+UWC-377
+[{Image src = 'Wiki.png'}]
+

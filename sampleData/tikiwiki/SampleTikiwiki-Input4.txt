@@ -1,0 +1,117 @@
+Date: Tue, 10 Jan 2006 20:24:54+00:00
+Mime-Version: 1.0 (Produced by Tiki)
+Content-Type: multipart/mixed;
+  boundary="=_multipart_boundary_158"
+
+--=_multipart_boundary_158
+Content-Type: application/x-tikiwiki;
+  pagename=MySQL;
+  flags="";
+  author=xxxxxxxx;
+  version=2;
+  lastmodified=1110392101;
+  author_id=xxxxxxxxxxxxx;
+  summary="";
+  hits=15;
+  description="";
+  charset=iso-8859-1
+Content-Transfer-Encoding: binary
+
+[http://www.mysql.com|MySQL] is an open-source RDBMS that's very easy to set up and use.  We sometimes use MySQL in the development phase of projects when we need a database we can administer ourselves because of frequent schema changes.  ((Hypersonic)) is another nice RDBMS for this purpose.  Recently, getting an ((Oracle)) instance made and administering it ourselves has become easier, so we're relying less on MySQL.
+
+-=Reference=-
+
+Here's a quick list of common MySQL commands (most of these are just plain SQL, actually).
+
+List of databases:
+   SHOW DATABASES;
+Switch to database:
+   USE dbname;
+List of tables in database:
+   SHOW TABLES;
+Table details:
+   DESCRIBE tblname;
+Create database:
+   CREATE DATABASE dbname;
+Grant privileges on database:
+   GRANT ALL ON dbname.* TO username;
+
+Add table:
+   CREATE TABLE tblname (colname type, colname type, ...);
+Remove table:
+   DROP TABLE tblname;
+
+Add column:
+   ALTER TABLE tblname ADD colname type [[NOT NULL] [[DEFAULT value];
+Remove column:
+   ALTER TABLE tblname DROP colname;
+Rename column:
+   ALTER TABLE tblname CHANGE colname newcolname (same type);
+
+Insert row:
+   INSERT tblname (colname,...) VALUES (expr,...);
+Update rows:
+   UPDATE tblname SET colname=expr, ... [[WHERE where_expr];
+Remove rows:
+   DELETE FROM tblname [[WHERE where_expr];
+
+Compare with NULL:
+   colname IS [[NOT] NULL
+
+
+--=_multipart_boundary_158
+Content-Type: application/x-tikiwiki;
+  pagename=MySQL;
+  flags="";
+  author=xxxxxxxx;
+  version=2;
+  lastmodified=1110392017;
+  author_id=xxxxxxxxxxxxx;
+  summary="";
+  description="";
+  charset=iso-8859-1
+Content-Transfer-Encoding: binary
+
+[http://www.mysql.com|MySQL] is an open-source DBMS that's very easy to set up and use.  We sometimes use MySQL in the development phase of projects when we need a database we can administer ourselves because of frequent schema changes.  Recently, getting an ((Oracle)) instance made and administering it ourselves has become easier, so we're relying less on MySQL.
+
+-=Reference=-
+
+Here's a quick list of common MySQL commands (most of these are just plain SQL, actually).
+
+List of databases:
+   SHOW DATABASES;
+Switch to database:
+   USE dbname;
+List of tables in database:
+   SHOW TABLES;
+Table details:
+   DESCRIBE tblname;
+Create database:
+   CREATE DATABASE dbname;
+Grant privileges on database:
+   GRANT ALL ON dbname.* TO username;
+
+Add table:
+   CREATE TABLE tblname (colname type, colname type, ...);
+Remove table:
+   DROP TABLE tblname;
+
+Add column:
+   ALTER TABLE tblname ADD colname type [[NOT NULL] [[DEFAULT value];
+Remove column:
+   ALTER TABLE tblname DROP colname;
+Rename column:
+   ALTER TABLE tblname CHANGE colname newcolname (same type);
+
+Insert row:
+   INSERT tblname (colname,...) VALUES (expr,...);
+Update rows:
+   UPDATE tblname SET colname=expr, ... [[WHERE where_expr];
+Remove rows:
+   DELETE FROM tblname [[WHERE where_expr];
+
+Compare with NULL:
+   colname IS [[NOT] NULL
+
+
+--=_multipart_boundary_158--

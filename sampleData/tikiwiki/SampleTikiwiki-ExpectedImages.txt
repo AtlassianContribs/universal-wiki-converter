@@ -1,0 +1,27 @@
+NOTE: For an image test to be successful, it must both
+1. Change the syntax correctly
+2. Attach the image file correctly
+
+The result of running this file through the UWC - tikiwiki converter should be
+1. two syntax conversions each (see SampleTikiwiki-ExpectedImages.txt)
+2. All unique referenced images uploaded to the new Confluence page.
+
+Uploaded Images - change testimage.png to something in that directory
+!testimage.png!
+!testimage.png!
+
+Image Gallery Images - change testimage.png to an image gallery image, and id=1 to an id in one of your image galleries
+!testimage.png!
+!Wiki.png!
+
+File Gallery Images - change fileId=1 to a file in one of your file galleries, also update URL to correct tikiwiki url
+!cow.jpg!
+!cow.jpg!
+!hobbespounce.gif!
+	
+Images from another site - just fix the image syntax and don't try to upload
+!http://localhost:8081/tikiwiki-1.9.5/images/book.gif!
+
+Problem Images - These will trigger error messages
+!badimage.gif!
+!wiki_up!

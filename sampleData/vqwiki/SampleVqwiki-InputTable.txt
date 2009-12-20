@@ -1,0 +1,12 @@
+
+####
+Abc##Def##
+GHI####
+####
+
+Problems with dollar signs UWC-385
+####
+r1c1##Testing $20 abc ##r1c3##
+r2c1##r2c2##r2c3##
+####
+

@@ -1,0 +1,7 @@
+This sample is for testing conversion of italics.
+
+Italics:
+_italics_
+
+This _word_ is in italics.
+

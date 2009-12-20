@@ -1,0 +1,37 @@
+This is sample text for tab transformations. See UWC-384
+
+before tabbed section
+
+%%tabbedSection
+%%tab-tab1
+content on tab 1
+/%
+%%tab-tab2
+content on tab 2
+/%
+/%
+
+outside of tabbed section
+
+And a second one:
+
+%%tabbedSection
+%%tab-foo
+Testing
+__123__  
+456
+/%
+%%tab-bar
+lalalaa
+/%
+
+
+%%tab-meh
+abcdef
+loremipsum
+/%
+
+/%
+
+Ok. That's it.
+

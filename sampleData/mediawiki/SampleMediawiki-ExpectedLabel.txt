@@ -1,0 +1,14 @@
+This is for testing Category -> Label conversions
+
+should create the following labels:
+
+anexamplecategory
+anexamplecategory2
+nows
+withnumbers123
+simple
+withcaps
+thislabelhascolons
+thislabelhasparens
+thislabelhasamp
+thislabelhasdot

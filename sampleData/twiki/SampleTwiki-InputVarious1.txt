@@ -1,0 +1,34 @@
+Sample problems a user was experiencing 6/16/09
+
+
+1)
+
+This:
+
+   * Lorem Ipsum
+      * lev 2
+      * abc
+      * def
+   * Lev 1
+   * ghi
+
+
+2) 
+
+Test non camelcase filename !AbcDef.xml 
+
+
+3) this:
+
+<sup>[[#foo][1]]</sup>
+
+4) this:
+
+<sup><a name="foo">1</a></sup>
+
+----
+| !Lorem-Ipsum|
+| !Lorem-Ipsum.net| 
+| !LoremIpsum123 | 
+| !LoremIpsum | 
+

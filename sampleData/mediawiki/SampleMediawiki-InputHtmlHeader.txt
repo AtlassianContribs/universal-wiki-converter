@@ -1,0 +1,10 @@
+This is a sample file for html style headers.
+
+<h2>New section</h2>
+Testing 123
+<h3>Subsection</h3>
+lorem ipsum
+<h4>Sub-subsection</h4>
+tralala
+<h3>Whitespace issues</h3><h3>More WS Issues</h3>
+

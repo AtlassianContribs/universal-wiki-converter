@@ -1,0 +1,7 @@
+This sample is for testing conversion of strikethrough text.
+
+Strike:
+-striked text-
+
+This -word- has been struck.
+

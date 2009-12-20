@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<content>This sample is for testing table conversion
+
+Simple:
+
+{table}
+Title 1 | Title 2
+Word 1 | Word 2
+{table}
+
+Has sum (we're not converting the sum):
+
+{table}
+Category | Sales (K?)
+Category 1 | 100
+Category 2 | 50
+Category 3 | 50
+Total | =sum(B2:B4)
+{table}
+
+</content></xwikidoc>

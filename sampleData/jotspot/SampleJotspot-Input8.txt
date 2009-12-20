@@ -1,0 +1,58 @@
+<node xmlns="http://www.foopee.com/ns/s3" serialization="flat-1.0" path="/WikiHome/Task List" revision="2" editTime="2006-12-07 14:07:02.172" modificationTime="2006-12-07 14:07:02.202" user="liquid" nodeId="1116" name="Task List" parentNodeId="10" scopeId="0" parentScopeId="0"><content><property name="main/text" type="element"><html xmlns="http://www.w3.org/1999/xhtml" xmlns:s3="http://www.foopee.com/ns/s3/srvtmpl/"><h1>Task List for Foo</h1>
+<p><a href="wiki:///WikiHome/Project Foo Calendar">Release calendar</a></p>
+<p>A list of tasks we've agreed we need to do </p>
+<p>
+<table border="1" cellPadding="1" cellSpacing="0" class="jot-tabular" height="96" width="767">
+<tbody>
+<tr>
+<td width="100"><b>?| Task</b></td>
+<td width="100"><b>Priority <br /></b></td>
+<td width="103">?| <b>Estimate</b></td></tr>
+<tr>
+<td width="100">Design</td>
+<td width="100">S</td>
+<td width="103">?| </td></tr>
+<tr>
+<td width="100">Write</td>
+<td width="100">S</td>
+<td width="103">?| </td></tr>
+<tr>
+<td width="100">Dev</td>
+<td width="100">M</td>
+<td width="103">?| </td></tr>
+<tr>
+<td vAlign="top">Integration</td>
+<td vAlign="top">M<br /></td>
+<td width="103">?| </td></tr>
+<tr>
+<td vAlign="top">Test plan<br /></td>
+<td vAlign="top">M<br /></td>
+<td width="103">?| </td></tr>
+<tr>
+<td>?| Test</td>
+<td>?| </td>
+<td width="103">?| </td></tr>
+<tr>
+<td>?| upgrade db</td>
+<td>?| </td>
+<td width="103">?| </td></tr>
+<tr>
+<td>?| <br />launch planning</td>
+<td>?| </td>
+<td width="103">?| </td></tr>
+<tr>
+<td vAlign="top"><br />PR</td>
+<td vAlign="top">M<br /></td>
+<td width="103">?| </td></tr>
+<tr>
+<td vAlign="top">marketing<br /></td>
+<td vAlign="top">M<br /></td>
+<td width="103">?| </td></tr>
+<tr>
+<td vAlign="top">Set optimization<br /></td>
+<td vAlign="top">S<br /></td>
+<td width="103">?| </td></tr>
+<tr>
+<td vAlign="top">Quality checking<br /></td>
+<td vAlign="top">S<br /></td>
+<td width="103">?| </td></tr></tbody></table></p></html></property></content></node>

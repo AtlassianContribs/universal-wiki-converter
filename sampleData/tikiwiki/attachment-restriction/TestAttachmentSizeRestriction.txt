@@ -1,0 +1,11 @@
+This attachment should be attached (exists and is an acceptable size):
+
+{img src="img/wiki_up/hummingbird.jpg"}
+
+This attachment should NOT be attached (too big):
+
+{img src="img/wiki_up/testsize.zip"}
+
+This attachment should NOT be attached (doesn't exist) - possible it was ignored by that Wiki Converter's attachment converter, but if an non-existent attachment makes it this far, we want to provide a useful error message:
+
+{img src="img/wiki_up/abc.gif" }

@@ -1,0 +1,10 @@
+Subject: SampleSocialtext-InputHR
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+This is a sample file for socialtext hr syntax, which is pretty mucht the same as Confluence syntax, but we're still having a test file so that we can make sure other converters don't interfere
+
+
+----
+

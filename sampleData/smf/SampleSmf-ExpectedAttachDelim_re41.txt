@@ -1,0 +1,9 @@
+*Original Poster:* [~admin]
+*Original Timestamp:* 2009-07-02 15:13:03
+
+Inline:
+!1_cow.jpg!
+Thumbnail:
+!2_cow.jpg_thumb.jpg!
+
+{gallery:title=Attached Images}

@@ -1,0 +1,17 @@
+For the purpose of testing attachment syntax
+
+Getting a file from this page?
+
+A file: [ed.jpeg]
+
+A file with an alias: [alias|ed.jpeg]
+
+How about a non-image file: [ed.txt]
+with alias: [alias|ed.txt]
+
+Another page that will reference this attachment: [AttachmentReferringPage]
+
+Inlining? could get from jspwiki.properties, or just guess
+
+[alias|Wiki.png]\\
+[hummingbird.jpg]\\

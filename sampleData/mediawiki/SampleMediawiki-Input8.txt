@@ -1,0 +1,9 @@
+image syntax that does not appear to be being converted
+
+uwc-100: attachment converter for mediawiki images is case sensitive when the syntax isn't
+[[Image:Wiki.png]]
+[[Image:wiki.png]]
+
+uwc-101: Mediawiki image conversion syntax needs to be case insensitive
+[[image:Wiki.png]]
+[[Image:Wiki.png]]

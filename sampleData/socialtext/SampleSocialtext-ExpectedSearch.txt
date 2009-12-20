@@ -1,0 +1,18 @@
+Test page for the search macro
+
+*search with a keyword*
+{search: keyword}
+
+*search with a tag*
+{contentbylabel:labels=category}
+{contentbylabel:labels=loremipsum}
+{contentbylabel:labels="something"}
+
+*search with booleans and tags*
+{contentbylabel:labels=+foo,+bar}
+{contentbylabel:labels=+abc,+def}
+{contentbylabel:labels=abc,def}
+
+*search with whitespace*
+{contentbylabel:labels=+foo,+loremipsum}
+

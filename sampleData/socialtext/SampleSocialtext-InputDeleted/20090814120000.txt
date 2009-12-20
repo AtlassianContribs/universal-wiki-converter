@@ -1,0 +1,8 @@
+Control: Deleted
+Subject: SampleSocialtext-InputDeleted
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+
+This file should be filtered out.

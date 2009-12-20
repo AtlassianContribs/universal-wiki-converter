@@ -1,0 +1,11 @@
+This sample is for testing quote conversion
+
+{quote}
+Here is some text with a quote
+[Source|http://www.xwiki.org]
+{quote}
+
+{quote}
+Another type of quote syntax
+{quote}
+

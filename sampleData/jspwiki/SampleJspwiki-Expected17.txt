@@ -1,0 +1,10 @@
+This is for testing recently updated plugin conversion
+
+{recently-updated}
+
+And with options:
+
+{recently-updated}
+
+After plugin
+

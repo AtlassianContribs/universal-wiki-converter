@@ -1,0 +1,9 @@
+Sample file for links with windows style file link - see uwc-358
+
+[file://c:/foo/bar.txt]
+
+* [DSP Track Attributes |file://Filesrv11/public/09_Projects/9.1_Active/DSP_Track_Attributes/DSP_Track_Attributes_Project_Workbook.xls]
+* [Content Initiatives 2007/2008 |file://Filesrv11/public/09_Projects/9.1_Active/2007_Content_Initiative/2007_Content_Initiative_Project_Workbook.xls]
+* [Music Enrichment 2.5.1 |file://FILESRV11/PUBLIC/09_Projects/9.1_Active/Music_Enrichment/ME_Project_Workbook.xls]
+* [Device 2.5.1 |file://FILESRV11/PUBLIC/09_Projects/9.1_Active/Device/Device_2.5/Device_2.5_Project_Workbook.xls]
+

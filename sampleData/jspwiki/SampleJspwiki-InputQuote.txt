@@ -1,0 +1,9 @@
+This is a sample file for quote blocks - as described in UWC-333
+
+%%quote 
+quoted text
+more quoted text
+
+even more
+/%
+

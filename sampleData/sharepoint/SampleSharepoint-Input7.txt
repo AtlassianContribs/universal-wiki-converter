@@ -1,0 +1,7 @@
+5;#vti_parserversion:SR|12.0.0.6219 ContentType:SW|Wiki Page ContentTypeId:SW|0x010108008586D6569CB93B489CBCF8B01B47B952 vti_metatags:VR|CollaborationServer SharePoint\\ Team\\ Web\\ Site vti_charset:SR|utf-8 vti_author:SR| vti_setuppath:SX|DocumentTemplates\\wkpstd.aspx vti_cachedzones:VR|Bottom vti_cachedneedsrewrite:BR|false WikiField:SW|<div class="ms-wikicontent"><div class=ExternalClass6401589625F24EB681A45DBE6B1A1B3E><p class=ExternalClassCCAFF3FAA0E340529C5A6A3E0B18184B><font face=Arial><strong><em>xxxxxx<br></em></strong>xxxxxx</font></p>
+<p class=ExternalClassCCAFF3FAA0E340529C5A6A3E0B18184B><font face=Arial><u><strong>xxxxxx<br></strong></u>xxxxxx</font></p>
+<p class=ExternalClassCCAFF3FAA0E340529C5A6A3E0B18184B><font face=Arial><em><u>xxxxxx<br></u></em>xxxxxx</font></p> 
+<ul><li><strong>abc</strong></li>
+<li><ul><li><strong>def</strong></li></ul></li>
+</ul> vti_modifiedby:SR|PUBLIC36\\brendanpatterson</div></div> vti_cachedhastheme:BR|false 
+

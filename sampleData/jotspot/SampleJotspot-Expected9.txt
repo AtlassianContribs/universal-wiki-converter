@@ -1,0 +1,84 @@
+Here's some plain text
+
+*Here's some bold text*
+
+_italicize with tildas!_
+
+{{fixed font}}
+
+-strike out that old text-
+
+h3. Header 1
+h2. Header 2
+h1. Header 3
+Horizontal Rule:
+
+
+----
+
+A different Horizontal Rule:
+
+
+----
+
+Unordered List:
+
+
+*  One
+*  Two
+**  Two Point Five
+Ordered List:
+
+
+#  One
+#  Two
+##  Two Point Five
+#  Three
+Without Three spaces, no list:
+
+\* not a list
+
+1 Just a one
+
+Combined List:
+
+
+*  One
+*  Confusing
+*  Nesting
+*  Two
+But what about?
+
+
+*  One
+*#  Confusing
+*#  Nesting
+*  Two
+Or even?
+
+
+*  One
+*#  Confusing
+*  Nesting
+*  Two
+
+Tables
+
+| a | b | c |
+| 1 | 2 | 3 |
+| A | B | C |
+
+
+Links:
+
+[SunCase]
+
+[Sun Facts]
+
+[Google|http://www.google.com]
+
+[me@abc.com|mailto:me@abc.com]
+
+[http://www.google.com]
+
+

@@ -1,0 +1,1 @@
+This file's filename has chars that should be decoded when the illegal names handling framework gets it.

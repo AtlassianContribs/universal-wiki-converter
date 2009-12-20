@@ -1,0 +1,5 @@
+
+Alternate Monospace Syntax:
+
+-+Should Be Monospace+-
+

@@ -1,0 +1,5 @@
+This is a sample for handling attachments, including edge cases such as UWC-286
+
+	*  Testing
+		*  [[%ATTACHURL%/2007-OS-sybase-testing-matrix.xls][2007 OS/Sybase Testing Spreadsheet]]
+

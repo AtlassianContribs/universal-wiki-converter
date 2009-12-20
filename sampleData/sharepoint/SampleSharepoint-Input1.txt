@@ -1,0 +1,4 @@
+5;#vti_parserversion:SR|12.0.0.6219 ContentType:SW|Wiki Page ContentTypeId:SW|0x010108008586D6569CB93B489CBCF8B01B47B952 vti_metatags:VR|CollaborationServer SharePoint\\ Team\\ Web\\ Site vti_charset:SR|utf-8 vti_author:SR| vti_setuppath:SX|DocumentTemplates\\wkpstd.aspx vti_cachedzones:VR|Bottom vti_cachedneedsrewrite:BR|false WikiField:SW|<div class=ExternalClass14E9F8AB519A470B995C8046769BE7FC><div class=ExternalClass03BFEACBDD2F4A61A6DF16469ED01B1D><div class=ExternalClass9831F41C1D6B425D9281846617F46F8B>For Link Testing. We're going to link to this from <a href="/test%20wiki/How%20To%20Use%20This%20Wiki%20Library.aspx">another page</a>. <br>
+<br>Here's an <a href="/Shared%20Documents/certmemo.pdf">attachment</a>
+<br>And apparently, there's an internal link syntax too: [[Home]]
+</div></div></div> vti_modifiedby:SR|PUBLIC36\\brendanpatterson vti_cachedhastheme:BR|false 

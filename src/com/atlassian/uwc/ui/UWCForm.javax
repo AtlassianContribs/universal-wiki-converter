@@ -1,0 +1,352 @@
+package com.atlassian.uwc.ui;
+
+import org.apache.log4j.Logger;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import static java.util.Collections.sort;
+
+import com.atlassian.uwc.util.PropertyFileManager;
+import com.atlassian.uwc.util.BareBonesBrowserLaunch;
+
+/**
+ * This is the main form for the UWC application. It can be accessed
+ * via a Singleton getter.
+ */
+public class UWCForm {
+    protected JButton includeConverterButton;
+    protected JButton chooseWikiButton;
+    protected JButton removePagesButton;
+    protected JButton excludeConverterButton;
+    protected JList engineSelectedConvertersJList;
+    protected JList pageFileJList;
+    protected JButton sendToConfluenceButton;
+    protected JButton confluenceExportSettingsButton;
+    protected JButton organizeWiki;
+    protected JButton testRegExFrame;
+    protected JButton helpButton;
+    protected JButton attachmentsButton;
+    protected JPanel mainPanel;
+    protected JScrollPane pageFileListScrollPane;
+    protected JScrollPane convertersScrollPane;
+    protected DefaultListModel engineSelectedConvertersListModel;
+
+    Properties converterProperties = null;
+    protected ArrayList<File> pageList = new ArrayList<File>();
+    protected ArrayList<String> engineSelectedConverterList = new ArrayList<String>();
+    Logger log = Logger.getLogger("UWCForm");
+    protected ConverterListForm converterListForm = new ConverterListForm(this);
+    protected RegExTestTool regExTestToolForm = new RegExTestTool(this);
+    protected HierarchyTool hierarchyToolForm = new HierarchyTool(this);
+
+    TreeMap<String, String> allConverters = new TreeMap<String, String>();
+    HashMap activeConverters = new HashMap();
+    static JFrame converterListFrame = null;
+    static JFrame regExTestToolFrame = null;
+    static JFrame hierarchyToolFrame = null;
+
+    public final static String converterPropFileLoc = "conf" + File.separator + "converter.properties";
+
+    protected ConverterEngine converterEngine = new ConverterEngine();
+    protected ConfluenceSettingsForm confluenceSettingsForm = new ConfluenceSettingsForm();
+    protected ChooseWikiForm chooseWikiForm = new ChooseWikiForm();
+    protected JFrame mainFrame = new JFrame("Universal Wiki Converter");
+    private File currentChooserPageDir = null;
+
+    public ConfluenceSettingsForm getConfluenceSettingsForm() {
+        return confluenceSettingsForm;
+    }
+
+    public ConverterEngine getConverterEngine() {
+        return converterEngine;
+    }
+
+    /**
+     * main method which of course
+     * starts up the app. Also instantiaties the main form and some other stuff
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        UWCForm form = UWCForm.getInstance();
+        form.init();
+        form.mainFrame.setContentPane(form.mainPanel);
+
+        form.mainFrame.pack();
+        form.mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        form.mainFrame.setVisible(true);
+
+        converterListFrame = new JFrame("Converter List");
+        converterListFrame.setContentPane(form.converterListForm.converterListPanel);
+        converterListFrame.pack();
+        converterListFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+        regExTestToolFrame = new JFrame("Regular Expression Test Tool");
+        regExTestToolFrame.setContentPane(form.regExTestToolForm.regExTestToolPanel);
+        regExTestToolFrame.pack();
+        regExTestToolFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+	hierarchyToolFrame = new JFrame("Hierarchy Tool");
+	hierarchyToolFrame.setContentPane(form.hierarchyToolForm.hierarchyToolPanel);
+	hierarchyToolFrame.pack();
+        hierarchyToolFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+    }
+
+    private static UWCForm instance = null;
+
+    /**
+     * singleton getter for this class
+     *
+     * @return
+     */
+    public static UWCForm getInstance() {
+        if (instance == null) {
+            instance = new UWCForm();
+        }
+        return instance;
+    }
+
+    protected UWCForm() {
+    }
+
+    /**
+     * initialize stuff
+     */
+    protected void init() {
+        // create button listeners
+        createActionListeners();
+        readInConverterPropFile();
+
+        populateAllConverterList();
+        confluenceSettingsForm.populateConfluenceSettings();
+        chooseWikiForm.init();
+
+        // set up the engineSelectedConverterList with a converterListModel so elements can be added and removed
+        engineSelectedConvertersListModel = new DefaultListModel();
+        engineSelectedConvertersJList.setModel(engineSelectedConvertersListModel);
+        currentChooserPageDir = getCurrentChooserPageDir();
+    }
+
+    /**
+     * gets the directory which the 'page chooser' JFileChooser should
+     * be set to when it is popped open. This is very nice to know
+     * because otherwise it always defaults to your home dir. which
+     * can be annoying to say the least.
+     *
+     * @return
+     */
+    private File getCurrentChooserPageDir() {
+        String currentPageChooseDirStr = confluenceSettingsForm.getCurrentPageChooserDir();
+        if (currentPageChooseDirStr == null) return null;
+        return new File(currentPageChooseDirStr);
+    }
+
+
+    /**
+     * This method populates the list of all converters presented on the 'ConvertersListForm'
+     */
+    protected void populateAllConverterList() {
+        // local pointer to the list converterListModel
+        DefaultListModel converterListModel = converterListForm.converterListModel;
+        converterListForm.converterList.setModel(converterListModel);
+        converterListForm.converterList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+        converterListModel.removeAllElements();
+        // @todo - sorting for a List....FNI
+        ArrayList<String> tempList = new ArrayList<String>(allConverters.keySet());
+        sort(tempList);
+
+        Iterator<String> keys = tempList.iterator();
+
+        while (keys.hasNext()) {
+            String key = keys.next();
+            String value = allConverters.get(key);
+            //tempConverters.add(key+"="+value);
+            converterListModel.addElement(key + "=" + value);
+        }
+        //converterListForm.engineSelectedConverterList = new JList(tempConverters.toArray());
+        converterListForm.converterListScrollPane.getViewport().setView(converterListForm.converterList);
+        converterListForm.converterList.revalidate();
+        converterListForm.converterListScrollPane.revalidate();
+    }
+
+    protected void readInConverterPropFile() {
+        // clear out list
+        allConverters.clear();
+        try {
+            allConverters = PropertyFileManager.loadPropertiesFile(converterPropFileLoc);
+        } catch (IOException e) {
+            log.error("IO Exception " + e);
+        }
+    }
+
+    /**
+     * set up the action listeners for all the form elements. I can't believe IDEA doens't
+     * generate this stuff for you.
+     */
+    protected void createActionListeners() {
+        includePagesButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                addWikiPages(mainPanel);
+            }
+
+        });
+
+        includeConverterButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                readInConverterPropFile();
+                populateAllConverterList();
+                converterListFrame.setVisible(true);
+            }
+        });
+        chooseWikiButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // launch choose wiki list
+                chooseWikiForm.populateList();
+                chooseWikiForm.chooseWikiDialogue.setVisible(true);
+
+            }
+        });
+        removePagesButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                removePagesFromList();
+            }
+        });
+        excludeConverterButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // excludeConvertersButton button pressed
+                removeConvertersFromEngineList();
+            }
+        });
+        sendToConfluenceButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                final SwingWorker worker = new SwingWorker() {
+                    public Object construct() {
+//                        converterEngine.processPages(UWCForm2.this);
+                        return null;
+                    }
+                };
+                worker.start();  //required for SwingWorker 3
+            }
+        });
+        confluenceExportSettingsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                confluenceSettingsForm.confluenceSettingsDialogue.setVisible(true);
+            }
+        });
+        organizeWiki.addActionListener(new ActionListener() {
+	            public void actionPerformed(ActionEvent e) {
+	            	hierarchyToolFrame.setVisible(true);
+	            }
+        });
+        testRegExFrame.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                regExTestToolFrame.setVisible(true);
+            }
+        });
+        helpButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                BareBonesBrowserLaunch.openURL("http://confluence.atlassian.com/display/CONFEXT/UWC+Documentation");
+            }
+        });
+        attachmentsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // includePagesButton button pressed
+            }
+        });
+    }
+
+    /**
+     * Add selected pages to the page file list
+     *
+     * @param parent
+     */
+    protected void addWikiPages(JComponent parent) {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setMultiSelectionEnabled(true);
+        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        if (currentChooserPageDir != null) chooser.setCurrentDirectory(currentChooserPageDir);
+        int returnVal = chooser.showOpenDialog(parent);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File[] files = chooser.getSelectedFiles();
+            for (File file : files) {
+                pageList.add(file);
+            }
+            pageFileJList = new JList(pageList.toArray());
+            pageFileListScrollPane.getViewport().setView(pageFileJList);
+            pageFileListScrollPane.getViewport().setViewPosition(new Point(500, 0));
+        }
+        // persist the last directory choosen.....this was driving me crazy before.
+        currentChooserPageDir = chooser.getCurrentDirectory();
+        confluenceSettingsForm.setCurrentPageChooserDir(currentChooserPageDir.getPath());
+        confluenceSettingsForm.serializeOutConfluenceSettings();
+    }
+
+    /**
+     * remove pages button removes the selected pages from the list
+     */
+    protected void removePagesFromList() {
+        Object[] files = pageFileJList.getSelectedValues();
+        for (Object file : files) {
+            pageList.remove(file);
+        }
+        pageFileJList = new JList(pageList.toArray());
+        pageFileListScrollPane.getViewport().setView(pageFileJList);
+        pageFileListScrollPane.getViewport().setViewPosition(new Point(500, 0));
+    }
+
+    protected JButton includePagesButton;
+
+    /**
+     * send updated converter list to the converter.properties file
+     */
+    protected void serializeOutConverterPropFile() {
+        try {
+            PropertyFileManager.storePropertiesFile(allConverters, converterPropFileLoc);
+        } catch (IOException e) {
+            log.error("could not write file: " + converterPropFileLoc);
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+    }
+
+    public void updateConverterListModel() {
+        engineSelectedConvertersListModel.removeAllElements();
+        for (String s : engineSelectedConverterList) {
+            engineSelectedConvertersListModel.addElement(s);
+        }
+        engineSelectedConvertersJList.revalidate();
+        convertersScrollPane.revalidate();
+
+    }
+
+    protected void removeConvertersFromEngineList() {
+        Object toRemove[] = engineSelectedConvertersJList.getSelectedValues();
+        engineSelectedConverterList.removeAll(engineSelectedConverterList);
+        for (Object o : toRemove) {
+            // @todo - should be able to more easily moving data between lists and list models - FNI
+            engineSelectedConvertersListModel.removeElement(o);
+        }
+        // sooo messy but we need to synch the List back up with the converterListModel
+        int size = engineSelectedConvertersListModel.getSize();
+        for (int i = 0; i < size; i++) {
+            engineSelectedConverterList.add(engineSelectedConvertersListModel.get(i).toString());
+        }
+
+        engineSelectedConvertersJList.revalidate();
+        convertersScrollPane.revalidate();
+    }
+
+    /**
+     * launch the choose wiki list
+     */
+    protected void launchChooseWiki() {
+    }
+
+
+}

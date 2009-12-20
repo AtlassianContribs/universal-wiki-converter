@@ -1,0 +1,3 @@
+download syntax: (this is a local test - change the url to your tikiwiki location)
+{img src=tiki-download_file.php?fileId=1 }
+{img src=http://localhost:8081/tikiwiki-1.9.5/tiki-download_file.php?fileId=2}

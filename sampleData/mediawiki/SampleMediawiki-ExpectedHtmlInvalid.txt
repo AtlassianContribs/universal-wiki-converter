@@ -1,0 +1,4 @@
+This is a sample for testing what happens when the mediawiki text
+has invalid html in it This single line entity has no closing
+forward slash. It needs to be tidied. 
+----

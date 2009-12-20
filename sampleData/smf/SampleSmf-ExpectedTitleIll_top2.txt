@@ -1,0 +1,6 @@
+*Original Poster:* [~admin]
+*Original Timestamp:* 2009-06-22 17:08:56
+
+This is a sample page for testing how the SMF Converter deals with pages that have illegal chars in the title. (title is defined in meta file).
+
+{gallery:title=Attached Images}

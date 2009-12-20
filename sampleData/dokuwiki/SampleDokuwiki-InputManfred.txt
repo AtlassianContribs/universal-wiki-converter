@@ -1,0 +1,77 @@
+===== Test Page =====
+This is a page containing Dokuwiki syntax - it may be used in order to check proper conversion from Dokuwiki to Confluence using atlassian's UWC.
+
+Additional to the 'core' syntax of Dokuwiki, this page also contains syntax code of common plug-ins and dokuwiki extensions.
+If one does not use those plug-ins, the regarding code snippets just may be removed.
+
+=== Lists ===
+
+== Unsorted Lists ==
+  * unsorted 1
+  * unsorted 1
+  * unsorted 1
+
+== Sorted Lists ==
+  - sorted 1
+  - sorted 2
+  - sorted 3
+
+=== Links ===
+  * german Wikipedia link: [[wpde>Ant]]
+  * german Wikipedia link with alias: [[wpde>Ant|Ant Tool]]
+  * english Wikipedia link: [[wp>Ant]]
+  * general link: [[http://www.atlassian.com/|Atlassian's Homepage]]
+
+=== Notes & Co. ===
+<note>text</note>
+
+<note>
+  * a link: [[http://www.atlassian.com/|Atlassian's Homepage]]
+  * just plain text
+</note>
+
+
+<note important>
+  * a link: [[http://www.atlassian.com/|Atlassian's Homepage]]
+  * just plain text
+</note>
+
+<note warning>
+  * a link: [[http://www.atlassian.com/|Atlassian's Homepage]]
+  * just plain text
+</note>
+
+<note tip>
+  * a link: [[http://www.atlassian.com/|Atlassian's Homepage]]
+  * just plain text
+</note>
+
+=== Code Sections ===
+
+<code>Class.forName()</code>
+
+<code>
+Class.forName()
+Class.forName()
+Class.forName()
+</code>
+
+<code java>
+Class.forName()
+Class.forName()
+Class.forName()
+</code>
+
+=== Misc Formatting elements ===
+
+Clear line break:
+~~CL~~
+
+Some explicit new lines:
+\\ \\ \\ 
+\\ 
+
+This is a text that is annotated with a tooltip((this is a tooltip))
+
+
+

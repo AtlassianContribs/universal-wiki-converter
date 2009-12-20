@@ -1,0 +1,34 @@
+Sample problems a user was experiencing 6/16/09
+
+
+1\)
+
+This:
+
+* Lorem Ipsum
+** lev 2
+** abc
+** def
+* Lev 1
+* ghi
+
+
+2\) 
+
+Test non camelcase filename {nl}AbcDef.xml{nl} 
+
+
+3\) this:
+
+{html}<sup>{html}[1|#foo]{html}</sup>{html}
+
+4\) this:
+
+{html}<sup>{html}{anchor:foo}1{html}</sup>{html}
+
+----
+| !Lorem-Ipsum|
+| !Lorem-Ipsum.net| 
+| {nl}LoremIpsum123{nl} | 
+| {nl}LoremIpsum{nl} | 
+

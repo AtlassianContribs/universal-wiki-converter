@@ -1,0 +1,12 @@
+This is a sample file for variations on the code tags conversion. See also: UWc-414
+
+<code>
+123
+</code>
+
+<code>
+ leading spaces
+</code>
+
+ leading spaces with no code macro
+

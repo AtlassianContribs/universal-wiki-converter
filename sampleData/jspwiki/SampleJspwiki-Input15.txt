@@ -1,0 +1,13 @@
+This is for testing table of contents plugin conversion
+
+[{TableOfContents}]
+
+After TOC
+
+UWC-355:
+
+[{TableOfContents}]
+[{TableOfContents }]
+[{ TableOfContents }]
+[{    TableOfContents    }]
+

@@ -1,0 +1,1 @@
+Inline:<br />[img]http://localhost:8081/SMF/index.php?action=dlattach;topic=6.0;attach=1;image[/img]<br />Thumbnail:<br />[img]http://localhost:8081/SMF/index.php?action=dlattach;topic=6.0;attach=2;image[/img]

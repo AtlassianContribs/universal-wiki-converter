@@ -1,0 +1,4 @@
+This is a sample file for file link syntax
+
+[file://myserver/hiddenshare$/folder]
+

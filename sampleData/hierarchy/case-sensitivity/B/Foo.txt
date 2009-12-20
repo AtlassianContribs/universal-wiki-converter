@@ -1,0 +1,3 @@
+This is for testing case sensitivity.
+
+This file was titled "Foo.txt" originally and was in the 'B' directory.

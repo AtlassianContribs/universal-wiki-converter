@@ -1,0 +1,33 @@
+This is a sample page for html syntax
+http://abc.com/something.html
+
+{html}
+<iframe src="http://localhost:8082/dashboard.action" scrolling = "auto" width=800 height=600>
+your browser does not support inline frames </iframe>
+{html}
+
+{html}
+<b>bold</b>
+<br/>
+newline then <i>italic</i>
+{html}
+
+{html}
+<FORM>
+<Strong>Testing</Strong>
+<INPUT TYPE="button" VALUE="Foo Bar" onClick="dosomething('')">
+<FORM>
+<br>
+<br>
+{html}
+
+{html}
+<script type="text/javascript">
+jQuery('abc').css({backgroundColor: '#000000'});
+</script>
+{html}
+
+{html}
+<span style="color:#ff0000;">RED</span><br>
+{html}
+

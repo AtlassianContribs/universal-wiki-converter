@@ -1,0 +1,11 @@
+This is for testing lists with no whitespace, and with links or macros following
+
+*a
+#b
+*ab
+#ab
+*[link]
+#[http://www.google.com]
+*[[link|link]]
+#makro:something
+*makro:something

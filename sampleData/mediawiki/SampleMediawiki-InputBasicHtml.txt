@@ -1,0 +1,33 @@
+This sample file contains a mixture of mediawiki syntax and html syntax
+
+
+Bold text
+'''bold mediawiki'''
+<b>bold html</b>
+<strong>strong html</strong>
+
+Italicise text
+''italic mediawiki''
+<i>italic html</i>
+<em>emphasis</em>
+
+Bold and italic
+'''''bold and italic mediawiki''''' 
+<b><i>bold and ital html</i></b>
+<i>bold and <b>ital html</b></i>
+<b>bold and <em>emphasized</em> html</b>
+<strong>strong <em>and emphasized</em> html</strong>
+
+Handle raw & characters.
+Ignore proper &amp; &lt; &#34; entities.
+
+Monospace 
+<tt>mono</tt>
+
+Underline
+<u>underlined html</u>
+
+Horizontal Rule
+<hr/>
+Foobar
+

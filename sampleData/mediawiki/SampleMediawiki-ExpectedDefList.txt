@@ -1,0 +1,28 @@
+This sample file is to test converting definition lists
+
+From Mediawiki's Help Editing pages:
+
+* Definition
+Simple
+
+* Word
+Definition of the word
+* A longer phrase needing definition
+Phrase defined
+* A word
+Which has a definition
+Also a second one
+even a third
+
+* Definition
+list1
+list2
+list3
+list4
+
+* Definition
+list5
+list6
+list7
+list8
+

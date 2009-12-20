@@ -1,0 +1,111 @@
+BR Macro
+One line[[BR]]Another Line
+
+Escaped WikiNames
+Wiki``Name
+Wiki''''''Name
+
+External Links
+Some external http link:[http://jira.atlassian.com/browse/DMI-39 DMI-39].
+Some external http link with space:[http://jira.atlassian.com/browse/DMI-39 DMI 39].
+Some external ftp link:[ftp://jira.atlassian.com/browse/DMI-39 DMI-39].
+Some external file link:[file://c:\boot.ini boot.ini].
+[http://b c] and [ftp://B C].
+
+Attachment
+[attachment:BetterBuildsWithMaven.pdf Better Builds with Maven] is a free e-book that is a "must have been read" for any person using Maven.
+
+WikiName Links (UTF-8 encoded)
+AnotherWikiName
+UnicodeWikiÑame
+UnicodeWikiNamé
+UnícodeWíkiName
+UnícodeWikiName
+ÚnicodeWikiName
+ÚnicodeÚikiÚame
+WikiNameWikiNameWikiName
+NOTAWIKINAME
+Notawikiname
+NotaWIkiname
+notaWikiName
+C++
+This Line is not a WikiName totaly.
+http://server-name/WikiName.html
+
+Bullet List
+ * Level1
+ *Level1
+  *Level2
+  * Level2
+   *Level3
+   * Level3
+    *Level4
+    * Level4
+
+Monospaced
+{{{monospaced}}}
+something {{{monospaced}}}
+{{{monospaced}}} something
+{{{ monospaced }}}
+{{{monospaced }}}
+{{{ monospaced}}}
+Prefer {{{public}}} and {{{private}}} visibility.
+
+Code
+{{{
+code
+}}} 
+  {{{
+  code
+  }}} 
+  {{{
+  code
+  }}}
+
+Remove Anchor Macro
+something[[Anchor(un)]]something
+something55[[Anchor(deux)]] something
+something55 [[Anchor(68)]]12something
+
+Monospaced + WikiName
+Use {{{PreparedStatement}}}s to manage
+{{{ dfdsff WikiName fffff}}}
+
+Smileys
+(!) 
+:(  
+:-( 
+:-? 
+:o  
+<!> 
+B)  
+{*} 
+{3} 
+(./)
+:)  
+:-) 
+:D  
+;)  
+<:( 
+B-) 
+{1} 
+{OK}
+{i} 
+|)  
+/!\ 
+:)) 
+:-))
+:\  
+;-) 
+>:> 
+X-( 
+{2} 
+{X} 
+{o} 
+|-) 
+
+Not Smiley
+inline:oracle.png
+
+Macros
+[[macro1]] [[macro2]]

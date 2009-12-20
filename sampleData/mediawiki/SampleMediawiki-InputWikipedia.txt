@@ -1,0 +1,6 @@
+This is a sample page for turning a wikipedia link to a shortcut link
+
+[[wikipedia:tags]]
+
+[[wikipedia:tags|tags]]
+

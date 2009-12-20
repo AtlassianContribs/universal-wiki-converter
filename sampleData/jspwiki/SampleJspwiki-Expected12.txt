@@ -1,0 +1,18 @@
+This is for testing definition list converions
+
+* _term_
+def
+* _term2_
+def2
+* _somethingelse_
+something or other
+* _two words_
+even more words
+* _had whitespace_
+this too
+* _Testing WhiteSpace_
+Lorem Ipsum lalala
+* _Testing !@#$%^& Punctuation $10_
+abc (def)ghi \{jk} $20
+
+After the list

@@ -1,0 +1,14 @@
+Sample file for macro like syntaxes
+
+{toc}
+
+{html}<span border="1">{html}testing{html}</span>{html}
+
+
+
+{nl}NotALink{nl}
+
+ ok
+
+
+

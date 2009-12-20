@@ -1,0 +1,7 @@
+This sample is for testing subscript text.
+
+Subscript:
+~subscript~
+
+This ~word and a few others~ are in subscript.
+

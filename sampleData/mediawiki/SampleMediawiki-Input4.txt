@@ -1,0 +1,27 @@
+This is for testing src/com/atlassian/uwc/converters/mediawiki/MultiLineSyntaxConverter.java
+
+
+''Italics''
+'''Bold'''
+'''''Bold and Italic'''''
+<tt>Monospace</tt>
+
+
+And the multiline counterparts:
+And there's some ''funny stuff
+going on'' here
+
+Here '''and here
+too''' :P
+
+And <tt>what about
+here</tt> ?
+
+And '''''Let's not forget
+here''''' !!!!!
+
+'''How about''' this nasty case?
+
+not italic ''
+italic'' not ''yes
+''

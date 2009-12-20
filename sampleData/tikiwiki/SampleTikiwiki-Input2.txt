@@ -1,0 +1,15 @@
+Attachments
+
+{img src=&quot;img/wiki_up/hobbespounce.gif&quot; width=&quot;200&quot;}
+{img src=show_image.php?name=Wiki.png }
+{img src=show_image.php?id=1 }
+
+Importance of quotes
+{img src=img/wiki_up/hobbespounce.gif}
+{img src="show_image.php?name=Wiki.png" }
+
+Importance of space
+{img src="img/wiki_up/hobbespounce.gif"}
+{img src="img/wiki_up/hobbespounce.gif" }
+{img src=show_image.php?name=Wiki.png}
+

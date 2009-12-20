@@ -1,0 +1,13 @@
+This is for testing footnote conversions.\\
+
+This here[1] is a sentence containing a footnote.\\
+This one too[2].\\
+How does the actual footnote look?\\
+Named footnotes[three|3].\\
+Footnote that is named later[4].\\
+
+----
+[#1] The first footnote.\\
+[#2] The second footnote.\\
+[#3] The third footnote.\\
+[Fourth footnote|#4] The fourth footnote.\\

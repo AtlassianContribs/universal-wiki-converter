@@ -1,0 +1,16 @@
+Testing the TWikiHierarchy
+
+Test Files: 
+*         FileHierTest
+*         FileHierTest/FileHierPage.txt
+*         TWikiFAQ.txt
+*         TestFile1.txt
+
+To test that TWikiHierarchy is working.
+1. Make sure that the hierarchy framework has been turned on in converter.twiki.properties. (See doc on hierarchy framework for more details.)
+2. run the uwc
+3. Choose the above listed files as the pages
+4. run the converter (uploading turned on)
+5. examine the pages in the chosen space. TWikiFAQ should be the parent page of TestFile1
+
+NOTE: The TWikiHierarchy has problems with .svn directories. You may have to explicitly choose FileHierTest/FileHierPage.txt to avoid errors.

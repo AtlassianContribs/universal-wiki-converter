@@ -1,0 +1,13 @@
+NOTE: Tikiwiki.0210-plaintext-links-not-linkified.class must be uncommented.
+This is to test conversion of plain links to use the html macro to hide the linking functionality, and stay inline
+
+http://www.google.com
+https://www.google.com
+
+Testing inline-ness http://www.google.com end
+
+Testing code blocks don't do this:
+
+{CODE()}
+http://www.google.com
+{CODE}

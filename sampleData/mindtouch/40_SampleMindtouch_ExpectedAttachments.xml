@@ -1,0 +1,7 @@
+We're going to have some attachments content.
+We need an image that's inline, a link to an attachment, and an attached file with no reference in the page.
+Inline:
+!cow.jpg!
+Link:
+[^abc.txt]
+

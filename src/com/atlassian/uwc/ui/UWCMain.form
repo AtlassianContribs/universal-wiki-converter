@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.atlassian.uwc.ui.UWCForm_Old">
+  <grid id="c9b63" binding="mainPanel" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="36" y="31" width="757" height="412"/>
+      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="ce29a" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <xy x="0" y="351" width="757" height="61"/>
+          <grid row="4" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="b853f" class="javax.swing.JButton" binding="attachmentsButton">
+            <constraints>
+              <xy x="0" y="18" width="253" height="25"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1"/>
+            </constraints>
+            <properties>
+              <enabled value="false"/>
+              <text value="Attachments"/>
+            </properties>
+          </component>
+          <component id="4fd97" class="javax.swing.JButton" binding="helpButton">
+            <constraints>
+              <xy x="545" y="18" width="212" height="25"/>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1"/>
+            </constraints>
+            <properties>
+              <enabled value="true"/>
+              <text value="Help"/>
+            </properties>
+          </component>
+          <component id="2e949" class="javax.swing.JButton" binding="testRegExFrame">
+            <constraints>
+              <xy x="263" y="18" width="272" height="25"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1"/>
+            </constraints>
+            <properties>
+              <actionCommand value=""/>
+              <autoscrolls value="true"/>
+              <enabled value="true"/>
+              <label value="Test Reg Ex Tool"/>
+              <text value="Test Reg Ex Tool"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="ff9ed" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <xy x="0" y="285" width="757" height="61"/>
+          <grid row="3" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="ac54b" class="javax.swing.JButton" binding="organizeWiki">
+            <constraints>
+              <xy x="0" y="18" width="231" height="25"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1"/>
+            </constraints>
+            <properties>
+              <enabled value="true"/>
+              <label value="Organize Your Wiki"/>
+              <text value="Organize Your Wiki"/>
+            </properties>
+          </component>
+          <component id="aa246" class="javax.swing.JButton" binding="confluenceExportSettingsButton">
+            <constraints>
+              <xy x="241" y="18" width="271" height="25"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1"/>
+            </constraints>
+            <properties>
+              <text value="Confluence Export Settings"/>
+            </properties>
+          </component>
+          <component id="f3c7d" class="javax.swing.JButton" binding="sendToConfluenceButton">
+            <constraints>
+              <xy x="522" y="18" width="235" height="25"/>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1"/>
+            </constraints>
+            <properties>
+              <text value="Send to Confluence"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="3456d" row-count="2" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <xy x="0" y="25" width="757" height="189"/>
+          <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <hspacer id="2c2e9">
+            <constraints>
+              <xy x="0" y="101" width="55" height="11"/>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1"/>
+            </constraints>
+          </hspacer>
+          <scrollpane id="2457f" binding="pageFileListScrollPane">
+            <constraints>
+              <xy x="55" y="25" width="291" height="164"/>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="45e29" class="javax.swing.JList" binding="pageFileJList">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+          <hspacer id="55ea9">
+            <constraints>
+              <xy x="356" y="101" width="55" height="11"/>
+              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1"/>
+            </constraints>
+          </hspacer>
+          <scrollpane id="d5ccf" binding="convertersScrollPane">
+            <constraints>
+              <xy x="411" y="25" width="291" height="164"/>
+              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="c3265" class="javax.swing.JList" binding="engineSelectedConvertersJList">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+          <hspacer id="bf0f9">
+            <constraints>
+              <xy x="702" y="101" width="55" height="11"/>
+              <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1"/>
+            </constraints>
+          </hspacer>
+          <component id="e3ce1" class="javax.swing.JLabel">
+            <constraints>
+              <xy x="167" y="3" width="66" height="14"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0"/>
+            </constraints>
+            <properties>
+              <text value="Page File List"/>
+            </properties>
+          </component>
+          <component id="ed87b" class="javax.swing.JLabel">
+            <constraints>
+              <xy x="527" y="3" width="58" height="14"/>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0"/>
+            </constraints>
+            <properties>
+              <text value="Converters"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="ab378" row-count="1" column-count="11" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <xy x="0" y="219" width="757" height="61"/>
+          <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <hspacer id="7df2">
+            <constraints>
+              <xy x="0" y="25" width="24" height="11"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1"/>
+            </constraints>
+          </hspacer>
+          <component id="d9442" class="javax.swing.JButton" binding="includePagesButton">
+            <constraints>
+              <xy x="24" y="18" width="125" height="25"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1"/>
+            </constraints>
+            <properties>
+              <inheritsPopupMenu value="true"/>
+              <selected value="false"/>
+              <text value="Include Wiki Pages"/>
+            </properties>
+          </component>
+          <hspacer id="a3bf1">
+            <constraints>
+              <xy x="159" y="25" width="24" height="11"/>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1"/>
+            </constraints>
+          </hspacer>
+          <component id="12b0d" class="javax.swing.JButton" binding="removePagesButton">
+            <constraints>
+              <xy x="183" y="18" width="107" height="25"/>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1"/>
+            </constraints>
+            <properties>
+              <text value="Remove Pages"/>
+            </properties>
+          </component>
+          <hspacer id="17987">
+            <constraints>
+              <xy x="300" y="25" width="24" height="11"/>
+              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1"/>
+            </constraints>
+          </hspacer>
+          <component id="507e" class="javax.swing.JButton" binding="chooseWikiButton">
+            <constraints>
+              <xy x="324" y="18" width="95" height="25"/>
+              <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1"/>
+            </constraints>
+            <properties>
+              <enabled value="true"/>
+              <text value="Choose Wiki"/>
+            </properties>
+          </component>
+          <hspacer id="e942c">
+            <constraints>
+              <xy x="429" y="25" width="24" height="11"/>
+              <grid row="0" column="6" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1"/>
+            </constraints>
+          </hspacer>
+          <component id="80d19" class="javax.swing.JButton" binding="includeConverterButton">
+            <constraints>
+              <xy x="453" y="18" width="123" height="25"/>
+              <grid row="0" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1"/>
+            </constraints>
+            <properties>
+              <text value="Include Converter"/>
+            </properties>
+          </component>
+          <hspacer id="2064a">
+            <constraints>
+              <xy x="586" y="25" width="23" height="11"/>
+              <grid row="0" column="8" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1"/>
+            </constraints>
+          </hspacer>
+          <component id="d24cf" class="javax.swing.JButton" binding="excludeConverterButton">
+            <constraints>
+              <xy x="609" y="18" width="125" height="25"/>
+              <grid row="0" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1"/>
+            </constraints>
+            <properties>
+              <text value="Exclude Converter"/>
+            </properties>
+          </component>
+          <hspacer id="77602">
+            <constraints>
+              <xy x="734" y="25" width="23" height="11"/>
+              <grid row="0" column="10" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1"/>
+            </constraints>
+          </hspacer>
+        </children>
+      </grid>
+      <hspacer id="d43bf">
+        <constraints>
+          <xy x="0" y="4" width="318" height="11"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1"/>
+        </constraints>
+      </hspacer>
+      <component id="c5c0c" class="javax.swing.JLabel">
+        <constraints>
+          <xy x="318" y="3" width="122" height="14"/>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0"/>
+        </constraints>
+        <properties>
+          <text value="Universal Wiki Converter"/>
+        </properties>
+      </component>
+      <hspacer id="779bd">
+        <constraints>
+          <xy x="440" y="4" width="317" height="11"/>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1"/>
+        </constraints>
+      </hspacer>
+    </children>
+  </grid>
+</form>

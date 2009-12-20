@@ -1,0 +1,10 @@
+This is a sample page for handling twiki anchors. See UWC-370
+
+[1|#foo]
+{anchor:foo}1
+
+What about anchors with no alias? \(This is a guess\)
+[2|#bar]
+{anchor:bar}
+Bar: What we're anchored to.
+

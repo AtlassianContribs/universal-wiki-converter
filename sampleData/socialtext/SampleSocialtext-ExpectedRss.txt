@@ -1,0 +1,8 @@
+This is a sample page for fetchrss widgets to be transformed to rss macros.
+
+Google News Feed
+{rss:url=http://news.google.com/news?pz=1&ned=us&hl=en&output=rss} 
+
+Huffington Post Latest News
+{rss:url=http://feeds.huffingtonpost.com/huffingtonpost/LatestNews} 
+

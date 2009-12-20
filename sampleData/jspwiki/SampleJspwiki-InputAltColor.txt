@@ -1,0 +1,39 @@
+This is a sample for handling UWC-331
+
+%%(color: red;)foobar%%
+
+%%(color: red;)
+foobar%%
+
+%%(color: red;)
+foobar
+%%
+
+%%(color: red;)
+foo
+
+bar
+%%
+
+*%%(color: red;)foo bar
+asdf
+*gah goo
+
+*%%(color: blue;)foo bar
+*gah
+
+tada
+
+*%%(color: blue;)foo bar%%
+*gah
+
+foobar
+
+**%%(color: blue;)[[team] The layout on this screen is largely derived from One Voice guidelines (e.g. links don't use underlines until mouse-over).  This screen is intended for the new user and we expect they may need to read all the words on the page, but will later bypass the General tab and perform actions using table toolbars, e.g. on Devices tab.%% 
+ 
+!Chapter 3 of Admin Guide (Getting Started)
+
+%%( color: black ; background-color : silver )  
+!!!__THE INFORMATION ON THIS SITE IS RESTRICTED__
+%%
+

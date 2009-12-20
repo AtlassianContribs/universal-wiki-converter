@@ -1,0 +1,33 @@
+<node xmlns="http://www.foopee.com/ns/s3" serialization="flat-1.0" path="/WikiHome" revision="49" editTime="2006-12-12 14:29:52.707" modificationTime="2006-12-12 14:29:52.739" user="pimvanmeurs@aol.com" nodeId="13" name="WikiHome" parentNodeId="0" scopeId="0" parentScopeId="0"><content><property name="main/text" type="element"><html xmlns="http://www.w3.org/1999/xhtml" xmlns:jot="http://www.foopee.com/ns/s3/srvtmpl/"><p><img src="top_bk3.jpg" width="100%" />
+
+</p><ul><li> <a href="wiki:AOL Developer Programs">AOL Developer Programs</a>
+
+</li></ul><ul><li> <a href="wiki:AOL Announcements">AOL Announcements</a>
+</li><li> <a href="wiki:AOL Internal Sites">AOL Internal Sites</a>
+</li><li> <a href="wiki:AOL 2.Open">AOL 2.Open</a>
+
+</li></ul><ul><li> <a href="wiki:Wiki replacement comparison">Wiki replacement comparison</a>
+
+</li></ul><h2>AOL Wireless - Tegic
+</h2><ul><li> <a href="wiki:T9 The Future">T9 The Future</a>
+</li><li> <a href="wiki:AOL Wireless on-boarding">AOL Wireless on-boarding</a>
+</li><li> <a href="wiki:Getting started at AOL Wireless">Getting started at AOL Wireless</a>
+</li><li> <a href="http://tegicdb.ad.aol.aoltw.net/wiki/index.php?title=Main_Page">Wiki T9 Platforms, XT9 and OEM Support</a>
+
+</li></ul><h2>Products
+</h2><ul><li> <a href="wiki:Innovation">Innovation Home</a>
+
+</li></ul><ul><li> <a href="wiki:ULTRA Messaging Platform">ULTRA Messaging Platform</a>
+</li><li> <a href="wiki:Navigator Home">Navigator Home</a>
+
+</li></ul><ul><li> <a href="wiki:Input">Text Input Home</a>
+</li><li> <a href="wiki:T9 Text Output">T9 Text Output</a>
+</li><li> <a href="wiki:XT9 Platform Integration Home">XT9 Platform Integration Home</a>
+
+</li></ul><ul><li> <a href="wiki:Product Marketing">Product Marketing</a>
+</li><li> <a href="wiki:Standardization">Standardization</a>
+
+</li></ul><h3>Resources
+</h3><ul><li> <a href="/KnowledgeBaseHome/Knowledge%20Base">Knowledge Base</a>
+</li><li> <a href="wiki:Presentation Resources">Presentation Resources</a>
+</li></ul></html></property><property name="sys/form" type="string">/System/Forms/DefaultForm</property><property name="sys/permission/addAttachment" type="string">#all</property><property name="sys/permission/addChild" type="string">#all</property><property name="sys/permission/email" type="stringList">mailbot</property><property name="sys/permission/owner" type="string">#all</property><property name="sys/permission/read" type="stringList">#all</property><property name="sys/permission/write" type="stringList">#all</property><property name="sys/ui/allowApplyForm" type="boolean">false</property></content></node>

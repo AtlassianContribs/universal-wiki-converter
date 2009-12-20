@@ -1,0 +1,1 @@
+Testing bad chars in title

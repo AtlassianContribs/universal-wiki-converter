@@ -1,0 +1,8 @@
+.txt file
+
+If we have a filter like this:
+{code}
+MyWiki.xxxx.somedescription.filter=.txt
+{code}
+
+then this page should be imported

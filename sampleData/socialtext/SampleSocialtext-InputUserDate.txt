@@ -1,0 +1,14 @@
+Subject: SampleSocialtext-InputUserDate
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+This is a sample file for maintaining the params only for user and date macros:
+
+{user: someuser}
+{user: abc@def.com}
+
+{date: 2009-09-01 12:00:59 GMT}
+
+_contributed by {user: lorem@ipsum.com} on {date: 2000-01-23 04:56:59 GMT}_
+

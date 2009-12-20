@@ -1,0 +1,20 @@
+
+
+h2. Project Foo {color:#ff0000}({color}{color:#ff0000}Current build 2.0){color}
+
+Project Foo is intended to solve our ongoing energy problem by tapping into this thing call the "Sun"
+
+*_What is the Sun?_* [http://en.wikipedia.org/wiki/Sun]
+
+[Sun Facts]
+
+*Knowledgebase*
+
+[Task List] 
+
+[Project Foo Calendar]
+
+[SunCase] format
+
+!270px-Sun,_Earth_size_comparison_labeled.jpg!
+

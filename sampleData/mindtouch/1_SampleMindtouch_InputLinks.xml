@@ -1,0 +1,15 @@
+<pagedata><content type="text/html" title="1_SampleMindtouch_InputLinks"><body>
+<p>Internal</p>
+<p><a rel="internal" href="http://192.168.2.247/Sandbox/Test_Comments">Test Comments</a></p>
+<p><a rel="internal" href="http://192.168.2.247/Sandbox/Test_Comments">Alias to Comments Page</a></p>
+<p>External</p>
+<p><a title="http://abc.com/" class=" external" rel="external nofollow" href="http://abc.com" target="_blank">http://abc.com</a></p>
+<p><a title="http://abc.com/" class=" external" rel="external nofollow" href="http://abc.com" target="_blank">Alias to external link</a></p>
+<p>underscores:</p>
+<p><a rel="internal" href="http://192.168.2.247/Sandbox/Test_Z_underscores">Test Z_underscores </a></p>
+<p>links to a "bad char" page</p>
+<p><a rel="internal" href="http://192.168.2.247/Sandbox/Test_XYZ%3b_Bad_Chars">Test XYZ; Bad Chars</a></p>
+<p>inline images from another page:</p>
+<p><img alt="cow.jpg" class="internal default" src="http://192.168.2.247/@api/deki/files/1/=cow.jpg?parent=Test Attachments" /></p>
+<p>attachment links from another page:</p>
+<p><a rel="internal" href="http://192.168.2.247/@api/deki/files/1/=cow.jpg?parent=Test Attachments" class="iconitext-16 ext-jpg ">cow.jpg</a></p></body><body target="toc"><em>No headers</em></body></content><tags count="0" href="http://192.168.2.247/@api/deki/pages/53/tags" /><comments sort="asc" count="0" totalcount="0" href="http://192.168.2.247/@api/deki/pages/53/comments" /><files count="0" href="http://192.168.2.247/@api/deki/pages/53/files" /></pagedata>

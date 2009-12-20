@@ -1,0 +1,14 @@
+Sample file for macro like syntaxes
+
+%TOC%
+
+<span border="1">testing</span>
+
+<nop>
+
+!NotALink
+
+%META:anythinghere% ok
+
+
+

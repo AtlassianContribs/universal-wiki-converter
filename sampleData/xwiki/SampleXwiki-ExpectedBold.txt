@@ -1,0 +1,5 @@
+This sample file is for making sure bold syntax stays the same.
+
+*bold*
+
+This is *bold*. This isn't.

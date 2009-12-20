@@ -1,0 +1,13 @@
+id=1
+type=brd
+title=General Discussion
+parentid=1
+parenttype=cat
+ancestors=cat1
+time=null
+userid=null
+username=null
+useremail=null
+attachments.location=null
+attachments.name=null
+attachments.delim=,

@@ -1,0 +1,11 @@
+This is a sample page that just removes the metatags, and leaves the value of the text tag alone.
+version=pmwiki-2.0.13 ordered=1 urlencoded=1
+agent=some agent (something )
+author=somebody
+host=some.thing.1.2
+name=Main.HomePage
+rev=123
+targets=1bc.def,123.sdf
+text=Some text
+time=123456789
+title=A Title

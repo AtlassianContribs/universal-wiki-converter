@@ -1,0 +1,18 @@
+Subject: SampleSocialtext-InputInclude
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+
+This is a sample page for the include macro.
+
+{include: [Pagename]}
+
+{include: workspace [Pagename]}
+
+{include: [Foo:Bar]}
+
+Illegal Pagename Characters:
+[Foo/Bar]
+{include: [Foo/Bar]}
+

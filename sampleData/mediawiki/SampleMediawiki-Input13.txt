@@ -1,0 +1,9 @@
+This is for testing links to images in tables.
+
+{| border="1"
+|+ The table's caption
+|-
+|Video || [http://127.0.0.1:8081/mediawiki/index.php/Main_Page How to] || [http://127.0.0.1:8081/mediawiki/index.php/Image:Wiki.png serial cable]|| [[Media:Wiki.png]] ||  [file://localhost:8081/shares/public/project_current Project] || [file://localhost:8081/shares/public/project2/ project2] || [http://127.0.0.1:8081/mediawiki/index.php/Image:Wiki.png jumper photo] 
+|-
+|non link||cells|| || || || || 
+|}

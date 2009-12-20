@@ -1,0 +1,36 @@
+This is to test Code blocks bug uwc-97 (maybe this is a list context issue?)
+
+Before
+* Listone
+** {code}
+This is a code block
+{code}
+** Some stuff
+** {code}
+Another code block!
+{code}
+
+Another possibility is that this stuff is getting munged by the panel:
+
+{panel}
+Starting a panel here
+
+{code}
+Non list context code block
+{code}
+Something else
+{code}
+This is different?
+{code}
+
+* list context!
+** {code}
+Something
+{code}
+** still list
+** {code}
+Something else
+{code}
+
+About to end the panel
+{panel}

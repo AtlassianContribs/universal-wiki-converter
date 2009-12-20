@@ -1,0 +1,10 @@
+* {color:#006600}The sun....our shinier brother celestial body (test edit history).{color}
+* {color:#006600}Gives off a warm warming glow...just like TV {color}
+** {color:#006600}But not LCDs {color}
+* {color:#000099}Is yellowish {color}in color
+* {color:#000099}Nested font might be a challenge to{color} convert.
+
+----
+
+ [SubSubPage]
+

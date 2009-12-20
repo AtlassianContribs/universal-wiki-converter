@@ -1,0 +1,14 @@
+5;#vti_parserversion:SR|12.0.0.6219 ContentType:SW|Wiki Page ContentTypeId:SW|0x010108008586D6569CB93B489CBCF8B01B47B952 vti_metatags:VR|CollaborationServer SharePoint\\ Team\\ Web\\ Site vti_charset:SR|utf-8 vti_author:SR| vti_setuppath:SX|DocumentTemplates\\wkpstd.aspx vti_cachedzones:VR|Bottom vti_cachedneedsrewrite:BR|false WikiField:SW|<div class=ExternalClass14E9F8AB519A470B995C8046769BE7FC><div class=ExternalClass03BFEACBDD2F4A61A6DF16469ED01B1D><div class=ExternalClass9831F41C1D6B425D9281846617F46F8B><div class=ExternalClass482E934BA36E41D190108C5FF6077782>Place to test Sharepoint Converter syntax.
+<br>
+Internal Link:
+[[Home]]
+<br>
+Link to an image:
+<a href="/Shared%20Documents/image.jpg">image.jpg</a>
+<br>
+Show an image:
+<img src="/Shared%20Documents/image.jpg" height=200 />
+<br>
+<a href="/subsite2/testwiki/TestPage.aspx">Testing Subsite Link</a>
+</div></div></div></div> vti_modifiedby:SR|PUBLIC36\\brendanpatterson vti_cachedhastheme:BR|false 
+

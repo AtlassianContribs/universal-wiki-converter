@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<content>This sample file is for testing conversion of info, error, and warning boxes
+
+XWiki syntax sample:
+#info("This is an information panel - corresponds to Confluence info box")
+
+Corresponds to Confluence note box
+#warning("This is a warning panel")
+
+Corresponds to Confluence warning box
+#error("This is an error panel")
+
+</content></xwikidoc>

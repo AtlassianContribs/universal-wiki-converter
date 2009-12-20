@@ -1,0 +1,13 @@
+Sample file for moinmoin italics and bold syntax
+See http://moinmoin.wikiwikiweb.de/HelpOnFormatting
+
+''italic''
+
+'''bold'''
+
+'''''Mix''' at the beginning''
+
+''Mix at the '''end'''''
+
+'''Mix at the ''end'''''
+

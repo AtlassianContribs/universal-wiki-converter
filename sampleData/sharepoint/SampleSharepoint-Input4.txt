@@ -1,0 +1,54 @@
+3;#vti_parserversion:SR|12.0.0.6219 ContentType:SW|Wiki Page ContentTypeId:SW|0x010108008586D6569CB93B489CBCF8B01B47B952 vti_metatags:VR|CollaborationServer SharePoint\\ Team\\ Web\\ Site vti_charset:SR|utf-8 vti_author:SR| vti_setuppath:SX|DocumentTemplates\\wkpstd.aspx vti_cachedzones:VR|Bottom vti_cachedneedsrewrite:BR|false WikiField:SW|<div class=ExternalClassEDB2E14EA0AB40A387DAA9A275FA7671>
+<div class=ExternalClass5D95B22ED5A24EA9B978EEFA0E4B93E8>
+<div class=ExternalClass4063AE12DA0E4183BD4E180737A1F772>
+<div class=ExternalClassE46829A67B9B4352BC85EC9C52A8676F>
+<font size=7 color="#8b0000">
+<span style="background-color:rgb(255, 192, 203)">
+It's my </span>
+<strong style="background-color:rgb(255, 192, 203)">
+party </strong>
+<span style="background-color:rgb(255, 192, 203)">
+and I'll </span>
+<em style="background-color:rgb(255, 192, 203)">
+cry </em>
+<span style="background-color:rgb(255, 192, 203)">
+if I want to.</span>
+<br style="background-color:rgb(255, 192, 203)">
+</font>
+<div align=left dir=ltr style="background-color:rgb(255, 192, 203)">
+<ul>
+<li>
+<font size=5 color="#8b0000">
+Cry if I want to</font>
+</li>
+<li>
+<font size=7 color="#8b0000">
+Cry <font size=4>
+if I want to</font>
+</font>
+</li>
+</ul>
+<blockquote>
+<font size=7 color="#8b0000">
+<font size=4 face="Times New Roman">
+Formatting oddities of SharePoint have not changed!</font>
+<br>
+<br>
+</font>
+</blockquote>
+<font size=7 color="#8b0000">
+But even so the editor is not bad.<br>
+<br>
+<font size=5 color="#000000">
+Let's create a <a class=ms-wikilink href="/my%20test%20wiki/child%20page.aspx">
+child page</a>
+.</font>
+<br>
+<br>
+</font>
+</div>
+</div>
+</div>
+</div>
+</div>
+ vti_modifiedby:SR|PUBLIC36\\brendanpatterson vti_cachedhastheme:BR|false 

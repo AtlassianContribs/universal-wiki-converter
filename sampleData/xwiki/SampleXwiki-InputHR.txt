@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xwikidoc>
+<parent>Main.Abc</parent>
+<content>This sample is for ensureing hr syntax remains the same.
+
+Above the hr
+----
+Below the hr
+
+</content></xwikidoc>

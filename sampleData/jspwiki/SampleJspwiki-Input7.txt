@@ -1,0 +1,2 @@
+{n}
+This just checks that escpaing curly braces respects beginning of the file

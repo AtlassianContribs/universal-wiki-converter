@@ -1,0 +1,26 @@
+This is for testing Category -> Label conversions
+
+[[Category: An Example Category]] 
+[[Category: An_Example_Category]]
+[[Category: An_Example_Category2]]
+[[Category:nows]] 
+[[Category: withnumbers123]] 
+[[Category: simple]] 
+[[Category: withCAPS]] 
+[[Category:thislabel:hascolons]]
+[[Category:thislabel(hasparens)]]
+[[Category:thislabel&hasamp]]
+[[Category:thislabel.hasdot]]
+
+should create the following labels:
+
+anexamplecategory
+anexamplecategory2
+nows
+withnumbers123
+simple
+withcaps
+thislabelhascolons
+thislabelhasparens
+thislabelhasamp
+thislabelhasdot

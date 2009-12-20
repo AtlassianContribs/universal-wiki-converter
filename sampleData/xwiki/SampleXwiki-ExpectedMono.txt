@@ -1,0 +1,7 @@
+This sample is for testing conversion of monospace text.
+
+Monospace:
+{{monospace}}
+
+Here we have {{some monospace words}} and now not so much.
+

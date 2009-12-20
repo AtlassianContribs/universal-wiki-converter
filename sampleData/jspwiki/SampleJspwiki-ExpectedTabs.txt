@@ -1,0 +1,38 @@
+This is sample text for tab transformations. See UWC-384
+
+before tabbed section
+
+{composition-setup}
+{deck:id=1}
+{card:label=tab1}
+content on tab 1
+{card}
+{card:label=tab2}
+content on tab 2
+{card}
+{deck}
+
+outside of tabbed section
+
+And a second one:
+
+{deck:id=2}
+{card:label=foo}
+Testing
+*123*  
+456
+{card}
+{card:label=bar}
+lalalaa
+{card}
+
+
+{card:label=meh}
+abcdef
+loremipsum
+{card}
+
+{deck}
+
+Ok. That's it.
+

@@ -1,0 +1,10 @@
+<node xmlns="http://www.foopee.com/ns/s3" serialization="flat-1.0" path="/WikiHome" revision="10" editTime="2006-12-07 14:24:42.611" modificationTime="2006-12-07 14:28:25.421" user="liquid" nodeId="10" name="WikiHome" parentNodeId="0" scopeId="0" parentScopeId="0"><content><property name="main/text" type="element"><html xmlns="http://www.w3.org/1999/xhtml" xmlns:s3="http://www.foopee.com/ns/s3/srvtmpl/"><h2>?| </h2>
+<h2>Project Foo <font color="#ff0000">(</font><font color="#ff0000">Current build 2.0)</font></h2>
+<p>Project Foo is intended to solve our ongoing energy problem by tapping into this thing call the "Sun"</p>
+<p><strong><em>What is the Sun?</em></strong> <a href="http://en.wikipedia.org/wiki/Sun">http://en.wikipedia.org/wiki/Sun</a></p>
+<p><a href="wiki:///WikiHome/Sun Facts">Sun Facts</a></p>
+<p><strong>Knowledgebase</strong></p>
+<p><a href="wiki:///WikiHome/Task List">Task List</a>?| </p>
+<p><a href="wiki:///WikiHome/Project Foo Calendar">Project Foo Calendar</a></p>
+<p><a href="wiki:SunCase">SunCase</a> format</p>
+<p><img src="System/TmpImageUpload/270px-Sun,_Earth_size_comparison_labeled.jpg" /></p></html></property></content></node>

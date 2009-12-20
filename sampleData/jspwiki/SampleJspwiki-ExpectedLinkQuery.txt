@@ -1,0 +1,4 @@
+Test for links with query syntax see UWC-343
+
+[foo|http://foo.com/foo.dll?bar=gah]
+

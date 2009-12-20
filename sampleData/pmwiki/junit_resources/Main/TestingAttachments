@@ -1,0 +1,27 @@
+version=pmwiki-2.2.7 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5
+author=
+charset=ISO-8859-1
+csum=
+ctime=1258490662
+host=127.0.0.1
+name=Main.TestingAttachments
+rev=5
+targets=
+text=This is for testing images and attachments links.%0a%0aLink to%0a%0a[[Attach:cow.jpg]]%0a%0aInline%0a%0aAttach:cow.jpg
+time=1258494418
+author:1258494418=
+diff:1258494418:1258494405:=3,4d2%0a%3c Link to%0a%3c %0a6,7d3%0a%3c %0a%3c Inline%0a
+host:1258494418=127.0.0.1
+author:1258494405=
+diff:1258494405:1258494319:=5c5,6%0a%3c Attach:cow.jpg%0a\ No newline at end of file%0a---%0a> Inline:%0a> [[cow.jpg]]%0a\ No newline at end of file%0a
+host:1258494405=127.0.0.1
+author:1258494319=
+diff:1258494319:1258494018:=3,6c3%0a%3c [[Attach:cow.jpg]]%0a%3c %0a%3c Inline:%0a%3c [[cow.jpg]]%0a\ No newline at end of file%0a---%0a> [[Attach:cow.jpg]]%0a\ No newline at end of file%0a
+host:1258494319=127.0.0.1
+author:1258494018=
+diff:1258494018:1258490662:=1,3c1%0a%3c This is for testing images and attachments links.%0a%3c %0a%3c [[Attach:cow.jpg]]%0a\ No newline at end of file%0a---%0a> This is for testing images and attachments links.%0a\ No newline at end of file%0a
+host:1258494018=127.0.0.1
+author:1258490662=
+diff:1258490662:1258490662:=1d0%0a%3c This is for testing images and attachments links.%0a\ No newline at end of file%0a
+host:1258490662=127.0.0.1

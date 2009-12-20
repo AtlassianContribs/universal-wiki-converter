@@ -1,0 +1,13 @@
+id=1
+type=top
+title=Welcome to SMF!
+parentid=1
+parenttype=brd
+ancestors=cat1:brd1
+time=1245692231
+userid=0
+username=Simple Machines
+useremail=info@simplemachines.org
+attachments.location=
+attachments.name=
+attachments.delim=,

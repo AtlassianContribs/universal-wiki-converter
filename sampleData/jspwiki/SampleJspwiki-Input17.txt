@@ -1,0 +1,10 @@
+This is for testing recently updated plugin conversion
+
+[{INSERT com.ecyrd.jspwiki.plugin.RecentChangesPlugin}]
+
+And with options:
+
+[{INSERT com.ecyrd.jspwiki.plugin.RecentChangesPlugin since=30}]
+
+After plugin
+

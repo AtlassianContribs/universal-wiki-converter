@@ -1,0 +1,17 @@
+This is a sample for combination alt syntax, as described in UWC-328 
+
+* {color:red}+gooba+{color}
+* gah
+
+UWC-356 variant ending for headers
+h2. +Test 1+
+h2. +Test 2+
+The above two lines should transform the same way.
+
+but shouldn't affect non-headers
+{color:red}Test 3
+testing{color}
+
+what if the decoration is later in the header?
+h2. Foo +Bar+
+

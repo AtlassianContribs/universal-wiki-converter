@@ -1,0 +1,7 @@
+This is to test converting and attaching image syntax that uses URLs
+
+This image is located on my local apache server
+
+{img src="http://localhost:8081/tikiwiki-1.9.5/img/wiki_up/hobbespounce.gif"}
+
+Does it convert and attach?

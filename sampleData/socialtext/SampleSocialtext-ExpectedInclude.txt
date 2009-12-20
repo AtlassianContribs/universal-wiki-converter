@@ -1,0 +1,13 @@
+
+This is a sample page for the include macro.
+
+{include: Pagename}
+
+{include: space2:Pagename}
+
+{include: Foo.Bar}
+
+Illegal Pagename Characters:
+[Foo-Bar]
+{include: Foo-Bar}
+

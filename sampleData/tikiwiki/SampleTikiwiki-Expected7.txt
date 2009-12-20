@@ -1,0 +1,16 @@
+
+Enforce List Whitespace
+
+* listitem
+** listitem
+
+# numbereditem
+## numbereditem
+### numbereditem
+
+* already has the whitespace
+** already has the whitespace
+# already has the whitespace
+## already has the whitespace
+### already has the whitespace
+

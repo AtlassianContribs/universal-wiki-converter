@@ -1,0 +1,13 @@
+This is for testing footnote conversions.
+
+This here ^[#1]^ is a sentence containing a footnote.
+This one too ^[#2]^ .
+How does the actual footnote look?
+Named footnotes ^[three|#3]^ .
+Footnote that is named later ^[#4]^ .
+
+----
+{anchor:1} The first footnote.
+{anchor:2} The second footnote.
+{anchor:3} The third footnote.
+{anchor:4} *Fourth footnote* - The fourth footnote.

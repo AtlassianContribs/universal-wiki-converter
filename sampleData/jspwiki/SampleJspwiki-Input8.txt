@@ -1,0 +1,7 @@
+Deals with escaping breakets:
+
+[[...]
+
+and also
+
+blah [[0-1A-Z_] bother

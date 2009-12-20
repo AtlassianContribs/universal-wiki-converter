@@ -1,0 +1,56 @@
+This is a sample page for testing uwc-221, code tags in dokuwiki.
+
+Example provided by dokuwiki's syntax page:
+{code:java}
+/** 
+ * The HelloWorldApp class implements an application that
+ * simply displays "Hello World!" to the standard output.
+ */
+class HelloWorldApp {
+    public static void main(String[] args) {
+        System.out.println("Hello World!"); //Display the string.
+    }
+}
+{code}
+
+Example for unsupported languages:
+{code:perl}
+if (s/abc/def/) {
+tada();
+}
+elsif (s/def/abc/) {
+whosit();
+}
+{code}
+
+UWC-221
+{code}
+this is my code
+{code}
+
+UWC-446
+Some text here
+
+{code:bash}
+etckeeper init
+{code}
+
+Some text here
+
+{code:bash}
+etckeeper init
+{code}
+
+UWC-447
+{code}
+$ git show HEAD   # last commit
+$ git show HEAD^  # pre-last commit
+$ git show HEAD^^ # pre-pre-last commit
+{code}
+
+UWC-448
+{code:bash}
+$ git checkout [rev] file                  # Fetch file from revision
+$ git ls-files -d | xargs git checkout --  # Restore removed files
+{code}
+

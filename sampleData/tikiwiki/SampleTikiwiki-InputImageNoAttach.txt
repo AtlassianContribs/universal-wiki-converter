@@ -1,0 +1,4 @@
+This is for testing references to external images without attaching or causing errors:
+
+{img src=http://localhost:8081/tikiwiki-1.9.5/images/book.gif}
+

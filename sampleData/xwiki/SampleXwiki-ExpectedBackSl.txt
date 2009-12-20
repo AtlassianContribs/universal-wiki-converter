@@ -1,0 +1,13 @@
+This sample file is for making sure backslashes are converted correctly
+
+Explicit
+newline
+
+Just get rid of newlines at ends of lines
+
+In a table:
+|| Header 1 ||Header 2   ||
+| row 1 col 1  |row 1 \\col 2   |
+| r2c1|r2c2  |
+
+

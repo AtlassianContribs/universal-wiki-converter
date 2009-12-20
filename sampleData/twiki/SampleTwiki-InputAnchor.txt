@@ -1,0 +1,10 @@
+This is a sample page for handling twiki anchors. See UWC-370
+
+[[#foo][1]]
+<a name="foo">1</a>
+
+What about anchors with no alias? (This is a guess)
+[[#bar][2]]
+<a name="bar"/>
+Bar: What we're anchored to.
+

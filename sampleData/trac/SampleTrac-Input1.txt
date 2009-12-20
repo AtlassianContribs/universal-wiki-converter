@@ -1,0 +1,69 @@
+= First testpage =
+
+== Paragraphs ==
+
+This is the first paragraph with[[BR]]a line break. It contains '''bold''', ''italic'', '''''bold italic''''', __underline__, {{{monospace1}}}, `monospace2`, ~~strike-through~~, ^superscript^ and ,,subscript,, text.
+
+The second paragraph has some links: First we have internal wiki links like [wiki:TracGuide], ["TracWiki"] and to an [attachment:Attached_File.pdf]. Links can be given a more descriptive title by writing the link followed by a space and a title and all this inside square brackets, like in [TracOverview Trac Overview] and [wiki:TracGuide Trac Guide with some German umlauts: ä ö ü]. Links can be avoided by !EscapingWikiNames.
+
+Of course, there can also be external links. URLs like http://www.google.com/search?q=Confluence are automatically linked but they can also be put inside square brackets: [http://www.google.de/search?hl=de&q=Confluence+Trac+importer&btnG=Suche&meta=], even with titles like [http://www.google.de/search?hl=de&q=trac+export&btnG=Suche&meta= Google search for "trac export"]. We add some [#Relativelinks relative links] and [MainPage/SubWikiPage links to] ["WikiPage/SubPages"] just for fun.
+
+  This text is a quote from someone else, rendered as blockquote.
+  
+Finally, we have a text with characters that are special in Confluence: Exclamation marks!!! are used to embed !images!, curly braces {{ for {macros}.
+
+Test to make sure that possible markup inside a paragraph is not touched: == test ==  *     **   1. 
+
+== Special Formatting (taken from WikiFormatting) ==
+
+ === Lists (headlines may have a leading space) ===
+
+ * Item 1
+   * Item 1.1
+     * Item 1.1.1   
+     * Item 1.1.2
+     * Item 1.1.3
+   * Item 1.2
+ * Item 2
+
+ 1. Item 1
+ 1. Item 2
+ 1. Item 3
+
+=== Preformatted text ===
+
+Blocks containing preformatted text are suitable for source code snippets, notes and examples. Use three curly braces wrapped around the text to define a block quote. The curly braces need to be on a separate line. Example: 
+{{{
+<?xml version='1.0' encoding='utf-8'?>
+<!-- Note:  A "Server" is not itself a "Container", so you may not
+     define subcomponents such as "Valves" at this level.
+     Documentation at /docs/config/server.html
+ -->
+<Server port="8005" shutdown="SHUTDOWN">
+
+  <!--APR library loader. Documentation at /docs/apr.html -->
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+}}}
+{{{
+ {{{
+  A nested code block
+ }}}
+}}}
+{{{
+ Formatting must not be converted in preformatted text:
+ '''bold''', ''italic'', '''''bold italic''''', __underline__, {{{monospace1}}},
+ `monospace2`, ~~strike-through~~, ^superscript^, ,,subscript,,
+}}}
+
+=== Tables ===
+
+First table:
+||^Cell 1^||'''Cell 2'''||Cell 3||
+||Cell 4||Cell 5||Cell 6||
+
+Second table with spaces:
+|| http://www.atlassian.com/ || [wiki:TracGuide] || __underline__ ||
+
+=== Images ===
+
+Embed attached images: [[Image(myImage.png)]], also from different wiki pages: [[Image(wiki:WikiFormatting:picture.gif)]], [[Image(wiki:WikiToc:toc.gif)]]

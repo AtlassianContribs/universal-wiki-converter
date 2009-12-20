@@ -1,0 +1,11 @@
+id=2
+type=brd
+title=Test Board
+parentid=1
+parenttype=cat
+ancestors=cat1
+time=1245696721
+userid=1
+username=admin
+useremail=laura.kolker@gmail.com
+

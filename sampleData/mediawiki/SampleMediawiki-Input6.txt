@@ -1,0 +1,8 @@
+This is a test page for image and attachment syntax that leaves out underscores.
+
+[[Image:Wiki file.png|thumb|Caption text]]
+[[Image:Wiki_file.png|thumb|Caption text]]
+[[Media:Wiki file.doc]]
+[[Media:Wiki file.doc|alias]]
+[[media: Wiki file.doc]]
+

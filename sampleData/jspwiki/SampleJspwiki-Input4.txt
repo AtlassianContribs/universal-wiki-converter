@@ -1,0 +1,3 @@
+Escape the star
+|* |zero or more times |? |zero or one time
+after table

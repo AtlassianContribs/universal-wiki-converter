@@ -1,0 +1,1 @@
+[b]List Problem missing closing li BB tags[/b]<br /><br />[list]<br />[li]<br />no delim<br />[/list]

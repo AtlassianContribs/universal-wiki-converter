@@ -1,0 +1,11 @@
+This is for testing the stripping away of unnecessary newlines between nested list items
+
+* item a
+** item a1
+** item a2 (this should only have the inner bullet, not both bullets)
+
+
+But! These should be considered seperate lists:
+* item c
+
+* item d

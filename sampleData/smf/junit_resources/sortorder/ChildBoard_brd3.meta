@@ -1,0 +1,7 @@
+id=3
+type=brd
+title=Child Board
+parentid=1
+parenttype=brd
+ancestors=cat1:brd1
+

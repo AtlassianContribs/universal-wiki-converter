@@ -1,0 +1,18 @@
+This sample is for testing math syntax 
+
+{latex}
+\begin{eqnarray}
+{
+g(x,y)\,
+}
+\end{eqnarray}
+{latex}
+
+{latex}
+\begin{eqnarray}
+{
+f(x) = \int_0^1 e^{-t} g(t) \, dt.
+}
+\end{eqnarray}
+{latex}
+

@@ -1,0 +1,25 @@
+This sample is for converting image syntax.
+
+Xwiki example:
+!img.png!
+!img.png|height=30!
+!img.png|width=20!
+!img.png|height=30,width=20!
+
+All params, based on doc found here:
+http://code.xwiki.org/xwiki/bin/view/Macros/ImageMacro
+
+alt: !cow.jpg|alt=A Cow. Moo!
+width/height: !gamesigns.jpg|height=128,width=128!
+align: !cow.jpg|align=right!
+halign: !cow.jpg|halign=floatleft!
+document: !XWiki:XWikiSyntax^img.png!
+link: !img.jpg!
+fromIncludingDoc: !Main:Abc^img.png!
+
+What happens when the image is right next to something else
+Text !cow.jpg! Something else
+
+What about an attachment link (instead of inline)
+[^wiki.png]
+

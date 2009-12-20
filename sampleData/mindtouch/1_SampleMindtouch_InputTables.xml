@@ -1,0 +1,4 @@
+<pagedata><content type="text/html" title="1_SampleMindtouch_InputTables"><body>
+<table cellspacing="1" cellpadding="1" border="1" style="width: 100%; table-layout: fixed;"> <tbody> <tr> <td>Testing</td> <td>234</td> </tr> <tr> <td><strong> 123 </strong></td> <td><em>234</em></td> </tr> <tr> <td><span style="color: rgb(255, 0, 0);">foo</span></td> <td><span style="color: rgb(153, 204, 0);">bar</span></td> </tr> </tbody>
+</table>
+</body><body target="toc"><em>No headers</em></body></content><tags count="0" href="http://192.168.2.247/@api/deki/pages/56/tags" /><comments sort="asc" count="0" totalcount="0" href="http://192.168.2.247/@api/deki/pages/56/comments" /><files count="0" href="http://192.168.2.247/@api/deki/pages/56/files" /></pagedata>

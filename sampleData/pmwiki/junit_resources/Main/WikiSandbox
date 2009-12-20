@@ -1,0 +1,26 @@
+version=pmwiki-2.2.7 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5
+author=
+charset=ISO-8859-1
+csum=
+host=127.0.0.1
+name=Main.WikiSandbox
+rev=8
+targets=PmWiki.TextFormattingRules,OtherGroup.OtherGroup,OtherGroup.Sandbox,Main.TestingAttachments
+text=Feel free to use this page to experiment with the [[PmWiki/Text Formatting Rules]].  Just click the "Edit Page" link at the bottom of the page.%0a----%0a%0aTesting 123 --LK%0a%0aGroups%0a%0a[[OtherGroup.]] -- other groups are like Confluence spaces%0a%0a[[OtherGroup/]]%0a%0a[[OtherGroup.Sandbox]] -- a sandbox in the other group%0a%0aAttachments%0a%0a[[Testing Attachments]]
+time=1258490632
+author:1258490632=
+diff:1258490632:1258490625:=14c14%0a%3c Attachments%0a---%0a> *Attachments*%0a
+host:1258490632=127.0.0.1
+author:1258490625=
+diff:1258490625:1258489467:=12,16c12%0a%3c [[OtherGroup.Sandbox]] -- a sandbox in the other group%0a%3c %0a%3c *Attachments*%0a%3c %0a%3c [[Testing Attachments]]%0a\ No newline at end of file%0a---%0a> [[OtherGroup.Sandbox]] -- a sandbox in the other group%0a\ No newline at end of file%0a
+host:1258490625=127.0.0.1
+author:1258489467=
+diff:1258489467:1258489440:=7d6%0a%3c %0a9d7%0a%3c %0a11d8%0a%3c %0a
+host:1258489467=127.0.0.1
+author:1258489440=
+diff:1258489440:1258489222:=4,9c4%0a%3c Testing 123 --LK%0a%3c %0a%3c Groups%0a%3c [[OtherGroup.]] -- other groups are like Confluence spaces%0a%3c [[OtherGroup/]]%0a%3c [[OtherGroup.Sandbox]] -- a sandbox in the other group%0a\ No newline at end of file%0a---%0a> Testing 123 --LK%0a\ No newline at end of file%0a
+host:1258489440=127.0.0.1
+author:1258489222=
+diff:1258489222:1093548433:=3,4d2%0a%3c %0a%3c Testing 123 --LK%0a\ No newline at end of file%0a
+host:1258489222=127.0.0.1

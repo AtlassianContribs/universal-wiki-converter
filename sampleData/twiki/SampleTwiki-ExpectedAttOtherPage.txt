@@ -1,0 +1,27 @@
+
+
+*Link:*
+
+\(using puburl and web variables\)
+[uwctest:SampleFooBar^cow.jpg]
+[uwctest:SampleFooBar^cow.jpg]
+
+attachurl: http://localhost:8082/display/uwctest/SampleTwiki-InputAttOtherPage
+attachurl path: uwctest:SampleTwiki-InputAttOtherPage
+puburl: http://localhost:8082/plugins/servlet/confluence/default/Global
+web: uwctest
+
+*Inline1:*
+\(with hardcoded url and params\)
+!uwctest:SampleFooBar^cow.jpg!
+
+*Inline2:*
+\(with PUBURL, hand writted web\)
+!uwctest:SampleFooBar^cow.jpg!
+
+*Inline3:*
+\(with img tag, puburl\)
+!uwctest:SampleFooBar^cow.jpg|width="88", height="31", border="0", alt="logo"!
+
+*Inline 4:
+!uwctest:SampleFooBar^cow.jpg|width="88", height="31", border="0", alt="logo"!

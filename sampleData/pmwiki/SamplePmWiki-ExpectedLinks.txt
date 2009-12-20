@@ -1,0 +1,16 @@
+Feel free to use this page to experiment with the [Text Formatting Rules|PmWiki:TextFormattingRules].  Just click the "Edit Page" link at the bottom of the page.
+----
+
+Testing 123 --LK
+
+Groups
+
+[OtherGroup:] -- other groups are like Confluence spaces
+
+[OtherGroup:]
+
+[OtherGroup:Sandbox] -- a sandbox in the other group
+
+Attachments
+
+[Testing Attachments|TestingAttachments]

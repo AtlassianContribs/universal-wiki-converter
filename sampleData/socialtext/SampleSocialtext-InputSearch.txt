@@ -1,0 +1,23 @@
+Subject: SampleSocialtext-InputSearch
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+Test page for the search macro
+
+*search with a keyword*
+{search: keyword}
+
+*search with a tag*
+{search: tag: category}
+{search: tag:loremipsum}
+{search: tag:"something"}
+
+*search with booleans and tags*
+{search: tag: foo AND tag: bar}
+{search: tag: abc and tag: def}
+{search: tag: abc OR tag: def}
+
+*search with whitespace*
+{search: tag: foo and tag:lorem ipsum}
+

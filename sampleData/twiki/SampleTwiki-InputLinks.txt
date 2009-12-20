@@ -1,0 +1,17 @@
+Test file for links
+
+Links:
+[[Testing Images From Other Page]]
+with alias: [[Testing Images From Other Page][alias]]
+
+External:
+http://www.google.com
+laura.kolker@gmail.com
+[[http://www.google.com Google Alias 1]]
+[[http://www.google.com][Google Alias 2]]
+
+#TestAnchor
+
+mailto links (UWC-367)
+mailto:laura.kolker@gmail.com
+

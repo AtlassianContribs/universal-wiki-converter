@@ -1,0 +1,6 @@
+Page names with a space after the colon are not linked correctly on other pages.
+
+[[UWC:Colon In Title]]
+
+[[UWC: Another Colon in the Title]]
+

@@ -1,0 +1,13 @@
+*Original Poster:* [~admin]
+*Original Timestamp:* 2009-07-02 16:05:58
+
+Testing Confluence syntax that needs escaping:
+
+\* just a star
+\# just a hash
+\{somethingelse}
+
+* but we should probably leave this sort of construct alone
+
+
+{gallery:title=Attached Images}

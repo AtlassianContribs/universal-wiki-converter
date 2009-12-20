@@ -1,0 +1,42 @@
+Date: Tue, 10 Jan 2006 20:24:55+00:00
+Mime-Version: 1.0 (Produced by Tiki)
+Content-Type: multipart/mixed;
+  boundary="=_multipart_boundary_2"
+
+--=_multipart_boundary_2
+Content-Type: application/x-tikiwiki;
+  pagename=MetadataTitlesTestPage;
+  flags="";
+  author=xxxxxxxx;
+  version=2;
+  lastmodified=1168026094;
+  author_id=xxx.xxx.xxx.xxx;
+  summary="";
+  hits=22;
+  description="";
+  charset=iso-8859-1
+Content-Transfer-Encoding: binary
+
+TESTING File 1
+Page title should be:
+MetadataTitlesTestPage
+And should be at version 1 in the history.
+
+--=_multipart_boundary_2
+Content-Type: application/x-tikiwiki;
+  pagename=testPage;
+  flags="";
+  author=xxxxxxxx;
+  version=2;
+  lastmodified=1168015749;
+  author_id=xxxxxxxxxxxxx;
+  summary="";
+  hits=15;
+  description="";
+  charset=iso-8859-1
+Content-Transfer-Encoding: binary
+
+Currently, this page history is __deleted__ because it's an earlier version
+Add new syntaxes about this.
+
+--=_multipart_boundary_2--

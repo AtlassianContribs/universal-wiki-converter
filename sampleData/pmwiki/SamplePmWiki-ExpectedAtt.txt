@@ -1,0 +1,12 @@
+This is for testing images and attachments links.
+
+Link to
+
+[^cow.jpg]
+
+With Alias
+[Alias|^cow.jpg]
+
+Inline
+
+!cow.jpg! 

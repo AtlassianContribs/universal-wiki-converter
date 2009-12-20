@@ -1,0 +1,12 @@
+
+This is a sample page for testing twiki syntax
+
+
+
+-- Main.LauraKolker - 19 May 2009
+
+* Cow Picture: 
+
+     !uwctest:SampleTwiki-InputAttachments2^cow.jpg|alt="cow.jpg", width="450", height="319"!
+
+

@@ -1,0 +1,7 @@
+Newline delimiter Tables:
+
+| A | B | C | D | E |
+| abc | def | ghi | jkl | \- |
+| abc | def | ghi | jkl | |
+| abc | def | ghi | | |
+

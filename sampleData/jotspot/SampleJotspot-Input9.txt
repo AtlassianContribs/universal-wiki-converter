@@ -1,0 +1,65 @@
+<node xmlns="http://www.foopee.com/ns/s3" serialization="flat-1.0" path="/WikiHome/Syntax Test Page/Testing Markup Editor" revision="5" editTime="2006-12-14 08:50:08.414" modificationTime="2006-12-14 08:50:08.434" user="admin" nodeId="1129" name="Testing Markup Editor" parentNodeId="1101" scopeId="0" parentScopeId="0"><content><property name="main/text" type="element"><html xmlns="http://www.w3.org/1999/xhtml" xmlns:jot="http://www.foopee.com/ns/s3/srvtmpl/"><p>Here's some plain text
+
+</p><p><b>Here's some bold text</b>
+
+</p><p><i>italicize with tildas!</i>
+
+</p><p><code>fixed font</code>
+
+</p><p><s>strike out that old text</s>
+
+</p><h3>Header 1
+</h3><h2>Header 2
+</h2><h1>Header 3
+
+</h1><p>Horizontal Rule:
+
+</p><hr /><br /><p>A different Horizontal Rule:
+
+</p><hr /><br /><p>Unordered List:
+
+</p><ul><li> One
+</li><li> Two
+<ul><li> Two Point Five
+
+</li></ul></li></ul><p>Ordered List:
+
+</p><ol><li> One
+</li><li> Two
+<ol><li> Two Point Five
+</li></ol></li><li> Three
+
+</li></ol><p>Without Three spaces, no list:
+<br />* not a list
+<br />1 Just a one
+
+</p><p>Combined List:
+
+</p><ul><li> One
+</li><li> Confusing
+</li><li> Nesting
+</li><li> Two
+
+</li></ul><p>But what about?
+
+</p><ul><li> One
+<ol><li> Confusing
+</li><li> Nesting
+</li></ol></li><li> Two
+
+</li></ul><p>Or even?
+
+</p><ul><li> One
+<ol><li> Confusing
+</li></ol></li><li> Nesting
+</li><li> Two
+
+</li></ul><br /><p>Tables
+
+</p><table border="1" cellpadding="1" cellspacing="0" class="jot-tabular"><tr><td> a </td><td> b </td><td> c </td></tr><tr><td> 1 </td><td> 2 </td><td> 3 </td></tr><tr><td> A </td><td> B </td><td> C </td></tr></table><br /><br /><p>Links:
+<br /><a href="wiki:SunCase">SunCase</a>
+<br /><a href="wiki:Sun Facts">Sun Facts</a>
+<br /><a href="http://www.google.com">Google</a>
+<br /><a href="mailto:me@abc.com">me@abc.com</a>
+<br /><a href="http://www.google.com">http://www.google.com</a>
+</p></html></property></content></node>

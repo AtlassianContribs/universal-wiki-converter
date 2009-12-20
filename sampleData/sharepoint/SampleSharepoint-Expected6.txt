@@ -1,0 +1,23 @@
+*Testing Table*
+Simple Table
+
+| r1c1 | r1c2 |
+| r2c1 | r2c2 |
+With header row
+
+|| r1c1 || r1c2 ||
+| r2c1 | r2c2 |
+With spans:
+
+| r1c1 | colspan -\\r1c2 |
+| r2c1 | r2c2 -\\rowspan | r2c3 |
+| r3c1 | r3c3 |
+With other formatting:
+
+| *r1c1* | {color:#00ff00}r1c2{color} |
+| {panel:bgColor=#ffd700}r2c1{panel} | h2. r2c2 |
+
+| r1c1 | r1c2 | r2c1 | r2c2 |
+| * a\\* b\\* c | # one\\# two\\## three | * one\\# b\\* c |  |
+
+

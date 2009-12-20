@@ -1,0 +1,6 @@
+Test file for the recently changed macro.
+
+{recently-updated}
+
+{recently-updated:spaces=space2}
+

@@ -1,0 +1,5 @@
+Place to test Sharepoint Converter syntax.
+Internal Link: [Home]
+Link to an image:[image.jpg|http://artemis2.sharepointspace.com/Shared%20Documents/image.jpg]
+Show an image:!http://artemis2.sharepointspace.com/Shared%20Documents/image.jpg|height="200"!
+[Testing Subsite Link|subsite2testwiki:TestPage]

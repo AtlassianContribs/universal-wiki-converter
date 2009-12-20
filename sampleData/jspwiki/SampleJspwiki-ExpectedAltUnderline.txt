@@ -1,0 +1,40 @@
+This is a sample file for alternate underline syntax as described in UWC-328
+
++underlined text+
++underlined text 2+
++underlined text 3+
++underlined text 4+
+
+h2. +Objectives+
+
+h2. +[User Stories / Requirements|ateam75userstories]+
+
+h2. +Development+
+* [A Team 7.5 Development Area|ateam75DevelopmentArea]
+
++foo bar gah+
+
++foo+
+
++bar+
+
++gah+
+
+And without closing delimiters with lists
+* +howdy ho+
+* hasta
+
++foo bar+
+
++gah+
+
++jupiter+
+
+UWC-356 (comment)
+h2. +Heading+
+* Bullet
+
+UWC-381
+h2. +Objectives+
+
+The

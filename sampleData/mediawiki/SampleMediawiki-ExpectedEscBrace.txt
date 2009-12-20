@@ -1,0 +1,15 @@
+This sample is for testing escaping of curly braces, and also that mediawiki syntaxes that use curly braces aren't affected.
+
+This is an \{example\} with pages with \{curly\} brackets.
+
+The \{ curly \} should be escaped to \{curly\}.
+
+{{This should be left alone}}
+
+
+{panel:title=caption|borderStyle=dashed|borderColor=#ccc|bgColor=#fff}
+|| This || is || a ||
+| table | . | It |
+| should be | left | alone |
+{panel}
+

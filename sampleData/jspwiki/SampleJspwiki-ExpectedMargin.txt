@@ -1,0 +1,25 @@
+This is for optional margin handling described in UWC-330
+
+{indent}
+    resolutionmanager=15.2.113.21
+    ZMASTER_ZIPADDR=15.2.113.21
+    SAP_URI=tcp://15.2.113.21:3464
+ {indent}
+
+UWC-378:
+{indent}
+testing
+{indent}
+
+{indent}
+{color:red}testing 123{color}
+{indent}
+
+{indent}
+{color:purple}This test harness will save the following data into a {{./<timezone>.csv}} file for analysis.
+{{targetName,NumOfJob,syncStarttime,syncEndtime,totalSyncMilliSecs}}{color}
+{indent}\\{indent}
+Two sets of data can be saved
+1. As observed by the agent - {{timezone.CSV}}
+2. As observed by the running DTM server (will need to turn on server instrumentation){indent}
+

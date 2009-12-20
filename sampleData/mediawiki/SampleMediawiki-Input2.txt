@@ -1,0 +1,170 @@
+Monospace 
+<tt>mono</tt>
+
+No wiki formatting
+<nowiki>*No* formatting</nowiki>
+
+Italicise text
+''italic''
+
+Bold text
+'''bold'''
+
+Bold and italic
+'''''bold & italic''''' 
+
+Internal link (within Wikipedia)
+[[name of page]]
+[[name of page|display text]]
+[[#section in this page]]
+[[Main Page#Some Editing Resources|Section in another page]]
+[[Main Page#Some Editing Resources]]
+
+
+External link (to other websites)
+[http://www.example.com]
+[http://www.example.com display text]
+http://www.example.com
+[https://security.com Secure]
+
+Applies only at the beginning of the line
+Headings
+of different sizes
+
+==Level 1==
+===Level 2===
+====Level 3====
+=====Level 4=====
+
+Bullet list
+
+* one
+* two
+** two point one
+* three
+
+Numbered list
+
+# one
+# two
+## two point one
+# three
+
+Thumbnail image
+
+[[Image:Wiki.png|thumb]]
+
+__TOC__
+
+Tables
+
+{| 
+|+caption
+!Header1 || Header2 || Header3
+|-
+||r1c1||r1c2||r1c3
+|-
+|r2c1
+|r2c2
+|r2c3
+|}
+
+{| border="1" class="wikitable" style="text-align:center" cellpadding="2"
+|+caption
+!Header1||Header2||Header3
+|-
+!Row1 Header
+|r1c2||r1c3
+|-
+!Row2 Header
+|r2c2
+|r2c3
+|}
+
+{| border="1" cellpadding="5" cellspacing="0" align="center"
+|+'''An example table'''
+|-
+! style="background:#efefef;" | First header
+! colspan="2" style="background:#ffdead;" | Second header
+|-
+| upper left
+|  
+| rowspan=2 style="border-bottom:3px solid grey;" valign="top" |
+right side
+|-
+| style="border-bottom:3px solid grey;" | lower left
+| style="border-bottom:3px solid grey;" | lower middle
+|-
+| colspan="3" align="center" |
+{| border="0"
+|+''A table in a table''
+|-
+| align="center" width="150px" | [[Image:Wiki.png]]
+| align="center" width="150px" | [[Image:Wiki.png]]
+|-
+| align="center" colspan="2" style="border-top:1px solid red; border-right:1px solid red; border-bottom:2px solid red; border-left:1px solid red;" | Two Wikipedia logos
+|}
+|}
+
+
+{| border="1" cellpadding="5" cellspacing="0"
+|-
+! Column 1 || Column 2 || Column 3
+|-
+| A
+| colspan="2" align="center"| B
+|-
+| C
+| D
+|-
+| E
+| colspan="2" align="center"| F
+|- 
+| G
+| H
+| I
+|- 
+| J
+| K
+|-
+| colspan="2" align="center"| L
+|}
+
+{| cellpadding=7 border=0 cellspacing=0
+! Service
+! Host
+! Admin
+! URL
+! Description
+|-
+| style="border-bottom:1px solid grey;" | SVN
+| style="border-bottom:1px solid grey;" | SourceForge
+| style="border-bottom:1px solid grey;" | [[WicketCore]]
+| style="border-bottom:1px solid grey;" | http://svn.sourceforge.net/viewvc/wicket/
+| style="border-bottom:1px solid grey;" | Subversion
+|-
+| Woogle
+| [[Frankbille]]
+| [[Frankbille]]
+| http://woogle.billen.dk/
+| Wicket search engine
+|}
+
+Pre tags
+<pre>System.out.println("This is code");</pre>
+<pre>This {might} have some [[Wiki syntax]]. That's ignored.</pre>
+
+Code tags
+<code>Object</code>
+
+
+ And what does this white-space starting line mean?
+ Is this like a pre tag?
+ How does it treat [[Wiki syntax]]?
+ 
+[[Help:Editing]]
+[[category:FAQ]] [[Category:Component]]
+ 
+:Indenting is stripped out.
+::Includes double indenting
+ 

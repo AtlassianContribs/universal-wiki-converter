@@ -1,0 +1,82 @@
+<pagedata><content type="text/html" title="MindTouch"><body><div id="section_1"><span id="Welcome_to_MindTouch" /><h2 class="editable">Welcome to MindTouch</h2><div class="mt-tabs">
+	<ul>
+<li><a rel="external nofollow" href="http://campaign.mindtouch.com/OOBE/Learn_More" title="http://campaign.mindtouch.com/OOBE/Learn_More" target="_blank" class=" external">learn more</a></li>
+<li><a href="#" title="mt-kb">a knowledge base</a></li>
+<li><a href="#" title="mt-extranet">an extranet</a></li>
+<li><a href="#" title="mt-intranet">an intranet</a></li>
+<li class="title">MY SITE WILL BE:</li>
+	</ul>
+</div>
+
+<div class="mt-content">
+	<div class="mt-kb hide">
+<div class="mt-title-bar mt-title-bar-admin-kb"> <div><a class="mt-tips external" rel="external nofollow" href="http://www.mindtouch.com/Solutions/Knowledge_Base" title="http://www.mindtouch.com/Solutions/Knowledge_Base" target="_blank">Did you know that MindTouch has an out of the box <strong>Collaborative Knowledge Base</strong> solution?</a></div>  </div> <div class="mt-table"> <ul> <li> <div> <span id="Knowledge_Base_Templates" /><h4>Knowledge Base Templates</h4> <p>Create your own templates or use the default templates below. You can add templates by clicking <img style="vertical-align:middle;" alt="" src="/skins/common/images/oobe/mt-icon-template.gif" /> while editing.</p> <div class="mt-template-row"><img alt="" src="/skins/common/images/oobe/mt-button-template-left-bar.gif" /> <span class="mt-template-title">Left Highlight</span> <a href="#" onclick="window.location='/index.php?title=New_left_highlight_page_created_by_laura.kolker&amp;&amp;template=mt_template_left_highlight'">Create a new page with a left highlight layout</a></div> <div class="mt-template-row"><img alt="" src="/skins/common/images/oobe/mt-button-template-documentation-files.gif" /> <span class="mt-template-title">Documentation with files</span> <a href="#" onclick="window.location='/index.php?title=New_documentation_and_files_page_created_by_laura.kolker&amp;&amp;template=mt_template_documentation_files'">Create a new page with a documentation and files layout</a></div> <div class="mt-template-row"><img alt="" src="/skins/common/images/oobe/mt-button-template-faq.gif" /> <span class="mt-template-title">Frequently Asked Quesions</span> <a href="#" onclick="window.location='/index.php?title=New_frequently_asked_questions_page_created_by_laura.kolker&amp;&amp;template=mt_template_faq'">Create a new frequently asked questions layout</a></div> <p class="mt-btn-bar mt-btn-create-template"><a href="#" onclick="window.location='/index.php?title=Template:New_template_created_by_laura.kolker&amp;action=edit'">create a template</a></p> </div> </li> <li class="middle"> <div> <span id="Document_Management" /><h4>Document Management</h4> <p>Keep your knowledge base organized with the <a class="external" rel="external nofollow" href="http://www.mindtouch.com/Products/Desktop_Tools" title="http://www.mindtouch.com/Products/Desktop_Tools" target="_blank">MindTouch Desktop Connector</a>. Manage, organize and modify your knowledge base from the comfort of a desktop application.</p> <span id="Properly_Identifying_Content" /><h4>Properly Identifying Content</h4> <p>MindTouch provides a number of tools to make organizing and searching your content quick and effective.</p> <ol class="mt-small"> <li><strong>Tags: </strong>Tag your MindTouch pages to show relevant keywords and related pages.</li> <li><strong>Attachments: </strong>Attachments are indexed and searched for contextual relevance.</li> <li><strong>Comments: </strong>Add community generated content to your site to increase a pages relevancy.</li> </ol> </div> </li> <li> <div> <span id="User_.2f_Role_Management" /><h4>User / Role Management</h4> <p>User management with MindTouch is easy, extensive and versatile. Create new <a rel="internal" href="http://192.168.2.247/deki/cp/user_management.php" class="mt-cp-link new">users</a>, <a rel="internal" href="http://192.168.2.247/deki/cp/role_management.php" class="mt-cp-link new">roles</a> and <a rel="internal" href="http://192.168.2.247/deki/cp/group_management.php" class="mt-cp-link new">groups</a> in the <a rel="internal" href="http://192.168.2.247/deki/cp/dashboard.php" class="mt-cp-link new">control panel</a>.</p> <p class="mt-btn-bar mt-btn-user-page"><a rel="internal" href="http://192.168.2.247/deki/cp/user_management.php" class=" new">user manager</a></p> <span id="Permissions_and_Privacy" /><h4>Permissions and Privacy</h4> <p>MindTouch allows you to limit content to particular users, roles and group. You can apply limitations to individual pages or entire hierarchies.</p> <ol class="mt-small"> <li>Go to the page you wish to protect</li> <li>Click <strong>More &gt; Restrict Access</strong></li> <li>Select the appropriate restriction level</li> </ol> <p style="text-align:center; margin:0"><img alt="" src="/skins/common/images/oobe/mt-img-privacy-settings.gif" /></p> </div> </li> </ul> </div> <p style="margin:3px 0;text-align:right;padding-right:30px;"><img alt="" src="/skins/common/images/oobe/mt-img-privacy-legend.gif" /></p> 
+	</div>
+	
+	<div class="mt-extranet hide">
+<div class="mt-title-bar mt-title-bar-admin-extranet"><a class="mt-tips external" rel="external nofollow" href="http://campaign.mindtouch.com/OOBE/Contact" title="http://campaign.mindtouch.com/OOBE/Contact" target="_blank"> <span>Did you know MindTouch 2009 has database connectors?</span> <span>Did you know MindTouch 2009 has desktop tools?</span> <span>Did you know MindTouch 2009 has powerful mashup capabilities?</span> <span>Did you know MindTouch 2009 has premium  support and training?</span> <span>Did you know MindTouch 2009 has multi-tenant capabilities?</span> <span>Did you know MindTouch 2009 has rich dashboards?</span> </a>  </div> <div class="mt-table"> <ul> <li> <div> <span id="Identify_Your_Extranet" /><h4>Identify Your Extranet</h4> <span id="Customer_extranet_(public)" /><h5>Customer extranet (public)</h5> <p>A customer extranet portal is a secure website that enables businesses to share documents, communicate and share content with customers in a central repository. The customer extranet portal provides access to collaborative tools with just an Internet connection.</p> <span id="Partner_extranet_(private)" /><h5>Partner extranet (private)</h5> <p>The partner extranet portal is a private website that enables businesses to share content with partners in a secure environment. The partner extranet portal provides data connections with CRM as well as collaborative tools with just an Internet connection.</p> </div> </li> <li class="middle"> <div> <span id="Sharing_Official_Documentation" /><h4>Sharing Official Documentation</h4> <p>Creating new content makes your documentation richer and more valuable. Use the <strong><a href="#" onclick="window.location='/index.php?title=New_page_created_by_laura.kolker'">New page</a></strong> link to add a page or use the <strong>Edit page</strong> link to make changes to an existing page.</p> <p>File management is simple, manageable and files are versioned with each modification.</p> <p class="mt-btn-bar mt-btn-create-page"><a href="#" onclick="window.location='/index.php?title=New_page_created_by_laura.kolker'">create a new page</a></p> <span id="Stay_Informed" /><h4>Stay Informed</h4> <p>Monitoring your extranet with MindTouch has never been easier. With page notifications you can receive edit overview emails when any or all pages are modified. Look for the <img style="vertical-align:top;" alt="" src="/skins/common/images/oobe/mt-icon-notifications.gif" /> icon on each page.</p> </div> </li> <li> <div> <span id="User_.2f_Role_Management_2" /><h4>User / Role Management</h4> <p>User management with MindTouch is easy, extensive and versatile. Create new <a rel="internal" href="http://192.168.2.247/deki/cp/user_management.php" class="mt-cp-link new">users</a>, <a rel="internal" href="http://192.168.2.247/deki/cp/role_management.php" class="mt-cp-link new">roles</a> and <a rel="internal" href="http://192.168.2.247/deki/cp/group_management.php" class="mt-cp-link new">groups</a> in the <a rel="internal" href="http://192.168.2.247/deki/cp/dashboard.php" class="mt-cp-link new">control panel</a>.</p> <p class="mt-btn-bar mt-btn-user-page"><a rel="internal" href="http://192.168.2.247/deki/cp/user_management.php" class=" new">user manager</a></p> <span id="Permissions_and_Privacy_2" /><h4>Permissions and Privacy</h4> <p>Need to keep something to yourself? Privacy with MindTouch is easy and secure.</p> <ol class="mt-small"> <li>Go to the page you wish to protect</li> <li>Click <strong>More &gt; Restrict Access</strong></li> <li>Select the appropriate restriction level</li> </ol> <p style="text-align:center; margin:0"><img alt="" src="/skins/common/images/oobe/mt-img-privacy-settings.gif" /></p> </div> </li> </ul> </div> <p style="margin:3px 0;text-align:right;padding-right:30px;"><img alt="" src="/skins/common/images/oobe/mt-img-privacy-legend.gif" /></p>
+	</div>
+	
+	<div class="mt-intranet">
+<div class="mt-title-bar mt-title-bar-admin-intranet"> <div><a class="mt-tips external" rel="external nofollow" href="http://www.mindtouch.com/Solutions/Intranet_Solution" title="http://www.mindtouch.com/Solutions/Intranet_Solution" target="_blank">Did you know that MindTouch has out of the box <strong>Collaborative Intranets</strong>?</a></div>  </div> <div class="mt-table"> <ul> <li> <div> <span id="What_makes_a_good_Intranet.3f" /><h4>What makes a good Intranet?</h4> <p>MindTouch Intranets tightly integrate projects, content management, teams and search into a single <a rel="external nofollow" href="http://www.mindtouch.com/Solutions/Intranet_Solution" title="http://www.mindtouch.com/Solutions/Intranet_Solution" target="_blank" class=" external">out of the box intranet solution</a>.</p> <span id="MindTouch_Intranet" /><h4>MindTouch Intranet</h4> <p style="text-align:center;"><img alt="" src="/skins/common/images/oobe/mt-img-intranet.gif" /></p> <p>Leverage user contributions to build your intranet and establish community champions.</p> </div> </li> <li class="middle"> <div> <span id="Authentication" /><h4>Authentication</h4> <p>Authentication with MindTouch is flexible and powerful.  MindTouch enables you to leverage your existing authentication providers such as LDAP/AD for a seamless <strong>single-sign-on</strong> experience.</p> <p /> <p class="mt-btn-bar mt-btn-authentication"><a rel="internal" href="http://192.168.2.247/deki/cp/authentication.php" class=" new">add authentication</a></p> <span id="Intranet_Setup" /><h4>Intranet Setup</h4> <p>Setting up your intranet is a snap. Set up team and department pages, dashboards and projects with just a few clicks.</p> <p>Use MindTouch permissions to grant users access to specific hierarchies.</p> </div> </li> <li> <div> <span id="User_.2f_Role_Management_3" /><h4>User / Role Management</h4> <p>User management with MindTouch is easy, extensive and versatile. Create new <a rel="internal" href="http://192.168.2.247/deki/cp/user_management.php" class="mt-cp-link new">users</a>, <a rel="internal" href="http://192.168.2.247/deki/cp/role_management.php" class="mt-cp-link new">roles</a> and <a rel="internal" href="http://192.168.2.247/deki/cp/group_management.php" class="mt-cp-link new">groups</a> in the <a rel="internal" href="http://192.168.2.247/deki/cp/dashboard.php" class="mt-cp-link new">control panel</a>.</p> <p class="mt-btn-bar mt-btn-user-page"><a rel="internal" href="http://192.168.2.247/deki/cp/user_management.php" class=" new">user manager</a></p> <span id="Permissions_and_Privacy_3" /><h4>Permissions and Privacy</h4> <p>Need to keep something to yourself? Privacy with MindTouch is easy and secure.</p> <ol class="mt-small"> <li>Go to the page you wish to protect</li> <li>Click <strong>More &gt; Restrict Access</strong></li> <li>Select the appropriate restriction level</li> </ol> <p style="text-align:center; margin:0"><img alt="" src="/skins/common/images/oobe/mt-img-privacy-settings.gif" /></p> </div> </li> </ul> </div> <p style="margin:3px 0;text-align:right;padding-right:30px;"><img alt="" src="/skins/common/images/oobe/mt-img-privacy-legend.gif" /></p>
+	</div>
+	
+	<div class="mt-enterprise-wiki hide">
+enterprise wiki
+	</div>
+</div>
+
+<div>
+<script type="text/javascript"><![CDATA[
+	$("body").ready( function() {
+$(".mt-tabs li:not(.selected) a").click( function() { 
+var contenthref = $(this).attr("href");
+if (contenthref=='#') {
+var contentid = $(this).attr("title");
+$(".mt-tabs li a").removeClass("selected");
+$(this).addClass("selected");
+
+$(".mt-content > div:not(.hide)").fadeOut( function() {
+	$(".mt-content > div." + contentid).fadeIn();
+	
+	$(".mt-content > div").addClass("hide");
+	$(".mt-content > div." + contentid).removeClass("hide");
+});
+return false;
+}
+
+});
+
+$(".mt-tabs li:not(.title):last a").addClass("selected");
+
+$(".mt-tips span:first").addClass("selected");	
+$(".mt-tips span:last").attr("pos","last");	
+
+$(".mt-tips span.selected").fadeIn();	
+
+setInterval ( "nextTip()", 6000 );
+	});
+	
+	function nextTip() {
+	
+	
+$(".mt-tips span.selected").each( function() {
+$(this).hide();
+$(this).removeClass("selected");
+var pos = $(this).attr("pos");
+
+if (pos=="last") {
+	$(this).parent().find("span:first").addClass("selected");
+	$(this).parent().find("sp an:first").show();
+} else {
+	$(this).find("+ span").addClass("selected");
+	$(this).find("+ span").show();
+}
+});
+
+	}
+]]></script>
+</div>
+
+
+<link rel="stylesheet" type="text/css" href="/skins/common/oobe.css" /></div></body><body target="toc"><ol style="list-style-type:none; margin-left:0px; padding-left:0px;"><li><span>1.</span> <a href="#Welcome_to_MindTouch" rel="internal">Welcome to MindTouch</a><ol style="list-style-type:none; margin-left:0px; padding-left:15px;"><li><ol style="list-style-type:none; margin-left:0px; padding-left:15px;"><li><span>1.1.1.</span> <a href="#Knowledge_Base_Templates" rel="internal">Knowledge Base Templates</a></li><li><span>1.1.2.</span> <a href="#Document_Management" rel="internal">Document Management</a></li><li><span>1.1.3.</span> <a href="#Properly_Identifying_Content" rel="internal">Properly Identifying Content</a></li><li><span>1.1.4.</span> <a href="#User_.2f_Role_Management" rel="internal">User / Role Management</a></li><li><span>1.1.5.</span> <a href="#Permissions_and_Privacy" rel="internal">Permissions and Privacy</a></li><li><span>1.1.6.</span> <a href="#Identify_Your_Extranet" rel="internal">Identify Your Extranet</a><ol style="list-style-type:none; margin-left:0px; padding-left:15px;"><li><span>1.1.6.1.</span> <a href="#Customer_extranet_(public)" rel="internal">Customer extranet (public)</a></li><li><span>1.1.6.2.</span> <a href="#Partner_extranet_(private)" rel="internal">Partner extranet (private)</a></li></ol></li><li><span>1.1.7.</span> <a href="#Sharing_Official_Documentation" rel="internal">Sharing Official Documentation</a></li><li><span>1.1.8.</span> <a href="#Stay_Informed" rel="internal">Stay Informed</a></li><li><span>1.1.9.</span> <a href="#User_.2f_Role_Management_2" rel="internal">User / Role Management</a></li><li><span>1.1.10.</span> <a href="#Permissions_and_Privacy_2" rel="internal">Permissions and Privacy</a></li><li><span>1.1.11.</span> <a href="#What_makes_a_good_Intranet.3f" rel="internal">What makes a good Intranet?</a></li><li><span>1.1.12.</span> <a href="#MindTouch_Intranet" rel="internal">MindTouch Intranet</a></li><li><span>1.1.13.</span> <a href="#Authentication" rel="internal">Authentication</a></li><li><span>1.1.14.</span> <a href="#Intranet_Setup" rel="internal">Intranet Setup</a></li><li><span>1.1.15.</span> <a href="#User_.2f_Role_Management_3" rel="internal">User / Role Management</a></li><li><span>1.1.16.</span> <a href="#Permissions_and_Privacy_3" rel="internal">Permissions and Privacy</a></li></ol></li></ol></li></ol></body></content><tags count="0" href="http://192.168.2.247/@api/deki/pages/21/tags" /><comments sort="asc" count="0" totalcount="0" href="http://192.168.2.247/@api/deki/pages/21/comments" /><files count="0" href="http://192.168.2.247/@api/deki/pages/21/files" /></pagedata>

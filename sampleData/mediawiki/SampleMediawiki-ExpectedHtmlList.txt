@@ -1,0 +1,30 @@
+This is a sample file for html style lists.
+
+Ordered List
+# item1
+# item2
+## a
+## b
+
+
+Unordered List
+* item1
+* item2
+** a
+** b
+
+
+Both
+# item1
+# item2
+#* a
+#* b
+
+
+Both - NO WS
+
+# item1 
+# item2 
+#* a 
+#* b  
+

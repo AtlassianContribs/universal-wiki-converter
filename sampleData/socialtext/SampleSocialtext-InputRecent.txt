@@ -1,0 +1,11 @@
+Subject: SampleSocialtext-InputRecent
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+Test file for the recently changed macro.
+
+{recent_changes: }
+
+{recent_changes: workspace}
+

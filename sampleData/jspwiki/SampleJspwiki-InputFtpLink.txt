@@ -1,0 +1,5 @@
+Sample file for ftp links. See UWC-389
+
+[ftp://www.hp.com]
+[hp ftp site|ftp://www.hp.com]
+

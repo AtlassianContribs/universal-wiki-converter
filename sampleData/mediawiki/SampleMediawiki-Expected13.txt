@@ -1,0 +1,6 @@
+This is for testing links to images in tables.
+
+{panel:title=The table's caption|borderStyle=dashed|borderColor=#ccc|bgColor=#fff}
+| Video | [How to|http://127.0.0.1:8081/mediawiki/index.php/Main_Page] | [serial cable|http://127.0.0.1:8081/mediawiki/index.php/Image:Wiki.png] | [^Wiki.png] | [Project|file://localhost:8081/shares/public/project_current] | [project2|file://localhost:8081/shares/public/project2/] | [jumper photo|http://127.0.0.1:8081/mediawiki/index.php/Image:Wiki.png] |
+| non link | cells | | | | | |
+{panel}

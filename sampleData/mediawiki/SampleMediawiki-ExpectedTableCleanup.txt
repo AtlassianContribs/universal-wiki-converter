@@ -1,0 +1,6 @@
+This sample page is for mediawiki tables that need cleanup before the tableconverter can use them
+|| h1. Lorem Ipsum ||
+|| Foo || Bar ||
+
+
+

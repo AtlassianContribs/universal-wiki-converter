@@ -1,0 +1,7 @@
+This sample is for testing superscript text.
+
+Superscript:
+^superscript^
+
+This ^word and a few others^ is in superscript.
+

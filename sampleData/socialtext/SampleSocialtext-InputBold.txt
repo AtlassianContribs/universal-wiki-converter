@@ -1,0 +1,17 @@
+Subject: SampleSocialtext-InputBold
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+This is a sample file for bold syntax.
+Socialtext bold syntax appears to be the same as Confluence bold syntax
+but it's best to have a test for it to make sure that other converters don't interfere
+
+*Bold*
+
+Foo Bar *Lalala* 123
+
+* *item*
+** *item2*
+* abc *bold* def
+

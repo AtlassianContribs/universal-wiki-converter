@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<content>This sample file is for making sure pre syntax stays the same.
+{pre}
+No *bold rendering* in wiki syntax.
+{/pre}
+</content></xwikidoc>

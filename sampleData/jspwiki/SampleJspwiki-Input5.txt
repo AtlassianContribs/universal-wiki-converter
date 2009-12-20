@@ -1,0 +1,7 @@
+Here is a macro
+{2}
+And another one
+{1,2}
+What about this
+{hi}
+

@@ -1,0 +1,7 @@
+<outer>
+<pre>Stuff</pre>
+<ul>
+<li>This is an item</li>
+</ul>
+<end att="something" />
+</outer>

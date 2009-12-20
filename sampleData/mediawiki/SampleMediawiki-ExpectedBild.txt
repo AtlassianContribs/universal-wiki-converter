@@ -1,0 +1,4 @@
+This is a sample file for testing what happens when the word Bild is used to identify an image:
+
+!Wiki.png!
+

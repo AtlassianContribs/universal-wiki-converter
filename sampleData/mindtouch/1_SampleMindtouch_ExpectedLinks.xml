@@ -1,0 +1,14 @@
+Internal
+[Test Comments]
+[Alias to Comments Page|Test Comments]
+External
+[http://abc.com]
+[Alias to external link|http://abc.com]
+underscores:
+[Test Z_underscores |Test Z_underscores]
+links to a "bad char" page
+[Test XYZ; Bad Chars|Test XYZ. Bad Chars]
+inline images from another page:
+!Test Attachments^cow.jpg!
+attachment links from another page:
+[Test Attachments^cow.jpg]

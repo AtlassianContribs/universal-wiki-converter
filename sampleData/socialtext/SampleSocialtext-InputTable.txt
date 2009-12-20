@@ -1,0 +1,40 @@
+Subject: SampleSocialtext-InputTable
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+This is a sample page for testing table syntax
+
+----
+
+| Basic | Table | Testing |
+| foo | bar | meh |
+
+| 
+testing | 
+* one | 
+# two | 
+## three |
+
+it figures out how to stop by a lack of ws after the last pipe?
+
+|| sort:off border:on
+| ^^^ r1c1
+| *r1c2* | _r1c3_ |
+| 
+* list | 
+# numbered | 
+* Testing |
+| xyz | 
+* test | 
+# ing |
+
+|| sort:off border:on
+| 
+* one
+* two
+* three | 
+# one
+# two
+# three | |
+

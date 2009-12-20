@@ -1,0 +1,4 @@
+This is a sample for a parser that takes a given tag and attributes and transforms them to Confluence macro syntax.
+
+{span:class=someclass|style=color:red}This is a span tag{span}
+

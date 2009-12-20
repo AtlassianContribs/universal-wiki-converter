@@ -1,0 +1,17 @@
+This sample file is for testing conversion of info, error, and warning boxes
+
+XWiki syntax sample:
+{info}
+This is an information panel - corresponds to Confluence info box
+{info}
+
+Corresponds to Confluence note box
+{note}
+This is a warning panel
+{note}
+
+Corresponds to Confluence warning box
+{warning}
+This is an error panel
+{warning}
+

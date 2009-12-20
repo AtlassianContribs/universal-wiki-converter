@@ -1,0 +1,5 @@
+This is for testing links that would be affected by the UseBuilder hierarchy option
+
+[Def|Def]
+[alias|JustThis]
+

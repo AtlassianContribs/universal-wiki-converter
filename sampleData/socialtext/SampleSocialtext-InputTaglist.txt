@@ -1,0 +1,21 @@
+Subject: SampleSocialtext-InputTaglist
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+This is a sample page for transforming tag_list widget to contentbylabel
+
+Basic label:
+{tag_list: test}
+
+What if the label has illegalchars?
+{tag_list: abc!#&()*,.:;<>?@[]^def}
+{tag_list: has white space}
+(These chars are ok:)
+{tag_list: abc$%-_+=\"'{~}
+right brace and pipe are legal label chars as well, but the former will not be able to be used in a macro, and the latter will have issues with the table converter's line condensing formula. These are, however, unusual chars, so we're not worrying about these for now.
+
+What if there's more than one label?
+{tag_list: a OR b}
+{tag_list: foo OR tag_list:bar OR tag_list:meh OR tag_list:abc}
+

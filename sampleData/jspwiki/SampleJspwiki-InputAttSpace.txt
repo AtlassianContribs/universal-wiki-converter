@@ -1,0 +1,4 @@
+Test for uwc-195 - links to attachments with spaces
+
+[This is a foo bar|foo bar.pdf]
+

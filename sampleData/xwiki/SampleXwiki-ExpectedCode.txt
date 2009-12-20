@@ -1,0 +1,7 @@
+This sample file is for making sure code syntax isn't changed.
+
+XWiki syntax sample:
+{code}
+No <strong>bold rendering</strong> in HTML.
+No *bold rendering in* wiki syntax.
+{code}

@@ -1,0 +1,15 @@
+*Original Poster:* [~admin]
+*Original Timestamp:* 2009-07-02 15:13:03
+
+Inline:
+!1_cow.jpg!
+Thumbnail:
+!2_cow.jpg_thumb.jpg!
+
+Link
+[^1_cow.jpg]
+[thumb alias|^2_cow.jpg_thumb.jpg]
+
+Note: There's an image attached to this message? topic? and I don't necessarily have to refer to it in the page content.
+
+{gallery:title=Attached Images}

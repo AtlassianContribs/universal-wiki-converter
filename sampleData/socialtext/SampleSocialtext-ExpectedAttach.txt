@@ -1,0 +1,38 @@
+
+*Inline Images*
+!cow.jpg!
+!pagename^cow.jpg!
+!space2:pagename^cow.jpg!
+!Utah.png!
+
+*Size constraints*
+!ed.jpeg|thumbnail!
+!ed.jpeg|width=50%!
+!ed.jpeg|width=5%!
+!ed.jpeg|width=20%!
+!ed.jpeg|width=200px!
+!ed.jpeg|width=0px!
+
+*File links*
+[^cow.jpg]
+[pagename^cow.jpg]
+[space2:pagename^cow.jpg]
+
+*Allows whitespace in filename*
+!double facepalm.jpg!
+[^double facepalm.jpg]
+
+*Allows whitespace in filename, but file on system uses %20 for whitespace*
+!foo%20bar.gif!
+[^foo%20bar.gif]
+
+*Alias for file links*
+[Alias|^cow.jpg]
+
+*Everything at once*
+[Alias|space2:pagename^double facepalm.jpg]
+!space2:pagename^double facepalm.jpg|width=20%!
+
+*External*
+!http://localhost:8082/download/attachments/426023/double+facepalm.jpg!
+

@@ -1,0 +1,16 @@
+This is a sample page for transforming tag_list widget to contentbylabel
+
+Basic label:
+{contentbylabel:labels=test}
+
+What if the label has illegalchars?
+{contentbylabel:labels=abcdef}
+{contentbylabel:labels=haswhitespace}
+(These chars are ok:)
+{contentbylabel:labels=abc$%-_+=\"'{~}
+right brace and pipe are legal label chars as well, but the former will not be able to be used in a macro, and the latter will have issues with the table converter's line condensing formula. These are, however, unusual chars, so we're not worrying about these for now.
+
+What if there's more than one label?
+{contentbylabel:labels=a,b}
+{contentbylabel:labels=foo,bar,meh,abc}
+

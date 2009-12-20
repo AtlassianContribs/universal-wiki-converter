@@ -1,0 +1,20 @@
+Sample page with Table containing a list
+
+{| border="1" cellspacing="0" cellpadding="5" align="left"
+! align="left" colspan="2"| 
+== ABC DEF == <!-- Comment -->
+|- 
+! align="left"| A <!-- testing 123 -->
+! align="left"| B <!-- abcdef -->
+|- 
+! valign="top" align="left"| 
+=== Something else ===
+| valign="top" align="left"| <!-- abcdef -->
+* testing 
+*#'''123 '''
+* blah blah
+**'''''Something, here'''''
+* abcdef
+|- <!-- ABCDEF -->
+|}
+

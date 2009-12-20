@@ -1,0 +1,8 @@
+Test page for the search macro with configuration options
+
+*search with a tag*
+{contentbylabel:labels=category|title=Category|reverse=true|spaces=@self|sort=creation}
+
+*search with booleans and tags*
+{contentbylabel:labels=+foo,+bar|title=Foo and Bar|reverse=true|spaces=@self|sort=creation}
+

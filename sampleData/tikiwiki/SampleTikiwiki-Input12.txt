@@ -1,0 +1,27 @@
+This is a test of color text conversion
+
+Before
+
+~~#FF0000:Should be red~~
+
+Not
+
+~~red:Should be red~~
+
+Not
+
+red:Should not be red
+
+Not
+
+~~red:Should be red
+multiline
+coloration
+~~
+
+~~#FF0000:Should be red
+multiline
+coloration
+~~
+
+After

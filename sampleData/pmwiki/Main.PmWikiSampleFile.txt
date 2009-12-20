@@ -1,0 +1,83 @@
+
+!!!Test Header
+
+The reason this file is called 'Main.PmWikiSampleFile.txt' is because with PmWiki all pages are grouped into 'groups'. Files store the wiki content. Those files are always prepended with a group name. One of the default groups is 'Main'. Also attachments are stored in subdirectories named after the group. Hence the 'Main' dir which is storing an attachment.
+
+
+You have to enable the Confluence html macro if it is not already
+----
+paragraph indentation (no apparent Confluence translation)
+
+->Four score and seven years ago our fathers placed upon
+this continent a new nation, conceived in liberty and
+dedicated to the proposition that all men are created
+equal.
+
+--->Four score and seven years ago our fathers placed upon
+this continent a new nation, conceived in liberty and
+dedicated to the proposition that all men are created
+equal.
+
+but this should not impact arrows -> that are in the middle
+but this should not impact arrows ---> that are in the middle
+
+----
+Bullets (Conf: done - no change)
+
+* First-level list item
+** Second-level list item
+** Another second-level item
+* A first-level item
+[[fun]]
+
+----
+horizontal line - (Conf: done)
+
+----
+simple formating - (Conf: done)
+
+''italics words''
+
+'''bold text'''
+
+'''''bold and italics text'''''
+
+----
+tables (Conf: done, but no multi-span)
+
+||border=1 width=50%
+||!Table||!Heading||!Example||
+||!Left   || Center || Right||
+||A       ||!   B   ||     C||
+||        || single ||      ||
+||        || multi span   |||
+----
+Links 
+
+ here is some text with a link - [[ link to a page ]] yadda yadda
+ here is some text with two links - [[ link to a page ]] yadda [[anotherLink]] yadda
+ link to a page with some text - [[ link to a page | and some text ]] yadda [[anotherLink]] yadda
+ link to a page with an arrow - [[ and some text -> link to a page ]] yadda [[anotherLink]] yadda
+ link to an attachment - [[Attach:testFile.doc]] yadda yadda
+ link to an attachment also with text [[Attach:testFile.doc|More fun]] yadda yadda
+ [[Attach:testFile.jpeg| link to the test image file that should be uploaded]]
+ 
+ 
+ [[http://www.google.com]]
+  [[https://www.google.com]]
+----
+image attachment
+
+Attach:testFile.jpeg <- this is an image
+Attach:testFile.doc <- this is a non-image attachment
+
+----
+----
+Headings
+
+! Level 1 Heading
+!! Level 2 Heading
+!!! Level 3 Heading
+!!!! Level 4 Heading
+
+But should not convert ! or !!s that exist in the middle

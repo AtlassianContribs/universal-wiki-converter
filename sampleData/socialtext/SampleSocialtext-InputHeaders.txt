@@ -1,0 +1,36 @@
+Subject: SampleSocialtext-InputHeaders
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+
+^^^^ This is a sample file for testing socialtext header syntax
+
+^ heading 1
+^^ heading 2
+^^^ heading 3
+^^^^ heading 4
+^^^^^ heading 5
+^^^^^^ heading 6
+
+^^ [With a Link]
+^^ *With Bold:*
+^^ {section:anchor} With Anchor
+
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+{link: anchor}
+
+^^^^ _foo bar hrm 'testing ?_
+

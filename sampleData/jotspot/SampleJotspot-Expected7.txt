@@ -1,0 +1,32 @@
+h2. Sun Facts
+
+h2. !270px-Sun920607.jpg!
+
+
+* [1 Overview|http://en.wikipedia.org/wiki/Sun#Overview]
+* [2 Life cycle|http://en.wikipedia.org/wiki/Sun#Life_cycle]
+* [3 Structure|http://en.wikipedia.org/wiki/Sun#Structure]
+** [3.1 Core|http://en.wikipedia.org/wiki/Sun#Core]
+** [3.2 Radiation zone|http://en.wikipedia.org/wiki/Sun#Radiation_zone]
+** [3.3 Convection zone|http://en.wikipedia.org/wiki/Sun#Convection_zone]
+** [3.4 Photosphere|http://en.wikipedia.org/wiki/Sun#Photosphere]
+** [3.5 Atmosphere|http://en.wikipedia.org/wiki/Sun#Atmosphere]
+* [4 Solar activity|http://en.wikipedia.org/wiki/Sun#Solar_activity]
+** [4.1 Sunspots and the solar cycle|http://en.wikipedia.org/wiki/Sun#Sunspots_and_the_solar_cycle]
+** [4.2 Effects on Earth|http://en.wikipedia.org/wiki/Sun#Effects_on_Earth]
+* [5 Theoretical problems|http://en.wikipedia.org/wiki/Sun#Theoretical_problems]
+** [5.1 Solar neutrino problem|http://en.wikipedia.org/wiki/Sun#Solar_neutrino_problem]
+** [5.2 Coronal heating problem|http://en.wikipedia.org/wiki/Sun#Coronal_heating_problem]
+** [5.3 Ultraviolet rays|http://en.wikipedia.org/wiki/Sun#Ultraviolet_rays]
+** [5.4 Faint young Sun problem|http://en.wikipedia.org/wiki/Sun#Faint_young_Sun_problem]
+* [6 Magnetic field|http://en.wikipedia.org/wiki/Sun#Magnetic_field]
+* [7 History of solar observation|http://en.wikipedia.org/wiki/Sun#History_of_solar_observation]
+** [7.1 Early understanding of the Sun|http://en.wikipedia.org/wiki/Sun#Early_understanding_of_the_Sun]
+** [7.2 Development of modern scientific understanding|http://en.wikipedia.org/wiki/Sun#Development_of_modern_scientific_understanding]
+** [7.3 Solar space missions|http://en.wikipedia.org/wiki/Sun#Solar_space_missions]
+* [8 Sun observation and eye damage|http://en.wikipedia.org/wiki/Sun#Sun_observation_and_eye_damage]
+* [9 Sun in human culture|http://en.wikipedia.org/wiki/Sun#Sun_in_human_culture]
+* [10 See also|http://en.wikipedia.org/wiki/Sun#See_also]
+* [11 References|http://en.wikipedia.org/wiki/Sun#References]
+* [12 External links|http://en.wikipedia.org/wiki/Sun#External_links]
+

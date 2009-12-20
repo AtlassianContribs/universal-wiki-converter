@@ -1,0 +1,47 @@
+From CompoundPropertyModel
+=Scope=
+{{ModelBackground | modelJavadoc=[http://wicket.sourceforge.net/apidocs/wicket/model/CompoundPropertyModel.html CompoundPropertyModel]}}
+
+
+=Background=
+
+For the moment, see [[Models#Compound_Property_Models]] for more information.
+
+''(If you came here looking for specific info & later find it elsewhere, please consider adding a note about it somewhere on the wiki for the next person!)
+''
+
+=FAQ=
+
+
+
+
+
+=Examples=
+
+
+
+
+
+[[category:FAQ]] [[category:Model]]
+
+
+
+From Java Security Permissions
+Version 1.1 may require property permissions and OGNL permissions that are not listed here. Please update this page if you know more about it.
+
+For version 1.2, you seem to need (Tomcat catalina.policy syntax):
+
+<pre>
+// For substitution of one object for another during serialization
+// or deserialization. This is used in ReplaceObjectOutputStream,
+// which is used for page versioning (undoing changes).
+permission java.io.SerializablePermission "enableSubstitution";
+
+// For crypted URL functionality (see WebRequestWithCryptedUrl).
+permission java.security.SecurityPermission "insertProvider.SunJCE";
+</pre>
+
+<pre>
+// The following was required to get Wicket, at least the examples, to work at all
+permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+</pre>

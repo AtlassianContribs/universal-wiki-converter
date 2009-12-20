@@ -1,0 +1,2 @@
+This page has an internal link to a page with a bad char:
+[Page With Bad Char|testwiki2:Page With Bad Char]

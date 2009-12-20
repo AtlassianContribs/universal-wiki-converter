@@ -1,0 +1,7 @@
+This is a sample file for combinations of syntax.
+
+UWC-351
+*'' __A B C.__''
+*'' __   D E F. __''
+*''   __ G H I.__''
+

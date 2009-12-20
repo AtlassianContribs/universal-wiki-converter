@@ -1,0 +1,35 @@
+*Original Poster:* [~admin]
+*Original Timestamp:* 2009-07-02 15:06:22
+
+Simple list:
+* Testing
+* 123
+* abc
+* def
+
+
+Nesting:
+* level1
+** level 2
+* foobar
+
+No closing delimiter
+* no delim
+
+With Links:
+
+* test [http://abc.com]
+
+No LIs
+* circle
+* circle
+* circle
+* disc
+* disc
+# square
+# square
+# square
+
+
+
+{gallery:title=Attached Images}

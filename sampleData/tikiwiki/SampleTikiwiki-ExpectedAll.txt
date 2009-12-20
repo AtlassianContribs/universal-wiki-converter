@@ -1,0 +1,354 @@
+There will be a file here...
+
+Monospace 
+{{mono}}
+
+No wiki formatting
+{noformat}__No__ formatting{noformat}
+
+Italicise text
+_italic_
+
+Bold text
+*bold*
+
+Bold and italic
+*_bold & italic_*
+
+Internal link (within Wikipedia)
+[name of page]
+[display text|name of page]
+[label in this page|#section in this page]
+
+External link (to other websites)
+[http://www.example.com]
+[display text|http://www.example.com]
+[display text|http://www.example.com]
+[Secure|https://security.com]
+
+Applies only at the beginning of the line
+Headings
+of different sizes
+
+h1. Level 1
+h2. Level 2
+h3. Level 3
+h4. Level 4
+
+Bullet list
+
+* one
+* two
+** two point one
+* three
+
+Numbered list
+
+# one
+# two
+## two point one
+# three
+
+Thumbnail image
+
+!hobbespounce.gif!
+!Wiki.png!
+
+{toc:type=list|outline=true|printable=false}
+
+Tables
+
+|| Header1 || Header2 || Header3 ||
+| r1c1 | r1c2 | r1c3 |
+| r2c1 | r2c2 | r2c3 |
+
+|| Header1 || Header2 || Header3 ||
+|| Row1 Header | r1c2 | r1c3 |
+|| Row2 Header | r2c2 | r2c3 |
+
+
+No headers:
+
+| r1c1 | r1c2 |
+| r2c1 | r2c2 |
+
+Row and Col spans:
+
+| row1-column1 | row1-column2 | row1-column3 |
+| row2-columns123 | | |
+| row3-column1 | row3-columns23 | |
+
+Preformatted:
+{noformat}This __might__ have some ((Wiki syntax)). That's ignored.{noformat}
+
+Code:
+{code}
+System.out.println("This is code");
+{code}
+
+
+{panel}
+{{And what does this white-space starting line mean?}}
+{{Is this like a pre tag?}}
+{{How does it treat [Wiki syntax]?}}
+{panel}
+
+Colored text:
+{color:#FFEE33}some text{color}
+
+Underlined:
++underlined+
+
+Title bar:
+h1. title
+
+Centered text
+Centered
+
+{panel}
+Just a panel?
+{panel}
+
+{anchor:section in this page}
+
+Mostly from [WikiSyntax|http://tikiwiki.org/tiki-index.php?page=WikiSyntax]
+
+----
+Attachments
+
+!hobbespounce.gif!
+!Wiki.png!
+!Wiki.png!
+
+Importance of quotes
+!hobbespounce.gif!
+!Wiki.png!
+
+Importance of space
+!hobbespounce.gif!
+!hobbespounce.gif!
+!Wiki.png!
+
+[MySQL|http://www.mysql.com] is an open-source RDBMS that's very easy to set up and use.  We sometimes use MySQL in the development phase of projects when we need a database we can administer ourselves because of frequent schema changes.  [Hypersonic] is another nice RDBMS for this purpose.  Recently, getting an [Oracle] instance made and administering it ourselves has become easier, so we're relying less on MySQL.
+
+----
+h1. Reference
+
+Here's a quick list of common MySQL commands (most of these are just plain SQL, actually).
+
+List of databases:
+{{SHOW DATABASES;}}
+Switch to database:
+{{USE dbname;}}
+List of tables in database:
+{{SHOW TABLES;}}
+Table details:
+{{DESCRIBE tblname;}}
+Create database:
+{{CREATE DATABASE dbname;}}
+Grant privileges on database:
+{{GRANT ALL ON dbname.* TO username;}}
+
+Add table:
+{{CREATE TABLE tblname (colname type, colname type, ...);}}
+Remove table:
+{{DROP TABLE tblname;}}
+
+Add column:
+{{ALTER TABLE tblname ADD colname type \[NOT NULL\] \[DEFAULT value\];}}
+Remove column:
+{{ALTER TABLE tblname DROP colname;}}
+Rename column:
+{{ALTER TABLE tblname CHANGE colname newcolname (same type);}}
+
+Insert row:
+{{INSERT tblname (colname,...) VALUES (expr,...);}}
+Update rows:
+{{UPDATE tblname SET colname=expr, ... \[WHERE where_expr\];}}
+Remove rows:
+{{DELETE FROM tblname \[WHERE where_expr\];}}
+
+Compare with NULL:
+{{colname IS \[NOT\] NULL}}
+
+
+----
+Alternate Monospace Syntax:
+
+{{Should Be Monospace}}
+
+
+----
+CamelCase Not a Link Syntax:
+
+NotALink
+
+This [should be a link] but this needs to be cleaned
+
+
+----
+Enforce List Whitespace
+
+* listitem
+** listitem
+
+# numbereditem
+## numbereditem
+### numbereditem
+
+* already has the whitespace
+** already has the whitespace
+# already has the whitespace
+## already has the whitespace
+### already has the whitespace
+
+----
+This is to test converting and attaching image syntax that uses URLs
+
+This image is located on my local apache server
+
+!http://localhost:8081/tikiwiki-1.9.5/img/wiki_up/hobbespounce.gif!
+
+Does it convert and attach?
+
+----
+This is to test Code blocks bug uwc-97 (maybe this is a list context issue?)
+
+Before
+* Listone
+** {code}
+This is a code block
+{code}
+** Some stuff
+** {code}
+Another code block!
+{code}
+
+Another possibility is that this stuff is getting munged by the panel:
+
+{panel}
+Starting a panel here
+
+{code}
+Non list context code block
+{code}
+Something else
+{code}
+This is different?
+{code}
+
+* list context!
+** {code}
+Something
+{code}
+** still list
+** {code}
+Something else
+{code}
+
+About to end the panel
+{panel}
+
+download syntax: (this is a local test - change the url to your tikiwiki location)
+!cow.jpg!
+!cow.jpg!
+
+Color
+{color:#FF0000}Should be red{color}
+{color:red}Should be red{color}
+{color:red}Should be red
+multiline
+coloration
+{color}
+
+Tables with dashes
+| r1c1 | \- |
+| r2c1 | r2c2 |
+
+Tables with newline delimiters
+
+| A | B | C | D | E |
+| abc | def | ghi | jkl | \- |
+| abc | def | ghi | jkl | |
+| abc | def | ghi | | |
+
+Multiple Tables with Newline Delimiters
+
+{panel}
+Pre text: ABC, DEFs.
+|| ABC || DEF || GHI JKL || MNO PQR ||
+| http://www.google.com/ | Ac | 11/29/2005 | 11/29/2005 |
+| http://www.google.com/ | Ac | 1/6/2006 | 1/6/2006 |
+{panel}
+
+
+*header*
+{panel}
+Home Site:[http://www.google-google.com/|http://www.google-google.com/]
+Download Link:[http://www.google-google.com/download.shtml|http://www.google-google.com/download.shtml]
+
+| Date: | 1/4/2006 |
+| Version: | 1.0 |
+| Purchase URL: | http://www.google-google.com/buynow.shtml |
+| Purchase Price: | $19.99 |
+| Functionality: | Time Limit (15 day trial version) |
+| Rabc: | ABC |
+| Common Components: | |
+| To Adds: | installer |
+| Notes: | |
+
+{panel}
+
+Tables Back to Back (uwc-115)
+| A | B |
+| a | b |
+
+| C | D |
+| c | d |
+
+Tables with Colspans that can be pruned (uwc-133)
+| A | B |
+| a | b |
+
+Tables starting with an empty cell (uwc-118)
+| A | B |
+| | b |
+
+Horizontal Rules:
+----
+
+Getting out of List Context
+* item 1
+* item 2
+
+Should not be indented like a list item.
+
+This is for testing the stripping away of unnecessary newlines between nested list items
+
+* item a
+** item a1
+** item a2 (this should only have the inner bullet, not both bullets)
+
+
+But! These should be considered seperate lists:
+* item c
+
+* item d
+
+This is for testing adding empty cells to pad out shorter rows that would otherwise have been colspans
+
+| A | B | |
+| a | b | c |
+
+File Gallery Images with whitespace in the filename
+!ed copy.jpeg!
+
+Code blocks that might be interfered with by uwc-106 (illegal name handling)
+{code}
+blah [[blah]] blah
+{code}
+
+----
+XXX Add more conversions here.
+
+

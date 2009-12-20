@@ -1,0 +1,15 @@
+This sample is for testing table conversion
+
+Simple:
+
+|| Title 1 || Title 2 ||
+| Word 1 | Word 2 |
+
+Has sum (we're not converting the sum):
+
+|| Category || Sales (K?) ||
+| Category 1 | 100 |
+| Category 2 | 50 |
+| Category 3 | 50 |
+| Total | =sum(B2:B4) |
+

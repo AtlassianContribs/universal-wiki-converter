@@ -1,0 +1,5 @@
+This is the 2nd sample file for file link syntax (we're getting different results depending on what's in the file)
+
+[file://myserver/hiddenshare$/folder]
+[file://myserver/hiddenshare/folder]
+

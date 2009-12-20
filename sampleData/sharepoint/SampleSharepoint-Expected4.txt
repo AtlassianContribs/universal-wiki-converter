@@ -1,0 +1,18 @@
+{panel:bgColor=#ffc0cb}{color:#8b0000}It's my *party* and I'll _cry_ if I want to.{color}{panel}
+
+* h3. {color:#8b0000}Cry if I want to{color}
+* {color:#8b0000}Cry if I want to{color}
+
+
+{quote}
+h4. {color:#8b0000}Formatting oddities of SharePoint have not changed!
+
+{color}
+{quote}
+{color:#8b0000}But even so the editor is not bad.
+
+{color}
+h3. {color:#000000}Let's create a [child page|my test wiki:child page].{color}
+{color:#8b0000}
+
+{color}

@@ -1,0 +1,10 @@
+For the purpose of testing attachment syntax:
+
+an attachment: [SampleJspwiki-Input21/ed.jpeg]
+not an image: [SampleJspwiki-Input21/ed.zip]
+
+with an alias: [alias|SampleJspwiki-Input21/ed.png]
+with an alias: [alias|SampleJspwiki-Input21/ed.doc]
+
+with dots in the alias: [testing.123|SampleJspwiki-Input21/ed.doc]
+

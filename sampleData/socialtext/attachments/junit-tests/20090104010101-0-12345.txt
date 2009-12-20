@@ -1,0 +1,8 @@
+Control: Deleted
+From: testing@foobar.com
+Subject: somefile.jpg
+DB_Filename: somefile.jpg
+Date: 2009-01-01 01:01:01 GMT
+Received: from 127.0.0.1
+Content-MD5: 123346573489
+Content-Length:1234

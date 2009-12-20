@@ -1,0 +1,17 @@
+This is a sample for combination alt syntax, as described in UWC-328 
+
+*%%(text-decoration: underline; color: red) gooba
+*gah
+
+UWC-356 variant ending for headers
+!! %%(text-decoration: underline)Test 1\\
+!! %%(text-decoration: underline)Test 2%%
+The above two lines should transform the same way.
+
+but shouldn't affect non-headers
+%%(color: red)Test 3\\
+testing%%
+
+what if the decoration is later in the header?
+!! Foo %%(text-decoration: underline)Bar\\
+

@@ -1,0 +1,2 @@
+[u]Lists Problem 3 - Missing Closing Delimiters[/u]<br />[list]<br /><br />a<br /><br />[list][li]b[/li]<br /><br />[li]c[/li]<br />[/list]<br /><br />d
+

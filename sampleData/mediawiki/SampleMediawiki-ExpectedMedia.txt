@@ -1,0 +1,14 @@
+This sample is for testing the conversion and attachment of Media files
+with aliases
+
+[Example PPT File|^Example_PPT_File.ppt]
+
+[^Example-PPT_File-with_dashes.ppt]
+
+[^Example_DOC_file.doc]
+
+[Example XLS File|^Example_XLS_file.xls]
+
+(reported media syntax variant)
+[Alias|^some.doc]
+

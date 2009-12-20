@@ -1,0 +1,35 @@
+This is a sample file for html style lists.
+
+Ordered List
+<ol>
+<li>item1</li>
+<li>item2</li>
+<ol>
+<li>a</li>
+<li>b</li>
+</ol>
+</ol>
+
+Unordered List
+<ul>
+<li>item1</li>
+<li>item2</li>
+<ul>
+<li>a</li>
+<li>b</li>
+</ul>
+</ul>
+
+Both
+<ol>
+<li>item1</li>
+<li>item2</li>
+<ul>
+<li>a</li>
+<li>b</li>
+</ul>
+</ol>
+
+Both - NO WS
+<ol> <li>item1</li> <li>item2</li> <ul> <li>a</li> <li>b</li> </ul> </ol>
+

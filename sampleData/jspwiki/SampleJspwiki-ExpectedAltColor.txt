@@ -1,0 +1,41 @@
+This is a sample for handling UWC-331
+
+{color:red}foobar{color}
+
+{color:red}
+foobar{color}
+
+{color:red}
+foobar
+{color}
+
+{color:red}
+foo
+
+bar
+{color}
+
+* {color:red}foo bar{color}
+
+asdf
+* gah goo
+
+* {color:blue}foo bar{color}
+* gah
+
+tada
+
+* {color:blue}foo bar{color}
+* gah
+
+foobar
+
+** {color:blue}\[team\] The layout on this screen is largely derived from One Voice guidelines (e.g. links don't use underlines until mouse-over).  This screen is intended for the new user and we expect they may need to read all the words on the page, but will later bypass the General tab and perform actions using table toolbars, e.g. on Devices tab.{color}
+
+ 
+h3. Chapter 3 of Admin Guide (Getting Started)
+
+{panel:bgColor=silver}
+h1. {color:black}*THE INFORMATION ON THIS SITE IS RESTRICTED*{color}
+{panel}
+

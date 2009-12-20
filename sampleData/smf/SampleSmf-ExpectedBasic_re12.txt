@@ -1,0 +1,27 @@
+*Original Poster:* [~admin]
+*Original Timestamp:* 2009-07-02 15:00:56
+
+Bold
+*bold*
+
+Italics
+_italics_
+
+Underline
++underline+
+
+Mixed
+*_Bold and Italics_*
+
+With Newlines
+
+   *_With Newlines_*
+
+{color:blue}colored text{color}
+
+{quote}Block quote{quote}
+{color:red}glow text to red color{color}
+{color:red}even when the color is specified{color}
+
+
+{gallery:title=Attached Images}

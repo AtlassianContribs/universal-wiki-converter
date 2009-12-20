@@ -1,0 +1,40 @@
+{{WikiProject Discworld|class=start|in-universe=yes}}
+i am missing a mentioning of the [[man in the middle attack]] in going postal 
+
+----
+There are several errors in this text that I can¿t be bothered to fix cleanly right now. ¿ The largest is the one on the huge hill in Ankh-Morpork called The Grand Trunk¿ ¿ this is the main trunk tower (the hill is the Tump), which is one end of the Grand Trunk, the line from Ankh-Morpork to Genua. ¿ Sent messages were also automatically recorded on punch cards, kept in a metal drum.¿ - this does not seem to agree with the operation of the drum as described in Going Postal. The drum seems to be a self-contained clockwork unit which, among other things, can automatically switch out messages for a given tower. Punch cards don¿t seem to be a suitable form of storage; there is certainly no specific reference to the use of punched cards within the drum. -[[User:Ahruman|Ahruman]] 17:40, 11 April 2006 (UTC)
+
+:I've corrected the Tump/Trunk confusion, and just deleted the line about the drum for the moment. [[User:Daibhid C|Daibhid C]] 13:37, 21 April 2006 (UTC)
+
+
+::Okay, I've reread the book, and I think that's it sorted out now. [[User:Daibhid C|Daibhid C]] 20:17, 9 May 2006 (UTC)
+
+----
+
+Concerning the smoking GNU, I thought the reference would be rather clear: Compare the noncommercial GNU project and its relation to a certain monolithic software corporation to the situation in Going Postal. I also miss the explication of Gilt as a literal "corporate pirate" [[User:88.134.168.58|88.134.168.58]] 20:44, 13 February 2007 (UTC)
+
+I would like to second the idea that ¨Smoking GNU¨ a play on the GNU Project. I´m sure Pratchett could have formulated dozens of other possibilities for a humorous name. Especially given the ¨hacker¨ nature of the Smoking GNU, and their combat with a monolithic, ¨evil¨ corporation.
+
+The "confusion" of gun and gnu also goes back to [Truckers|The_Bromeliad] ("Can you threaten some-one with a gnu?"), but I agree that having GNU uppercase is pretty conclusive.  <span style="font-size: smaller;" class="autosigned">¿Preceding [[Wikipedia:Signatures|unsigned]] comment added by [[Special:Contributions/87.192.217.123|87.192.217.123]] ([[User talk:87.192.217.123|talk]]) 01:40, 3 March 2009 (UTC)</span><!-- Template:UnsignedIP --> <!--Autosigned by SineBot-->
+
+---- 
+
+surely there's another pun with fax (facsimile)? [[User:Danja|Danja]] 21:30, 24 May 2007 (UTC)
+
+----
+
+Where does the six-shutter array come from? ''The Fifth Elephant'' refers to eight shutters, elsewhere sixteen are mentioned (both sides or a duplex), but why six? [[User:99.247.111.69|99.247.111.69]] 19:11, 4 June 2007 (UTC)
+
+----
+
+<''The clacks in Terry Pratchett's Discworld novels is a network of semaphore towers stretching along the Sto Plains, into the Ramtops and across the '''Unnamed Continent''' to Genua.''>
+
+Not the Unnamed Continent, but Uberwald! [[User:212.145.212.247|212.145.212.247]] 08:09, 24 August 2007 (UTC) Daniela.
+
+== Good, but wrong. ==
+
+I¿ve added in-universe and primary-sources templates to the article. Basically, it needs to be completely rewritten because while it would be a good [http://wiki.lspace.org/ Discworld Wiki] article, it¿s not a good Wikipedia article. See [[Wikipedia:Manual of Style (writing about fiction)]]. -[[User:Ahruman|Ahruman]] 07:30, 1 October 2007 (UTC)
+:I find it a bit distressing, though not surprising, that us editors of articles about fiction were not informed when the requirements for articles about fiction were turned upside down. --[[User:Kizor|Kizor]] 22:22, 7 October 2007 (UTC)
+:: It's a fun article to read, but it's not an encyclopedia article (i.e. it cracks jokes). I think that's what Ahruman was getting at. He's not saying it's bad or factually inaccurate, just inappropriately styled.
+Actually, I have a factual error :) The Tump, as a name, predates the clacks tower being built on it, so I don't think the name is in reference to the Trump Tower or the Grand Trunk. Can't remember the reference offhand or I'd change the text. Might have been in the Streets of Ankh-Morpork or maybe the first Companion.[[User:Dantheman123|Dantheman123]] ([[User talk:Dantheman123|talk]]) 14:54, 20 May 2008 (UTC)
+

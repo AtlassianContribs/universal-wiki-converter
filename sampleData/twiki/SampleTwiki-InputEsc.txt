@@ -1,0 +1,11 @@
+Testing escape characters
+
+Testing [ no sign of link.
+
+] foo bar
+
+{ lorem
+
+
+} ipsum
+

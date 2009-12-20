@@ -1,0 +1,7 @@
+Subject: SampleSocialtext-InputFilter
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+This is a sample page for filtering.
+This is the most recent version of this page.

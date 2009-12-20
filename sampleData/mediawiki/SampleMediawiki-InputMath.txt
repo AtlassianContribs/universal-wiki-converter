@@ -1,0 +1,6 @@
+This sample is for testing math syntax 
+
+<math>g(x,y)\,</math>
+
+<math>f(x) = \int_0^1 e^{-t} g(t) \, dt.</math>
+

@@ -1,0 +1,20 @@
+
+This is a page for testing links to pages with illegal characters.
+
+Link number 1: [TestIllegalChars_None]
+Link number 2: [TestIllegalChars[One]
+Link number 3: [TestIllegalChars%5f_None]
+Link number 4: [TestIllegalChars%7b_One]
+Link number 5: [TestIllegalChars[Mult[i]
+Link number 6: [TestIllegalChars%7b_Both[_Types]
+
+What about aliases?
+Link number 1: [alias|TestIllegalChars_None]
+Link number 2: [alias|TestIllegalChars[One]
+Link number 3: [alias|TestIllegalChars%5f_None]
+Link number 4: [alias|TestIllegalChars%7b_One]
+Link number 5: [alias|TestIllegalChars[Mult[i]
+Link number 6: [alias|TestIllegalChars%7b_Both[_Types]
+
+
+

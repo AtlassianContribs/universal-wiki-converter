@@ -1,0 +1,179 @@
+This file is meant to test the wiki converters for XWiki syntax. 
+
+Each set of syntax is shown and it's proper conversion to Confluence syntax is shown afterwards surrounded by {code} tags.
+
+
+Headings
+
+Type:	To get:
+h1. Heading 1
+
+{code}
+when converted to Confluence should be this:
+h1. Heading 1
+{code}
+
+h2. Heading 2
+{code}
+when converted to Confluence should be this:
+h2. Heading 2
+{code}
+
+h3. Heading 3
+{code}
+when converted to Confluence should be this:
+h3. Heading 3
+{code}
+
+h4. Heading 4
+{code}
+when converted to Confluence should be this:
+h4. Heading 4
+{code}
+
+h5. Heading 5
+{code}
+when converted to Confluence should be this:
+h5. Heading 5
+{code}
+
+h6. Heading 6
+{code}
+when converted to Confluence should be this:
+h6. Heading 6
+{code}
+
+Paragraphs
+
+Here is the first paragraph. This text continues the same paragraph.
+{code}
+Here is the first paragraph. This text continues the same paragraph.
+{code}
+
+
+This paragraph is a new one.
+
+Bold, Italics, Striked
+
+a *bold* word
+{code}
+when converted to Confluence should be this:
+a *bold* word
+{code}
+
+an +underlined+ word
+{code}
+when converted to Confluence should be this:
+an +underlined+ word
+{code}
+
+_text in italics_
+{code}
+when converted to Confluence should be this:
+_text in italics_
+{code}
+
+-striked text-
+{code}
+when converted to Confluence should be this:
+-striked text-
+{code}
+
+Lists
+
+* Level 1
+** Level 2
+*** Level 3
+** Level 2
+{code}
+when converted to Confluence should be this:
+no change
+{code}	
+
+# Item
+## Subitem
+# Item
+#* Subitem 	
+{code}
+when converted to Confluence should be this:
+# Item
+## Subitem
+# Item
+#* Subitem 	
+{code}
+
+Tables
+
+Type:	To get:
+||Category || Sales (K€)||
+|Category 1 | 100|
+|Category 2 | 50|
+|Category 3 | 50|
+|Total | =sum(B2:B4)|
+
+{code}
+when converted to Confluence should be this:
+||Category || Sales (K€)||
+|Category 1 | 100|
+|Category 2 | 50|
+|Category 3 | 50|
+|Total | =sum(B2:B4)|
+{code}
+
+Links
+
+[WebHome]
+[home|WebHome]
+[Main:WebHome]
+[home|Main:WebHome]
+http://www.xwiki.org
+[http://www.xwiki.org]
+[XWiki|http://www.xwiki.org]
+
+{code}
+when converted to Confluence should be this:
+[WebHome]
+[home|WebHome]
+[Main:WebHome]
+[home|Main:WebHome]
+http://www.xwiki.org
+[http://www.xwiki.org]
+[XWiki|http://www.xwiki.org]
+{code}
+
+Images
+
+!img.png!
+!img.png|width=30!
+!img.png| ,length=20!
+!img.png|width=30,length=20!
+
+{code}
+when converted to Confluence should be this:
+!img.png!
+!img.png|width=30!
+!img.png| ,length=20!
+!img.png|width=30,length=20!
+{code}
+
+Attachments:
+
+[A simple text file|^simple.txt|title=Download Simple Txt]
+[^test.txt]
+
+{code}
+when converted to Confluence should be this:
+[A simple text file|^simple.txt|title=Download Simple Txt]
+[^test.txt]
+{code}
+
+Other macros (this is actually the same as Confluence):
+
+{code}
+some code here
+{code}
+
+{toc}
+{code}
+{toc}
+{code}

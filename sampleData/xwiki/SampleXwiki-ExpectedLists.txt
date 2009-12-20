@@ -1,0 +1,56 @@
+This sample file is for testing lists.
+
+Bulleted Lists
+
+* Item 1
+** Item 2
+*** Item 3
+* Item 4
+
+Numbered Lists
+
+# Item 1
+## Item 2
+### Item 3
+# Item 4
+
+Mixed Lists
+
+# Item 1
+#* Item 2
+#* Item 3
+# Item 4
+
+* Item 1
+*# Item 2
+*# Item 3
+* Item 4
+
+# Alphabetical enumerated list
+# Alphabetical enumerated list
+
+# Uppercase alphabetical enumerated list
+# Uppercase alphabetical enumerated list
+
+# Roman enumerated list
+# Roman enumerated list
+
+# Uppercase roman enumerated list
+# Uppercase roman enumerated list
+
+# Greek enumerated list
+# Greek enumerated list
+
+# Hirigana (jap.) enumerated list
+# Hirigana (jap.) enumerated list
+
+# Katakana (jap.) enumerated list
+# Katakana (jap.) enumerated list
+
+Definition Lists
+
+*Term*
+* Definition
+*Term 2*
+* some wordy definition of wordiness.
+

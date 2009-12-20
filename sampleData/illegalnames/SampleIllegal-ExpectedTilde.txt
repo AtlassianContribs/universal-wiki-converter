@@ -1,0 +1,8 @@
+Filenames with starting tildes should not be acceptable. 
+But links with starting tildes need to be acceptable so that we can convert things into user links.
+Perhaps a property like allow-at-in-links would be the correct solution.
+
+So:
+[~username]
+[Alias|~user]
+

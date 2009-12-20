@@ -1,0 +1,26 @@
+This is a sample file for issues captures in UWC-232 and UWC-252.
+
+Link space handling with aliases. These should all link to the same page.
+[AwesomePage]
+[Awesome Page|AwesomePage]
+[This is my awesome page|AwesomePage]
+[This is my awesome page|AwesomePage]
+
+[Home|http://wiki.internal.gracenote.com/AETeamWiki/]
+
+
+[Do we support DXFingerprint aka DirectX Fingerprinter?|DXFingerprintSupport]
+
+Problem with Question Marks
+[What is a TagID?|WhatIsATagID]
+[What is a TUI?|WhatIsATUI]
+[What is a MediaID?|WhatIsAMediaID]
+[What is the difference between a MUI ID and a TUI ID?|DifferenceBetweenMUIAndTUI]
+[What is the difference between Upward Mapping and Downward Mapping in the Master Genre Correlate table?|UpwardMappingVs.DownwardMapping]
+
+[TestT|http://testt.x.y.com/test/test.htm]
+[MyLink]
+
+UWC-357
+* [Operational Process Engine (Opie)|OperationalProcessEngineOpie]
+

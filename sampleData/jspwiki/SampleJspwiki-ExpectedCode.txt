@@ -1,0 +1,67 @@
+This is a sample file for handling code/preformatted syntax, as described here:
+http://www.jspwiki.org/wiki/TextFormattingRules#section-TextFormattingRules-PreformattedText
+See also UWC-275
+
+{code} __testing 123__ {code}
+
+{code}
+#!/usr/local/bin/perl
+use cddbOracle qw (dbConnect dbDisconnect);
+use strict;
+use utf8;
+
+print "Started:    ".localtime()."\n";
+my $db_username = "<username>";
+my $db_sid = "<databasename>";
+my %attr;
+{code}
+
+{code}
+#!/usr/local/bin/perl
+use cddbOracle qw (dbConnect dbDisconnect);
+use strict;
+use utf8;
+
+print "Started:    ".localtime()."\n";
+my $db_username = "<username>";
+my $db_sid = "<databasename>";
+my %attr;
+
+# Connect
+my $dbh = dbConnect($db_sid, $db_username) || die "Cannot make DB connection";
+# Export
+my $sql= "select 'test','test' from dual";
+my $header="column_1\tcolumn_2\n";
+db_export($dbh,"export_filename.txt",$sql,$header);
+
+# Disconnect
+dbDisconnect($dbh);
+print "Completed:  ".localtime()."\n";
+
+
+#-------------------------------------------
+# db_export
+#-------------------------------------------
+sub db_export {
+        my ($dbh,$filename,$sql,$header) = @_;
+
+        my $sth=$dbh->prepare($sql);
+        die "SQL not parsed" unless ($sth);
+
+	open FILE, ">:utf8", $filename; 
+        #
+        # Header
+        #
+        print FILE "$header";
+
+        $sth->execute() || die "Error during data fetch : $DBI::errstr\n";
+        while (my @recdata = $sth->fetchrow_array) {
+                my @outdata=join("\t",@recdata);
+                print FILE "@outdata\n";
+
+        }
+        close (FILE);
+        $sth->finish();
+}
+{code}
+

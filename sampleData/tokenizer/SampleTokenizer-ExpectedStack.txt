@@ -1,0 +1,6 @@
+This is a test of detokenizing tokens within tokens. Use the mediawiki converter to test. UWC-398
+
+dollar signs in pre tags:
+
+{code}Testing $123{code}
+

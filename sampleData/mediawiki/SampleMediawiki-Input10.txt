@@ -1,0 +1,5 @@
+This is for testing image alignment syntax conversion
+
+[[Image:Wiki.png|right]]
+[[Image:Wiki.png|center]]
+[[Image:Wiki.png|left]]

@@ -1,0 +1,27 @@
+This is a test of color text conversion
+
+Before
+
+{color:#FF0000}Should be red{color}
+
+Not
+
+{color:red}Should be red{color}
+
+Not
+
+red:Should not be red
+
+Not
+
+{color:red}Should be red
+multiline
+coloration
+{color}
+
+{color:#FF0000}Should be red
+multiline
+coloration
+{color}
+
+After

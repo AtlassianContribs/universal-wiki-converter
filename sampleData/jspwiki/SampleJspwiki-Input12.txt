@@ -1,0 +1,11 @@
+This is for testing definition list converions
+
+;term:def
+;term2:def2
+;somethingelse:something or other
+;two words:even more words
+; had whitespace : this too
+; Testing WhiteSpace : Lorem Ipsum lalala
+;Testing !@#$%^& Punctuation $10 : abc (def)ghi {jk} $20
+
+After the list

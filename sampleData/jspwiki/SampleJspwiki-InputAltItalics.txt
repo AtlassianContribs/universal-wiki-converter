@@ -1,0 +1,33 @@
+This is a sample file for alternate underline syntax as described in UWC-328
+
+%%(font-style: italic) underlined text%%
+%%(font-style: italic)underlined text 2%%
+%%(font-style: italic)
+underlined text 3%%
+%%(font-style: italic)
+underlined text 4
+%%
+
+!! %%(font-style: italic) Objectives%%
+
+!! %%(font-style:italic) [User Stories / Requirements|ateam75userstories]%%
+
+!! %%(font-style: italic) Development%%
+* [A Team 7.5 Development Area|ateam75DevelopmentArea]
+
+%%(font-style: italic)foo
+bar
+gah
+%%
+
+%%(font-style: italic)foo
+
+bar
+
+gah
+%%
+
+And without closing delimiters with lists
+*%%(font-style:italic)howdy ho
+*hasta
+

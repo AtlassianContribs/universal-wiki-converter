@@ -1,0 +1,5 @@
+This is for testing image alignment syntax conversion
+
+!Wiki.png|align=right!
+!Wiki.png|align=center!
+!Wiki.png!

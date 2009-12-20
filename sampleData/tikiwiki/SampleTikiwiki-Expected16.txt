@@ -1,0 +1,26 @@
+This is for testing multiple tables, where a dollar sign shows up in the raw text.
+
+{panel}
+Pre text: ABC, DEFs.
+|| ABC || DEF || GHI JKL || MNO PQR ||
+| http://www.google.com/ | Ac | 11/29/2005 | 11/29/2005 |
+| http://www.google.com/ | Ac | 1/6/2006 | 1/6/2006 |
+{panel}
+
+
+*header*
+{panel}
+Home Site:[http://www.google-google.com/|http://www.google-google.com/]
+Download Link:[http://www.google-google.com/download.shtml|http://www.google-google.com/download.shtml]
+
+| Date: | 1/4/2006 |
+| Version: | 1.0 |
+| Purchase URL: | http://www.google-google.com/buynow.shtml |
+| Purchase Price: | $19.99 |
+| Functionality: | Time Limit (15 day trial version) |
+| Rabc: | ABC |
+| Common Components: | |
+| To Adds: | installer |
+| Notes: | |
+
+{panel}

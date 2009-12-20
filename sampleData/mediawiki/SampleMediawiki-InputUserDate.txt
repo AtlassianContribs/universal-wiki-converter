@@ -1,0 +1,3 @@
+{user:testing}
+{timestamp:19991231235959}
+Sample test file for the user date metadata framework

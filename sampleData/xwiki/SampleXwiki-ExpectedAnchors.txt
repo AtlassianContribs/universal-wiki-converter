@@ -1,0 +1,82 @@
+XWiki, in practice, has two undocumented (or poorly documented) aspects to it's internal anchoring that are addressed in this sample file.
+* the Anchor delimiter is really #H (not #)
+* Anchors built from sections are stripped of ws.
+
+h1. Section 1
+
+[Link to Section 2|SampleXwiki-InputAnchors#Section 2]
+
+lorempisum
+
+lorempisum
+
+lorempisum
+
+lorempisum
+lorempisum 
+lorempisum
+
+lorempisum
+
+lorempisum
+
+lorempisum
+lorempisum 
+lorempisum
+
+lorempisum
+
+lorempisum
+
+lorempisum
+lorempisum 
+lorempisum
+
+lorempisum
+
+lorempisum
+
+lorempisum
+lorempisum
+
+h2. Section 2
+
+
+
+loremipsum
+
+lorempisum
+
+lorempisum
+
+lorempisum
+
+lorempisum
+lorempisum 
+lorempisum
+
+lorempisum
+
+lorempisum
+
+lorempisum
+lorempisum 
+lorempisum
+
+lorempisum
+
+lorempisum
+
+lorempisum
+lorempisum 
+lorempisum
+
+lorempisum
+
+lorempisum
+
+lorempisum
+lorempisum 
+
+h3. Section 3
+

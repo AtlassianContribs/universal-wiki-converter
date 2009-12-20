@@ -1,0 +1,10 @@
+For the purpose of testing attachment syntax:
+
+an attachment: !ed.jpeg!
+not an image: [^ed.zip]
+
+with an alias: !ed.png!
+with an alias: [alias|^ed.doc]
+
+with dots in the alias: [testing.123|^ed.doc]
+

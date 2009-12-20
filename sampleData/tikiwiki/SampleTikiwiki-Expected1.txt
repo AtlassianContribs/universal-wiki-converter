@@ -1,0 +1,112 @@
+Monospace 
+{{mono}}
+
+No wiki formatting
+{noformat}__No__ formatting{noformat}
+
+Italicise text
+_italic_
+
+Bold text
+*bold*
+
+Bold and italic
+*_bold & italic_*
+
+Internal link (within Wikipedia)
+[name of page]
+[display text|name of page]
+[label in this page|#section in this page]
+
+External link (to other websites)
+[http://www.example.com]
+[display text|http://www.example.com]
+[display text|http://www.example.com]
+[Secure|https://security.com]
+
+Applies only at the beginning of the line
+Headings
+of different sizes
+
+h1. Level 1
+h2. Level 2
+h3. Level 3
+h4. Level 4
+
+Bullet list
+
+* one
+* two
+** two point one
+* three
+
+Numbered list
+
+# one
+# two
+## two point one
+# three
+
+Thumbnail image
+
+!hobbespounce.gif!
+!Wiki.png!
+
+{toc:type=list|outline=true|printable=false}
+
+Tables
+
+|| Header1 || Header2 || Header3 ||
+| r1c1 | r1c2 | r1c3 |
+| r2c1 | r2c2 | r2c3 |
+
+|| Header1 || Header2 || Header3 ||
+|| Row1 Header | r1c2 | r1c3 |
+|| Row2 Header | r2c2 | r2c3 |
+
+
+No headers:
+
+| r1c1 | r1c2 |
+| r2c1 | r2c2 |
+
+Row and Col spans:
+
+| row1-column1 | row1-column2 | row1-column3 |
+| row2-columns123 | | |
+| row3-column1 | row3-columns23 | |
+
+Preformatted:
+{noformat}This __might__ have some ((Wiki syntax)). That's ignored.{noformat}
+
+Code:
+{code}
+System.out.println("This is code");
+{code}
+
+
+{panel}
+{{And what does this white-space starting line mean?}}
+{{Is this like a pre tag?}}
+{{How does it treat [Wiki syntax]?}}
+{panel}
+
+Colored text:
+{color:#FFEE33}some text{color}
+
+Underlined:
++underlined+
+
+Title bar:
+h1. title
+
+Centered text
+Centered
+
+{panel}
+Just a panel?
+{panel}
+
+{anchor:section in this page}
+
+Mostly from [WikiSyntax|http://tikiwiki.org/tiki-index.php?page=WikiSyntax]

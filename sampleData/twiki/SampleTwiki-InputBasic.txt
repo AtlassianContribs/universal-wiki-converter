@@ -1,0 +1,28 @@
+
+*Bold*
+
+=Mono=
+NoBoundaries=Mono=
+Boundaries =Mono=
+
+==Bold Mono==
+
+_Italic_
+
+__Bold and Italics__
+
+-EscapeStrike-
+--EscapeStrike--
+=-EscapeThisToo-=
+
+
+HR
+---
+foo
+----------
+bar
+-----
+-----
+test
+-----LoremIpsum?
+

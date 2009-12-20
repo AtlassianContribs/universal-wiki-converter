@@ -1,0 +1,28 @@
+Some basic html that the twiki converter handles
+
+*bold*
+
+_italics_
+
+h2. headers
+
+
+{code}monospace{code}
+
+_emphasis_
+
+Breaks
+Here
+and using
+Paragraph syntax
+
+
+{quote}quotes
+as a block
+of text
+{quote}
+
+[Alias|http://www.google.com]
+
+
+

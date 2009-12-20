@@ -1,0 +1,63 @@
+This is for testing CSS style conversions
+
+~This should be subscript~ not sub
+
+normal
+
+^This should be superscript^ not super
+
+normal
+
+-This should be strikethroughed-
+
+normal
+
+{panel}
+floating right margin comment box
+{panel}
+
+normal
+
+{info}
+This is an info box
+{info}
+
+normal
+
+{note}
+This is warning box
+{note}
+
+normal
+
+{warning}
+Error box
+{warning}
+
+normal
+
+{note}
+what about inline?
+{note}
+
+
+normal
+
+Some CSS next:
+{panel:bgColor=#999999|borderWidth=2px|borderStyle=dashed|borderColor=#999900}
+{color:blue}This panel could be weird{color}
+{panel}
+
+normal
+
+{panel}
+Something we're not supporting
+----
+Jspwiki style: small
+{panel}
+
+{panel}
+Something else we're not supporting
+----
+Jspwiki style: sortable
+{panel}

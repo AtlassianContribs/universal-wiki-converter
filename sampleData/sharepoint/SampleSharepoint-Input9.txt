@@ -1,0 +1,33 @@
+5;#vti_parserversion:SR|12.0.0.6219 ContentType:SW|Wiki Page ContentTypeId:SW|0x010108008586D6569CB93B489CBCF8B01B47B952 vti_metatags:VR|CollaborationServer SharePoint\\ Team\\ Web\\ Site vti_charset:SR|utf-8 vti_author:SR| vti_setuppath:SX|DocumentTemplates\\wkpstd.aspx vti_cachedzones:VR|Bottom vti_cachedneedsrewrite:BR|false WikiField:SW|<div class=ExternalClass14E9F8AB519A470B995C8046769BE7FC><div class=ExternalClass03BFEACBDD2F4A61A6DF16469ED01B1D><div class=ExternalClass9831F41C1D6B425D9281846617F46F8B><p>
+This is for testing dollar signs<br/>
+<b>$1</b><br/>
+<strong>$2.99</strong><br/>
+<em>$3</em><br/>
+<i>$4</i><br/>
+<u>$5</u><br/>
+<blockquote>
+Stuff costs $money
+</blockquote>
+<a href="http://www.google.com">I has $$$$?</a><br/>
+<font style="color:red">$$$$!!!</font><br/>
+<h3>$6</h3><br/>
+<font size=2>$7</font><br/>
+<ul>
+<li>$1</li>
+<li>$2</li>
+</ul>
+<table>
+<tbody>
+<tr>
+<th>$8</th>
+<th>$8</th>
+</tr>
+<tr>
+<td>$8</td>
+<td>$8</td>
+</tr>
+</tbody>
+</table><br/>
+<img src="http://something.com/image.jpg" alt="money $$$"/>
+
+</p></div></div></div> vti_modifiedby:SR|PUBLIC36\\brendanpatterson vti_cachedhastheme:BR|false 

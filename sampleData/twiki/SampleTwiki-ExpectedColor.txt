@@ -1,0 +1,8 @@
+Sample file for color handling
+
+This text should be {color:RED}red{color}. 
+This text should be {color:BLUE}blue{color}. 
+This text should be {color:YELLOW}yellow{color}. 
+This text should be {color:GREEN}green{color}. 
+This text should be {color:ORANGE}orange{color}. 
+

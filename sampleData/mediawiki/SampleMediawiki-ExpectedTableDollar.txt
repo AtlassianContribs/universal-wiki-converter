@@ -1,0 +1,6 @@
+Sample file for testing dollars in tables
+
+|| Header1 || $1.00 || $5 dollars ||
+| r1c1 | r1c2 | $4.00 |
+| r2c1 | $$12dollars | r2c3 |
+

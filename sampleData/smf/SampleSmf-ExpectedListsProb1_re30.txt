@@ -1,0 +1,9 @@
+*Original Poster:* [~admin]
+*Original Timestamp:* 2009-07-02 15:10:02
+
+*List Problem missing closing li BB tags*
+
+* no delim
+
+
+{gallery:title=Attached Images}

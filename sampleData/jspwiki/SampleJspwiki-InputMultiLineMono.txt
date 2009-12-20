@@ -1,0 +1,11 @@
+Sample test for MultiLine monospace syntax. See UWC-379
+
+{{
+a
+b
+c
+}}
+
+{{foo
+bar}}
+

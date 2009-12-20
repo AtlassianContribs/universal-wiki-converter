@@ -1,0 +1,21 @@
+This is a sample page for testing table syntax
+
+----
+
+| Basic | Table | Testing |
+| foo | bar | meh |
+
+| testing | * one | # two | ## three |
+
+it figures out how to stop by a lack of ws after the last pipe?
+
+| h3. r1c1| *r1c2* | _r1c3_ |
+| * list | # numbered | * Testing |
+| xyz | * test | # ing |
+
+| * one
+* two
+* three | # one
+# two
+# three | |
+

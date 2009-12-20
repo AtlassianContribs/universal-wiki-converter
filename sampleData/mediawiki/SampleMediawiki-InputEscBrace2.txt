@@ -1,0 +1,27 @@
+This is a sample file for handling escaping single braces
+
+Just a { brace in some text. Should be } escaped.
+
+This is a table. Don't escape!
+{| border="1" cellspacing="0" cellpadding="5" align="center"
+! This
+! is
+|- 
+| a
+| table
+|}
+
+This is a listen macro. Don't escape!
+{{listen
+ |title    = Flow my tears
+ |filename = Flow my tears.ogg
+ |filesize = 583KB
+}}
+
+Templates. Don't escape!
+{{Transclusion demo}}
+
+Hover. Don't escape!
+{{H:title|This is the hover text|
+Hover your mouse over this text}}
+

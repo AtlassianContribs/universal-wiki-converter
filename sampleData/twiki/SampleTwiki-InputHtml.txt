@@ -1,0 +1,24 @@
+Some basic html that the twiki converter handles
+
+<b>bold</b>
+
+<i>italics</i>
+
+<h2>headers</h2>
+
+<code>monospace</code>
+
+<em>emphasis</em>
+
+Breaks<br/>Here
+and using<p>Paragraph syntax</p>
+
+<blockquote>quotes
+as a block
+of text
+</blockquote>
+
+<a href="http://www.google.com">Alias</a>
+
+
+

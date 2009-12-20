@@ -1,0 +1,6 @@
+This sample is for ensureing hr syntax remains the same.
+
+Above the hr
+----
+Below the hr
+

@@ -1,0 +1,4 @@
+This sample file is for making sure pre syntax stays the same.
+{noformat}
+No *bold rendering* in wiki syntax.
+{noformat}

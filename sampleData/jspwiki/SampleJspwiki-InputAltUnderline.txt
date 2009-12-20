@@ -1,0 +1,50 @@
+This is a sample file for alternate underline syntax as described in UWC-328
+
+%%(text-decoration: underline) underlined text%%
+%%(text-decoration: underline)underlined text 2%%
+%%(text-decoration: underline)
+underlined text 3%%
+%%(text-decoration: underline)
+underlined text 4
+%%
+
+!! %%(text-decoration: underline) Objectives%%
+
+!! %%(text-decoration:underline) [User Stories / Requirements|ateam75userstories]%%
+
+!! %%(text-decoration: underline) Development%%
+* [A Team 7.5 Development Area|ateam75DevelopmentArea]
+
+%%(text-decoration: underline)foo
+bar
+gah
+%%
+
+%%(text-decoration: underline)foo
+
+bar
+
+gah
+%%
+
+And without closing delimiters with lists
+*%%(text-decoration:underline)howdy ho
+*hasta
+
+%%(text-decoration: underline;)
+foo
+bar
+
+gah
+
+jupiter
+%%
+
+UWC-356 (comment)
+!! %%(text-decoration: underline)Heading
+*Bullet
+
+UWC-381
+!! %%(text-decoration: underline) Objectives%%
+
+The

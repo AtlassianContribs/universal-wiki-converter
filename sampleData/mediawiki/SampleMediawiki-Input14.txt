@@ -1,0 +1,40 @@
+This is a test file for uwc-138:
+
+This page has tables in it that don't have any special stuff going on.
+
+{| width=400px
+|-
+! One
+! Two
+! Three
+|-
+| blah
+| blah 2
+| blah 3
+|-
+| goop 
+| goop 2
+| goop 3
+|}
+
+
+{| class="prettytable"  width=600px
+|-
+! One
+! Two
+! Three
+! Four
+! Five
+|-
+| blah
+| blah 2
+| blah 3
+| etc.
+|
+|-
+| goop 
+| goop 2
+| goop 3
+|
+| why?
+|}

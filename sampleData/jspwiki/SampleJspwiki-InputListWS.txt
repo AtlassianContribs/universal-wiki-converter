@@ -1,0 +1,13 @@
+This is a sample file for testing problems from UWC-148 - lists with whitespace
+
+*test1
+*test2
+**test3
+#abc
+#*def
+
+*[ MyLink ]
+
+And another example from UWC-345:
+##To quickly set the Environment and Test Version values for all the entries in the Execution Grid, click the Tests menu item and select Replace.  Set the Find in Field to the column you want to set and enter the appropriate value in the Replace with field.  Nancy is able to click Replace All, but for me I found I had to enter * for the Value to Find and check Use Wildcard.  Then Replace All worked for me.
+

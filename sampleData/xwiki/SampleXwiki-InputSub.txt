@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<content>This sample is for testing subscript text.
+
+Subscript:
+<sub>subscript</sub>
+
+This <sub>word and a few others</sub> are in subscript.
+
+</content></xwikidoc>

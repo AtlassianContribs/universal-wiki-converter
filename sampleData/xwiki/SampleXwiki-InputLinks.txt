@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<content>This sample is for testing the conversion of links.
+
+Xwiki Examples - Internal
+
+[WebHome] (uses current space)
+[home>WebHome] (uses current space)
+[Main.WebHome]
+[home|Main.WebHome]
+[home>Main.WebHome>_blank]
+
+Xwiki Examples - External
+
+http://www.xwiki.org
+[http://www.xwiki.org]
+[XWiki>http://www.xwiki.org]
+
+Each syntax
+
+alias - [alias>Home]
+alias - [alias|Home]
+virtual wiki - [virtual:Home]
+space - [Sandbox.Home]
+virtual + space - [virtual:Sandbox.Home]
+query - [http://www.google.com/search?q=xwiki]
+anchor - [Home#Section]
+interwikialias - [xwiki@Wikipedia]
+target - [Home|_blank]
+target - [Home>_blank]
+target - [Home|_self]
+target - [Home>_self]
+combinations - [alias|virtual:Home#TestSection>_blank]
+combinations - [alias>test@Test]
+combinations - [Sandbox.Home|_self]
+combinations - [alias|http://www.google.com>_blank]
+
+Anchor Links From XWikiSyntax - apparently, there needs to be an extra H before the link.
+* [Titles&gt;#HTitles]
+* [Paragraphs&gt;#HParagraphs]
+
+</content></xwikidoc>

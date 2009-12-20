@@ -1,0 +1,13 @@
+Subject: SampleSocialtext-InputSearchOpt
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+Test page for the search macro with configuration options
+
+*search with a tag*
+{search: tag: category}
+
+*search with booleans and tags*
+{search: tag: foo AND tag: bar}
+

@@ -1,0 +1,7 @@
+This is sample text for headers with equal signs. See UWC-255
+
+== Header 1 = has equals sign ==
+=== Header 2 = has equals sign ===
+==== Header 3 = has equals sign ====
+===== Header 4 = has equals sign =====
+

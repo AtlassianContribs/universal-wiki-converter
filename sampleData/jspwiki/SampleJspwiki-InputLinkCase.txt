@@ -1,0 +1,7 @@
+This is a sample file for case insensitive links that point to the same page. 
+See UWC-382
+
+[CAS and CAE Faq|cons7.5faq]
+[CAS and CAE Faq|Cons7.5faq]
+[CAS and CAE Faq|CoNs7.5fAq]
+

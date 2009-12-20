@@ -1,0 +1,7 @@
+
+CamelCase Not a Link Syntax:
+
+))NotALink((
+
+This ((should be a link)) but ))this needs to be cleaned((
+

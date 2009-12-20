@@ -1,0 +1,59 @@
+This is for testing CSS style conversions
+
+%%sub This should be subscript%% not sub
+
+normal\\
+
+%%sup This should be superscript %% not super
+
+normal\\
+
+%%strike
+This should be strikethroughed
+%%
+
+normal\\
+
+%%commentbox
+floating right margin comment box
+%%
+
+normal\\
+
+%%information
+This is an info box
+%%
+
+normal\\
+
+%%warning
+This is warning box
+%%
+
+normal\\
+
+%%error
+Error box
+%%
+
+normal\\
+
+%%warning what about inline? %%
+
+
+normal\\
+
+Some CSS next:\\
+%%( font-name:Times New Roman; color:blue; background-color:#999999; border:2px dashed #999900;)
+This panel could be weird
+%%
+
+normal\\
+
+%%small
+Something we're not supporting
+%%
+
+%%sortable
+Something else we're not supporting
+%%

@@ -1,0 +1,5 @@
+Test for getting out of list syntax. (uwc-129)
+
+* item 1
+* item 2
+Should not be indented like a list item.

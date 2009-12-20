@@ -1,0 +1,3 @@
+{info}
+The XWiki space contains documents used by XWiki for its own use. You can administrate your wiki through the...
+{info}

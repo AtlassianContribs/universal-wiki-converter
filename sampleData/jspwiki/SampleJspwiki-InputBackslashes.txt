@@ -1,0 +1,7 @@
+Sample test for transforming double backslashes
+UWC-378
+
+at the end of the line - remove\\
+
+in the middle of a line \\becomes a newline
+

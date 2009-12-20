@@ -1,0 +1,57 @@
+Monospace text\\
+{{mono}}\\
+
+Bold text\\
+__bold__\\
+
+Italics text\\
+''italics''\\
+
+Bold and italic\\
+__''bold & italic''__\\
+
+Internal link\\
+[Main]\\
+[display|Main]\\
+
+External Link\\
+[http://www.google.com]\\
+[display|http://www.google.com]\\
+
+Headings \\
+of different sizes\\
+!Level 1\\
+!!Level 2\\
+!!!Level 3\\
+
+Bullet list\\
+* one\\
+* two\\
+** two point one\\
+* three\\
+
+Numbered list\\
+# one\\
+# two\\
+## two point one\\
+# three\\
+
+Mixed list
+* one\\
+*# one point one\\
+*# one point two\\
+* two\\
+
+Underlined\\
+[underlined|]\\
+
+Image\\
+[http://localhost:8083/JSPWiki/images/xmlCoffeeCup.png]\\
+[exclamation tool tip|http://localhost:8083/JSPWiki/images/xmlCoffeeCup.png]\\
+
+Table, Simple
+
+|| Heading 1 || Heading 2
+| r1c1 | r1c2 \\ r1c2
+| r2c1 | r2c2
+
