@@ -1,0 +1,42 @@
+====== Test Dokuwiki ======
+
+===== namespaces and images =====
+[[images:start]]
+[[images:cows]]
+[[images:cows:jpgs]]
+[[images:cows:jpgs:favorite]]
+
+===== collapsible syntax =====
+Is this a plugin, or do we get it for free?
+It's a plugin
+
+===== Monospace: =====
+
+''Mono''
+
+Multiline monospace:
+''
+Testing
+123
+One newline in edit window appears to not be treated as a newline in rendering
+''
+
+''
+What
+
+about
+
+double
+
+newlines - still not rendered
+''
+
+How do we force a newline?
+
+===== Images =====
+From this page:
+{{:cow.jpg|}}
+
+===== Links =====
+[[Test Images]]
+[[test:test1]]

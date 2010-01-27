@@ -1,0 +1,27 @@
+This should be the top level start page.
+
+We're going to test out link and image namespace collision fixing.
+
+[[drink:start]]
+[[:drink:start]]
+[[drink:juice:start|Alias for the juice link]]
+[[drink:juice:apple]]
+[[drink:water]]
+[[food:start|Food]]
+[[food:Baklava]]
+[[food:fruit:start]]
+[[food:fruit:apple]]
+[[food:pie:start]]
+[[food:pie:apple]]
+[[food:pie:fruit:start]]
+[[food:pie:fruit:apple]]
+[[food:pie:start:apple]]
+[[otherspace:Testing 123]]
+
+{{drink:Wiki.png}} - render
+{{:drink:juice:Wiki.png}} - render
+{{drink:juice:test.pdf|}} - link to attachment
+{{food:pie:test.pdf|Alias?}}
+{{food:pie:fruit:Wiki.png}}
+{{otherspace:Wiki.png}}
+

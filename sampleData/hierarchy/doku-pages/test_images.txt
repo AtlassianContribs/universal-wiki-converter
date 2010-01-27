@@ -1,0 +1,4 @@
+===== Images on another page =====
+[[start|{{:cow.jpg}}]]
+
+
