@@ -394,8 +394,13 @@ public class ConverterEngine implements FeedbackHandler {
 					//tell the hierarchy builder about the page histories framework
 					//do this here so that we're sure the page histories properties are set
 					if (hierarchyBuilder.getProperties() != null) { 
-						hierarchyBuilder.getProperties().setProperty("switch."+NONCONVERTERTYPE_PAGEHISTORYPRESERVATION, isHandlingPageHistories()+"");	
-						hierarchyBuilder.getProperties().setProperty("suffix."+NONCONVERTERTYPE_PAGEHISTORYPRESERVATION, getPageHistorySuffix());
+						hierarchyBuilder.getProperties().setProperty("switch."+NONCONVERTERTYPE_PAGEHISTORYPRESERVATION, isHandlingPageHistories()+"");
+						if (getPageHistorySuffix() != null)	
+							hierarchyBuilder.getProperties().setProperty("suffix."+NONCONVERTERTYPE_PAGEHISTORYPRESERVATION, getPageHistorySuffix());
+					}
+					//tell the hierarchy some other information
+					if (hierarchyBuilder.getProperties() != null) {
+						hierarchyBuilder.getProperties().setProperty("spacekey", settings.getSpace());
 					}
 					//build the hierarchy
 					HierarchyNode root = hierarchyBuilder.buildHierarchy(allPages);
@@ -1115,7 +1120,10 @@ public class ConverterEngine implements FeedbackHandler {
     	//check to see if "off" property is present
     	if (this.miscProperties != null && 
     			this.miscProperties.containsKey("list-collisions") &&
-    			!Boolean.parseBoolean(this.miscProperties.getProperty("list-collisions"))) return collisions;
+    			!Boolean.parseBoolean(this.miscProperties.getProperty("list-collisions"))) {
+    		log.debug("Namespace Collisions Feature turned off.");
+    		return collisions;
+    	}
     	//sort
     	Vector<Page> sorted = new Vector<Page>();
     	sorted.addAll(pages);
@@ -1427,6 +1435,8 @@ public class ConverterEngine implements FeedbackHandler {
         this.newNodes = 0; //this has to be a field, because we're already returning something; 
         // at last write the pages to Confluence!
         for (HierarchyNode topLevelPage : root.getChildren()) {
+			   log.debug("writeHierarchy: toplevelpage = " + topLevelPage.getName());
+				log.debug("number of children this toplevelpage has = " + topLevelPage.getChildren().size());
             progressNum = writeHierarchy(topLevelPage, null, progressNum, maxProgress, spacekey);
             if (!this.running) {
         		this.feedback = Feedback.CANCELLED;
@@ -1524,7 +1534,10 @@ public class ConverterEngine implements FeedbackHandler {
      * @throws IllegalArgumentException if a confluenceSetting is invalid
      */
     protected String sendPage(Page page, String parentId, UWCUserSettings settings) {
-    	ConfluenceServerSettings confSettings = new ConfluenceServerSettings();
+    	//XXX why are we setting these up every page. Most of these are global. 
+    	//XXX If we set these up earlier in the process, we could do the checkConfluenceSettings call 
+    	//(currently in the next sendPage) earlier in the process as well
+    	ConfluenceServerSettings confSettings = new ConfluenceServerSettings(); 
     	confSettings.login = settings.getLogin();
     	confSettings.password = settings.getPassword();
     	confSettings.url = settings.getUrl(); 
@@ -1694,7 +1707,7 @@ public class ConverterEngine implements FeedbackHandler {
     		this.state.updateNote(message);
     		throw new IllegalArgumentException(message);
     	}
-    	log.info(TestSettingsListener.SUCCESS_MESSAGE_LONG);
+//    	log.info(TestSettingsListener.SUCCESS_MESSAGE_LONG); //this is getting called for every page 
 		
 	}
 	/**
@@ -1711,7 +1724,7 @@ public class ConverterEngine implements FeedbackHandler {
     	//create page that broker can use
     	Hashtable pageTable = createPageTable(page, parentId);
      	//check for problems with settings 
-    	checkConfluenceSettings(confSettings);
+    	checkConfluenceSettings(confSettings); //XXX Why are we doing this for every page? 'cause we seem to create the confSettings on a page by page basis?
     	//send page
     	log.debug("Attempting to send page: " + page.getName());
     	String id = sendPage(broker, pageTable, confSettings);
