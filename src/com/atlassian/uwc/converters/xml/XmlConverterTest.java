@@ -389,15 +389,15 @@ public class XmlConverterTest extends TestCase {
 				"<br>" +
 				"</span>" +
 				"</body></html>";
-		expected = "<html>\n" + 
-				"<head>\n" + 
-				"<title></title>\n" + 
-				"</head>\n" + 
+		expected = "<html>" + 
+				"<head>" + 
+				"<title></title>" + 
+				"</head>" + 
 				"<body>\n" + 
-				"<span attribute=\"noquotes\">testing123<br />\n" + 
-				"</span>\n" + 
-				"</body>\n" + 
-				"</html>\n" + 
+				"<span attribute=\"noquotes\">testing123\n<br />" + 
+				"</span>" + 
+				"</body>" + 
+				"</html>" + 
 				"\n";
 		actual = tester.enforceValidity(input);
 		assertNotNull(actual);
@@ -435,17 +435,18 @@ public class XmlConverterTest extends TestCase {
 				"Some html fragments: <b>bold</b>\n" +
 				"Some screwed up html: <span att=noquotes>test</span>";
 		expected = 
-				"<html>\n" + 
-				"<head>\n" + 
-				"<title></title>\n" + 
-				"</head>\n" + 
-				"<body>\n" + 
-				"Some mediawiki text: *bold* testing123 Some html fragments:\n" + 
-				"<b>bold</b> Some screwed up html: <span att=\"noquotes\">test</span>\n" + 
-				"</body>\n" + 
-				"</html>\n" + 
-				"\n" + 
-				"";
+				"<html>" + 
+				"<head>" + 
+				"<title></title>" + 
+				"</head>" + 
+				"<body>" + 
+				"Some mediawiki text: *bold*\n" +
+				"testing123\n" +
+				"Some html fragments: <b>bold</b>\n" +
+				"Some screwed up html: <span att=\"noquotes\">test</span>" + 
+				"</body>" + 
+				"</html>" + 
+				"\n";
 		actual = tester.enforceValidity(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
@@ -485,20 +486,321 @@ public class XmlConverterTest extends TestCase {
 		actual = parse(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
-
+	}
+	public void testConvert_SimpleTables2() {
+		String input, expected, actual;
+		events.addEvent("table", "com.atlassian.uwc.converters.xml.SimpleTableParser");
+		events.addEvent("tr", "com.atlassian.uwc.converters.xml.SimpleTableParser");
+		events.addEvent("td", "com.atlassian.uwc.converters.xml.SimpleTableParser");
 //		TODO Not sure why this isn't passing here. Similar regression test seems to behave better.
-//		input = "<uwc>" +
-//				"<table> \n" + 
-//				"<tr><td>r1c1</td><td>r1c2</td></tr>\n" + 
-//				"<tr><td>r2c1</td><td>r2c2</td></tr>\n" + 
-//				"</table>\n" + 
-//				"</uwc>";
-//		expected = "| r1c1 | r2c2 |\n" +
-//				"| r2c1 | r2c2 |\n";
-//		actual = parse(input);
-//		assertNotNull(actual);
-//		assertEquals(expected, actual);
+		input = "<uwc>" +
+				"<table> \n" + 
+				"<tr><td>r1c1</td><td>r1c2</td></tr>\n" + 
+				"<tr><td>r2c1</td><td>r2c2</td></tr>\n" + 
+				"</table>\n" + 
+				"</uwc>";
+		expected = "| r1c1 | r1c2 |\n" +
+				"| r2c1 | r2c2 |\n\n";
+		actual = parse(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
 
+	}
+	
+	public void testConvert_ContentFormattingTable() {
+		String input, expected, actual;
+		events.addEvent("table", "com.atlassian.uwc.converters.xml.ContentFormattingTableParser");
+		events.addEvent("tr", "com.atlassian.uwc.converters.xml.ContentFormattingTableParser");
+		events.addEvent("td", "com.atlassian.uwc.converters.xml.ContentFormattingTableParser");
+		input = "<uwc>" +
+			"<table><tr><td>a</td><td>b</td>\n" +
+			"<td>c</td>\n" +
+			"</tr><tr><td colspan=\"2\">Testing</td></tr>\n" +
+			"</table>" + 
+			"</uwc>";
+		expected = "{table:border=1}\n" +
+				"{tr}\n" +
+				"{td}a{td}\n" +
+				"{td}b{td}\n" +
+				"{td}c{td}\n" +
+				"{tr}\n" +
+				"{tr}\n" +
+				"{td:colspan=2}Testing{td}\n" +
+				"{tr}\n" +
+				"{table}";
+		actual = parse(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	public void testConvert_ContentFormattingMacro2() {
+		String input, expected, actual;
+		events.addEvent("table", "com.atlassian.uwc.converters.xml.ContentFormattingTableParser");
+		events.addEvent("tr", "com.atlassian.uwc.converters.xml.ContentFormattingTableParser");
+		events.addEvent("td", "com.atlassian.uwc.converters.xml.ContentFormattingTableParser");
+		events.addEvent("th", "com.atlassian.uwc.converters.xml.ContentFormattingTableParser");
+
+		input = "<uwc>" +
+				"<table>\n" + 
+				" <tr>\n" + 
+				"   <th>Column 1</th>\n" + 
+				"   <th>Column 2</th>\n" + 
+				"   <th>Column 3</th>\n" + 
+				" </tr>\n" + 
+				" <tr>\n" + 
+				"   <td>A</td>\n" + 
+				"   <td colspan=\"2\" align=\"center\">B</td>\n" + 
+				" </tr>\n" + 
+				" <tr>\n" + 
+				"   <td>C</td>\n" + 
+				"   <td>D</td>\n" + 
+				" </tr>\n" + 
+				" <tr>\n" + 
+				"   <td>E</td>\n" + 
+				"   <td colspan=\"2\">F</td>\n" + 
+				" </tr>\n" + 
+				" <tr>\n" + 
+				"   <td>G</td>\n" + 
+				"   <td>H</td>\n" + 
+				"   <td>I</td>\n" + 
+				" </tr>\n" + 
+				" <tr>\n" + 
+				"   <td>J</td>\n" + 
+				"   <td>K</td>\n" + 
+				" </tr>\n" + 
+				" <tr>\n" + 
+				"   <td colspan=\"2\">L</td>\n" + 
+				" </tr>\n" + 
+				"<tr>\n" + 
+				"   <td rowspan=\"2\">M</td>\n" + 
+				"   <td>N</td>\n" + 
+				"   <td>O</td>\n" + 
+				" </tr>\n" + 
+				" <tr>\n" + 
+				"   <td colspan=\"2\">P</td>\n" + 
+				" </tr>\n" + 
+				"</table>\n" + 
+				"</uwc>";
+		expected = "{table:border=1}\n" + 
+				"{tr}\n" + 
+				"{th}Column 1{th}\n" + 
+				"{th}Column 2{th}\n" + 
+				"{th}Column 3{th}\n" + 
+				"{tr}\n" + 
+				"{tr}\n" + 
+				"{td}A{td}\n" + 
+				"{td:colspan=2|align=center}B{td}\n" + 
+				"{tr}\n" + 
+				"{tr}\n" + 
+				"{td}C{td}\n" + 
+				"{td}D{td}\n" + 
+				"{tr}\n" + 
+				"{tr}\n" + 
+				"{td}E{td}\n" + 
+				"{td:colspan=2}F{td}\n" + 
+				"{tr}\n" + 
+				"{tr}\n" + 
+				"{td}G{td}\n" + 
+				"{td}H{td}\n" + 
+				"{td}I{td}\n" + 
+				"{tr}\n" + 
+				"{tr}\n" + 
+				"{td}J{td}\n" + 
+				"{td}K{td}\n" + 
+				"{tr}\n" + 
+				"{tr}\n" + 
+				"{td:colspan=2}L{td}\n" + 
+				"{tr}\n" + 
+				"{tr}\n" + 
+				"{td:rowspan=2}M{td}\n" + 
+				"{td}N{td}\n" + 
+				"{td}O{td}\n" + 
+				"{tr}\n" + 
+				"{tr}\n" + 
+				"{td:colspan=2}P{td}\n" + 
+				"{tr}\n" + 
+				"{table}\n" + 
+				"";
+		actual = parse(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+	}
+
+	public void testDefaultConverter_NewlineHandling() {
+		String input, expected, actual;
+		events.addEvent("b", "com.atlassian.uwc.converters.xml.example.BoldParser");
+		
+		input = "<uwc>" +
+				"[foo bar|foo bar 2]\n" + 
+				"\n" + 
+				"h1. some heading\n" + 
+				"\n" + 
+				"xxxxxxxx xxxxxxx xxxx xxxxxx xxx xxxx xxxxxxxxxxx xxxxxx " +
+				"xxxxxxxx xxxx xxxxx xx xxxxxxxxxx xxxxxxx xxx xxxxxxxxx xx " +
+				"xxxx xxxxxxxxx xx xxxxxxxx xxxxxxxxxxxxx\n" + 
+				"\n" + 
+				"!test.jpg!\n" + 
+				"\n" + 
+				"\n" + 
+				"xxx xxxx xxxx xxxxxxx xxxx xxxx xx xxx xxxx xxxxxxxxx xxxxx xxx" +
+				" xxxxxx xxxx xxxxx xxxxxxxx xxxxxxxxx x xxxx xxxx xxxxxxx xxxx " +
+				"xxxx xxxxx xxxxxx xxx xx xxx xxxxxxxx xxxxx xxxxxxxxx xxxxx xx " +
+				"xxxxxxxxx xxx xxxxxx xx xxx xxxx x xxxxxxxxxxx xxxxx xxx xxxx xx" +
+				" xxxxxx xxxxxxxxxx xxx xxx xxxxxxxxx xx xxx xxxxxxxxxxx xx xxxxx" +
+				"xxx xxxx xx <b>xx</b> <b>xx</b> xx xxxxxxxx xxxxxxxxx xxxxxxxx" +
+				" xxxx xxxxxxxxxxx xxxx x xxxx xxxxxxx xxxxxx" +
+				"</uwc>";
+		
+		expected = "[foo bar|foo bar 2]\n" + 
+		"\n" + 
+		"h1. some heading\n" + 
+		"\n" + 
+		"xxxxxxxx xxxxxxx xxxx xxxxxx xxx xxxx xxxxxxxxxxx xxxxxx " +
+		"xxxxxxxx xxxx xxxxx xx xxxxxxxxxx xxxxxxx xxx xxxxxxxxx xx " +
+		"xxxx xxxxxxxxx xx xxxxxxxx xxxxxxxxxxxxx\n" + 
+		"\n" + 
+		"!test.jpg!\n" + 
+		"\n" + 
+		"\n" + 
+		"xxx xxxx xxxx xxxxxxx xxxx xxxx xx xxx xxxx xxxxxxxxx xxxxx xxx" +
+		" xxxxxx xxxx xxxxx xxxxxxxx xxxxxxxxx x xxxx xxxx xxxxxxx xxxx " +
+		"xxxx xxxxx xxxxxx xxx xx xxx xxxxxxxx xxxxx xxxxxxxxx xxxxx xx " +
+		"xxxxxxxxx xxx xxxxxx xx xxx xxxx x xxxxxxxxxxx xxxxx xxx xxxx xx" +
+		" xxxxxx xxxxxxxxxx xxx xxx xxxxxxxxx xx xxx xxxxxxxxxxx xx xxxxx" +
+		"xxx xxxx xx *xx* *xx* xx xxxxxxxx xxxxxxxxx xxxxxxxx" +
+		" xxxx xxxxxxxxxxx xxxx x xxxx xxxxxxx xxxxxx";
+		actual = parse(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testDefaultConverter_NewlineHandling_WithTidy() {
+		String input, expected, actual;
+		events.addEvent("b", "com.atlassian.uwc.converters.xml.example.BoldParser");
+		Properties properties = new Properties();
+		properties.setProperty("xml-use-htmltidy", "true");
+		tester.setProperties(properties);
+
+		
+		input = "[foo bar|foo bar 2]\n" + 
+				"\n" + 
+				"h1. some heading\n" + 
+				"\n" + 
+				"xxxxxxxx xxxxxxx xxxx xxxxxx xxx xxxx xxxxxxxxxxx xxxxxx " +
+				"xxxxxxxx xxxx xxxxx xx xxxxxxxxxx xxxxxxx xxx xxxxxxxxx xx " +
+				"xxxx xxxxxxxxx xx xxxxxxxx xxxxxxxxxxxxx\n" + 
+				"\n" + 
+				"!test.jpg!\n" + 
+				"\n" + 
+				"\n" + 
+				"xxx xxxx xxxx xxxxxxx xxxx xxxx xx xxx xxxx xxxxxxxxx xxxxx xxx" +
+				" xxxxxx xxxx xxxxx xxxxxxxx xxxxxxxxx x xxxx xxxx xxxxxxx xxxx " +
+				"xxxx xxxxx xxxxxx xxx xx xxx xxxxxxxx xxxxx xxxxxxxxx xxxxx xx " +
+				"xxxxxxxxx xxx xxxxxx xx xxx xxxx x xxxxxxxxxxx xxxxx xxx xxxx xx" +
+				" xxxxxx xxxxxxxxxx xxx xxx xxxxxxxxx xx xxx xxxxxxxxxxx xx xxxxx" +
+				"xxx xxxx xx <b>xx</b> <b>xx</b> xx xxxxxxxx xxxxxxxxx xxxxxxxx" +
+				" xxxx xxxxxxxxxxx xxxx x xxxx xxxxxxx xxxxxx";
+		
+		expected = "[foo bar|foo bar 2]\n" + 
+		"\n" + 
+		"h1. some heading\n" + 
+		"\n" + 
+		"xxxxxxxx xxxxxxx xxxx xxxxxx xxx xxxx xxxxxxxxxxx xxxxxx " +
+		"xxxxxxxx xxxx xxxxx xx xxxxxxxxxx xxxxxxx xxx xxxxxxxxx xx " +
+		"xxxx xxxxxxxxx xx xxxxxxxx xxxxxxxxxxxxx\n" + 
+		"\n" + 
+		"!test.jpg!\n" + 
+		"\n" + 
+		"\n" + 
+		"xxx xxxx xxxx xxxxxxx xxxx xxxx xx xxx xxxx xxxxxxxxx xxxxx xxx" +
+		" xxxxxx xxxx xxxxx xxxxxxxx xxxxxxxxx x xxxx xxxx xxxxxxx xxxx " +
+		"xxxx xxxxx xxxxxx xxx xx xxx xxxxxxxx xxxxx xxxxxxxxx xxxxx xx " +
+		"xxxxxxxxx xxx xxxxxx xx xxx xxxx x xxxxxxxxxxx xxxxx xxx xxxx xx" +
+		" xxxxxx xxxxxxxxxx xxx xxx xxxxxxxxx xx xxx xxxxxxxxxxx xx xxxxx" +
+		"xxx xxxx xx *xx* *xx* xx xxxxxxxx xxxxxxxxx xxxxxxxx" +
+		" xxxx xxxxxxxxxxx xxxx x xxxx xxxxxxx xxxxxx ";
+		actual = parse(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		tester.getProperties().clear();
+	}
+	
+	public void testWhistespaceHandlingWithTidy() {
+		String input, expected, actual;
+		Properties properties = new Properties();
+		properties.setProperty("xml-use-htmltidy", "true");
+		properties.setProperty("xml-tidyopt-numeric-entities","true");
+		properties.setProperty("xml-tidyopt-drop-proprietary-attributes","true");
+
+		tester.setProperties(properties);
+		
+		input = "[a<sup>b</sup> xml in link aliases|http://abc.com]";
+		expected = "[ab xml in link aliases|http://abc.com] ";
+		
+		actual = parse(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		tester.getProperties().clear();
+	}
+	public void testWhistespaceHandlingWithTidy2() {
+		String input, expected, actual;
+		Properties properties = new Properties();
+		properties.setProperty("xml-use-htmltidy", "true");
+		properties.setProperty("xml-tidyopt-numeric-entities","true");
+		properties.setProperty("xml-tidyopt-drop-proprietary-attributes","true");
+		tester.setProperties(properties);
+		
+		input = "h1. Foo Bar\n" +
+				"[a<sup>b</sup> xml|http://abc.com]\n";
+		expected = "h1. Foo Bar\n" +
+				"[ab xml|http://abc.com]\n ";
+		
+		actual = parse(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+
+		tester.getProperties().clear();
+	}
+	
+	public void testPreserveNL() {
+		String input, expected, actual;
+		input = "testing\n123";
+		expected = "testing~UWCXMLNLTOKEN~123";
+		actual = tester.preserveNewlines(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual); 
+	}
+	
+	public void testRemoveNL() {
+		String input, expected, actual;
+		input = "testing\n123";
+		expected = "testing 123";
+		actual = tester.removeNewlines(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		input = "<testing>\n<123>";
+		expected = "<testing><123>";
+		actual = tester.removeNewlines(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+
+		input = "<sup>\nmeh</sup>";
+		expected = "<sup>meh</sup>";
+		actual = tester.removeNewlines(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+
+	}
+	
+	public void testRevertNL() {
+		String input, expected, actual;
+		input = "testing~UWCXMLNLTOKEN~123";
+		expected = "testing\n123";
+		actual = tester.revertNewlines(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
 	}
 	
 	private String parse(String input) {

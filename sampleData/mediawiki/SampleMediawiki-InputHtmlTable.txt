@@ -1,6 +1,5 @@
 This is sample page for html tables. See UWC-359.
 
-(The whitespace handling is a little weird, but displays ok in confluence)
 <table> 
 <tr><td>r1c1</td><td>r1c2</td></tr>
 <tr><td>r2c1</td><td>r2c2</td></tr>

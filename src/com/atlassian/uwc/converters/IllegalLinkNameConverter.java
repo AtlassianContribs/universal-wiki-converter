@@ -75,7 +75,7 @@ public class IllegalLinkNameConverter extends IllegalNameConverter {
 	 * @return true if the link is an external link (http://somepage.com),
 	 * returns false if the link is an internal wiki page
 	 */
-	protected boolean isExternalLink(String input) {
+	public boolean isExternalLink(String input) {
 		Matcher protocolFinder;
 		if (this.getProperties().containsKey(PROPKEY_CUSTOMPROTOCOL)) {
 			try {

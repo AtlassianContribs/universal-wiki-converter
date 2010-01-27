@@ -6,3 +6,6 @@ sortby title - parent=SampleMediawiki-InputSplist/Test
 sortby title as default param - parent=SampleMediawiki-InputSplist
 {children:sort=title|page=SampleMediawiki-InputSplist}
 
+character correction
+{children:sort=title|page=Page With Underscores Subpage} 
+ 

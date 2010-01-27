@@ -138,10 +138,33 @@ public class ImageConverterTest extends TestCase {
 	}
 	
 	public void testResize() {
-		//Not supporting resize right now
 		String input = "[[Image:Wiki.png|30 px]]";
-		String expected = "!Wiki.png!";
+		String expected = "!Wiki.png|width=30px!";
 		String actual = tester.convertImages(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		input = "[[Image:Wiki.png|130px]]";
+		expected = "!Wiki.png|width=130px!";
+		actual = tester.convertImages(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		input = "[[Image:example.png|200x200px]]";
+		expected = "!example.png|width=200px,height=200px!";
+		actual = tester.convertImages(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		input = "[[Image:example.jpg|frame|250px]]";
+		expected = "!example.jpg|align=right,width=250px!";
+		actual = tester.convertImages(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		input = "[[Image:example.jpg|150px|frame]]";
+		expected = "!example.jpg|align=right,width=150px!";
+		actual = tester.convertImages(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}

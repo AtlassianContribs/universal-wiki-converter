@@ -1,0 +1,12 @@
+Sample page for mediawiki images with size params
+
+!example.jpg|width=50px!
+
+!example.jpg|width=500px!
+
+!example.jpg|align=right,width=250px!
+
+!example.jpg|align=right,width=150px!
+
+!example.png|width=200px,height=200px!
+

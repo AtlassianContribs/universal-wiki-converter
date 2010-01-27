@@ -6,3 +6,5 @@ sortby title - parent=SampleMediawiki-InputSplist/Test
 sortby title as default param - parent=SampleMediawiki-InputSplist
 <splist parent="SampleMediawiki-InputSplist" showparent="no" sort="asc" liststyle="unordered" showpath="no" kidsonly="yes" debug="0"></splist>
 
+character correction
+<splist parent="Page_With_Underscores/Subpage" showparent="no" sort="asc" sortby="title" liststyle="unordered" showpath="no" kidsonly="yes" debug="0" /> 

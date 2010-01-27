@@ -1,0 +1,12 @@
+Sample page for mediawiki images with size params
+
+[[Image:example.jpg|50px]]
+
+[[Image:example.jpg|500px]]
+
+[[Image:example.jpg|frame|250px]]
+
+[[Image:example.jpg|150px|frame]]
+
+[[Image:example.png|200x200px]]
+

@@ -58,4 +58,13 @@ public class NamespaceCleanerTest extends TestCase {
 		
 	}
 
+	public void testNotExternal() {
+		String input, expected, actual;
+		input = "[[http://www.hub.slb.com/display/index.do?id=id2588770]]";
+		expected = input;
+		actual = tester.cleanNamespace(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
 }

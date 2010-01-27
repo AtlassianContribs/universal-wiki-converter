@@ -1,6 +1,7 @@
 package com.atlassian.uwc.hierarchies;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -49,6 +50,7 @@ public class ContentHierarchy implements HierarchyBuilder {
 		
 		//set up root node
 		HierarchyNode root = new HierarchyNode();
+		root.setChildrenComparator(getVersionComparator());
 		HierarchyNode pen = getPenultimateNode(getRootName(), root);
 		
 		log.info("Building Hierarchy.");
@@ -78,6 +80,7 @@ public class ContentHierarchy implements HierarchyBuilder {
 					log.debug(".... to node: " + ancestorNode.getName());
 				//the addChild method handles redundant children for us
 				ancestorNode.addChild(currentChild); 
+				log.debug(".... has " + ancestorNode.getChildren().size() + " children");
 				currentChild = ancestorNode;
 			}
 		}  
@@ -102,10 +105,11 @@ public class ContentHierarchy implements HierarchyBuilder {
 	private TreeMap<String, HierarchyNode> getAncestorNodeMap(Collection<Page> pages, boolean hasCurrent) {
 		TreeMap<String,HierarchyNode> nodes = new TreeMap<String, HierarchyNode>();
 		for (Page page : pages) {
-			log.debug(".. creating node: " + page.getName());
+			log.debug(".. creating node: " + page.getName() + " version: "+ page.getVersion());
 			if (page == null) continue;
 			HierarchyNode node = new HierarchyNode();
 			node.setPage(page);
+			node.setChildrenComparator(getVersionComparator());
 			String hierarchy = getHierarchy(page);
 			//if we don't have the current node's name in the ancestor path, add it
 			if (!hasCurrent) { 
@@ -135,7 +139,14 @@ public class ContentHierarchy implements HierarchyBuilder {
 			root.addChild(pen);
 		}
 		else pen = root;
+		pen.setChildrenComparator(getVersionComparator());
 		return pen;
+	}
+
+	private static VersionComparator versionComparator;
+	private Comparator getVersionComparator() {
+		if (versionComparator == null) versionComparator = new VersionComparator();
+		return versionComparator;
 	}
 
 	/**
@@ -289,4 +300,20 @@ public class ContentHierarchy implements HierarchyBuilder {
 		this.props = properties;
 	}
 
+	public class VersionComparator implements Comparator {
+
+		public int compare(Object o1, Object o2) {
+			HierarchyNode n1 = (HierarchyNode) o1;
+			HierarchyNode n2 = (HierarchyNode) o2;
+			String name1 = n1.getName();
+			String name2 = n2.getName();
+			log.debug("comparing: " + name1 + " and " + name2);
+			int nameCompare = name1.compareTo(name2);
+			if (nameCompare != 0) return nameCompare;
+			int v1 = n1.getPage().getVersion();
+			int v2 = n2.getPage().getVersion();
+			return v1 - v2;
+		}
+		
+	}
 }

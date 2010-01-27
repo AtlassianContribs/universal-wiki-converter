@@ -16,7 +16,7 @@ public class ImageConverter extends BaseConverter {
 
 	private static final String IMAGE_DELIM = "|";
 	
-	private static final String OTHER_DELIM = ",";
+	private static final String MULT_DELIM = ",";
 	
 	public enum Alignment {
 		LEFT { public String toString() {return "";}},
@@ -71,6 +71,8 @@ public class ImageConverter extends BaseConverter {
 	}
 
 
+	Pattern size = Pattern.compile("\\d+");
+	Pattern heightPattern = Pattern.compile("(\\d+)x(\\d+)px");
 	/**
 	 * checks to see if a thumb property is present, and if so returns the
 	 * converter image string with a thumb parameter
@@ -82,13 +84,13 @@ public class ImageConverter extends BaseConverter {
 		// XXX when we want to handle other image properties (uwc-103), we'll do
 		// it here
 		// XXX Also note: CONF-8177 http://jira.atlassian.com/browse/CONF-8177
-		// as of Confluence 2.4.2, tumbnail and alignment properties not co-existing
+		// as of Confluence 2.4.2, thumbnail and alignment properties not co-existing
 		// peacefully, but we should assume they should be able to and convert
 		// accordingly
 		log.debug("handling image property for input: " + input);
 		
 		//split on pipes
-		String[] props = input.split("\\" + IMAGE_DELIM); //escape 'cause pipe is a regec char
+		String[] props = input.split("\\" + IMAGE_DELIM); //escape 'cause pipe is a regex char
 		
 		//handle errors
 		if (props.length == 0) {
@@ -99,6 +101,7 @@ public class ImageConverter extends BaseConverter {
 		String img = props[0];
 		boolean thumbnail = false;
 		Alignment align = Alignment.LEFT;
+		String sizing = null;
 		//look through props. [0] was the image.
 		for (int i = 1; i < props.length; i++) {
 			String prop = props[i];
@@ -118,17 +121,32 @@ public class ImageConverter extends BaseConverter {
 				align = Alignment.CENTER;
 				continue;
 			}
+			else if (size.matcher(prop).lookingAt()) {
+				Matcher heightFinder = heightPattern.matcher(prop);
+				if (heightFinder.matches()) {
+					String width = heightFinder.group(1);
+					String height = heightFinder.group(2);
+					sizing = "width=" + width + "px,height="+ height + "px";
+				}
+				else {
+					sizing = "width=" + prop.replaceAll("\\D", "") + "px";
+				}
+			}
 		}
-		return createConfluenceImage(img, thumbnail, align);
+		return createConfluenceImage(img, thumbnail, align, sizing);
 	}
 
-
 	protected String createConfluenceImage(String img, boolean thumbnail, Alignment align) {
+		return createConfluenceImage(img, thumbnail, align, null);
+	}
+	protected String createConfluenceImage(String img, boolean thumbnail, Alignment align, String sizing) {
 		log.debug("Creating confluence image syntax.");
 		String imageSyntax = img;
 		imageSyntax += handleThumbnail(thumbnail);
-		String delim = (imageSyntax.equals(img)?IMAGE_DELIM:OTHER_DELIM);
+		String delim = (imageSyntax.equals(img)?IMAGE_DELIM:MULT_DELIM);
 		imageSyntax += handleAlignment(align, delim);
+		delim = (imageSyntax.equals(img)?IMAGE_DELIM:MULT_DELIM);
+		imageSyntax += handleSize(sizing, delim);
 		return imageSyntax;
 	}
 
@@ -144,5 +162,9 @@ public class ImageConverter extends BaseConverter {
 		return alignString;
 	}
 
+	protected String handleSize(String size, String delim) {
+		if (size == null) return "";
+		return delim + size;
+	}
 
 }

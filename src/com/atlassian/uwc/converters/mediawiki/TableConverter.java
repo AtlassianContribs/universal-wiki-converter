@@ -24,11 +24,13 @@ import com.atlassian.uwc.ui.Page;
 public class TableConverter extends BaseConverter {
 	
 	private static final String TOKEN_NL = "~UWCTOKENNEWLINE~";
-
 	private static final String CAPTION_PARAMS = "|borderStyle=dashed|borderColor=#ccc|bgColor=#fff";
-
+	private static final String DEFAULT_OUTPUT = "confluence";
+	private static final String PROP_OUTPUT = "tableoutput";
+	
 	//debugger objects
 	public Logger log = Logger.getLogger(this.getClass());
+	private Type type; //output type
 
 	//CONSTANTS - tokens
 	protected static final String HEADER_DELIM = "||";
@@ -46,10 +48,23 @@ public class TableConverter extends BaseConverter {
 	private static Pattern innertable = Pattern.compile(beginTable + "|" + endTable + "|" +markCaption);
 	private static Pattern attribute = Pattern.compile("\\w+=((\"[^\"]*\")|([^\\s\"]+))");
 	
+	public enum Type {
+		CONFLUENCE, 			//default confluence output
+		CONTENTFORMATTING;		//content formatting plugin output
+		public static Type getType(String type) {
+			if ("confluence".equals(type)) return CONFLUENCE;
+			if ("contentformatting".equals(type)) return CONTENTFORMATTING;
+			return null;
+		}
+	}
+	
 	public void convert(Page page) {
 		log.debug("Converting Mediawiki Tables -- starting.");
 		String text = page.getOriginalText();
 
+		String tableoutput = getProperties().getProperty(PROP_OUTPUT, DEFAULT_OUTPUT);
+		this.type = Type.getType(tableoutput);
+		
 		String converted = "";
 		//											 {| (stuff) |}
 		Pattern mediawikiTable = Pattern.compile("\\{\\|(.*?)\\|\\}", Pattern.DOTALL);	
@@ -57,7 +72,15 @@ public class TableConverter extends BaseConverter {
 		StringBuffer sb  = new StringBuffer();
 		while (mediawikiTableFinder.find()) {
 			String tableinnards = mediawikiTableFinder.group(1);
-			String replacement = getReplacement(tableinnards);
+			String replacement = "";
+			switch(this.type) {
+			case CONFLUENCE: 
+				replacement = getReplacement(tableinnards);
+				break;
+			case CONTENTFORMATTING:
+				replacement = getContentFormattingReplacement(tableinnards);
+				break;
+			}
 			replacement = RegexUtil.handleEscapesInReplacement(replacement);
 			mediawikiTableFinder.appendReplacement(sb, replacement);
 		}
@@ -149,6 +172,92 @@ public class TableConverter extends BaseConverter {
 	}
 	Pattern endComplete = Pattern.compile("[|] *\n+ *$");
 
+	private String getContentFormattingReplacement(String input) {
+		String tableparams = getTableParams(input);
+		input = input.replaceFirst(".*?(?=\n[|!])", "");
+		input = input.trim();
+		Matcher rowFinder = row.matcher(input);
+		StringBuffer sb = new StringBuffer();
+		boolean found = false;
+		boolean first = true;
+		while (rowFinder.find()) {
+			found = true;
+			String delim = rowFinder.group(1);
+			Context context = Context.getContext(delim);
+			String content = rowFinder.group(2);
+			content = content.trim();
+			String replacement = "";
+			switch (context) {
+//			case CAPTION:
+			case ROW:
+				if (!first) replacement += "{tr}\n";
+				replacement += "{tr}\n";
+				first = false;
+				break;
+			case CELL:
+				String params = getCellParams(content);
+				content = content.replaceFirst("^[^|]*\\|", "");
+				String leftmacro = (!"".equals(params))?"{td:"+params+"}":"{td}"; 
+				replacement += leftmacro + content.trim() + "{td}\n";
+				break;
+			case HEADER:
+				params = getCellParams(content);
+				content = content.replaceAll("\\s*\\Q||\\E\\s*", "{th}\n{th}");
+				content = content.replaceFirst("^[^|]*\\|", "");
+				leftmacro = (!"".equals(params))?"{th:"+params+"}":"{th}"; 
+				replacement += leftmacro + content.trim() + "{th}\n";
+				break;
+			}
+			replacement = RegexUtil.handleEscapesInReplacement(replacement);
+			rowFinder.appendReplacement(sb, replacement);
+		}
+		if (found) {
+			rowFinder.appendTail(sb);
+			String tableinnards = sb.toString();
+			if (!lastrow.matcher(tableinnards).find()) tableinnards += "{tr}\n";
+			return "{table" + tableparams +
+					"}\n" + tableinnards + "{table}\n";
+		}
+		return input;
+	}
+	
+	Pattern lastrow = Pattern.compile("\\{tr[^}]*\\}\n?$");
+
+	Pattern tableparams = Pattern.compile(".*?(?=\\n[|!])");
+	protected String getTableParams(String input) {
+		Matcher paramFinder = tableparams.matcher(input);
+		String replacement = "";
+		while (paramFinder.find()) {
+			String rawparams = paramFinder.group();
+			replacement = getConfParams(rawparams);
+			break; //only do this once
+		}
+		if (!"".equals(replacement)) replacement = ":" + replacement;
+		return replacement;
+	}
+
+	Pattern keyval = Pattern.compile("(\\S+)=\"([^\"]+)\"");
+	private String getConfParams(String input) {
+		Matcher keyvalFinder = keyval.matcher(input);
+		String replacement = "";
+		while (keyvalFinder.find()) {
+			String key = keyvalFinder.group(1);
+			String val = keyvalFinder.group(2);
+			if (!"".equals(replacement)) replacement += "|";
+			replacement += key + "=" + val;
+		}
+		return replacement;
+	}
+
+	Pattern prepipe = Pattern.compile("^[^|]*");
+	protected String getCellParams(String input) {
+		Matcher paramFinder = prepipe.matcher(input);
+		while (paramFinder.find()) {
+			String rawparams = paramFinder.group();
+			return getConfParams(rawparams);
+		}
+		return "";
+	}
 	private String handleCell(String cToken, String content, String replacement) {
 		if (hasInnertable(content))
 			content = cleanInnertable(content);

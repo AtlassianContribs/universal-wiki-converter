@@ -38,10 +38,13 @@ public class SubpagelistConverter extends BaseConverter {
 					val = val.replaceFirst("^['\"]", "");
 					val = val.replaceFirst("['\"]$", "");
 					val = val.replaceAll("/", " ");
+					if (Boolean.parseBoolean(getProperties().getProperty("underscore2space-links", "false"))){
+						val = val.replaceAll("_", " ");
+					}
 					pageval = "page=" + val;
 				}
 			}
-			String replacement = "{children:sort=title" +
+			String replacement = "{children:sort=title|all=true" +
 				(pageval != null?"|":"") + pageval +
 				"}";
 			replacement = RegexUtil.handleEscapesInReplacement(replacement);

@@ -93,6 +93,9 @@ echo "HeaderEq"
 echo "TableCurly"
 ./compare.sh TableCurly
 
+echo "ImageSize"
+./compare.sh ImageSize
+
 #OPT-IN ISSUES (converters have to be turned on for these to work):
 echo "*************************"
 echo "** OPT-IN ISSUES" 
@@ -112,3 +115,7 @@ echo "UserDate"
 
 echo "Splist"
 ./compare.sh Splist
+
+echo "TableSpan"
+./compare.sh TableSpan
+

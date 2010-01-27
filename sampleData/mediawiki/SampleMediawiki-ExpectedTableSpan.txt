@@ -1,0 +1,87 @@
+Mediawiki tables with row and colspans.
+
+Mediawiki Syntax
+
+{table:border=1|cellpadding=5|cellspacing=0}
+{tr}
+{th}Column 1{th}
+{th}Column 2{th}
+{th}Column 3{th}
+{tr}
+{tr}
+{td}A{td}
+{td:colspan=2|align=center}B{td}
+{tr}
+{tr}
+{td}C{td}
+{td}D{td}
+{tr}
+{tr}
+{td}E{td}
+{td:colspan=2|align=center}F{td}
+{tr}
+{tr}
+{td}G{td}
+{td}H{td}
+{td}I{td}
+{tr}
+{tr}
+{td}J{td}
+{td}K{td}
+{tr}
+{tr}
+{td:colspan=2|align=center}L{td}
+{tr}
+{tr}
+{td:rowspan=2}M{td}
+{td}N{td}
+{td}O{td}
+{tr}
+{tr}
+{td:colspan=2}P{td}
+{table}
+
+
+Html Syntax
+{table:border=1}
+{tr}
+{th}Column 1{th}
+{th}Column 2{th}
+{th}Column 3{th}
+{tr}
+{tr}
+{td}A{td}
+{td:colspan=2|align=center}B{td}
+{tr}
+{tr}
+{td}C{td}
+{td}D{td}
+{tr}
+{tr}
+{td}E{td}
+{td:colspan=2}F{td}
+{tr}
+{tr}
+{td}G{td}
+{td}H{td}
+{td}I{td}
+{tr}
+{tr}
+{td}J{td}
+{td}K{td}
+{tr}
+{tr}
+{td:colspan=2}L{td}
+{tr}
+{tr}
+{td:rowspan=2}M{td}
+{td}N{td}
+{td}O{td}
+{tr}
+{tr}
+{td:colspan=2}P{td}
+{tr}
+{table}
+
+
+

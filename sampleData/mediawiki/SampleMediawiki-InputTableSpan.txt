@@ -1,0 +1,76 @@
+Mediawiki tables with row and colspans.
+
+Mediawiki Syntax
+
+{| border="1" cellpadding="5" cellspacing="0"
+|-
+! Column 1 || Column 2 || Column 3
+|-
+| A
+| colspan="2" align="center"| B
+|-
+| C
+| D
+|-
+| E
+| colspan="2" align="center"| F
+|- 
+| G
+| H
+| I
+|- 
+| J
+| K
+|-
+| colspan="2" align="center"| L
+|-
+| rowspan="2"| M
+| N
+| O
+|-
+| colspan="2" |P
+|}
+
+Html Syntax
+<table>
+ <tr>
+	<th>Column 1</th>
+	<th>Column 2</th>
+	<th>Column 3</th>
+ </tr>
+ <tr>
+	<td>A</td>
+	<td colspan="2" align="center">B</td>
+ </tr>
+ <tr>
+	<td>C</td>
+	<td>D</td>
+ </tr>
+ <tr>
+	<td>E</td>
+	<td colspan="2">F</td>
+ </tr>
+ <tr>
+	<td>G</td>
+	<td>H</td>
+	<td>I</td>
+ </tr>
+ <tr>
+	<td>J</td>
+	<td>K</td>
+ </tr>
+ <tr>
+	<td colspan="2">L</td>
+ </tr>
+ <tr>
+	<td rowspan="2">M</td>
+   <td>N</td>
+   <td>O</td>
+ </tr>
+ <tr>
+	<td colspan="2">P</td>
+ </tr>
+</table>
+
+
+

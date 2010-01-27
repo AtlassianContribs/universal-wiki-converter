@@ -429,6 +429,7 @@ public class ContentHierarchyTest extends TestCase {
 			page.setConvertedText(page.getOriginalText());
 			page.setUnchangedSource(page.getOriginalText());
 			page.setName(guessName(file.getName()).replaceFirst("-\\d$", ""));
+			page.setVersion(Integer.parseInt(file.getName().replaceAll("\\D", "")));
 			pages.add(page);
 		}
 		
@@ -454,18 +455,110 @@ public class ContentHierarchyTest extends TestCase {
 		HierarchyNode treenode = nodes2.get(0); 
 		
 		Set<HierarchyNode> treechildren = treenode.getChildren();
-		assertEquals(3, treechildren.size());
+		assertEquals(5, treechildren.size());
 		Vector<HierarchyNode> trees = new Vector<HierarchyNode>();
 		trees.addAll(treechildren);
-		assertTrue((trees.get(0)).getName().equals("Chestnut") ||
-				(trees.get(0)).getName().equals("Pine"));
-		assertTrue((trees.get(1)).getName().equals("Chestnut") ||
-				(trees.get(1)).getName().equals("Pine"));
-		assertTrue((trees.get(2)).getName().equals("Chestnut") ||
-				(trees.get(2)).getName().equals("Pine"));
+		HierarchyNode node1 = trees.get(0);
+		HierarchyNode node2 = trees.get(1);
+		HierarchyNode node3 = trees.get(2);
+		HierarchyNode node4 = trees.get(3);
+		HierarchyNode node5 = trees.get(4);
+		
+		assertNotNull(node1);
+		assertEquals("Chestnut", node1.getName());
+		assertEquals(1, node1.getPage().getVersion());
+		assertNotNull(node2);
+		assertEquals("Chestnut", node2.getName());
+		assertEquals(2, node2.getPage().getVersion());
+		assertNotNull(node3);
+		assertEquals("Chestnut", node3.getName());
+		assertEquals(3, node3.getPage().getVersion());
+		assertNotNull(node4);
+		assertEquals("Pine", node4.getName());
+		assertEquals(1, node4.getPage().getVersion());
+		assertNotNull(node5);
+		assertEquals("Pine", node5.getName());
+		assertEquals(2, node5.getPage().getVersion());
 		
 	}
 	
+	public void testBuildHierarchy_History_ToHome() {
+		Properties props = new Properties();
+		props.setProperty("switch.page-history-preservation", "true");
+		props.setProperty("suffix.page-history-preservation", "-#.txt");
+		props.setProperty(ContentHierarchy.PROP_ROOT, "Home");
+		tester.setProperties(props);
+		
+		Vector<Page> pages = new Vector<Page>();
+		File sampledir = new File("sampleData/hierarchy/content-pagehistory/");
+		assertTrue(sampledir.exists() && sampledir.isDirectory());
+		
+		for (File file : sampledir.listFiles(new NoSvnFilter())) {
+			if (file.isDirectory()) continue;
+			Page page = new Page(file);
+			page.setOriginalText(readFile(file));
+			page.setConvertedText(page.getOriginalText());
+			page.setUnchangedSource(page.getOriginalText());
+			page.setName(guessName(file.getName()).replaceFirst("-\\d$", ""));
+			page.setVersion(Integer.parseInt(file.getName().replaceAll("\\D", "")));
+			pages.add(page);
+		}
+		
+		HierarchyNode actual = tester.buildHierarchy(pages);
+		assertNotNull(actual); //root node
+		assertNull(actual.getName());
+		assertNull(actual.getPage());
+		assertNull(actual.getParent());
+		assertNotNull(actual.getChildren());
+
+		Set<HierarchyNode> home = actual.getChildren();
+		assertEquals(1, home.size());
+		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
+		nodes0.addAll(home);
+		assertTrue((nodes0.get(0)).getName().equals("Home"));
+		
+		Set<HierarchyNode> children1 = nodes0.get(0).getChildren();
+		assertEquals(1, children1.size());
+		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
+		nodes1.addAll(children1);
+		assertTrue((nodes1.get(0)).getName().equals("Plants"));
+
+		Set<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
+		assertEquals(1, children2.size());
+		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
+		nodes2.addAll(children2);
+		assertTrue((nodes2.get(0)).getName().equals("Trees"));
+
+		HierarchyNode treenode = nodes2.get(0); 
+		
+		Set<HierarchyNode> treechildren = treenode.getChildren();
+		assertEquals(5, treechildren.size());
+		Vector<HierarchyNode> trees = new Vector<HierarchyNode>();
+		trees.addAll(treechildren);
+		HierarchyNode node1 = trees.get(0);
+		HierarchyNode node2 = trees.get(1);
+		HierarchyNode node3 = trees.get(2);
+		HierarchyNode node4 = trees.get(3);
+		HierarchyNode node5 = trees.get(4);
+		
+		assertNotNull(node1);
+		assertEquals("Chestnut", node1.getName());
+		assertEquals(1, node1.getPage().getVersion());
+		assertNotNull(node2);
+		assertEquals("Chestnut", node2.getName());
+		assertEquals(2, node2.getPage().getVersion());
+		assertNotNull(node3);
+		assertEquals("Chestnut", node3.getName());
+		assertEquals(3, node3.getPage().getVersion());
+		assertNotNull(node4);
+		assertEquals("Pine", node4.getName());
+		assertEquals(1, node4.getPage().getVersion());
+		assertNotNull(node5);
+		assertEquals("Pine", node5.getName());
+		assertEquals(2, node5.getPage().getVersion());
+		
+	}
+
 	public void testGetRootName() {
 		//default behavior
 		String expected = "";

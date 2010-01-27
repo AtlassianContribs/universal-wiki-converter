@@ -5,7 +5,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.w3c.tidy.Tidy;
@@ -179,12 +182,16 @@ public class XmlConverter extends BaseConverter {
 	 */
 	private String cleanWithJTidy(String input) {
 		log.info("Cleaning HTML with JTidy: Starting. (This may take a while...)");
+		
+		input = preserveNewlines(input); //otherwise tidy will get rid of valid newlines
+		
 		Tidy tidy = new Tidy();
 		tidy.setTidyMark(false);
 		tidy.setDropEmptyParas(true);
 		tidy.setXmlOut(true);
 		tidy.setDropFontTags(false);
 		tidy.setDocType(getDoctype());
+		tidy.setConfigurationFromProps(getTidyProps());
 		InputStream in = null;
 		String encoding = "utf-8";
 		try {
@@ -196,12 +203,61 @@ public class XmlConverter extends BaseConverter {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		tidy.parseDOM(in, out);
 		log.info("Cleaning HTML with JTidy: Completed.");
-		return out.toString();
+		String output = out.toString();
+		
+		output = removeNewlines(output);//otherwise tidy will add newlines I don't want
+		output = revertNewlines(output);//get back my original newlines
+		return output;
 	}
+
+	private Properties getTidyProps() {
+		Properties props = getProperties();
+		Properties tidyprops = new Properties();
+		for (Enumeration iter = props.keys();iter.hasMoreElements();) {
+			String prop = (String) iter.nextElement();
+			if (prop.startsWith("xml-tidyopt-")) {
+				String key = prop.replaceFirst("^xml-tidyopt-", "");
+				String val = props.getProperty(prop, null);
+				if (val != null) tidyprops.setProperty(key, val);
+			}
+		}
+		return tidyprops;
+	}
+
 	private String getDoctype() {
 		Properties props = getProperties();
 		if (!props.containsKey("doctype"))
 			return DEFAULT_DOCTYPE;
 		return props.getProperty("doctype", DEFAULT_DOCTYPE);
+	}
+	
+	Pattern nl = Pattern.compile("\n");
+	public static final String NL_TOKEN = "~UWCXMLNLTOKEN~";
+	Pattern nltokenPattern = Pattern.compile("\\Q" + NL_TOKEN + "\\E");
+	Pattern ws = Pattern.compile("(?<=[><]) ");
+	public static final String WS_TOKEN = "~UWCXMLWSTOKEN~";
+	Pattern wstokenPattern = Pattern.compile("\\Q" + WS_TOKEN + "\\E");
+	protected String preserveNewlines(String input) {
+		Matcher nlFinder = nl.matcher(input);//save all existing newlines
+		input = nlFinder.replaceAll(NL_TOKEN);
+		Matcher wsFinder = ws.matcher(input);//save spaces after tags (sometimes tidy turns to nl)
+		return wsFinder.replaceAll(WS_TOKEN);
+	}
+	
+	Pattern tagNl = Pattern.compile("(?<=[>])\n");
+	Pattern notTagNl = Pattern.compile("(?<=[^>])\n");
+	protected String removeNewlines(String input) {
+		Matcher nlFinder = tagNl.matcher(input);
+		input = nlFinder.replaceAll(""); //remove newlines between tags <html>\n<head>
+		nlFinder = notTagNl.matcher(input);
+		input = nlFinder.replaceAll(" ");//replace with " " all other newlines <span\natt="...
+		return input;
+	}
+	
+	protected String revertNewlines(String input) {
+		Matcher nltokenFinder = nltokenPattern.matcher(input);
+		input = nltokenFinder.replaceAll("\n");
+		Matcher wstokenFinder = wstokenPattern.matcher(input);
+		return wstokenFinder.replaceAll(" ");
 	}
 }
