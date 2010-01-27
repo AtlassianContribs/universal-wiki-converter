@@ -230,7 +230,7 @@ public class MindtouchExporter implements Exporter {
 			String before = attFinder.group(1);
 			String id = attFinder.group(2);
 			String after = attFinder.group(3);
-			String fileinfo = getFileInfo(id, "info", "");
+			String fileinfo = getFileInfo(id, "info", ""); //XXX what if fileinfo is null?
 			Matcher titleFinder = title.matcher(fileinfo);
 			if (titleFinder.find()) {
 				String title = titleFinder.group(1);
