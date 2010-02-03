@@ -96,6 +96,9 @@ echo "TableCurly"
 echo "ImageSize"
 ./compare.sh ImageSize
 
+echo "Mailto"
+./compare.sh Mailto
+
 #OPT-IN ISSUES (converters have to be turned on for these to work):
 echo "*************************"
 echo "** OPT-IN ISSUES" 

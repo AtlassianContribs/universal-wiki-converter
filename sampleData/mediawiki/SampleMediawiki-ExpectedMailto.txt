@@ -1,0 +1,5 @@
+testing mailto link
+
+[mailto:johndoe@domain.com]
+[John Doe|mailto:johndoe@domain.com]
+
