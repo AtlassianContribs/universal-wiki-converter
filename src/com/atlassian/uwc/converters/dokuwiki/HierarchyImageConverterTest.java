@@ -85,5 +85,26 @@ public class HierarchyImageConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
+	
+	public void testConvertImages_wSize() {
+		String input, expected, actual;
+		input = "{{drink:Wiki.png?50}} - render\n" + 
+			"{{:drink:juice:Wiki.png?50}} - render\n" +
+			"{{drink:Wiki.png?50x100}} - render\n" + 
+			"{{:drink:juice:Wiki.png?50x100}} - render\n" +
+			"{{drink:Wiki?50}}\n" + //what do we do if no extension?
+			"{{drink:Wiki?words&50}}\n" + //what do we do if non-number params?
+			"{{drink:Wiki?words&50x100}}"; //what do we do if non-number params?
+		expected = "!food:Drink^Wiki.png|width=50px! - render\n" +
+			"!food:Juice^Wiki.png|width=50px! - render\n" +
+			"!food:Drink^Wiki.png|width=50px,height=100px! - render\n" +
+			"!food:Juice^Wiki.png|width=50px,height=100px! - render\n" +
+			"!food:Drink^Wiki|width=50px!\n" +
+			"!food:Drink^Wiki|width=50px!\n" +
+			"!food:Drink^Wiki|width=50px,height=100px!";
+		actual = tester.convertImages(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 
 }

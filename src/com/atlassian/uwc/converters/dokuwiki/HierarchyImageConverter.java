@@ -27,6 +27,8 @@ public class HierarchyImageConverter extends HierarchyTarget {
 	protected String convertImages(String input) {
 		return convertImages(input, null);
 	}
+	Pattern size = Pattern.compile("([^?]*)\\?(.*)");
+	Pattern params = Pattern.compile("(\\d+)(x(\\d+))?");
 	protected String convertImages(String input, String currentPath) {
 		String currentSpacekey = getProperties().getProperty("spacekey", null);
 		Vector<String> allspaces = getSpaces();
@@ -94,9 +96,24 @@ public class HierarchyImageConverter extends HierarchyTarget {
 			}
 			//add spacekey to target if necessary
 			target = linkSpacekey + ":" + target;
+			//handle resize info
+			Matcher sizeFinder = size.matcher(target);
+			boolean hasSizeParam = false;
+			if (sizeFinder.find()) {
+				hasSizeParam = true;
+				image = sizeFinder.group(1);
+				String paramString = sizeFinder.group(2);
+				Matcher paramFinder = params.matcher(paramString);
+				if (paramFinder.find()) {
+					String width = paramFinder.group(1);
+					String height = paramFinder.group(3);
+					target = image + "|width=" + width + "px" +  
+					(height != null?",height="+height + "px":"");
+				}
+			}
 			//build replacement string
 			String replacement = "";
-			if (isImage(image)) {
+			if (hasSizeParam || isImage(image)) {
 				replacement = "!" + target + "!";
 			}
 			else {

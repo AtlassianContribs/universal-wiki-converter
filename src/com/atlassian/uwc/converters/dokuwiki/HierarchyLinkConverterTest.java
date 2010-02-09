@@ -90,4 +90,12 @@ public class HierarchyLinkConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 
+	public void testConvertUNC() {
+		String input, expected, actual;
+		input = "[[\\\\path\\to\\unc\\file.jpg]]\n";
+		expected = input;
+		actual = tester.convertLink(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual); 
+	}
 }

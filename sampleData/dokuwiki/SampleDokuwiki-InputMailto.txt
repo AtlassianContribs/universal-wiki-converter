@@ -1,0 +1,10 @@
+Sample page for mailto links
+
+Requested conversion:
+[[mailto:abc@abc.com]]
+[[mailto:abc@abc.com|Foo Bar]]
+[[mailto:abc@abc.com | Foo Bar]]
+Email header?:
+>> From: Foo Bar [mailto:abc@abc.com]
+Described in dokuwiki.org/syntax as email link:
+<abc@someplace.org>

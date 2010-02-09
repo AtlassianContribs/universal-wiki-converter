@@ -34,6 +34,7 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 			found = true;
 			String target = linkFinder.group(1);
 			String alias = null;
+			if (target.startsWith("\\\\")) continue; //UNC link
 			if (target.contains("|")) {
 				String[] parts = target.split("\\|");
 				target = parts[0];
