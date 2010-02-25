@@ -7,9 +7,9 @@ If one does not use those plug-ins, the regarding code snippets just may be remo
 h4.  Lists 
 
 h5.  Unsorted Lists 
-  * unsorted 1
-  * unsorted 1
-  * unsorted 1
+* unsorted 1
+* unsorted 1
+* unsorted 1
 
 h5.  Sorted Lists 
 # sorted 1
@@ -17,33 +17,33 @@ h5.  Sorted Lists
 # sorted 3
 
 h4.  Links 
-  * german Wikipedia link: [Ant|http://de.wikipedia.org/wiki/Ant]
-  * german Wikipedia link with alias: [Ant Tool|http://de.wikipedia.org/wiki/Ant]
-  * english Wikipedia link: [Ant|http://en.wikipedia.org/wiki/Ant]
-  * general link: [Atlassian's Homepage|http://www.atlassian.com/]
+* german Wikipedia link: [Ant|http://de.wikipedia.org/wiki/Ant]
+* german Wikipedia link with alias: [Ant Tool|http://de.wikipedia.org/wiki/Ant]
+* english Wikipedia link: [Ant|http://en.wikipedia.org/wiki/Ant]
+* general link: [Atlassian's Homepage|http://www.atlassian.com/]
 
 h4.  Notes & Co. 
 {info}text{info}
 
 {info}
-  * a link: [Atlassian's Homepage|http://www.atlassian.com/]
-  * just plain text
+* a link: [Atlassian's Homepage|http://www.atlassian.com/]
+* just plain text
 {info}
 
 
 {note}
-  * a link: [Atlassian's Homepage|http://www.atlassian.com/]
-  * just plain text
+* a link: [Atlassian's Homepage|http://www.atlassian.com/]
+* just plain text
 {note}
 
 {warning}
-  * a link: [Atlassian's Homepage|http://www.atlassian.com/]
-  * just plain text
+* a link: [Atlassian's Homepage|http://www.atlassian.com/]
+* just plain text
 {warning}
 
 {tip}
-  * a link: [Atlassian's Homepage|http://www.atlassian.com/]
-  * just plain text
+* a link: [Atlassian's Homepage|http://www.atlassian.com/]
+* just plain text
 {tip}
 
 h4.  Code Sections 

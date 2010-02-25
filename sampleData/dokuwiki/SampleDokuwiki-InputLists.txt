@@ -1,0 +1,38 @@
+Sample page for testing lists
+
+Unordered Lists
+  * list item 1
+  * list item 2
+    * list item a
+    * list item b
+  * list item 3
+    * list item c
+      * foo
+        * bar
+      * foo2
+    * list item d
+
+Ordered Lists
+  - list item 1
+  - list item 2
+    - list item a
+    - list item b
+  - list item 3
+    - list item c
+      - foo
+        - bar
+      - foo2
+    - list item d
+
+Mixed Lists
+  * list item 1
+  * list item 2
+    - list item a
+    - list item b
+  * list item 3
+    - list item c
+      * foo
+        - bar
+      * foo2
+    - list item d
+

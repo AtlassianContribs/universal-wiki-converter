@@ -1,0 +1,3 @@
+Removing Discussion plugin
+http://www.dokuwiki.org/plugin:discussion
+

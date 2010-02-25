@@ -1,0 +1,8 @@
+Removing Discussion plugin
+http://www.dokuwiki.org/plugin:discussion
+
+~~DISCUSSION~~
+~~DISCUSSION:off~~
+~~DISCUSSION:closed~~
+~~DISCUSSION|Custom Title String~~
+~~DISCUSSION:closed|Custom Title String~~

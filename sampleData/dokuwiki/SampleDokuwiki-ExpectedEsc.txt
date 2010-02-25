@@ -10,3 +10,7 @@ Backslashes in links (windows shares syntax):
 [\\path\to\file.txt]
 [alias|\\path\to\file.txt]
 
+Removing backslashes at end of line
+Because they're unnecessary.
+But leave these ones\\alone.
+
