@@ -138,6 +138,9 @@ echo "AltBackslash"
 echo "EscTilde"
 ./compare.sh EscTilde
 
+echo "Mailto"
+./compare.sh Mailto
+
 echo "****************************"
 echo "* OPTIONAL CONVERTERS"
 echo "Margin"
