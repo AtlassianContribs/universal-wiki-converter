@@ -52,4 +52,20 @@ public class UWCForm3Test extends TestCase {
 		assertEquals(expected, actual);
 	}
 
+	public void testGetWikiDocLink() {
+		String input, expected, actual;
+		input = "mediawiki";
+		expected = UWCForm3.UWC_DOC_URL + "UWC+mediawiki+Notes";
+		actual = tester.getWikiDocLink(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		input = "testxml";
+		actual = tester.getWikiDocLink(input);
+		assertNull(actual);
+		
+		input = "swiki-earlier";
+		actual = tester.getWikiDocLink(input);
+		assertNull(actual);
+	}
 }

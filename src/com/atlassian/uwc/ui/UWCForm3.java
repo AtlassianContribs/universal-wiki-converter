@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.AbstractButton;
@@ -82,7 +83,7 @@ import com.atlassian.uwc.ui.listeners.WikiIsExportableListener;
 public class UWCForm3 {
 
 	//CONSTANTS
-	private static final String UWC_DOC_URL = "https://studio.plugins.atlassian.com/wiki/display/UWC/";
+	protected static final String UWC_DOC_URL = "https://studio.plugins.atlassian.com/wiki/display/UWC/";
 	private static final String DEFAULT_DIR_LABEL = "Attachments";
 	public static final String UWC_DOC_WEBSITE = UWC_DOC_URL + "Universal+Wiki+Converter";
 	private static final String PASSWORD_TOOLTIP = "The password to the Confluence user account being used in the Login field.";
@@ -1970,7 +1971,8 @@ public class UWCForm3 {
 						wikitype.equals("moinmoini"))
 					continue;
 				//add a menu item pointed at doc page for that wiki type
-				onlineDocMenu.add(getWikitypeDocMenuItem(wikitype));
+				JMenuItem item = getWikitypeDocMenuItem(wikitype);
+				if (item != null) onlineDocMenu.add(item);
 			}
 		}
 		return onlineDocMenu;
@@ -2056,6 +2058,7 @@ public class UWCForm3 {
 		if (this.wikiHelpMenuItems.containsKey(wikitype)) //return the existing one
 			return this.wikiHelpMenuItems.get(wikitype);
 		JMenuItem item = createJMenuItem(wikitype); //or if doesn't exist, create it
+		if (item == null) return null;
 		this.wikiHelpMenuItems.put(wikitype, item);
 		return item;
 	}
@@ -2083,6 +2086,7 @@ public class UWCForm3 {
 		if (mnemonic > -1) //only set mnemonic if an appropriate one was found
 			item.setMnemonic(mnemonic);
 		String link = getWikiDocLink(wikitype);
+		if (link == null) return null;
 		item.addActionListener(new UrlLauncher(link, this.feedbackWindow));
 		return item;
 	}
@@ -2128,12 +2132,17 @@ public class UWCForm3 {
 		return -1;										//give up. can't find suitable unused char.
 	}
 
+	Pattern nodocwiki = Pattern.compile("(test)|(-)");
 	/**
 	 * builds the url for the given wikitype's doc
 	 * @param wikitype
 	 * @return url
 	 */
-	private String getWikiDocLink(String wikitype) { 
+	protected String getWikiDocLink(String wikitype) { 
+		//hide wikitypes that have the word "test" or a "-"
+		Matcher nodocFinder = nodocwiki.matcher(wikitype);
+		if (nodocFinder.find()) return null;
+		//create link
 		String link = 
 				UWC_DOC_URL +
 				"UWC" +
