@@ -82,8 +82,9 @@ import com.atlassian.uwc.ui.listeners.WikiIsExportableListener;
 public class UWCForm3 {
 
 	//CONSTANTS
+	private static final String UWC_DOC_URL = "https://studio.plugins.atlassian.com/wiki/display/UWC/";
 	private static final String DEFAULT_DIR_LABEL = "Attachments";
-	public static final String UWC_DOC_WEBSITE = "http://confluence.atlassian.com/display/CONFEXT/Universal+Wiki+Converter";
+	public static final String UWC_DOC_WEBSITE = UWC_DOC_URL + "Universal+Wiki+Converter";
 	private static final String PASSWORD_TOOLTIP = "The password to the Confluence user account being used in the Login field.";
 	private static final String SPACE_TOOLTIP = "This is the spacekey of the Confluence space you will be importing files to.";
 	private static final String ATTACHMENTS_TOOLTIP = "This is the directory where attachments are kept for your particular wiki. This setting will be wiki dependent, so check the appropriate Help docs for more info.";
@@ -2005,7 +2006,7 @@ public class UWCForm3 {
 			quickDoc.setText("Quick Start Guide");
 			quickDoc.setPreferredSize(getIncreasedHeight(quickDoc));
 			quickDoc.setMnemonic(KeyEvent.VK_Q);
-			String link = "http://confluence.atlassian.com/display/CONFEXT/UWC+Quick+Start";
+			String link = UWC_DOC_URL + "UWC+Quick+Start";
 			quickDoc.addActionListener(new UrlLauncher(link, this.feedbackWindow));
 		}
 		return quickDoc;
@@ -2022,7 +2023,7 @@ public class UWCForm3 {
 			sslDoc.setFont(UWCLabel.getUWCFont());
 			sslDoc.setText("SSL Support");
 			sslDoc.setPreferredSize(getIncreasedHeight(sslDoc));
-			String link = "http://confluence.atlassian.com/display/CONFEXT/UWC+SSL+Support";
+			String link = UWC_DOC_URL + "UWC+SSL+Support";
 			sslDoc.addActionListener(new UrlLauncher(link, this.feedbackWindow));
 		}
 		return sslDoc;
@@ -2038,7 +2039,7 @@ public class UWCForm3 {
 			guiDoc.setText("New UI Doc");
 			guiDoc.setPreferredSize(getIncreasedHeight(guiDoc));
 			guiDoc.setMnemonic(KeyEvent.VK_N);
-			String link = "http://confluence.atlassian.com/display/CONFEXT/UWC+GUI+v3+Documentation";
+			String link = UWC_DOC_URL + "UWC+GUI+v3+Documentation";
 			guiDoc.addActionListener(new UrlLauncher(link, this.feedbackWindow));
 		}
 		return guiDoc;
@@ -2132,9 +2133,10 @@ public class UWCForm3 {
 	 * @param wikitype
 	 * @return url
 	 */
-	private String getWikiDocLink(String wikitype) {
+	private String getWikiDocLink(String wikitype) { 
 		String link = 
-				"http://confluence.atlassian.com/display/CONFEXT/UWC" +
+				UWC_DOC_URL +
+				"UWC" +
 				"+" +
 				wikitype +
 				"+" +
