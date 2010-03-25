@@ -25,11 +25,11 @@ public class TokenMap {
     public final static String TOKEN_START = "~UWC_TOKEN_START~";
     public final static String TOKEN_END = "~UWC_TOKEN_END~";
 
-    protected static HashMap<String, String> tokenCache = new HashMap<String, String>();
-    protected static Stack<String> keyStack = new Stack<String>();
-    protected static long tokenCounter = (new Date()).getTime();
+    private static HashMap<String, String> tokenCache = new HashMap<String, String>();
+    private static Stack<String> keyStack = new Stack<String>();
+    private static long tokenCounter = (new Date()).getTime();
 
-    public static String add(String textToReplaceWithToken) {
+    public synchronized static String add(String textToReplaceWithToken) {
         // assemble token
         tokenCounter++;
         String keyToken = TOKEN_START + tokenCounter + TOKEN_END;
@@ -51,7 +51,7 @@ public class TokenMap {
      * @param token
      * @return original value
      */
-    public static String getValueAndRemove(String token) {
+    public synchronized static String getValueAndRemove(String token) {
         String value = tokenCache.get(token);
         tokenCache.remove(token);
         return value;
@@ -65,7 +65,7 @@ public class TokenMap {
      * @param inputText
      * @return detokenized text
      */
-    public static String detokenizeText(String inputText) {
+    public synchronized static String detokenizeText(String inputText) {
         String result = inputText;
         Stack<String> keys = getKeys();
         Collection<String> keysToRemove = new ArrayList();
@@ -107,7 +107,7 @@ public class TokenMap {
         return result;
     }
 
-	private static Stack<String> getKeys() {
+	private synchronized static Stack<String> getKeys() {
 		return keyStack;
 	}
 
