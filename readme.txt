@@ -8,7 +8,7 @@ To build the UWC use ANT (http://ant.apache.org/):
 To run the newly built UWC
 * cd target/uwc/
 * chmod a+x *sh
-* ./bin/run_uwc_devel.sh
+* ./run_uwc_devel.sh
 
 For more info, please see:
 
