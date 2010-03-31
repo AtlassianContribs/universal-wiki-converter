@@ -86,6 +86,7 @@ public class TWikLinkiPostProcessor extends BaseConverter {
 		linkTarget = linkTarget.replace("-", ""); 
 		linkTarget = linkTarget.replace(".", "");
 		linkTarget = linkTarget.replace("/", "");
+		linkTarget = linkTarget.replace("$", "");
 		return linkTarget;
 	}
 	private boolean isInternalLink(String linkTarget) {

@@ -126,4 +126,17 @@ public class TWikLinkiPostProcessorTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
+	
+	public void testFixLinksWithDollars() {
+		String input, expected, actual;
+		input = "UWC_TOKEN_OLDollar in Alias $10|http://www.google.comUWC_TOKEN_CL\n" + 
+				"UWC_TOKEN_OLGoogle Alias 2|$dollarinlinkUWC_TOKEN_CL\n" + 
+				"";
+		expected = "UWC_TOKEN_OLDollar in Alias $10|http://www.google.comUWC_TOKEN_CL\n" + 
+				"UWC_TOKEN_OLGoogle Alias 2|dollarinlinkUWC_TOKEN_CL\n" + 
+				""; 
+		actual = tester.fixLinksWithSpaces(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 }
