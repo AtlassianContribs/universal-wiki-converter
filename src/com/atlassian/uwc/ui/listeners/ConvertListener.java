@@ -209,7 +209,7 @@ public class ConvertListener implements ActionListener, FeedbackHandler, Feedbac
 	 * @param propsPath dir where properties files are located
 	 * @return explanation of given feedback
 	 */
-	private String getFeedbackDescription(Feedback feedback, String propsPath) {
+	public static String getFeedbackDescription(Feedback feedback, String propsPath) {
 		String description = "";
 		description += "\nConversion Status... ";
 		switch(feedback) {

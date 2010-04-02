@@ -13,6 +13,7 @@ import org.apache.log4j.PropertyConfigurator;
 import biz.artemis.confluence.xmlrpcwrapper.ConfluenceServerSettings;
 
 import com.atlassian.uwc.exporters.Exporter;
+import com.atlassian.uwc.ui.listeners.ConvertListener;
 import com.atlassian.uwc.ui.listeners.TestSettingsListener;
 import com.atlassian.uwc.ui.listeners.FeedbackHandler.Feedback;
 import com.atlassian.uwc.util.PropertyFileManager;
@@ -172,12 +173,22 @@ public class UWCCommandLineInterface {
 			}
 			
 			engine.convert(files, converterStrings, settings);
+			displayFinalFeedback(engine.getErrors());
 		}
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
 			System.exit(1);
 		}
+	}
+
+	private static void displayFinalFeedback(ConverterErrors errors) {
+		if (errors.hasErrors()) {
+			log.info("\nConversion Status... FAILURE. See uwc.log for details.\n" + errors.getAllErrorMessages());
+		} else {
+			log.info(ConvertListener.getFeedbackDescription(Feedback.OK, ""));
+		}
+		
 	}
 
 	private static boolean requestConnectionTest(String[] args) {
