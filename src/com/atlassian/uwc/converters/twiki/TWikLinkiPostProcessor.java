@@ -89,9 +89,25 @@ public class TWikLinkiPostProcessor extends BaseConverter {
 		linkTarget = linkTarget.replace("$", "");
 		return linkTarget;
 	}
+	
+	private String DEFAULT_PROTOCOLS = "http,https,ftp";
 	private boolean isInternalLink(String linkTarget) {
-		return !linkTarget.contains("http:") &&
-		        !linkTarget.contains("ftp:");
+		String protocols = DEFAULT_PROTOCOLS;
+		if (this.getProperties().contains("twiki-link-protocol")) {
+			protocols = this.getProperties().getProperty("twiki-link-protocol", DEFAULT_PROTOCOLS);
+		}
+		String[] eachProtocol = protocols.split(",");
+		if (eachProtocol == null) {
+			protocols = DEFAULT_PROTOCOLS;
+			eachProtocol = null;
+			eachProtocol = protocols.split(",");
+		}
+		boolean isInternal = true;
+		for (String protocol : eachProtocol) {
+			if (linkTarget.contains(protocol + ":")) 
+				return false;
+		}
+		return isInternal;
 	}
 
 

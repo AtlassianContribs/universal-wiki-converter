@@ -9,6 +9,8 @@ http://www.google.com
 laura.kolker@gmail.com
 [[http://www.google.com Google Alias 1]]
 [[http://www.google.com][Google Alias 2]]
+[[https://www.google.com Google Alias 1]]
+[[https://www.google.com][Google Alias 2]]
 
 #TestAnchor
 

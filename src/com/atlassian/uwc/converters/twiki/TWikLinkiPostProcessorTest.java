@@ -23,7 +23,8 @@ public class TWikLinkiPostProcessorTest extends TestCase {
 				"http://www.google.com\n" + 
 				"laura.kolker@gmail.com\n" + 
 				"UWC_TOKEN_OLGoogle Alias 1|http://www.google.comUWC_TOKEN_CL\n" + 
-				"UWC_TOKEN_OLGoogle Alias 2|http://www.google.comUWC_TOKEN_CL\n" + 
+				"UWC_TOKEN_OLGoogle Alias 2|http://www.google.comUWC_TOKEN_CL\n" +
+				"UWC_TOKEN_OLGoogle Alias 2|https://www.google.comUWC_TOKEN_CL\n" + 
 				"";
 		expected = "UWC_TOKEN_OLTesting Images From Other Page|TestingImagesFromOtherPageUWC_TOKEN_CL\n" + 
 				"with alias: UWC_TOKEN_OLalias|TestingImagesFromOtherPageUWC_TOKEN_CL\n" + 
@@ -32,7 +33,8 @@ public class TWikLinkiPostProcessorTest extends TestCase {
 				"http://www.google.com\n" + 
 				"laura.kolker@gmail.com\n" + 
 				"UWC_TOKEN_OLGoogle Alias 1|http://www.google.comUWC_TOKEN_CL\n" + 
-				"UWC_TOKEN_OLGoogle Alias 2|http://www.google.comUWC_TOKEN_CL\n" + 
+				"UWC_TOKEN_OLGoogle Alias 2|http://www.google.comUWC_TOKEN_CL\n" +
+				"UWC_TOKEN_OLGoogle Alias 2|https://www.google.comUWC_TOKEN_CL\n" +
 				"";
 		actual = tester.fixLinksWithSpaces(input);
 		assertNotNull(actual);
