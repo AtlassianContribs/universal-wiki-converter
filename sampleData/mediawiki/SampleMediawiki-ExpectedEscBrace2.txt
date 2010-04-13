@@ -2,11 +2,11 @@ This is a sample file for handling escaping single braces
 
 Just a \{ brace in some text. Should be \} escaped.
 
-This is a table. Don't escape!
+This is a table. Don't escape\!
 || This || is ||
 | a | table |
 
-This is a listen macro. Don't escape!
+This is a listen macro. Don't escape\!
 {{listen
 {panel}
  |title    = Flow my tears
@@ -15,10 +15,10 @@ This is a listen macro. Don't escape!
 {panel}
 }}
 
-Templates. Don't escape!
+Templates. Don't escape\!
 {{Transclusion demo}}
 
-Hover. Don't escape!
+Hover. Don't escape\!
 {{H:title|This is the hover text|
 Hover your mouse over this text}}
 
