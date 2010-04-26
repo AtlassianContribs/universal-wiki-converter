@@ -1,0 +1,53 @@
+Subject: SampleSocialtext-InputMany2OneLinks
+From: laura.kolker@gmail.com
+Date: 2009-08-03 12:00:00 EDT
+Category: test
+Encoding: utf-8
+
+This is a sample page for social text links.
+
+Internal Links:
+[Sample Socialtext Links] 
+"Alias for this page" [Sample Socialtext Links]
+
+
+External Links:
+http://www.google.com
+https://mail.google.com
+laura.kolker@gmail.com
+"Google"<http://www.google.com>
+"Gmail"<https://mail.google.com>
+"Email"<mailto:laura.kolker@gmail.com>
+"# Foo Bar"<http://www.something123.com/>
+{link: [Other Page]}
+
+Alternate Workspace:
+"Alias Tada"{link: other-workspace [Some Pagename]}
+"Alias Tada"{link: other-workspace [Some Pagename] }
+
+Anchors/Sections/Headers:
+{link: anchor}
+{link: Header}
+{link: [Other Page] section}
+{link: workspace [Other Page] anchor}
+"Alias - Header"{link: Header}
+"Foo Bar"{link: [Something something something something]Something Something}
+
+{section:anchor}
+
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+
+^ Header
+
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+
+Socialtext allows colons in links. The Illegal Names Handler can't differentiate between valid space colon delimiters and invalid pagename colons in links. (It handles the pagenames)
+So, we have a converter to do this for us.
+{link: [foo:bar]}
+[foo:bar]

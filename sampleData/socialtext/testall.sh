@@ -57,4 +57,5 @@ echo "* OPTIONAL CONVERTERS"
 echo "SearchOpt"
 ./compare.sh SearchOpt
 
-
+echo "Many2OneLinks"
+./compare.sh Many2OneLinks

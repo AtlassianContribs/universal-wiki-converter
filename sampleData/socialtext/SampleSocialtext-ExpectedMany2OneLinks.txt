@@ -1,0 +1,48 @@
+
+This is a sample page for social text links.
+
+Internal Links:
+[Sample Socialtext Links - many2onetest] 
+[Alias for this page|Sample Socialtext Links - many2onetest]
+
+
+External Links:
+http://www.google.com
+https://mail.google.com
+laura.kolker@gmail.com
+[Google|http://www.google.com]
+[Gmail|https://mail.google.com]
+[Email|mailto:laura.kolker@gmail.com]
+[# Foo Bar|http://www.something123.com/]
+[Other Page]
+
+Alternate Workspace:
+[Alias Tada|Some Pagename - space1]
+[Alias Tada|Some Pagename - space1]
+
+Anchors/Sections/Headers:
+[#anchor]
+[#Header]
+[Other Page - many2onetest#section]
+[Other Page - space2#anchor]
+[Alias - Header|#Header]
+[Foo Bar|Something something something something - many2onetest#Something Something]
+
+{anchor:anchor}
+
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+
+h1. Header
+
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum 
+
+Socialtext allows colons in links. The Illegal Names Handler can't differentiate between valid space colon delimiters and invalid pagename colons in links. (It handles the pagenames)
+So, we have a converter to do this for us.
+[foo.bar - many2onetest]
+[foo.bar - many2onetest]

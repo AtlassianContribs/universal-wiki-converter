@@ -41,3 +41,6 @@ Encoding: utf-8
 *External*
 <http://localhost:8082/download/attachments/426023/double+facepalm.jpg>
 
+*Has brackets in the filename*
+{file: testing[1].pdf}
+
