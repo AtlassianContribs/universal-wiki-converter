@@ -25,3 +25,6 @@ web: uwctest
 
 *Inline 4:
 !uwctest:SampleFooBar^cow.jpg|width="88", height="31", border="0", alt="logo"!
+
+*Inline 5*:
+!cow.jpg!
