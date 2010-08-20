@@ -3,6 +3,8 @@ package com.atlassian.uwc.hierarchies;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
@@ -13,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.atlassian.uwc.filters.NoSvnFilter;
+import com.atlassian.uwc.ui.FileUtils;
 import com.atlassian.uwc.ui.Page;
 
 public class ContentHierarchyTest extends TestCase {
@@ -278,7 +281,11 @@ public class ContentHierarchyTest extends TestCase {
 			page.setOriginalText(readFile(file));
 			page.setConvertedText(page.getOriginalText());
 			page.setUnchangedSource(page.getOriginalText());
-			page.setName(file.getName());
+			//name needs to be set correctly ahead of time with PROP_CURRENT set to false
+			String newname = file.getName();
+			newname = newname.replaceFirst("(.*)_", "");
+			page.setName(newname); 
+			
 			pages.add(page);
 		}
 		
@@ -299,51 +306,51 @@ public class ContentHierarchyTest extends TestCase {
 		assertEquals(3, children2.size());
 		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
 		nodes2.addAll(children2);
-		assertTrue((nodes2.get(0)).getName().equals("Plants_Trees") ||
-				(nodes2.get(0)).getName().equals("Plants_Flowers") ||
-				(nodes2.get(0)).getName().equals("Plants_Nuts"));
-		assertTrue((nodes2.get(1)).getName().equals("Plants_Trees") ||
-				(nodes2.get(1)).getName().equals("Plants_Flowers") ||
-				(nodes2.get(1)).getName().equals("Plants_Nuts"));
+		assertTrue((nodes2.get(0)).getName().equals("Trees") ||
+				(nodes2.get(0)).getName().equals("Flowers") ||
+				(nodes2.get(0)).getName().equals("Nuts"));
+		assertTrue((nodes2.get(1)).getName().equals("Trees") ||
+				(nodes2.get(1)).getName().equals("Flowers") ||
+				(nodes2.get(1)).getName().equals("Nuts"));
 
 		HierarchyNode treenode = null, flowernode = null, nutnode = null;
 		for (HierarchyNode node : nodes2) {
-			if (node.getName().equals("Plants_Trees")) treenode = node;
-			if (node.getName().equals("Plants_Flowers")) flowernode = node;
-			if (node.getName().equals("Plants_Nuts")) nutnode = node;
+			if (node.getName().equals("Trees")) treenode = node;
+			if (node.getName().equals("Flowers")) flowernode = node;
+			if (node.getName().equals("Nuts")) nutnode = node;
 		}
 		
 		Set<HierarchyNode> treechildren = treenode.getChildren();
 		assertEquals(2, treechildren.size());
 		Vector<HierarchyNode> trees = new Vector<HierarchyNode>();
 		trees.addAll(treechildren);
-		assertTrue((trees.get(0)).getName().equals("Plants_Trees_Chestnut") ||
-				(trees.get(0)).getName().equals("Plants_Trees_Pine"));
-		assertTrue((trees.get(1)).getName().equals("Plants_Trees_Chestnut") ||
-				(trees.get(1)).getName().equals("Plants_Trees_Pine"));
+		assertTrue((trees.get(0)).getName().equals("Chestnut") ||
+				(trees.get(0)).getName().equals("Pine"));
+		assertTrue((trees.get(1)).getName().equals("Chestnut") ||
+				(trees.get(1)).getName().equals("Pine"));
 		
 		Set<HierarchyNode> flowerchildren = flowernode.getChildren();
 		assertEquals(3, flowerchildren.size());
 		Vector<HierarchyNode> flowers = new Vector<HierarchyNode>();
 		flowers.addAll(flowerchildren);
-		assertTrue((flowers.get(0)).getName().equals("Plants_Flowers_Rose") ||
-				(flowers.get(0)).getName().equals("Plants_Flowers_Daisy") ||
-				(flowers.get(0)).getName().equals("Plants_Flowers_Orchid"));
-		assertTrue((flowers.get(1)).getName().equals("Plants_Flowers_Rose") ||
-				(flowers.get(1)).getName().equals("Plants_Flowers_Daisy") ||
-				(flowers.get(1)).getName().equals("Plants_Flowers_Orchid"));
-		assertTrue((flowers.get(2)).getName().equals("Plants_Flowers_Rose") ||
-				(flowers.get(2)).getName().equals("Plants_Flowers_Daisy") ||
-				(flowers.get(2)).getName().equals("Plants_Flowers_Orchid"));
+		assertTrue((flowers.get(0)).getName().equals("Rose") ||
+				(flowers.get(0)).getName().equals("Daisy") ||
+				(flowers.get(0)).getName().equals("Orchid"));
+		assertTrue((flowers.get(1)).getName().equals("Rose") ||
+				(flowers.get(1)).getName().equals("Daisy") ||
+				(flowers.get(1)).getName().equals("Orchid"));
+		assertTrue((flowers.get(2)).getName().equals("Rose") ||
+				(flowers.get(2)).getName().equals("Daisy") ||
+				(flowers.get(2)).getName().equals("Orchid"));
 		
 		Set<HierarchyNode> nutchildren = nutnode.getChildren();
 		assertEquals(2, nutchildren.size());
 		Vector<HierarchyNode> nuts = new Vector<HierarchyNode>();
 		nuts.addAll(nutchildren);
-		assertTrue((nuts.get(0)).getName().equals("Plants_Nuts_Chestnut") ||
-				(nuts.get(0)).getName().equals("Plants_Nuts_Peanut"));
-		assertTrue((nuts.get(1)).getName().equals("Plants_Nuts_Chestnut") ||
-				(nuts.get(1)).getName().equals("Plants_Nuts_Peanut"));
+		assertTrue((nuts.get(0)).getName().equals("Chestnut") ||
+				(nuts.get(0)).getName().equals("Peanut"));
+		assertTrue((nuts.get(1)).getName().equals("Chestnut") ||
+				(nuts.get(1)).getName().equals("Peanut"));
 		
 	}
 	
@@ -558,6 +565,42 @@ public class ContentHierarchyTest extends TestCase {
 		assertEquals(2, node5.getPage().getVersion());
 		
 	}
+	
+	public void testBuildHierarchy_Encoding() throws Exception {
+		Properties props = new Properties();
+		props.setProperty(ContentHierarchy.PROP_CURRENT, "true");
+		props.setProperty(ContentHierarchy.PROP_SETNAME, "true");
+		tester.setProperties(props);
+		
+		Vector<Page> pages = new Vector<Page>();
+		File sampledir = new File("sampleData/hierarchy/content-encoding/");
+		assertTrue(sampledir.exists() && sampledir.isDirectory());
+		
+		for (File file : sampledir.listFiles(new NoSvnFilter())) {
+			if (file.isDirectory()) continue;
+			Page page = new Page(file);
+			page.setOriginalText(readBytes(file, "Cp1252"));
+			page.setConvertedText(page.getOriginalText());
+			page.setUnchangedSource(page.getOriginalText());
+			page.setName(file.getName().replaceFirst("\\.txt$", ""));
+			pages.add(page);
+		}
+		
+		HierarchyNode actual = tester.buildHierarchy(pages);
+		assertNotNull(actual); //root node
+		assertNull(actual.getName());
+		assertNull(actual.getPage());
+		assertNull(actual.getParent());
+		assertNotNull(actual.getChildren());
+
+		Set<HierarchyNode> children1 = actual.getChildren();
+		assertEquals(1, children1.size());
+		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
+		nodes1.addAll(children1);
+		assertTrue((nodes1.get(0)).getName().startsWith("Euro"));
+		assertTrue((nodes1.get(0)).getPage().getName().startsWith("Euro")); //test SETNAME property
+		
+	}
 
 	public void testGetRootName() {
 		//default behavior
@@ -666,6 +709,10 @@ public class ContentHierarchyTest extends TestCase {
 		actual = tester.getPageVersion(input, suffix);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
+	}
+	private String readBytes(File file, String encoding) throws IOException {
+		byte[] pagebytes = FileUtils.getBytesFromFile(file);
+		return new String(pagebytes, encoding);
 	}
 	private String readFile(File file) {
 		String filestring = "";

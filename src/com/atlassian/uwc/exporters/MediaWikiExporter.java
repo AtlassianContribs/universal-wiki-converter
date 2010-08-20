@@ -543,7 +543,7 @@ public class MediaWikiExporter extends SQLExporter {
 			String filename = gettingHistory()?
 					createFilename(page.title, page.namespace, page.versionId):
 					createFilename(page.title, page.namespace);
-			if (!filename.equals(page.title + ".txt") && gettingOrigTitle()) {
+			if (gettingOrigTitle()) {
 				log.debug("Adding original title to content: " + page.title);
 				page.text += "\n" + "{orig-title:" + page.title +"}\n";
 			}

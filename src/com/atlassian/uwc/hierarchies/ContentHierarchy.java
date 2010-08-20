@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import sun.tools.tree.AddExpression;
+
 import com.atlassian.uwc.converters.tikiwiki.RegexUtil;
 import com.atlassian.uwc.ui.Page;
 
@@ -24,12 +26,14 @@ public class ContentHierarchy implements HierarchyBuilder {
 	public static final String PROP_CURRENT = "content-hierarchy-pattern-includes-current";
 	public static final String PROP_DELIM = "content-hierarchy-delim";
 	public static final String PROP_ROOT = "content-hierarchy-default-root";
+	public static final String PROP_SETNAME = "content-hierarchy-setname";
 	private static final String PROP_HISTORY = "switch.page-history-preservation";
 	private static final String PROP_HISTORY_SUFFIX = "suffix.page-history-preservation";
 	public static final String DEFAULT_PATTERN = "\\{orig-title:([^}]*)\\}";
 	public static final String DEFAULT_CURRENT = "true";
 	public static final String DEFAULT_DELIM = "/";
 	public static final String DEFAULT_ROOT = "";
+	private static final String DEFAULT_SETNAME="false";
 	private static final String DEFAULT_HISTORY_SUFFIX = "-#";
 	private static final String DEFAULT_HISTORY = "false";
 	
@@ -65,9 +69,9 @@ public class ContentHierarchy implements HierarchyBuilder {
 			//get node
 			String hierarchy = (String) iter.next();
 			HierarchyNode node = nodes.get(hierarchy);
-			node.setName(node.getPage().getName());
 			//get ancestors
 			Vector<String> ancestors = getAncestors(hierarchy);
+			setNodeName(node, ancestors);
 			log.debug(".. connecting node: " + node.getName());
 			setTopLevelNodes(pen, node, ancestors);
 			//go through each ancestor, find its node and connect them together
@@ -78,6 +82,10 @@ public class ContentHierarchy implements HierarchyBuilder {
 				if (ancestorNode == currentChild) continue;
 				if (ancestorNode != null)
 					log.debug(".... to node: " + ancestorNode.getName());
+				else {
+					log.error(".... unexpected name: " + fullAncestor + " - SKIPPING");
+					continue;
+				}
 				//the addChild method handles redundant children for us
 				ancestorNode.addChild(currentChild); 
 				log.debug(".... has " + ancestorNode.getChildren().size() + " children");
@@ -86,6 +94,24 @@ public class ContentHierarchy implements HierarchyBuilder {
 		}  
 			
 		return root;
+	}
+
+	/**
+	 * sets the node name. If the SETNAME property is false (default), preserves the existing name from 
+	 * the page object. If SETNAME property is true, uses the last String in the ancestors list
+	 * to set the node name. 
+	 * @param node
+	 * @param ancestors
+	 */
+	private void setNodeName(HierarchyNode node, Vector<String> ancestors) {
+		if (shouldSetName()) { //set the name based on the ancestors hierarchy we've discovered
+			String leafname = ancestors.lastElement();
+			node.setName(leafname);
+			node.getPage().setName(leafname);
+		}
+		else { //preserve existing name from Page object
+			node.setName(node.getPage().getName());
+		}
 	}
 
 	private void setTopLevelNodes(HierarchyNode pen, HierarchyNode node, Vector<String> ancestors) {
@@ -164,6 +190,13 @@ public class ContentHierarchy implements HierarchyBuilder {
 	
 	private String getDelim() { //provided by the misc props framework
 		return getProperties().getProperty(PROP_DELIM, DEFAULT_DELIM);
+	}
+	
+	/**
+	 * return true if the content hierarchy should set the name of the page based on a hierarchy leaf
+	 */
+	private boolean shouldSetName() {//provided by the misc props framework
+		return Boolean.parseBoolean(getProperties().getProperty(PROP_SETNAME, DEFAULT_SETNAME));
 	}
 	
 	private boolean preservingHistory() { //provided by the ConverterEngine/page histories framework

@@ -686,6 +686,37 @@ public class MindtouchExporterTest extends TestCase {
 		assertEquals("DEF", page2.title);
 		assertTrue(page2.getSubpages().isEmpty());
 	}
+	
+	//use to help people debug there pagelist parsing
+	public void testPagelistParseFromFile() throws Exception {
+		String path = "/Users/laura/Code/Clients/Atlassian/support/scottharman/pages.xml";//XXX change for problem data
+		String filestring = "";
+		String line;
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(path));
+			while ((line = reader.readLine()) != null) {
+				filestring += line + "\n";
+			}
+			reader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Vector<MindtouchPage> pages = tester.parsePageXml(filestring);
+		assertNotNull(pages);
+		int actualsize = countPages(pages.get(0));
+		assertTrue(actualsize>10);
+	}
+	
+	private int countPages(MindtouchPage page) {
+		int total = 1;
+		if (page.getSubpages() != null && page.getSubpages().size() > 0) {
+			for (MindtouchPage child: page.getSubpages()) {
+				total += countPages(child);
+			}
+		}
+		return total;
+	}
 
 	
 	public void testHandleError() throws FileNotFoundException, IOException { //these failures should provide useful errors to the console
