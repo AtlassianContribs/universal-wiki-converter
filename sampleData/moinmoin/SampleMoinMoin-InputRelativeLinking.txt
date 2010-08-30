@@ -1,0 +1,6 @@
+{orig-title:SampleMoinMoin-InputRelativeLinking}
+[[TestPage]]
+[[/Subpage]]
+[[/Subpage|alias]]
+Link to parent: [[../]]
+Link to parent with alias [[../|free parent link]]

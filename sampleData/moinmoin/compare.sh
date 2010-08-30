@@ -5,7 +5,7 @@ IN="Input"
 OUT="Output"
 EXP="Expected"
 NUM="1"
-EXT=".uwc"
+EXT=".txt"
 FLAGS="-u"
 
 if [ -n "$1" ]

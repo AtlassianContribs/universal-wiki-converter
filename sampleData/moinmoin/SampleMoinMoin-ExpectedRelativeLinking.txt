@@ -1,0 +1,6 @@
+
+[TestPage]
+[Subpage]
+[alias|Subpage]
+Link to parent: {link-to:@parent}../{link-to}
+Link to parent with alias {link-to:@parent}free parent link{link-to}

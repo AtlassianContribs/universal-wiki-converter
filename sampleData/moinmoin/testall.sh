@@ -12,3 +12,5 @@ echo "3"
 echo "AltAtt"
 ./compare.sh AltAtt 
 
+echo "RelativeLinking"
+./compare.sh RelativeLinking
