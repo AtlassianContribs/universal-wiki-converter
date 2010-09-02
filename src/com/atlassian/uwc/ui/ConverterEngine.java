@@ -852,8 +852,8 @@ public class ConverterEngine implements FeedbackHandler {
     		String pagename = suffixReplacer.group(1);
     		String versionString = suffixReplacer.group(2);
     		int version = Integer.parseInt(versionString);
+    		page.setName(pagename); //set name before version so latestversion data is properly set in Page
     		page.setVersion(version);
-    		page.setName(pagename);
     	}
     	return page;
 	}
@@ -1779,9 +1779,12 @@ public class ConverterEngine implements FeedbackHandler {
         }
 	}
     
-    private void sendLabels(Page page, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings) {
+    protected void sendLabels(Page page, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings) {
     	log.debug("Examining labels for page: " + page.getName());
+    	//check to see if we're sending labels for this version of the page
+		if (badVersionForSendingLabels(page)) return;
     	String labels = page.getLabelsAsString();
+    	log.debug("Sending Labels: " + labels);
     	if (labels == null) 
     		return;
     	try {
@@ -1792,6 +1795,15 @@ public class ConverterEngine implements FeedbackHandler {
     		this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
     	}
     }
+
+	private boolean badVersionForSendingLabels(Page page) {
+		int version = page.getVersion();
+    	int latest = Page.getLatestVersion(page.getName());
+    	boolean history = isHandlingPageHistories();
+    	String allVersionsProp = (String) this.miscProperties.get("page-history-allversionlabels");
+    	boolean allVersions = (allVersionsProp != null) && Boolean.parseBoolean(allVersionsProp);
+		return history && !allVersions && version != latest;
+	}
     
     /**
      * adds page comments to a page in confluence

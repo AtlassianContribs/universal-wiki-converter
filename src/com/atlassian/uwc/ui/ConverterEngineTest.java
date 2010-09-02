@@ -352,6 +352,126 @@ public class ConverterEngineTest extends TestCase {
 		}
 	}
 	
+	public void testSendLabels_noversion() {
+		Page page = new Page(null);
+		String parentid = "0"; //XXX I don't think this settings currently matters?
+		ConfluenceServerSettings settings = new ConfluenceServerSettings();
+		String testpropslocation = "test.basic.properties";
+		loadSettingsFromFile(settings, testpropslocation);
+		String title = "Test Labels No Versions"; 
+		page.setName(title);
+		String input = "test labels abcdef";
+		page.setConvertedText(input);
+		
+		try {
+		tester.sendPage(page, parentid, settings);
+			page.addLabel("testlabel");
+
+			//the test
+			RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+			PageForXmlRpc startPage = null;
+			try {
+				String id = broker.getPageIdFromConfluence(settings, settings.spaceKey, title);
+				tester.sendLabels(page, broker, id, settings);
+				startPage = broker.getPage(settings, id);
+			} catch (Exception e) {
+				e.printStackTrace();
+				fail();
+			}
+			int a = 0; //XXX - SET BREAKPOINT. EXAMINE PAGE AT THIS POINT FOR CORRECT LABELS.
+
+		} finally {
+			deletePage(title, settings.getSpaceKey(), settings);
+		}
+	}
+	
+
+	public void testSendLabels_versioned_allversions() {
+		Page page = new Page(null);
+		Page page2 = new Page(null);
+		String parentid = "0"; //XXX I don't think this settings currently matters?
+		ConfluenceServerSettings settings = new ConfluenceServerSettings();
+		String testpropslocation = "test.basic.properties";
+		loadSettingsFromFile(settings, testpropslocation);
+		String title = "Test Labels All Versions"; 
+		page.setName(title);
+		page2.setName(title);
+		page.setVersion(1);
+		page2.setVersion(2);
+		String input = "test labels abcdef";
+		page.setConvertedText(input);
+		page2.setConvertedText(input);
+		tester.handlePageHistoryProperty("Mediawiki.0050.switch.page-history-preservation","true");
+		tester.handlePageHistoryProperty("Mediawiki.0051.suffix.page-history-preservation","-#.txt");
+		Properties props = tester.handleMiscellaneousProperties("Test.0001.page-history-allversionlabels.property", "true");
+		
+		try {
+		tester.sendPage(page, parentid, settings);
+		tester.sendPage(page2, parentid, settings);
+		page.addLabel("testlabel");
+		page2.addLabel("testlabel2");
+
+			//the test
+			RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+			PageForXmlRpc startPage = null;
+			try {
+				String id = broker.getPageIdFromConfluence(settings, settings.spaceKey, title);
+				tester.sendLabels(page, broker, id, settings);
+				String id2 = broker.getPageIdFromConfluence(settings, settings.spaceKey, title);
+				tester.sendLabels(page2, broker, id2, settings);
+			} catch (Exception e) {
+				e.printStackTrace();
+				fail();
+			}
+			int a = 0; //XXX - SET BREAKPOINT. EXAMINE PAGE AT THIS POINT FOR BOTH LABELS.
+
+		} finally {
+			deletePage(title, settings.getSpaceKey(), settings);
+		}
+	}
+	public void testSendLabels_versioned_latestversiononly() {
+		Page page = new Page(null);
+		Page page2 = new Page(null);
+		String parentid = "0"; //XXX I don't think this settings currently matters?
+		ConfluenceServerSettings settings = new ConfluenceServerSettings();
+		String testpropslocation = "test.basic.properties";
+		loadSettingsFromFile(settings, testpropslocation);
+		String title = "Test Labels Latest Version"; 
+		page.setName(title);
+		page2.setName(title);
+		page.setVersion(1);
+		page2.setVersion(2);
+		String input = "test labels abcdef";
+		page.setConvertedText(input);
+		page2.setConvertedText(input);
+		tester.handlePageHistoryProperty("Mediawiki.0050.switch.page-history-preservation","true");
+		tester.handlePageHistoryProperty("Mediawiki.0051.suffix.page-history-preservation","-#.txt");
+		Properties props = tester.handleMiscellaneousProperties("Test.0001.page-history-allversionlabels.property", "false");
+		
+		try {
+		tester.sendPage(page, parentid, settings);
+		tester.sendPage(page2, parentid, settings);
+		page.addLabel("testlabel");
+		page2.addLabel("testlabel2");
+
+			//the test
+			RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+			PageForXmlRpc startPage = null;
+			try {
+				String id = broker.getPageIdFromConfluence(settings, settings.spaceKey, title);
+				tester.sendLabels(page, broker, id, settings);
+				String id2 = broker.getPageIdFromConfluence(settings, settings.spaceKey, title);
+				tester.sendLabels(page2, broker, id2, settings);
+			} catch (Exception e) {
+				e.printStackTrace();
+				fail();
+			}
+			int a = 0; //XXX - SET BREAKPOINT. EXAMINE PAGE AT THIS POINT FOR ONLY testlabel2.
+		} finally {
+			deletePage(title, settings.getSpaceKey(), settings);
+		}
+	}
+	
 	public void testSendPage_ErrorHandling() { //See uwc-341
 		ConfluenceServerSettings settings = new ConfluenceServerSettings();
 		String testpropslocation = "test.basic.properties";

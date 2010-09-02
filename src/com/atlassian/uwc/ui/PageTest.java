@@ -2,7 +2,7 @@ package com.atlassian.uwc.ui;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -54,6 +54,31 @@ public class PageTest extends TestCase {
 		assertEquals(pageA2, sorted.get(1));
 		assertEquals(pageC, sorted.get(2));
 		
+	}
+	
+	public void testSetLatestVersionData() {
+		//test simple ascii comparison
+		Page pageA = new Page(new File("A"));
+		Page pageA2 = new Page(new File("A"));
+		Page pageC = new Page(new File("C"));
+		pageA.setName("A");
+		pageA2.setName("A");
+		pageC.setName("C");
+
+		pageA.setVersion(1);
+		pageA2.setVersion(2);
+		pageC.setVersion(1);
+		
+		HashMap actual = Page.getLatestVersions();
+		assertNotNull(actual);
+		assertNull(actual.get("foo"));
+		assertNotNull(actual.get("A"));
+		assertNotNull(actual.get("C"));
+		assertTrue(2 == (Integer) actual.get("A"));
+		assertTrue(1 == (Integer) actual.get("C"));
+		
+		assertTrue(2 == Page.getLatestVersion("A"));
+		assertTrue(1 == Page.getLatestVersion("C"));
 	}
 
 }

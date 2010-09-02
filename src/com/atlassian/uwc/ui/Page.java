@@ -2,6 +2,7 @@ package com.atlassian.uwc.ui;
 
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
@@ -70,6 +71,12 @@ public class Page implements Comparable {
      * timestamp when the author updated this page.
      */
     private Date timestamp;
+    
+    /**
+     * map providing information about which version is the latest for a given title.
+     * There should only be data in this object if pages have been sorted by history in the ConverterEngine
+     */
+    private static HashMap<String, Integer> latestVersions = new HashMap<String, Integer>();
     
     /**
      * Basic constructor. Creates a page with an empty path.
@@ -208,12 +215,35 @@ public class Page implements Comparable {
     }
 
     public void setVersion(int version) {
+    	//save latest version data
+    	if (getLatestVersion(getName()) <= version) {
+    		latestVersions.put(getName(), version);
+    	}
 		this.version = version;
 	}
 
     public int getVersion() {
 		return this.version;
 	}
+    
+    /**
+     * @return map of title -> latest version data.
+     */
+    public static HashMap<String, Integer> getLatestVersions() {
+    	return latestVersions;
+    }
+    
+    /**
+     * Latest version data is noted when setVersion is called based on the name the object has
+     * when setVersion is called.
+     * @param name page name this version is associated with
+     * @return latest version for title or 1 if no version set yet
+     */
+    public static int getLatestVersion(String name) {
+    	Integer latest = getLatestVersions().get(name);
+    	if (latest == null) return 1;
+    	return latest;
+    }
 
 	public Set<String> getLabels() {
 		return labels;
