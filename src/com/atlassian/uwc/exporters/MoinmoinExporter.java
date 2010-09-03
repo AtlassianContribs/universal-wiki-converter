@@ -112,9 +112,15 @@ public class MoinmoinExporter implements Exporter {
 
         for (int i = 0; i < pages.length; i++) {
             if (!pages[i].startsWith(BADCONTENT)) { //ignore BADCONTENT page
+					log.debug("page: " + pages[i]);
             	if (exportHistory()) {
             		String revisiondir = getSrc() + File.separator + pages[i] + File.separator + REVISIONS;
+						log.debug("revision dir: " + revisiondir);
             		String[] revisions = new File(revisiondir).list();
+						if (revisions == null) {
+							log.error("Revisions directory was null. Skipping.");
+							continue;
+						}
             		for (String revision : revisions) {
             			if (!revision.matches("\\d+")) continue; //ignore non-numbers
 						int num = Integer.parseInt(revision);
