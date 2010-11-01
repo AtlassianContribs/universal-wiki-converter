@@ -7,10 +7,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
 import com.atlassian.uwc.converters.BaseConverter;
+import com.atlassian.uwc.converters.tikiwiki.RegexUtil;
 import com.atlassian.uwc.prep.MoinMoinPreparation;
 import com.atlassian.uwc.ui.ConverterEngine;
 import com.atlassian.uwc.ui.Page;
@@ -57,35 +60,39 @@ public class MoinMoinAttachmentConverter extends BaseConverter {
      * @param page A page with text to be converted.
      */
     public void convert(Page page) {
-        if (log.isDebugEnabled()) {
-            log.debug(">convert(" + page.getName() + ")");
-        }
-        assert page != null;
-        assert page.getOriginalText() != null;
-
-        StringBuffer text = new StringBuffer(page.getOriginalText());
-
-        // Convert all the "attachment:" links
-        int linkStart = text.indexOf(ATTACHMENT);
-        while (linkStart >= 0) {
-            handleAttachment(text, linkStart, page, null);
-            linkStart = text.indexOf(ATTACHMENT);
-        }
-
-        // Convert all the "inline:" links
-        linkStart = text.indexOf(INLINE);
-        while (linkStart >= 0) {
-            handleAttachment(text, linkStart, page, null);
-            linkStart = text.indexOf(INLINE);
-        }
-
-        // Convert all the "drawing:" links, forcing the extension to be ".png"
-        linkStart = text.indexOf(DRAWING);
-        while (linkStart >= 0) {
-            handleAttachment(text, linkStart, page, ".png");
-            linkStart = text.indexOf(DRAWING);
-        }
-        page.setConvertedText(text.toString());
+    	//OLD HANDLING -- COMMENTING FOR NOW
+//        if (log.isDebugEnabled()) {
+//            log.debug(">convert(" + page.getName() + ")");
+//        }
+//        assert page != null;
+//        assert page.getOriginalText() != null;
+//
+//        StringBuffer text = new StringBuffer(page.getOriginalText());
+//
+//        // Convert all the "attachment:" links
+//        int linkStart = text.indexOf(ATTACHMENT);
+//        while (linkStart >= 0) {
+//            handleAttachment(text, linkStart, page, null);
+//            linkStart = text.indexOf(ATTACHMENT);
+//        }
+//
+//        // Convert all the "inline:" links
+//        linkStart = text.indexOf(INLINE);
+//        while (linkStart >= 0) {
+//            handleAttachment(text, linkStart, page, null);
+//            linkStart = text.indexOf(INLINE);
+//        }
+//
+//        // Convert all the "drawing:" links, forcing the extension to be ".png"
+//        linkStart = text.indexOf(DRAWING);
+//        while (linkStart >= 0) {
+//            handleAttachment(text, linkStart, page, ".png");
+//            linkStart = text.indexOf(DRAWING);
+//        }
+    	
+    	String input = page.getOriginalText();
+    	input = convertAttachments(input, page);
+        page.setConvertedText(input);
 
         // Fix the name and path of the page.
         setupNameAndPath(page);
@@ -93,8 +100,66 @@ public class MoinMoinAttachmentConverter extends BaseConverter {
             log.debug("<convert(" + page.getName() + ")");
         }
     }
+    
+    Pattern attachment = Pattern.compile("([{\\[])"+
+    		"\\1?" +
+    		"(?:(?:attachment)|(?:inline)):"+
+    		"([^}\\]]+)" +
+    		"([}\\]])\\3?");
+    Pattern pagedelim = Pattern.compile("\\/([^/]*)");
+    
+    private String convertAttachments(String input, Page page) {
+		Matcher attachmentFinder = attachment.matcher(input);
+		StringBuffer sb = new StringBuffer();
+		boolean found = false;
+		while (attachmentFinder.find()) {
+			found = true;
+			String type = attachmentFinder.group(1);
+			String target = attachmentFinder.group(2);
+			String replacement = "";
+			Matcher pagedelimfinder = pagedelim.matcher(target);
+			boolean haspagename = false;
+			String filename = target;
+			if (pagedelimfinder.find()) {
+				filename = pagedelimfinder.group(1);
+				target = pagedelimfinder.replaceFirst("^" +filename);
+				haspagename = true;
+			}
+			if (type.startsWith("{")) { //inline 
+				replacement = "!" + target + "!";
+			}
+			else { //link
+				if (!haspagename) target = "^" + target;
+				replacement = "[" + target + "]";
+			}
+			replacement = RegexUtil.handleEscapesInReplacement(replacement);
+			attachmentFinder.appendReplacement(sb, replacement);
+			attachfile(filename, page);
+		}
+		if (found) {
+			attachmentFinder.appendTail(sb);
+			return sb.toString();
+		}
+		return input;
+	}
 
-    /**
+
+
+	private void attachfile(String filename, Page page) {
+		String pagename = page.getName();
+		pagename = pagename.replaceFirst("\\.txt$", "");
+		String filePath = getAttachmentDirectory() 
+			+ File.separator + pagename + File.separator +  "attachments" + File.separator + filename;
+		File file = new File(filePath);
+		if (!file.exists()) {
+			log.error("Could not find attachment: " + filePath);
+		}
+		else page.addAttachment(file);
+	}
+
+
+
+	/**
      * Handles converting a link of the form "protocol:path/to/page/filename.ext".
      *
      * If the path is not present ("protocol:filename.ext") it refers to an attachment of the

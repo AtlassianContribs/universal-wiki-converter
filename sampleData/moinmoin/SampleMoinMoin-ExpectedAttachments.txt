@@ -1,0 +1,12 @@
+
+Testing attachments:
+
+Inline image
+!cow.jpg!
+
+Link to attachment:
+
+[^cow.jpg]
+
+Testing 123 _italics_
+

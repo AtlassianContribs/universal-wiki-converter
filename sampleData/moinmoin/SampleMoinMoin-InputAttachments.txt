@@ -1,0 +1,12 @@
+{orig-title:TestPage}
+Testing attachments:
+
+Inline image
+{{attachment:cow.jpg}}
+
+Link to attachment:
+
+[[attachment:cow.jpg]]
+
+Testing 123 ''italics''
+
