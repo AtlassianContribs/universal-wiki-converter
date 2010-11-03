@@ -1,5 +1,7 @@
 package com.atlassian.uwc.converters.jspwiki;
 
+import java.util.Properties;
+
 import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
@@ -9,12 +11,15 @@ public class TableConverterTest extends TestCase {
 
 	TableConverter tester = null;
 	Logger log = Logger.getLogger(this.getClass());
+	Properties props_escbsoptin = new Properties();
 	protected void setUp() throws Exception {
 		PropertyConfigurator.configure("log4j.properties");
 		tester = new TableConverter();
+		props_escbsoptin.setProperty("table-converter-escbs", "true"); //default is false
 	}
 
 	public void testConvertTables() {
+		tester.setProperties(props_escbsoptin);
 		String input = "Stuff before the table\n" +
 				"|| Heading 1 || Heading 2\n" +
 				"| r1c1 | r1c2 \\\\ r1c2\n" +
@@ -31,6 +36,7 @@ public class TableConverterTest extends TestCase {
 	}
 	
 	public void testConvertRows() {
+		tester.setProperties(props_escbsoptin);
 		String input = "|| Heading 1 || Heading 2\n" +
 			"| r1c1 | r1c2 \\\\ r1c2\n" +
 			"| r2c1 | r2c2\n";
@@ -64,6 +70,7 @@ public class TableConverterTest extends TestCase {
 	}
 	
 	public void testConvertCells() {
+		tester.setProperties(props_escbsoptin);
 		String input = "| r1c1 | r1c2 \\\\ r1c2\n";
 		String expected = "| r1c1 | r1c2 r1c2 |\n";
 		String actual = tester.convertCells(input);
@@ -122,6 +129,18 @@ public class TableConverterTest extends TestCase {
 	public void testEscapeDash() {
 		String input = "| - |hyphen, match a range of chars ";
 		String expected = "| \\- |hyphen, match a range of chars |\n";
+		String actual = tester.convertTables(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testProblemSample() {
+		String input = "|| ~~~Date~~~ || User || Action\n" + 
+				"| 2010-09-16 | Marco | *Migration Spain --> Rural* \\\\- 16:00 es.migrated.phase1=false set on production \\\\Database restore point (if needed) / last committed Spain (ES) transaction = *2010-09-16-16.30.00.000000* \\\\ Last logfile needed: *S0018824.LOG*\n" + 
+				"";
+		String expected = "|| ~~~Date~~~ || User || Action ||\n" + 
+				"| 2010-09-16 | Marco | *Migration Spain --> Rural* \\\\- 16:00 es.migrated.phase1=false set on production \\\\Database restore point (if needed) / last committed Spain (ES) transaction = *2010-09-16-16.30.00.000000* \\\\ Last logfile needed: *S0018824.LOG* |\n" + 
+				"";
 		String actual = tester.convertTables(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);

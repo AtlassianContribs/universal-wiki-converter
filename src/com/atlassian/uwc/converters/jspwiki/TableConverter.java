@@ -61,7 +61,6 @@ public class TableConverter extends BaseConverter {
 		if (found) {
 			tableFinder.appendTail(sb);
 			converted = sb.toString();
-			converted = escapeSpecialChars(converted);
 		}
 		return converted;
 	}
@@ -152,7 +151,10 @@ public class TableConverter extends BaseConverter {
 	 * @return example: | r2c1 | r2c2 |\n
 	 */
 	protected String convertCells(String input) {
-		String converted = removeBackslashes(input);
+		String converted = input;
+		if (Boolean.parseBoolean(getProperties().getProperty("table-converter-escbs", "false"))) {
+			converted = removeBackslashes(input);
+		}
 		Matcher cellFinder = cellPattern.matcher(converted);
 		StringBuffer sb = new StringBuffer();
 		boolean found = false;
@@ -167,6 +169,7 @@ public class TableConverter extends BaseConverter {
 			cellFinder.appendTail(sb);
 			converted = sb.toString();
 			converted = converted.trim();
+			converted = escapeSpecialChars(converted);
 			converted += " |\n";
 			return converted;
 		}
@@ -189,7 +192,7 @@ public class TableConverter extends BaseConverter {
 
 	String special = "[-*]"; //group containing any special chars (note: - has to be the first char in the group)
 	String specialPattern = "(?<=\\| ?)"  //zerowidth pipe 
-					+ "(" + special + ")"; //group of special characters
+					+ "(" + special + ")(?!\\w)"; //group of special characters
 	/**
 	 * adds backslashes before appropriate characters in tables
 	 * (Confluence syntax for lists)
