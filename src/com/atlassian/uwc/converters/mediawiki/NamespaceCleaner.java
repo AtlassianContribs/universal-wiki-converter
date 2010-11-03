@@ -46,6 +46,9 @@ public class NamespaceCleaner extends BaseConverter {
 			String namespace = namespaceFinder.group(2);
 			if (isImage(namespace)||isExternal(namespaceFinder.group(1) + namespace))
 				continue;
+			if ("".equals(namespace)) { //colon started link. just get rid of it
+				link = link.replaceFirst(":", "");
+			}
 			
 			Pattern colons = Pattern.compile(":\\s*");
 			Matcher colonFinder = colons.matcher(link);

@@ -18,7 +18,7 @@ public class IllegalPageNameConverter extends IllegalNameConverter {
 		String legal = convertIllegalName(pagename);
 		page.setName(legal);
 		
-		log.info("Converting Illegal Page Names - complete");
+		log.info("Converting Illegal Page Names - complete. Final pagename: '" + legal + "'");
 	}
 	
 	public String convertIllegalName(String input) {

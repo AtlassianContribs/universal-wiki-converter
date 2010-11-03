@@ -7,8 +7,6 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import sun.rmi.runtime.GetThreadPoolAction;
-
 import com.atlassian.uwc.ui.FileUtils;
 import com.atlassian.uwc.ui.Page;
 

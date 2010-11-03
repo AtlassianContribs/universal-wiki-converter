@@ -67,4 +67,13 @@ public class NamespaceCleanerTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 	
+	public void testPrefixColon() {
+		String input, expected, actual;
+		input = "[[:Testing a page link]]";
+		expected = "[[Testing a page link]]";
+		actual = tester.cleanNamespace(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
 }

@@ -5,10 +5,10 @@ h1. Scope
 
 h1. Background
 
-For the moment, see [Models#Compound_Property_Models] for more information.
+For the moment, see [Models#Compound Property Models] for more information.
 
-''(If you came here looking for specific info & later find it elsewhere, please consider adding a note about it somewhere on the wiki for the next person\!)
-''
+_(If you came here looking for specific info & later find it elsewhere, please consider adding a note about it somewhere on the wiki for the next person\!)_
+
 
 h1. FAQ
 

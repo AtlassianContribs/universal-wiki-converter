@@ -71,7 +71,31 @@ public class ConvertUnderscoresInTitleTest extends TestCase {
 		assertEquals(expTitle, actTitle);
 		assertEquals(expected, actContent);
 	}
-	
+
+	public void testUnderscoresInContent_NotAttachments() {
+		String input = "[alias|Page_Title^test_123.pdf]\n";
+		String title = "Abc";
+		String expected = "[alias|Page Title^test_123.pdf]\n";
+		String expTitle = "Abc";
+		
+		Page page = new Page(null);
+		page.setName(title);
+		page.setOriginalText(input);
+		page.setConvertedText(input);
+		Properties props = new Properties();
+		props.setProperty("underscore2space-links", "true");
+		tester.setProperties(props);
+		
+		tester.convert(page);
+		
+		assertNotNull(page);
+		String actContent = page.getConvertedText();
+		String actTitle = page.getName();
+		assertNotNull(actTitle);
+		assertNotNull(actContent);
+		assertEquals(expTitle, actTitle);
+		assertEquals(expected, actContent);
+	}
 	public void testProperties() {
 		String input = "[Copyright after 1978|Photo_Research___Copyright_after_1978]\n";
 		String expected = "[Copyright after 1978|Photo Research___Copyright after 1978]\n";

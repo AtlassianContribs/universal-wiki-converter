@@ -16,7 +16,7 @@ public class ConvertUnderscoresInTitle extends BaseConverter {
 		String filename = page.getName();
 		filename = convertUnderscores(filename);
 		page.setName(filename);
-		log.debug("Converting Underscores in filename -- complete");
+		log.debug("Converting Underscores in filename -- complete. New pagename: '" + filename + "'");
 
 		if (this.getProperties() == null) {
 			log.debug("this.getProperties() is null");
@@ -49,9 +49,21 @@ public class ConvertUnderscoresInTitle extends BaseConverter {
 		while (linkFinder.find()) {
 			found = true;
 			String link = linkFinder.group();
-			Matcher underscoreFinder = singleUnderscore.matcher(link);
+			String alias = "", page = link, attachment = "";//page part is link by default
+			if (link.contains("|")) { //if we have an alias, set up the alias and page parts
+				String[] parts = link.split("\\|");
+				alias = parts[0] + "|";
+				link = page = parts[1];
+			}
+			if (link.contains("^")) {//if we have an attachment, adjust page and attachment parts
+				String[] parts = link.split("\\^");
+				page = parts[0];
+				attachment = "^" + parts[1];
+			}
+			
+			Matcher underscoreFinder = singleUnderscore.matcher(page);//replace underscores just for page
 			if (underscoreFinder.find()) {
-			 	String replacement = underscoreFinder.replaceAll(" ");
+			 	String replacement = alias + underscoreFinder.replaceAll(" ") + attachment;
 				linkFinder.appendReplacement(sb, replacement);
 			}
 			else continue;

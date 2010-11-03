@@ -8,3 +8,5 @@ in a sentence [Mike Grove|mailto:mike.grove@company.com] this is
 
 [Person 1, Person 2|mailto:person1.last@company.com;person2.last@company.com]
 
+[Email Recipient|mailto:user@address.com] and [Email Recipient|mailto:user@address.com]
+

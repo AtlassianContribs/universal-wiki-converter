@@ -76,6 +76,7 @@ public class MediaWikiExporter extends SQLExporter {
 	private String origtitle;
 	//optional sql properties
 	private String optPageSql;
+	private String optTextIdSql;
 	private String optTextSql;
 	private String optRevSql;
 	private String optUdmfSql;
@@ -194,6 +195,7 @@ public class MediaWikiExporter extends SQLExporter {
 		
 		//leave opt sql props null, if unfilled
 		optPageSql = (String) props.get("db.sql.pagedata");
+		optTextIdSql = (String) props.get("db.sql.textiddata");
 		optTextSql = (String) props.get("db.sql.textdata");
 		optRevSql = (String) props.get("db.sql.revdata");
 		optUdmfSql = (String) props.get("db.sql.udmfdata");
@@ -281,6 +283,7 @@ public class MediaWikiExporter extends SQLExporter {
 	private boolean existsSqlProperties() {
 		return (optPageSql != null 
 				&& optTextSql != null
+				&& optTextIdSql != null
 				&& optTitleCol != null
 				&& optTextCol != null
 				&& optPageIdCol != null
@@ -323,26 +326,13 @@ public class MediaWikiExporter extends SQLExporter {
 					e1.printStackTrace();
 				}
 				
-				// Text associated with id is the original page's text. 
-				// To get the current text, we use the textid stored in 
-				// (as per UWC-8) revision that's pointed to from page_latest.
-				
-				//get the revision id
-				String revSql = "select " + COL_REV_TEXT + " from " + prefix + REV_TABLE +
-									" where " + COL_REV + "='" + latest + "';";
-				ResultSet revdata = sql(revSql);
-				String revid = "";
-				while (revdata.next()) {
-					revid = revdata.getString(COL_REV_TEXT);
-				}
-				
-				//handle histories
+				//get all the revision ids we need
 				Vector<String> allRevs = new Vector<String>();
 				if (gettingHistory()) {
-					allRevs = getAllRevIds(id);
+					allRevs = getAllRevIds(id); //handle histories
 				}
 				else {
-					allRevs.add(revid); //just the latest one
+					allRevs.add(latest); //just the latest revision id
 				}
 				
 				//user timestamp data
@@ -356,9 +346,17 @@ public class MediaWikiExporter extends SQLExporter {
 				
 				int numRevs = 1;
 				for (String rev : allRevs) {
+					//get the text id
+					String textIdSql = "select " + COL_REV_TEXT + " from " + prefix + REV_TABLE + 
+										" where " + COL_REV + "='" + rev + "';"; 
+					ResultSet revdata = sql(textIdSql);
+					String textid = "";
+					while (revdata.next()) {
+						textid = revdata.getString(COL_REV_TEXT); 
+					}
 					//get the text
 					String textSql = "select " + COL_TEXT + " from " + prefix + TEXT_TABLE + 
-										" where " + COL_TEXT_ID +  "='" + rev + "';";
+										" where " + COL_TEXT_ID +  "='" + textid + "';";
 					ResultSet textdata = sql(textSql);
 					String text = "";
 					while (textdata.next() ) {
@@ -371,7 +369,6 @@ public class MediaWikiExporter extends SQLExporter {
 							e.printStackTrace();
 						}
 					}
-					
 					if (gettingUserdate()) { //date for udmf framework: usernames and timestamps 
 						if (!this.running) return null;
 						String userdate = getUserDateData(rev, revUdmfMap);
@@ -412,8 +409,8 @@ public class MediaWikiExporter extends SQLExporter {
 		Vector pages = new Vector();
 		String message = null;
 		try {
-			ResultSet pageData, textData;
-			pageData = textData = null;
+			ResultSet pageData, textData, textIdData;
+			pageData = textData = textIdData = null;
 			message = pageSql;
 			pageData = sql(pageSql);
 			while (pageData.next()) {
@@ -484,7 +481,18 @@ public class MediaWikiExporter extends SQLExporter {
 				int numRevs = 1;
 				String textSqlRepeater = textSqlAdj;
 				for (String rev : allRevs) {
-					textSqlAdj = textSqlRepeater.replaceAll("db.column.textid", rev);
+					//get text id
+					String textIdSql = optTextIdSql.replaceAll("db.column.textid", rev);
+					message = textIdSql;
+					textIdData = sql(textIdSql);
+					String textid = "";
+					while (textIdData.next()) {
+						if (!this.running) return null;
+						textid = textIdData.getString(1); //get first column result
+					}
+					
+					//get text
+					textSqlAdj = textSqlRepeater.replaceAll("db.column.textid", textid);
 					message = textSqlAdj;
 					textData = sql(textSqlAdj);
 					String text = "";
@@ -673,7 +681,7 @@ public class MediaWikiExporter extends SQLExporter {
 	}
 
 	private Vector<String> getAllRevIds(String id) throws SQLException {
-		String col = COL_REV_TEXT;
+		String col = COL_REV; //rev ids (not rev text ids)
 		String sql = "select " + col +
 				" from " + prefix + REV_TABLE +
 				" where " + COL_REV_PAGE + "=" + id;

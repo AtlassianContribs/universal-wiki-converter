@@ -1,5 +1,6 @@
-package com.atlassian.uwc.converters.mediawiki;
+	package com.atlassian.uwc.converters.mediawiki;
 
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +28,7 @@ public class EscapeBracesConverter extends BaseConverter {
 		input = tokenizePre(input);
 		input = tokenizeDoubleBraceSyntax(input);
 		input = tokenizeTables(input);
+		input = tokenizeByProperty(input);
 		input = escapeSingleBraces(input);
 		input = detokenize(input);
 		return input;
@@ -60,6 +62,21 @@ public class EscapeBracesConverter extends BaseConverter {
 
 	protected String tokenizeTables(String input) {
 		return tokenize(input, "(\\{\\|.*?\\|\\}){replace-multiline-with}$1", "table") ;
+	}
+	
+	protected String tokenizeByProperty(String input) {
+		Properties props = getProperties();
+		for (Object key : props.keySet()) {
+			String keystring = (String) key;
+			if (keystring.startsWith("escapebraces-token")) {
+				String regex = props.getProperty(keystring, null);
+				if (regex == null) continue;
+				regex = "(" + regex + "){replace-multiline-with}$1";
+				String type = "by property: " + regex;
+				input = tokenize(input, regex, type);
+			}
+		}
+		return input;
 	}
 
 	Pattern leftBrace = Pattern.compile(

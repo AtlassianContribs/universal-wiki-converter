@@ -1,5 +1,7 @@
 package com.atlassian.uwc.converters.mediawiki;
 
+import java.util.Properties;
+
 import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
@@ -136,6 +138,21 @@ public class EscapeBracesConverterTest extends TestCase {
 				"| table\n" + 
 				"|}";
 		actual = tester.tokenizeTables(input);
+		assertNotNull(actual);
+		assertTrue(actual.startsWith(TokenMap.TOKEN_START));
+		assertTrue(actual.endsWith(TokenMap.TOKEN_END));
+		actual = tester.detokenize(actual);
+		assertNotNull(actual);
+		assertEquals(input, actual);
+	}
+	
+	public void testTokenizeByProperty() {
+		String input, expected, actual;
+		input = "<test>\nskdlfjsdlkjf { ak\nds } kjsdfksjdh\n</test>";
+		Properties props = tester.getProperties();
+		props.setProperty("escapebraces-token-1", "<test>.*?<\\/test>");
+		tester.setProperties(props);
+		actual = tester.tokenizeByProperty(input);
 		assertNotNull(actual);
 		assertTrue(actual.startsWith(TokenMap.TOKEN_START));
 		assertTrue(actual.endsWith(TokenMap.TOKEN_END));

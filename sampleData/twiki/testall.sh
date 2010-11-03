@@ -45,3 +45,5 @@ echo "AttOtherPage"
 echo "Anchor"
 ./compare.sh Anchor
 
+echo "Code"
+./compare.sh Code
