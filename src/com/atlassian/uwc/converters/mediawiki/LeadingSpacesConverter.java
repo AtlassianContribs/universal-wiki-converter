@@ -40,7 +40,6 @@ public class LeadingSpacesConverter extends BaseConverter {
 	//is equivalent to: String regex = "\n(( [^\n]+\n)+)([^ ])?";
 	String regex = newline + manyLeadingSpaceLines + optNoSpace;
 	Pattern p = Pattern.compile(regex);
-	String replacement = "\n{panel}\n$1{panel}\n$3"; //newlines were giving me trouble in the properties file
 
 	Pattern leadingspaces = Pattern.compile("" +
 			"(?<=\n|^) +[^\n]+");
@@ -71,6 +70,7 @@ public class LeadingSpacesConverter extends BaseConverter {
 		}
 		else {
 			log.debug("leading spaces -> panel");
+			String replacement = getReplacement(); //newlines were giving me trouble in the properties file
 			try {
 				Matcher m = p.matcher(input);
 				if (m.find()) {
@@ -85,6 +85,14 @@ public class LeadingSpacesConverter extends BaseConverter {
 		
 		page.setConvertedText(converted);
 		log.debug("Converting Leading Spaces - complete");
+	}
+	
+	private String getReplacement() {
+		String delim = getProperties().getProperty("leading-spaces-delim", "panel");
+		log.debug("Leading spaces replacement delim: " + delim);
+		return "\n{" + delim +
+				"}\n$1{" + delim + 
+				"}\n$3";
 	}
 
 }

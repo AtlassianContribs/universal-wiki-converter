@@ -120,6 +120,69 @@ public class MultilineBasicConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
-	
 
+	public void testConvertMultiline_htmlbold() {
+		String input, expected, actual;
+		input = "<b>Testing\n" + 
+				"sdkjfhskdjf</b>\n" + 
+				"";
+		expected = "*Testing*\n" + 
+				"*sdkjfhskdjf*\n" + 
+				"";
+		actual = tester.convertMultiline(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testConvertMultiline_htmlital() {
+		String input, expected, actual;
+		input = "<i>Testing\n" + 
+				"sdkjfhskdjf</i>\n" + 
+				"";
+		expected = "_Testing_\n" + 
+				"_sdkjfhskdjf_\n" + 
+				"";
+		actual = tester.convertMultiline(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+
+	public void testConvertMultiline_htmlstrong() {
+		String input, expected, actual;
+		input = "<strong>Testing\n" + 
+				"sdkjfhskdjf</strong>\n" + 
+				"";
+		expected = "*Testing*\n" + 
+				"*sdkjfhskdjf*\n" + 
+				"";
+		actual = tester.convertMultiline(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testConvertMultiline_htmltt() {
+		String input, expected, actual;
+		input = "<tt>Testing\n" + 
+				"sdkjfhskdjf</tt>\n" + 
+				"";
+		expected = "{{Testing}}\n" + 
+				"{{sdkjfhskdjf}}\n" + 
+				"";
+		actual = tester.convertMultiline(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testConvertMultiline_htmlstrike() {
+		String input, expected, actual;
+		input = "<s>Testing\n" + 
+				"sdkjfhskdjf</s>\n" + 
+				"";
+		expected = "-Testing-\n" + 
+				"-sdkjfhskdjf-\n" + 
+				"";
+		actual = tester.convertMultiline(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 }

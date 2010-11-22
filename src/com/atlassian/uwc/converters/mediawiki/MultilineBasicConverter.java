@@ -15,7 +15,7 @@ public class MultilineBasicConverter extends BaseConverter {
 		page.setConvertedText(converted);
 	}
 
-	Pattern basic = Pattern.compile("(?s)('{2,5})(.*?)\\1");
+	Pattern basic = Pattern.compile("(?s)('{2,5}|<([bis]|(?:tt)|(?:strong))>)(.*?)(\\1|(?:<\\/\\2>))");
 	Pattern nl = Pattern.compile("([^\n]*)\n\\s*");
 	protected String convertMultiline(String input) {
 		Matcher basicFinder = basic.matcher(input);
@@ -24,9 +24,9 @@ public class MultilineBasicConverter extends BaseConverter {
 		while (basicFinder.find()) {
 			found = true;
 			String type = basicFinder.group(1);
-			String delim = ("''".equals(type)?"_":"'''".equals(type)?"*":"*_");
-			String enddelim = delim.length()>1?"_*":delim;
-			String content = basicFinder.group(2);
+			String delim = getDelim(type);
+			String enddelim = getEndDelim(delim);
+			String content = basicFinder.group(3);
 			int end = basicFinder.end();
 			if (!content.contains("\n")) continue;
 			Matcher nlFinder = nl.matcher(content);
@@ -54,6 +54,18 @@ public class MultilineBasicConverter extends BaseConverter {
 			return sb.toString();
 		}
 		return input;
+	}
+	private String getEndDelim(String delim) {
+		if ("{{".equals(delim)) return "}}";
+		if ("*_".equals(delim)) return "_*";
+		return delim;
+	}
+	private String getDelim(String type) {
+		if ("''".equals(type) || "<i>".equals(type)) return "_";
+		if ("'''".equals(type) || "<b>".equals(type) || "<strong>".equals(type)) return "*";
+		if ("<s>".equals(type)) return "-";
+		if ("<tt>".equals(type)) return "{{";
+		return "*_";
 	}
 
 }

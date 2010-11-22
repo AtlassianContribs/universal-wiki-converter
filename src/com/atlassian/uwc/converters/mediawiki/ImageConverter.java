@@ -98,13 +98,13 @@ public class ImageConverter extends BaseConverter {
 			return input;
 		}
 		//get relevant image info
-		String img = props[0];
+		String img = props[0].trim();
 		boolean thumbnail = false;
 		Alignment align = Alignment.LEFT;
 		String sizing = null;
 		//look through props. [0] was the image.
 		for (int i = 1; i < props.length; i++) {
-			String prop = props[i];
+			String prop = props[i].trim();
 			if (prop.startsWith("thumb")) {
 				thumbnail = true;
 				continue;
