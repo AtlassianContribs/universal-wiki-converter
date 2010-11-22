@@ -258,17 +258,17 @@ public class ImageConverterTest extends TestCase {
 	
 	public void testImagesInTables() {
 		String input, expected, actual;
-		input = "|| Picture || Description || Features ||\n" + 
-				"| [[Image:zsecurity-v2-sampledata-screenshot.png | 200px]] | ZSecurity V2 Overview Dashboard (WIP Screenshot) | * Streams attacks as they happen.<br>* Shows which studios are being attacked.<br>* Shows what UIDs are attacking.<br>* Shows the method of attack. |\n" + 
-				"| [[Image:zsecurity-v2-correlationengine.png | 200px]] | ZSecurity V2 Correlation Engine (WIP Screenshot) | * Correlate attacks and create custom event triggers.<br>* Allows for creation of graphs, e-mails and filtering when specific patterns occur. |\n" + 
-				"| [[Image:zsecurity-v2-customdashboards.png | 200px]] | ZSecurity V2 Custom Dashboards (WIP Screenshot) | * Creates dynamic dashboards based on the correlation engine to trend attack patterns. |\n" + 
-				"| [[Image:zsecurity-v2-rssfeeds.png | 200px]] | ZSecurity V2 RSS Feeds (WIP Screenshot) | * All correlation chains can be exported to RSS feeds, streaming your profile to your favorite reader. |\n" + 
+		input = "|| foo || bar ||\n" + 
+				"| [[Image:abc-a2.png | 200px]] | abc (foo) |\n" + 
+				"| [[Image:abc-a2.png | 200px]] | abc (foo) |\n" + 
+				"| [[Image:abc-a2.png | 200px]] | abc (foo) |\n" + 
+				"| [[Image:abc-a2.png | 200px]] | abc (foo) |\n" + 
 				"";
-		expected = "|| Picture || Description || Features ||\n" + 
-				"| !zsecurity-v2-sampledata-screenshot.png|width=200px! | ZSecurity V2 Overview Dashboard (WIP Screenshot) | * Streams attacks as they happen.<br>* Shows which studios are being attacked.<br>* Shows what UIDs are attacking.<br>* Shows the method of attack. |\n" + 
-				"| !zsecurity-v2-correlationengine.png|width=200px! | ZSecurity V2 Correlation Engine (WIP Screenshot) | * Correlate attacks and create custom event triggers.<br>* Allows for creation of graphs, e-mails and filtering when specific patterns occur. |\n" + 
-				"| !zsecurity-v2-customdashboards.png|width=200px! | ZSecurity V2 Custom Dashboards (WIP Screenshot) | * Creates dynamic dashboards based on the correlation engine to trend attack patterns. |\n" + 
-				"| !zsecurity-v2-rssfeeds.png|width=200px! | ZSecurity V2 RSS Feeds (WIP Screenshot) | * All correlation chains can be exported to RSS feeds, streaming your profile to your favorite reader. |\n" + 
+		expected = "|| foo || bar ||\n" + 
+				"| !abc-a2.png|width=200px! | abc (foo) |\n" + 
+				"| !abc-a2.png|width=200px! | abc (foo) |\n" + 
+				"| !abc-a2.png|width=200px! | abc (foo) |\n" + 
+				"| !abc-a2.png|width=200px! | abc (foo) |\n" + 
 				"";
 		actual = tester.convertImages(input);
 		assertNotNull(actual);
