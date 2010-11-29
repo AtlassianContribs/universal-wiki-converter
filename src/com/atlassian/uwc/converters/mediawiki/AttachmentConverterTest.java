@@ -44,6 +44,7 @@ public class AttachmentConverterTest extends TestCase {
 		boolean actual = tester.foundFile(files, caseFilename);
 		assertEquals(expected, actual);
 	}
+		
 	public void testFoundFileMedia() {
 		Page page = new Page(new File(""));
 		String input = "[^Wiki.png]";
@@ -167,5 +168,104 @@ public class AttachmentConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals("Wiki.png", actual.get(0));
 	}
+
+	public void testAttachingImage_WhitespacevsUnderscore() {
+		String input = "!moo cow.jpg!\n" + //attachment filename is moo_cow.jpg
+				"[^double_facepalm.jpg]";  //attachment filename is "double facepalm.jpg"
+		Page page = new Page(new File(""));
+		page.setOriginalText(input);
+		String attachmentDirectory = "/Users/laura/Pictures/test/";
+		tester.addAttachmentsToPage(page, attachmentDirectory);
+		
+		Set<File> attachments = page.getAttachments();
+		assertNotNull(attachments);
+		assertEquals(2, attachments.size());
+		for (File attachment : attachments) {
+			assertNotNull(attachment);
+			assertTrue(attachment.exists());
+			assertTrue(attachment.isFile());
+			assertTrue("moo_cow.jpg".equals(attachment.getName())
+					||"double facepalm.jpg".equals(attachment.getName()));
+		}
+		String actual = page.getConvertedText();
+		String expected = "!moo_cow.jpg!\n" + //fix attachment name in text ref
+				"[^double facepalm.jpg]";
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 	
+	
+	public void testAttachingImage_WhitespacevsUnderscore_FixContent() {
+		String input = "!moo_cow.jpg!\n" + //attachment filename is moo_cow.jpg
+				"[alias|^moo cow.jpg]";  
+		Page page = new Page(new File(""));
+		page.setOriginalText(input);
+		String attachmentDirectory = "/Users/laura/Pictures/test/";
+		tester.addAttachmentsToPage(page, attachmentDirectory);
+		
+		Set<File> attachments = page.getAttachments();
+		assertNotNull(attachments);
+		assertEquals(1, attachments.size());
+		for (File attachment : attachments) {
+			assertNotNull(attachment);
+			assertTrue(attachment.exists());
+			assertTrue(attachment.isFile());
+			assertTrue("moo_cow.jpg".equals(attachment.getName()));
+		}
+		String actual = page.getConvertedText();
+		String expected = "!moo_cow.jpg!\n" + //fix attachment name in text ref
+				"[alias|^moo_cow.jpg]";
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testAttachingImage_WhitespacevsUnderscore_FixContent2() {
+		String input = "!double facepalm.jpg!\n" + //attachment filename is moo_cow.jpg
+				"[alias|^double_facepalm.jpg]" + 
+				"";  
+		Page page = new Page(new File(""));
+		page.setOriginalText(input);
+		String attachmentDirectory = "/Users/laura/Pictures/test/";
+		tester.addAttachmentsToPage(page, attachmentDirectory);
+		
+		Set<File> attachments = page.getAttachments();
+		assertNotNull(attachments);
+		assertEquals(1, attachments.size());
+		for (File attachment : attachments) {
+			assertNotNull(attachment);
+			assertTrue(attachment.exists());
+			assertTrue(attachment.isFile());
+			assertTrue("double facepalm.jpg".equals(attachment.getName()));
+		}
+		String actual = page.getConvertedText();
+		String expected = "!double facepalm.jpg!\n" + //fix attachment name in text ref
+				"[alias|^double facepalm.jpg]";
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+
+	public void testAttachingImage_WhitespacevsUnderscore_CaseInsensitiveToo() {
+		String input = "!Moo Cow.jpg!\n" + //attachment filename is moo_cow.jpg
+				"[^Double_Facepalm.jpg]";  //attachment filename is "double facepalm.jpg"
+		Page page = new Page(new File(""));
+		page.setOriginalText(input);
+		String attachmentDirectory = "/Users/laura/Pictures/test/";
+		tester.addAttachmentsToPage(page, attachmentDirectory);
+		
+		Set<File> attachments = page.getAttachments();
+		assertNotNull(attachments);
+		assertEquals(2, attachments.size());
+		for (File attachment : attachments) {
+			assertNotNull(attachment);
+			assertTrue(attachment.exists());
+			assertTrue(attachment.isFile());
+			assertTrue("moo_cow.jpg".equals(attachment.getName())
+					||"double facepalm.jpg".equals(attachment.getName()));
+		}
+		String actual = page.getConvertedText();
+		String expected = "!moo_cow.jpg!\n" + //fix attachment name in text ref
+				"[^double facepalm.jpg]";
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 }

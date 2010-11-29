@@ -85,9 +85,14 @@ public class MediaWikiExporter extends SQLExporter {
 	private String optPageIdCol;
 	private String optNamespaceCol;
 	private String optTextIdCol;
-
+	//namespace properties
+	private String nsPropIds;
+	private String nsPropExportAllCustom;
+	private String nsPropCustomMap;
+	private HashMap<Integer, String> nsCustomMap;
+	
 	//Descriptive names for mediawiki namespaces that use numbers in the database
-	String[] namespaces = {"Pages", "Discussions", "Users", "UserDiscussions", "Misc", "Misc", "Images"};
+	String[] namespaces = {"Pages", "Discussions", "Users", "UserDiscussions"};
 	
 	
 	/**
@@ -204,6 +209,11 @@ public class MediaWikiExporter extends SQLExporter {
 		optPageIdCol = (String) props.get("db.column.pageid");
 		optTextIdCol = (String) props.get("db.column.textid");
 		optTextCol = (String) props.get("db.column.text");
+		
+		//namespace properties
+		nsPropIds = (String) props.get("namespaces.ids");
+		nsPropExportAllCustom = (String) props.get("namespaces.exportallcustom");
+		nsPropCustomMap = (String) props.get("namespaces.customnamespace.mapping");
 
 	}
 
@@ -299,15 +309,14 @@ public class MediaWikiExporter extends SQLExporter {
 	 */
 	private Vector getMediaWikiPages() throws SQLException {
 		Vector pages = new Vector();
-		//get pages that do not have namespace Special or 12 (Editing)
+		//get pages 
 		String pageSql = "select " + 
 				COL_ID + ", " + 
 				COL_NAMESPACE +", " +
 				COL_TITLE + ", " +
 				COL_LATEST + " " + 
 				"from " + prefix + PAGE_TABLE + " " +
-				"where " + COL_NAMESPACE + "!='" + NAMESPACE_SPECIAL + "' " +	
-				"and " + COL_NAMESPACE + "!='" + NAMESPACE_INTERNAL + "';";					 
+				getNamespaceWhereClause() + ";"; 					 
 		ResultSet pagedata = sql(pageSql);
 	
 		try {
@@ -389,7 +398,49 @@ public class MediaWikiExporter extends SQLExporter {
 		return pages;
 	}
 
+	protected String getNamespaceWhereClause() {
+		String whereAllCustom = getExportAllCustomNamespaceProperty()?
+				COL_NAMESPACE + ">=100":
+				"";
+		String nsIds = getNamespaceIdsProperty();
+		String whereNSIds = "";
+		for (String id : nsIds.split(",")) {
+			if (!"".equals(whereNSIds)) whereNSIds += " or ";
+			if (id.matches("\\d+")) {
+				whereNSIds += COL_NAMESPACE + "=" + id;
+			}
+		}
+		if ("".equals(whereNSIds)) {
+			whereNSIds = "page_namespace=0 or page_namespace=2"; //default namespaces are main and user
+		}
+		String where = "";
+		if (!"".equals(whereAllCustom) && !"".equals(whereNSIds)) 
+			where = whereAllCustom + " or " + whereNSIds;
+		else where = whereAllCustom + whereNSIds;
+		if (!"".equals(where)) where = " where " + where;
+		return where;
+	}
+
 	
+
+	private boolean getExportAllCustomNamespaceProperty() {
+		boolean defaultProp = true;
+		if (nsPropExportAllCustom == null) return defaultProp;
+		if ("".equals(nsPropExportAllCustom)) return defaultProp;
+		
+		if (nsPropExportAllCustom.trim().matches("(?i)false")) return false;
+		else if (nsPropExportAllCustom.trim().matches("(?i)true")) return true;
+			
+		return defaultProp;
+	}
+
+	private String getNamespaceIdsProperty() {
+		if (nsPropIds == null) return "";
+		return nsPropIds;
+	}
+
+
+
 
 	Pattern firstCol = Pattern.compile("^(?i)select\\s*(\\w*).*$");
 	Pattern allCols = Pattern.compile("^(?i)select\\s*(.*) from.*$");
@@ -623,13 +674,48 @@ public class MediaWikiExporter extends SQLExporter {
 	private String getParent(String namespace) {
 		String parent = "";
 		try {
-			parent = output + "/" + namespaces[Integer.parseInt(namespace)] + "/";			
+			int nsId = Integer.parseInt(namespace);
+			String nsName = "";
+			if (nsId > (namespaces.length-1)) {
+				nsName = getNamespaceDirName(nsId);
+			}
+			else nsName = namespaces[nsId];
+			parent = output + "/" + nsName + "/";			
 		} catch (ArrayIndexOutOfBoundsException e) {
-			//I don't know the name of this particular namespace, so...	
+			//this shouldn't happen, but we'll handle this just in case
 			parent = output + "/Misc/";
 		}
 		log.debug("Parent directory = " + parent);
 		return parent;
+	}
+
+	protected String getNamespaceDirName(int nsId) {
+		HashMap<Integer,String> nsCustomMap = getNamespaceCustomMap();
+		if (nsCustomMap.containsKey(nsId)) return nsCustomMap.get(nsId);
+		return nsId+"";
+	}
+
+	private HashMap<Integer, String> getNamespaceCustomMap() {
+		if (this.nsCustomMap == null) {
+			this.nsCustomMap = new HashMap<Integer, String>();
+			if (this.nsPropCustomMap == null) return this.nsCustomMap;
+			for (String pair : this.nsPropCustomMap.split(",")) {
+				String[] parts = pair.split("=>");
+				if (parts != null && parts.length == 2) {
+					String key = parts[0];
+					String val = parts[1];
+					if (!key.matches("\\d+")) {
+						log.error("Invalid property: namespaces.customnamespace.mapping");
+						continue;
+					}
+					this.nsCustomMap.put(Integer.parseInt(key), val);
+				}
+				else {
+					log.error("Invalid property: namespaces.customnamespace.mapping");
+				}
+			}
+		}
+		return this.nsCustomMap;
 	}
 
 	/**

@@ -85,4 +85,26 @@ public class ExternalInternalLinksConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 	
+	public void testConvertExternal_ImageNoSyntax() {
+		String input, expected, actual;
+		input = "https://mw.wiki.org/index.php/Image:Some_1_file.png\n" + 
+				"";
+		expected = "[^Some_1_file.png]\n" +
+				"";
+		actual = tester.convertExternalInternalLinks(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testConvertExternal_ImageAlias() {
+		String input, expected, actual;
+		input = "[We have an alias|https://mw.wiki.org/index.php/Image:Slides_and_more_slides.pptx]\n" + 
+				"";
+		expected = "[We have an alias|^Slides_and_more_slides.pptx]\n" +
+				"";
+		actual = tester.convertExternalInternalLinks(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
 }

@@ -82,6 +82,11 @@ public class AttachmentConverter extends BaseConverter {
 	            log.debug("adding attachment: " + file.getName());
 	            page.addAttachment(file);
             }
+            if (foundWsUnderscoreInterchangeableFilename(soughtFilenames, filename, page)) {
+            	//attach the file
+	            log.debug("adding attachment: " + file.getName());
+	            page.addAttachment(file);
+            }
         }
 	}
 
@@ -100,6 +105,43 @@ public class AttachmentConverter extends BaseConverter {
 		for (String soughtFile : soughtFilenames) {
 			Matcher fileFinder = caseInsensitiveFilename.matcher(soughtFile);
 			if (fileFinder.matches()) return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * find filenames where ws and underscore chars are treated interchangeably.
+	 * Fix page content, as appropriate.
+	 * @param soughtFilenames, filenames found in the page text
+	 * @param filename, actual filename from the attachment directory
+	 * @param page, page object. content may be changed as side affect of this method
+	 * @return
+	 */
+	protected boolean foundWsUnderscoreInterchangeableFilename(
+			Vector<String> soughtFilenames, String filename, Page page) {
+		//check for underscore/whitespace problem (MW treats underscores and ws interchangeably in filenames)
+		String altFilename = filename.replaceAll("[_ ]", "\\[_ \\]");//replace underscore or whitespace with char class
+		Pattern altFilenamePattern = Pattern.compile(altFilename, Pattern.CASE_INSENSITIVE);
+		for (String soughtFile : soughtFilenames) {
+			Matcher fileFinder = altFilenamePattern.matcher(soughtFile);
+			String pagetext = (page.getConvertedText()!=null)?page.getConvertedText():page.getOriginalText();
+			if (fileFinder.matches()) {
+				String wsFilename = filename.replaceAll("_", " ");
+				Pattern wsPattern = Pattern.compile("\\Q" + wsFilename + "\\E", Pattern.CASE_INSENSITIVE);
+				Matcher wsMatcher = wsPattern.matcher(pagetext);
+				if (wsMatcher.find()) {
+					page.setConvertedText(wsMatcher.replaceAll(filename));
+					pagetext = page.getConvertedText();
+				}
+
+				String usFilename = filename.replaceAll(" ", "_");
+				Pattern usPattern = Pattern.compile("\\Q" + usFilename + "\\E", Pattern.CASE_INSENSITIVE);
+				Matcher usMatcher = usPattern.matcher(pagetext);
+				if (usMatcher.find()) {
+					page.setConvertedText(usMatcher.replaceAll(filename));
+				}
+				return true;
+			}
 		}
 		return false;
 	}

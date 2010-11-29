@@ -56,7 +56,7 @@ public class ExternalInternalLinksConverter extends BaseConverter {
 	Pattern noslashes = Pattern.compile("[^\\/]+$");
 	private String convertImages(String input) {
 		Pattern pattern = Pattern.compile(
-				getExternalLinkIdentifier() + "images\\/" + "([^\\] <\\s]+)");
+				getExternalLinkIdentifier() + "(?:(?:images\\/)|(?:index.php\\/Image:))" + "([^\\] <\\s]+)");
 		Matcher baseFinder = pattern.matcher(input);
 		StringBuffer sb = new StringBuffer();
 		boolean found = false;
