@@ -83,4 +83,20 @@ public class LeadingSpacesConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 	
+	public void testConvertPage_butNotEverything() {
+		String input, expected, actual;
+		input = "h1. ABC DEF GHI (HIJ)\n" + 
+				"\n" + 
+				"h2. KJL\n" + 
+				"";
+		expected = input; 
+		Page page = new Page(null);
+		page.setOriginalText(input);
+		page.setConvertedText(input);
+		tester.convert(page);
+		actual = page.getConvertedText();
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
 }
