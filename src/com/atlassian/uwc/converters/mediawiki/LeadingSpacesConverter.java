@@ -38,7 +38,8 @@ public class LeadingSpacesConverter extends BaseConverter {
 	String manyLeadingSpaceLines = "(" + leadingSpaceLine + "+)"; //1st group
 	String optNoSpace = "([^ ]?)"; //3rd group
 	//is equivalent to: String regex = "\n(( [^\n]+\n)+)([^ ])?";
-	String regex = newline + manyLeadingSpaceLines + optNoSpace;
+	String regex = newline + "?" + //optional newline 
+				   manyLeadingSpaceLines + optNoSpace;
 	Pattern p = Pattern.compile(regex);
 
 	Pattern leadingspaces = Pattern.compile("" +
