@@ -107,4 +107,42 @@ public class ExternalInternalLinksConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 	
+	public void testConvertExternal_UriEncodedPlus() {
+		String input, expected, actual;
+		input = "[https://mw.wiki.org/index.php/Test%2BPlus]\n" + 
+				"";
+		expected = "[Test Plus]\n";
+		actual = tester.convertExternalInternalLinks(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testConvertExternal_UriEncodedImages() {
+		String input, expected, actual;
+		input = "[abc|https://mw.wiki.org/index.php/Image:foobar" +
+				"%E5%BC%80.docx" +
+				"]\n";
+		expected = "[abc|^foobar开.docx]\n";
+		actual = tester.convertExternalInternalLinks(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+	}
+	public void testConvertExternal_NoCloseBrackets() {
+		String input, expected, actual;
+		input = "h1. abc deff jig\n" + 
+				"https://mw.wiki.org/index.php/Image:abc_def_ghi.pdf\n" + 
+				"\n" +
+				"*george washington - http://some.url.com/12345.html\n" + 
+				""; 
+		expected = "h1. abc deff jig\n" + 
+			"[^abc_def_ghi.pdf]\n" + 
+			"\n" +
+			"*george washington - http://some.url.com/12345.html\n" + 
+			"";
+		actual = tester.convertExternalInternalLinks(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
 }

@@ -46,6 +46,8 @@ public class MultilineBasicConverter extends BaseConverter {
 			String innerString = inner.toString().trim();
 			if (!innerString.endsWith(enddelim)) innerString += enddelim;
 			else innerString = innerString.replaceFirst(".$", ""); //remove last char
+			if (innerString.endsWith(delim+enddelim)) //edge case: *__* 
+				innerString = innerString.replaceFirst("\n\\Q"+delim+enddelim+"\\E$", "");
 			String replacement = RegexUtil.handleEscapesInReplacement(innerString);
 			basicFinder.appendReplacement(sb, replacement);
 		}

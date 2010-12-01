@@ -268,4 +268,5 @@ public class AttachmentConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
+	
 }

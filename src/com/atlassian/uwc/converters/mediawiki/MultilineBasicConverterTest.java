@@ -185,4 +185,17 @@ public class MultilineBasicConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
+	
+	public void testConvertMultiline_bolditalic() {
+		String input, expected, actual;
+		input = "# Testing 123\n" + 
+				"'''''NOTE: 'Stuff' Foobar.\n" + 
+				"'''''\n" + 
+				"";
+		expected = "# Testing 123\n" +
+				"*_NOTE: 'Stuff' Foobar._*\n";
+		actual = tester.convertMultiline(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 }

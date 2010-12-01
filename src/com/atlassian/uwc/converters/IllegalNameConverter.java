@@ -334,7 +334,7 @@ public abstract class IllegalNameConverter extends BaseConverter {
 	 * @param input
 	 * @return input with any URL entities decoded.
 	 */
-	protected String decodeUrl(String input) {
+	public String decodeUrl(String input) {
 		String encoding = "utf-8";
 		if (input == null) {
 			log.info("decodeUrl: input is null.");
