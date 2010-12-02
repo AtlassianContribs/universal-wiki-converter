@@ -263,10 +263,13 @@ public class TableConverter extends BaseConverter {
 			content = cleanInnertable(content);
 		//cell data?
 		Matcher dataFinder = dataPattern.matcher(content);
+		boolean found = false;
 		while (dataFinder.find()) {
+			found = true;
 			String data = dataFinder.group(1);
 			replacement = addDataSyntax(data, cToken, replacement);
 		}
+		if (!found) replacement = cToken + " "; //empty cell
 		return replacement;
 	}
 	

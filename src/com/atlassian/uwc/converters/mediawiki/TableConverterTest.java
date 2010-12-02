@@ -489,7 +489,38 @@ public class TableConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
-
+	
+	public void testConvertTables_EnforceColumns() {
+		String input, expected, actual;
+		input =  "{| class=\"wikitable\"\n" +
+				"|-\n" +
+				"! a \n" +
+				"! b \n" +
+				"! c \n" +
+				"|-\n" +
+				"| a\n" +
+				"| \n" +
+				"| \n" +
+				"|-\n" +
+				"| a \n" +
+				"| b NEXT \n" +
+				"|\n" +
+				"|-\n" +
+				"| a \n" +
+				"| b \n" +
+				"| c \n" +
+				"|}";
+		expected = "|| a || b || c ||\n" +
+				"| a | | |\n" +
+				"| a | b NEXT | |\n" +
+				"| a | b | c |";
+		Page page = new Page(null);
+		page.setOriginalText(input);
+		tester.convert(page);
+		actual = page.getConvertedText();
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 	
 	public void testCleanMacros() {
 		String input, expected, actual;
