@@ -8,6 +8,7 @@ import org.apache.log4j.PropertyConfigurator;
 import com.atlassian.uwc.converters.Converter;
 import com.atlassian.uwc.converters.DetokenizerConverter;
 import com.atlassian.uwc.ui.Page;
+import com.atlassian.uwc.util.TokenMap;
 
 public class JavaRegexAndTokenizerConverterTest extends TestCase {
 
@@ -27,9 +28,9 @@ public class JavaRegexAndTokenizerConverterTest extends TestCase {
 		converter.convert(page);
 		String actual = page.getConvertedText();
 		assertNotNull(actual);
-		assertTrue(actual.startsWith("testing\n~UWC_TOKEN_START~"));
-		assertTrue(actual.contains("~UWC_TOKEN_START~"));
-		assertTrue(actual.endsWith("~UWC_TOKEN_END~\nafter"));
+		assertTrue(actual.startsWith("testing\n" + TokenMap.TOKEN_START));
+		assertTrue(actual.contains(TokenMap.TOKEN_START));
+		assertTrue(actual.endsWith(TokenMap.TOKEN_END+ "\nafter"));
 		assertFalse(actual.contains("<math>foobar</math>"));
 	}
 
@@ -47,9 +48,11 @@ public class JavaRegexAndTokenizerConverterTest extends TestCase {
 		converter.convert(page);
 		String actual = page.getConvertedText();
 		assertNotNull(actual);
-		assertTrue(actual.startsWith("before\n~UWC_TOKEN_START~"));
-		assertTrue(actual.contains("~UWC_TOKEN_START~"));
-		assertTrue(actual.endsWith("~UWC_TOKEN_END~\n== next header =="));
+		assertTrue(actual.startsWith("before\n" +
+				TokenMap.TOKEN_START));
+		assertTrue(actual.contains(TokenMap.TOKEN_START));
+		assertTrue(actual.endsWith(TokenMap.TOKEN_END +
+				"\n== next header =="));
 		assertFalse(actual.contains("usage: some usage message"));
 	}
 	

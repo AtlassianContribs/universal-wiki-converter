@@ -22,8 +22,8 @@ import org.apache.log4j.Logger;
  */
 public class TokenMap {
     protected static Logger log = Logger.getLogger("TokenMap");
-    public final static String TOKEN_START = "~UWC_TOKEN_START~";
-    public final static String TOKEN_END = "~UWC_TOKEN_END~";
+    public final static String TOKEN_START = "~UWCTOKENSTART~";
+    public final static String TOKEN_END = "~UWCTOKENEND~";
 
     private static HashMap<String, String> tokenCache = new HashMap<String, String>();
     private static Stack<String> keyStack = new Stack<String>();
