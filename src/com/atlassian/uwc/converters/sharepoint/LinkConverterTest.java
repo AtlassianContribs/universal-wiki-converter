@@ -2,6 +2,7 @@ package com.atlassian.uwc.converters.sharepoint;
 
 import java.io.File;
 import java.util.List;
+import java.util.Properties;
 
 import junit.framework.TestCase;
 
@@ -459,4 +460,23 @@ public class LinkConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
+	
+	public void testOptOutAutoSpaces() {
+		Properties props = new Properties();
+		props.setProperty("links-samespace", "true");
+		tester.setProperties(props);
+		
+		//internal link 
+		String input = "<html>" +
+		"<a href=\"/test%20wiki/Test%20Page%2042.aspx\">Test Page 42</a>" +
+		"</html>";
+		String expected =  "<html>" + //FIXME
+		"[Test Page 42|Test Page 42]" +
+		"</html>";
+		String actual = tester.convertLinks(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+
+	}
+	
 }

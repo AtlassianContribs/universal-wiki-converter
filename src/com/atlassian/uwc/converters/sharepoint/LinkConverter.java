@@ -252,6 +252,7 @@ public class LinkConverter extends SharepointConverter {
 				!href.startsWith("/") && //not probably a file
 				hrefpartsFinder.matches()) {
 			String space = hrefpartsFinder.group(1);
+			if (space == null) space = "";
 			String pagename = hrefpartsFinder.group(2);
 			String copy = pagename;
 			pagename = SharepointExporter.removeBadTitleChars(pagename);
@@ -358,6 +359,11 @@ public class LinkConverter extends SharepointConverter {
 		String space = input.replaceFirst("\\Q" + pagename + "\\E$", "");
 		pagename = pagename.replaceFirst("\\.aspx", "");
 		pagename = decode(pagename);
+		String onespaceprop = getProperties().getProperty("links-samespace", null);
+		if (onespaceprop != null && Boolean.parseBoolean(onespaceprop)) {
+			return pagename;
+		}
+		
 		space = decode(space);
 		space = space.replaceAll("\\/", "");
 		space = getExportedSpacePermutation(space);
