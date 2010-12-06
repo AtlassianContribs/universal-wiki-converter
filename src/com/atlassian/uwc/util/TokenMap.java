@@ -38,7 +38,7 @@ public class TokenMap {
             log.error("DUPLICATE TOKEN!  " + tokenCounter);
             throw new Error("DUPLICATE TOKEN!");
         }
-//        log.debug("tokenizing: " + keyToken + ", " + textToReplaceWithToken); //COMMENT
+//        log.error("tokenizing: " + keyToken + ", " + textToReplaceWithToken); //COMMENT
         tokenCache.put(keyToken, textToReplaceWithToken);
         keyStack.push(keyToken);
         return keyToken;
@@ -57,6 +57,7 @@ public class TokenMap {
         return value;
     }
 
+    private static String racecheck = "";
     /**
      * replaces all the tokens in the input string with the values
      * stored in the cache and then removes them from the cache to
@@ -66,11 +67,13 @@ public class TokenMap {
      * @return detokenized text
      */
     public synchronized static String detokenizeText(String inputText) {
+//    	log.error("Detokenizing: " + inputText); //COMMENT
         String result = inputText;
         Stack<String> keys = getKeys();
         Collection<String> keysToRemove = new ArrayList();
         int iteration = 1;
         int previousTokenCacheSize = tokenCache.size();
+        racecheck = "";
         // sometimes tokens get tokenized in which case we have to keep unrolling, hence this while loop
         while (tokenCache.size() > 0) {
         	String key = null;
@@ -81,28 +84,33 @@ public class TokenMap {
             	// remove from the cache and iterate
                 if (result.contains(key)) {
                     String value = tokenCache.get(key);
-//                log.debug("detokenizing key = "+key+"  value= "+value); //COMMENT
+//                    log.error("detokenizing key = "+key+"  value= "+value); //COMMENT
                     result = result.replace(key, value);
-                } else {
-                    log.error("key not found for value: " + tokenCache.get(key));
+//                } else { //COMMENT
+//                    log.error("key (" + key + ") not found for value: " + tokenCache.get(key)); //COMMENT
                 }
-                keysToRemove.add(key); //moved this here because we sometims get some sort of race that causes a loop.
+                keysToRemove.add(key);
             }
             // clean up the cache by removing the keys that have
             // already been used. these are unique and won't be needed further
             for (String keyToRemove : keysToRemove) {
                 tokenCache.remove(keyToRemove);
             }
+            keysToRemove.clear();
+            
 //            log.debug("detokenizing iteration " + iteration++ + "  tokenCache size = " + tokenCache.size()); //COMMENT
             // a bit arbitrary, but break out of the loop if we can't seem to get the tokens out
-            if (previousTokenCacheSize==tokenCache.size() && iteration>10) {
+            if (previousTokenCacheSize==tokenCache.size() && iteration++>10) {
                 log.info("breaking out of detokenizing loop: cache size = "+previousTokenCacheSize+"  cache = "+tokenCache);
-                log.info("text = "+result); //COMMENT
+//                log.info("text = "+result); //COMMENT
                 tokenCache.clear();
                 keyStack.clear();
                 break;
             }
             previousTokenCacheSize = tokenCache.size();
+        }
+        if (result.contains(TOKEN_START)) {
+        	log.error("Result still contains " + TOKEN_START);
         }
         return result;
     }
