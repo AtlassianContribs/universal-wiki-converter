@@ -130,6 +130,10 @@ public class DocDirectoryHierarchy extends FilepathHierarchy {
 	private String getTemplate() {
 		if (template == null) {
 			String templatepath = getProperties().getProperty(PROP_TEMPLATE, "");
+			if ("".equals(templatepath)) {
+				template = DEFAULT_TEMPLATE;
+				return template;
+			}
 			File templatefile = new File(templatepath);
 			if (!templatefile.exists()) {
 				log.error("doc-directory-template file does not exist: " + templatepath + "\nUsing default.");
@@ -143,7 +147,6 @@ public class DocDirectoryHierarchy extends FilepathHierarchy {
 				template = FileUtils.readTextFile(templatefile);
 			} catch (IOException e) {
 				log.error("Could not read doc-directory-template file: " + templatepath + "\nUsing default.");
-				e.printStackTrace();
 				template = DEFAULT_TEMPLATE;
 			}
 		}

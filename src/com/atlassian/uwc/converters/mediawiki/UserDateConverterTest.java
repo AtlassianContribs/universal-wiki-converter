@@ -1,6 +1,7 @@
 package com.atlassian.uwc.converters.mediawiki;
 
 import java.util.Date;
+import java.util.Properties;
 
 import junit.framework.TestCase;
 
@@ -49,6 +50,28 @@ public class UserDateConverterTest extends TestCase {
 		actual = tester.cleanUserDate(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
+	}
+	
+	public void testDisableSettingData() {
+		Properties props = tester.getProperties();
+		props.setProperty("userdate-disabled", "true");
+		String input, expected, actual;
+		input = "{user:foobar}\n" +
+		"{timestamp:20011231235959}\n" +
+		"Testing 123";
+		expected = "Testing 123"; //gets rid of macros, but doesn't set page data
+		Page page = new Page(null);
+		page.setOriginalText(input);
+		tester.convert(page);
+		actual = page.getConvertedText();
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		actual = page.getAuthor();
+		assertNull(actual);
+		
+		Date timestamp = page.getTimestamp();
+		assertNull(timestamp);
 	}
 
 }

@@ -30,6 +30,11 @@ public class DocDirectoryHierarchyTest extends TestCase {
 		File sampledir = new File("sampleData/docdirectory/testtemplate.txt");
 		assertTrue(sampledir.exists());
 		
+		//ignore svn directories
+		Properties props = tester.getProperties();
+		props.setProperty("doc-directory-exclude", "\\.svn");
+		tester.setProperties(props);
+		
 		Page page = new Page(sampledir);
 		page.setOriginalText("");
 		page.setConvertedText(page.getOriginalText());
@@ -158,7 +163,7 @@ public class DocDirectoryHierarchyTest extends TestCase {
 	
 	public void testBuildHierarhcy_exclude() {
 		Properties props = tester.getProperties();
-		props.setProperty("doc-directory-exclude", "c");
+		props.setProperty("doc-directory-exclude", "(c)|(\\.svn)"); //need to ignore svn dir as well
 		tester.setProperties(props);
 		Vector<Page> pages = new Vector<Page>();
 		File sampledir = new File("sampleData/docdirectory/testtemplate.txt");

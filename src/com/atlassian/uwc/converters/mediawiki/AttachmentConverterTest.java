@@ -269,4 +269,30 @@ public class AttachmentConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 	
+	public void testAttachingImage_FixingContent_InconsistentWsUs() {
+		String input = "moo_moo moo moo.jpg\n" + 
+				"[^moo_moo moo moo.jpg]\n" +
+				"[^moo_moo_moo moo.jpg]\n" + 
+				"";  //attachment filename is "moo_moo_moo_moo.jpg"
+		Page page = new Page(new File(""));
+		page.setOriginalText(input);
+		String attachmentDirectory = "/Users/laura/Pictures/test/"; 
+		tester.addAttachmentsToPage(page, attachmentDirectory);
+
+		Set<File> attachments = page.getAttachments();
+		assertNotNull(attachments);
+		assertEquals(1, attachments.size());
+		for (File attachment : attachments) {
+			assertNotNull(attachment);
+			assertTrue(attachment.exists());
+			assertTrue(attachment.isFile());
+			assertTrue("moo_moo_moo_moo.jpg".equals(attachment.getName()));
+		}
+		String actual = page.getConvertedText();
+		String expected = "moo_moo_moo_moo.jpg\n" + 
+		"[^moo_moo_moo_moo.jpg]\n" +
+		"[^moo_moo_moo_moo.jpg]\n"; 
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 }

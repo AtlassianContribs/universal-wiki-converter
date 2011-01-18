@@ -23,10 +23,10 @@ public class MetaHierarchyTest extends TestCase {
 	}
 
 	public void testGetMeta() throws FileNotFoundException, IOException {
-		String path = "sampleData/smf/SampleSmf-InputHierarchy.txt";
+		String path = "sampleData/smf/junit_resources/SampleSmf-InputHierarchy.txt";
 		File file = new File(path);
 		assertTrue(file.exists());
-		assertTrue(new File("sampleData/smf/SampleSmf-InputHierarchy.meta").exists());
+		assertTrue(new File("sampleData/smf/junit_resources/SampleSmf-InputHierarchy.meta").exists());
 		Page page = new Page(file, path);
 		
 		Properties actual = tester.getMeta(page);
@@ -46,12 +46,13 @@ public class MetaHierarchyTest extends TestCase {
 	
 	public void testGetMetaPath() {
 		String input, expected, actual;
-		String path = "sampleData/smf/SampleSmf-InputHierarchy.txt";
+		String path = "sampleData/smf/junit_resources/SampleSmf-InputHierarchy.txt";
 		File file = new File(path);
 		assertTrue(file.exists());
-		assertTrue(new File("sampleData/smf/SampleSmf-InputHierarchy.meta").exists());
+		assertTrue(new File("sampleData/smf/junit_resources/SampleSmf-InputHierarchy.meta").exists());
 		Page page = new Page(file, path);
-		expected = "/Users/laura/Code/Subversion/uwc-current/devel/sampleData/smf/SampleSmf-InputHierarchy.meta";
+		expected = System.getProperty("user.dir") + 
+				"/sampleData/smf/junit_resources/SampleSmf-InputHierarchy.meta";
 		actual = tester.getMetaPath(page);
 		assertNotNull(actual);
 		assertEquals(expected, actual);

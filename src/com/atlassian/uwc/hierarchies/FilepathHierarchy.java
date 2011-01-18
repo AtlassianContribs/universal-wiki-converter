@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -19,11 +20,15 @@ import com.atlassian.uwc.ui.Page;
 public class FilepathHierarchy implements HierarchyBuilder {
 
 	private static final String PROPKEY_EXT = "filepath-hierarchy-ext";
+	private static final String PROPKEY_MATCHPAGENAME = "filepath-hierarchy-matchpagename";
+	private static final String DEFAULT_MATCHPAGENAME = "true";
 	Logger log = Logger.getLogger(this.getClass());
 	private HierarchyNode root;
 	private String fileExtension = null;
 	private String ignorableAncestors = "";
+	private String matchpagename = "";
 	Properties properties = new Properties();
+	
 	
 	public HierarchyNode buildHierarchy(Collection<Page> pages) {
 		log.debug("Checking Pages object is valid.");
@@ -39,6 +44,15 @@ public class FilepathHierarchy implements HierarchyBuilder {
 			return null;
 		}
 		log.debug("--> Pages object is valid.");
+		
+		//debug messages for properties
+		log.debug("Filepath properties - ignorable-ancestors: " + 
+				getProperties().getProperty("filepath-hierarchy-ignorable-ancestors"));
+		log.debug("Filepath properties - ext: " + 
+				getProperties().getProperty(PROPKEY_EXT, ""));
+		log.debug("Filepath properties - matchpagename: "+
+				getProperties().getProperty(PROPKEY_MATCHPAGENAME, DEFAULT_MATCHPAGENAME));
+		this.matchpagename = getProperties().getProperty(PROPKEY_MATCHPAGENAME, DEFAULT_MATCHPAGENAME);
 		
 		HierarchyNode root = getRootNode();
 		log.info("Building Hierarchy.");
@@ -139,6 +153,7 @@ public class FilepathHierarchy implements HierarchyBuilder {
 	}
 
 	protected String removePrefix(String fullpath, String prefix, String separator) {
+		if (prefix.endsWith(separator) && !fullpath.endsWith(separator)) fullpath += separator; 
 		if (fullpath.startsWith(prefix)) fullpath = fullpath.replaceFirst("\\Q"+prefix+"\\E", "");
 		if (fullpath.startsWith(separator)) fullpath = fullpath.substring(1);
 		log.debug("removed prefix: " + fullpath);
@@ -164,7 +179,11 @@ public class FilepathHierarchy implements HierarchyBuilder {
 			return false;
 		}
 		
-		HierarchyNode child = parent.findChild(childname);
+		HierarchyNode child = null;
+		if ("true".equals(matchpagename))
+			child = parent.findChildByFilename(childname);
+		else
+			child = parent.findChild(childname);
 		if (child == null) relationship = false;
 		else relationship = true;
 		
@@ -197,6 +216,7 @@ public class FilepathHierarchy implements HierarchyBuilder {
 		HierarchyNode child = new HierarchyNode(childPage, parent);
 		return child;
 	}
+	
 	/**
 	 * gets a node from the parent node that has a name matching the
 	 * given childname
@@ -212,7 +232,13 @@ public class FilepathHierarchy implements HierarchyBuilder {
 			return null;
 		}
 		for (HierarchyNode child : children) { 
-			if (childname.equals(child.getName())) {
+			String thisname = null;
+			if ("true".equals(matchpagename)) {
+				thisname = HierarchyNode.getFilename(child);
+			}
+			else
+				thisname = child.getName();
+			if (childname.equals(thisname)) {
 				log.debug("...... -> found child.");
 				return child;
 			}

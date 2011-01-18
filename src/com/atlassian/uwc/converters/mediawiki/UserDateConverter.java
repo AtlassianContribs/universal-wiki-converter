@@ -21,11 +21,13 @@ public class UserDateConverter extends BaseConverter {
 		String username = getUser(input);
 		Date timestamp = getDate(input);
 		String converted = cleanUserDate(input);
-		log.debug("author: " + username);
-		log.debug("timestamp: " + timestamp);
-		
-		if (username != null) page.setAuthor(username);
-		if (timestamp != null) page.setTimestamp(timestamp);
+		if (!getProperties().getProperty("userdate-disabled", "false").equals("true")) {
+			log.debug("author: " + username);
+			log.debug("timestamp: " + timestamp);
+			
+			if (username != null) page.setAuthor(username);
+			if (timestamp != null) page.setTimestamp(timestamp);
+		}
 		log.debug("page.getAuthor: " + page.getAuthor());
 		page.setConvertedText(converted);
 		log.debug("Adding User and Date metadata - Complete");

@@ -122,28 +122,25 @@ public class AttachmentConverter extends BaseConverter {
 		//check for underscore/whitespace problem (MW treats underscores and ws interchangeably in filenames)
 		String altFilename = filename.replaceAll("[_ ]", "\\[_ \\]");//replace underscore or whitespace with char class
 		Pattern altFilenamePattern = Pattern.compile(altFilename, Pattern.CASE_INSENSITIVE);
+		boolean found = false;
+		//foreach file in the text we're looking for
 		for (String soughtFile : soughtFilenames) {
 			Matcher fileFinder = altFilenamePattern.matcher(soughtFile);
 			String pagetext = (page.getConvertedText()!=null)?page.getConvertedText():page.getOriginalText();
+			//ignore ws and underscores, and check to see if we can identify the current filename as
+			//a sought file
 			if (fileFinder.matches()) {
-				String wsFilename = filename.replaceAll("_", " ");
-				Pattern wsPattern = Pattern.compile("\\Q" + wsFilename + "\\E", Pattern.CASE_INSENSITIVE);
-				Matcher wsMatcher = wsPattern.matcher(pagetext);
-				if (wsMatcher.find()) {
-					page.setConvertedText(wsMatcher.replaceAll(filename));
+				found = true;
+				String refFilename = fileFinder.group();
+				Matcher refFilenameFinder = Pattern.compile(
+						"\\Q" + refFilename + "\\E", Pattern.CASE_INSENSITIVE).matcher(pagetext);
+				if (refFilenameFinder.find()) { //fix the page content to point to the right filename
+					page.setConvertedText(refFilenameFinder.replaceAll(filename));
 					pagetext = page.getConvertedText();
 				}
-
-				String usFilename = filename.replaceAll(" ", "_");
-				Pattern usPattern = Pattern.compile("\\Q" + usFilename + "\\E", Pattern.CASE_INSENSITIVE);
-				Matcher usMatcher = usPattern.matcher(pagetext);
-				if (usMatcher.find()) {
-					page.setConvertedText(usMatcher.replaceAll(filename));
-				}
-				return true;
 			}
 		}
-		return false;
+		return found;
 	}
 
 	/**

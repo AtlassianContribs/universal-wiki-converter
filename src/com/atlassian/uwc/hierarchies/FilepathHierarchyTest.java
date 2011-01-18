@@ -30,6 +30,9 @@ public class FilepathHierarchyTest extends TestCase {
 	protected void setUp() throws Exception {
 		PropertyConfigurator.configure("log4j.properties");
 		tester = new FilepathHierarchy();
+		Properties properties = tester.getProperties();
+		properties.put("filepath-hierarchy-matchpagename", "false"); //opt-out (matches to filename)
+		tester.setProperties(properties);
 	}
 	
 	protected void tearDown() {
@@ -638,6 +641,7 @@ public class FilepathHierarchyTest extends TestCase {
 		tester.clearRootNode();
 		Properties properties = tester.getProperties();
 		properties.put("filepath-hierarchy-ignorable-ancestors", "sampleData/mindtouch/junit_resources/links");
+		properties.put("filepath-hierarchy-matchpagename", "false"); //opt-out (matches to filename)
 		
 		Vector<Page> pages = getDirSuffixPages(dir);
 
@@ -743,4 +747,55 @@ public class FilepathHierarchyTest extends TestCase {
 		assertEquals("parent test", parent, node.getParent());
 	}
 	
+	//original filename should match original directory name (minus extension) for purposes of location 
+	public void testCorrectPagename() {
+		Collection<Page> pages = new LinkedList<Page>();
+		Page root = new Page(new File("sampleData/hierarchy/filepath-origfilename/test1/Main_Page.txt"));
+		Page child1 = new Page(new File("sampleData/hierarchy/filepath-origfilename/test1/Main_Page/abc.txt"));
+		Page child2 = new Page(new File("sampleData/hierarchy/filepath-origfilename/test1/Main_Page/foo.txt"));
+		
+		root.setName("Root");
+		child1.setName("Child abc");
+		child2.setName("Child Foo");
+		root.setPath(getEnginePath(root.getFile().getPath()));
+		child1.setPath(getEnginePath(child1.getFile().getPath()));
+		child2.setPath(getEnginePath(child2.getFile().getPath()));
+		pages.add(root);
+		pages.add(child1);
+		pages.add(child2);
+		
+		Properties properties = tester.getProperties();
+		properties.put("filepath-hierarchy-ignorable-ancestors", "sampleData/hierarchy/filepath-origfilename/test1/");
+		properties.put("filepath-hierarchy-matchpagename", "true"); //default
+		
+		HierarchyNode rootnode = tester.buildHierarchy(pages);
+
+		assertNull(rootnode.getPage());
+		Set<HierarchyNode> actualrootnodeSet = rootnode.getChildren();
+		HierarchyNode actualRootNode = null;
+		for (HierarchyNode next : actualrootnodeSet) {
+			actualRootNode = next;
+		}
+		
+		Page actualRoot = actualRootNode.getPage();
+		assertNotNull(actualRoot);
+		assertEquals("Root", actualRoot.getName());
+		
+		Set<HierarchyNode> children = actualRootNode.getChildren();
+		for (HierarchyNode childnode : children) {
+			Page childpage = childnode.getPage();
+			assertNotNull(childpage);
+			assertTrue("Child abc".equals(childpage.getName()) || "Child Foo".equals(childpage.getName()));
+		}
+	}
+
+	private String getEnginePath(String path) {
+		int fileNameStart = path.lastIndexOf(File.separator);
+		if (fileNameStart >= 0) {
+			path = path.substring(0, fileNameStart);
+		} else {
+			path = "";
+		}
+		return path;
+	}
 }

@@ -99,4 +99,26 @@ public class LeadingSpacesConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 	
+	public void testIgnoreListsWithBold() {
+		Properties props = new Properties();
+		props.setProperty("leading-spaces-delim", "code");
+		props.setProperty("leading-spaces-noformat", "false");
+		tester.setProperties(props);
+		String input, expected, actual;
+		input = "h1. *Foobar*\n" + 
+				"* [Foobar]\n" + 
+				"\n" + 
+				"* *[Foo Bar Meh]*\n" + 
+				"* *[Something & Another]*\n" + 
+				"";
+		expected = input;
+		Page page = new Page(null);
+		page.setOriginalText(input);
+		page.setConvertedText(input);
+		tester.convert(page);
+		actual = page.getConvertedText();
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
 }

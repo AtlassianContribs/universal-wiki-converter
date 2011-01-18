@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.atlassian.uwc.ui.Page;
 
@@ -134,13 +136,46 @@ public class HierarchyNode {
             return null;
         }
         for (HierarchyNode child : children) {
-            if (name.equalsIgnoreCase(child.getName())) {
+            String pagename = child.getName();
+			if (name.equalsIgnoreCase(pagename)) {
+                return child;
+            }
+        }
+        return null;
+    }
+    
+    private static Pattern ext = Pattern.compile("[.].{3,4}$");
+    /**
+     * Looks up a child node.
+     * @param name The name of the sought-after child.
+     * @param ignorableExtension file extension we can ignore. should be "", if none.
+     * @return The child node, or <code>null</code> if the
+     *         child wasn't found.
+     */
+    public HierarchyNode findChildByFilename(String name) {
+        if (name == null || children == null) {
+            return null;
+        }
+        for (HierarchyNode child : children) {
+            String pagename = getFilename(child);
+			if (name.equalsIgnoreCase(pagename)) {
                 return child;
             }
         }
         return null;
     }
 
+	public static String getFilename(HierarchyNode child) {
+		if (child.getPage() == null) {
+			return child.getName();
+		}
+		String pagename = child.getPage().getFile().getName();
+		Matcher extFinder = ext.matcher(pagename);
+		if (extFinder.find()) 
+			pagename = extFinder.replaceFirst("");
+		return pagename;
+	}
+    
     /**
      * Returns the converter page associated with this node
      * @return A page object, or <code>null</code> if
