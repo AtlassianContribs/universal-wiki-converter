@@ -1,5 +1,6 @@
 package com.atlassian.uwc.converters.xml;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.xml.sax.Attributes;
@@ -45,6 +46,13 @@ public class ContentFormattingTableParser extends DefaultXmlParser {
 	private static int numCellsPerRow = 0;
 	private static int maxCellsPerRow = 0;
 	
+	/**
+	 * token to help us keep nested data
+	 */
+	private static final String TABLETOKEN = "UWCSTARTTABLE";
+	private static final String ROWTOKEN = "UWCSTARTTABLEROW";
+	private static final String CELLTOKEN = "UWCSTARTTABLECELL";
+	
 	Pattern borderatt = Pattern.compile("[:|]border=");
 	public void startElement(String uri, String localName, String qName, Attributes attributes) {
 		Type type = Type.getType(qName);
@@ -57,15 +65,19 @@ public class ContentFormattingTableParser extends DefaultXmlParser {
 			if ("".equals(params)) params = ":border=1";
 			else if (!borderatt.matcher(params).find()) params += "|border=1";
 			currentRow += "{table"+params+"}\n";
+			appendOutput(TABLETOKEN);
 			break;
 		case ROW:
-			currentRow += "{tr"+params+"}\n";
+			currentRow += "{tr"+params+"}";
+			appendOutput(ROWTOKEN);
 			break;
 		case CELL:
 			currentRow += "{td"+params+"}";
+			appendOutput(CELLTOKEN);
 			break;
 		case HEADER:
 			currentRow += "{th"+params+"}";
+			appendOutput(CELLTOKEN);
 			break;
 		}
 	}
@@ -82,6 +94,15 @@ public class ContentFormattingTableParser extends DefaultXmlParser {
 		return params;
 	}
 
+	Pattern tabletoken = Pattern.compile("^(?s)(.*?)" + 
+			TABLETOKEN +
+			"(.*)$");
+	Pattern rowtoken = Pattern.compile("^(?s)(.*?)" + 
+			ROWTOKEN +
+			"(.*)$");
+	Pattern celltoken = Pattern.compile("^(?s)(.*?)" + 
+			CELLTOKEN +
+			"(.*)$");
 	public void endElement(String uri, String localName, String qName) {
 		Type type = Type.getType(qName);
 		currentRow = currentRow.replaceAll("\n{2,}$", "\n");
@@ -89,26 +110,64 @@ public class ContentFormattingTableParser extends DefaultXmlParser {
 		case TABLE:
 			tableout += "{table}";
 			tableout = fixNL(tableout);
-			appendOutput(tableout);
+			integrateRowOutput(tabletoken, tableout);
 			clean();
 			break;
 		case ROW:
-			currentRow += "{tr}\n";
-			tableout += currentRow + "\n";
+			currentRow += "{tr}";
+			tableout += currentRow;
+			integrateRowOutput(rowtoken, currentRow);
+			clean();
 			currentRow = "";
 			if (numCellsPerRow > maxCellsPerRow) maxCellsPerRow = numCellsPerRow;
 			numCellsPerRow = 0;
 			break;
 		case CELL:
 			numCellsPerRow++;
-			currentRow += "{td}\n";
+			integrateWithOutput(celltoken, currentRow);
+			clean();
+			currentRow += "{td}";
 			break;
 		case HEADER:
 			numCellsPerRow++;
-			currentRow += "{th}\n";
+			integrateWithOutput(celltoken, currentRow);
+			clean();
+			currentRow += "{th}";
 		}
 	}
 
+	protected void integrateWithOutput(Pattern tokenPattern, String content) {
+		String out = getOutput();
+		Matcher tokenFinder = tokenPattern.matcher(out); //find the beginning of the table
+		
+		boolean found = false;
+		while (tokenFinder.find()) { //find the token for this element
+			found = true;
+			String pre = tokenFinder.group(1); //save existing pre-list content
+			out = tokenFinder.group(2);
+			this.clearOutput(); //delete all saved content
+			appendOutput(pre + content + out); //rewrite saved content with fixed list 
+			break;
+		}
+	}
+
+	protected void integrateRowOutput(Pattern tokenPattern, String content) {
+		String out = getOutput();
+		Matcher tokenFinder = tokenPattern.matcher(out); //find the beginning of the table
+		
+		boolean found = false;
+		while (tokenFinder.find()) { //find the token for this element
+			found = true;
+			String pre = tokenFinder.group(1); //save existing pre-list content
+			out = tokenFinder.group(2);
+			out = out.replaceAll("\n{2,}", "\n");
+			this.clearOutput(); //delete all saved content
+			appendOutput(pre + out + content); //rewrite saved content with fixed list 
+			break;
+		}
+	}
+
+	
 	/**
 	 * clean any necessary state so we can start fresh next time
 	 */

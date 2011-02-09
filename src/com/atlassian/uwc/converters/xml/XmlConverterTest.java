@@ -115,6 +115,30 @@ public class XmlConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 	
+	public void testConvert_SimpleParser_HandleNewlines() {
+		String input, expected, actual;
+		events.addEvent("b", "com.atlassian.uwc.converters.xml.BasicParser");
+		events.addEvent("i", "com.atlassian.uwc.converters.xml.BasicParser");
+		input = "<outer><b>italics\n" +
+				"</b></outer>";
+		expected = " *italics* ";
+		actual = parse(input);
+		assertNotNull(actual);
+		
+		input = "<outer><b>italics\n" +
+				"<i>bah</i></b></outer>";
+		expected = " *italics _bah_*";
+		actual = parse(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		input = "<outer><b>italics\n" +
+				"bah blah</b></outer>";
+		expected = " *italics bah blah*";
+		actual = parse(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
 	public void testConvert_Html2Macro() {
 		String input, expected, actual;
 		events.addEvent("span", "com.atlassian.uwc.converters.xml.MacroParser");
@@ -519,14 +543,14 @@ public class XmlConverterTest extends TestCase {
 			"</table>" + 
 			"</uwc>";
 		expected = "{table:border=1}\n" +
-				"{tr}\n" +
-				"{td}a{td}\n" +
+				"{tr}" +
+				"{td}a{td}" +
 				"{td}b{td}\n" +
 				"{td}c{td}\n" +
-				"{tr}\n" +
-				"{tr}\n" +
-				"{td:colspan=2}Testing{td}\n" +
-				"{tr}\n" +
+				"{tr}" +
+				"{tr}" +
+				"{td:colspan=2}Testing{td}" +
+				"{tr}" +
 				"{table}";
 		actual = parse(input);
 		assertNotNull(actual);
@@ -581,43 +605,43 @@ public class XmlConverterTest extends TestCase {
 				"</table>\n" + 
 				"</uwc>";
 		expected = "{table:border=1}\n" + 
+				" {tr}\n" + 
+				"   {th}Column 1{th}\n" + 
+				"   {th}Column 2{th}\n" + 
+				"   {th}Column 3{th}\n" + 
+				" {tr}\n" + 
+				" {tr}\n" + 
+				"   {td}A{td}\n" + 
+				"   {td:colspan=2|align=center}B{td}\n" + 
+				" {tr}\n" + 
+				" {tr}\n" + 
+				"   {td}C{td}\n" + 
+				"   {td}D{td}\n" + 
+				" {tr}\n" + 
+				" {tr}\n" + 
+				"   {td}E{td}\n" + 
+				"   {td:colspan=2}F{td}\n" + 
+				" {tr}\n" + 
+				" {tr}\n" + 
+				"   {td}G{td}\n" + 
+				"   {td}H{td}\n" + 
+				"   {td}I{td}\n" + 
+				" {tr}\n" + 
+				" {tr}\n" + 
+				"   {td}J{td}\n" + 
+				"   {td}K{td}\n" + 
+				" {tr}\n" + 
+				" {tr}\n" + 
+				"   {td:colspan=2}L{td}\n" + 
+				" {tr}\n" + 
 				"{tr}\n" + 
-				"{th}Column 1{th}\n" + 
-				"{th}Column 2{th}\n" + 
-				"{th}Column 3{th}\n" + 
-				"{tr}\n" + 
-				"{tr}\n" + 
-				"{td}A{td}\n" + 
-				"{td:colspan=2|align=center}B{td}\n" + 
-				"{tr}\n" + 
-				"{tr}\n" + 
-				"{td}C{td}\n" + 
-				"{td}D{td}\n" + 
-				"{tr}\n" + 
-				"{tr}\n" + 
-				"{td}E{td}\n" + 
-				"{td:colspan=2}F{td}\n" + 
-				"{tr}\n" + 
-				"{tr}\n" + 
-				"{td}G{td}\n" + 
-				"{td}H{td}\n" + 
-				"{td}I{td}\n" + 
-				"{tr}\n" + 
-				"{tr}\n" + 
-				"{td}J{td}\n" + 
-				"{td}K{td}\n" + 
-				"{tr}\n" + 
-				"{tr}\n" + 
-				"{td:colspan=2}L{td}\n" + 
-				"{tr}\n" + 
-				"{tr}\n" + 
-				"{td:rowspan=2}M{td}\n" + 
-				"{td}N{td}\n" + 
-				"{td}O{td}\n" + 
-				"{tr}\n" + 
-				"{tr}\n" + 
-				"{td:colspan=2}P{td}\n" + 
-				"{tr}\n" + 
+				"   {td:rowspan=2}M{td}\n" + 
+				"   {td}N{td}\n" + 
+				"   {td}O{td}\n" + 
+				" {tr}\n" + 
+				" {tr}\n" + 
+				"   {td:colspan=2}P{td}\n" + 
+				" {tr}" + 
 				"{table}\n" + 
 				"";
 		actual = parse(input);
@@ -626,6 +650,99 @@ public class XmlConverterTest extends TestCase {
 		
 	}
 
+	public void testConvert_ContentFormattingTable_AndOtherStuff() {
+		String input, expected, actual;
+		events.addEvent("table", "com.atlassian.uwc.converters.xml.ContentFormattingTableParser");
+		events.addEvent("tr", "com.atlassian.uwc.converters.xml.ContentFormattingTableParser");
+		events.addEvent("td", "com.atlassian.uwc.converters.xml.ContentFormattingTableParser");
+		events.addEvent("th", "com.atlassian.uwc.converters.xml.ContentFormattingTableParser");
+		events.addEvent("strong", "com.atlassian.uwc.converters.xml.BasicParser");
+		input = "<uwc>" +
+				"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"width: 311px;\">\n" + 
+				"<tbody>\n" + 
+				"<tr>\n" + 
+				"<td height=\"20\" width=\"115\">\n" + 
+				"<strong style=\"font-size: 10pt; \">\n" + 
+				"HEADER_1</strong>\n" + 
+				"</td>\n" + 
+				"<td width=\"196\">\n" + 
+				"<strong style=\"font-size: 10pt; \">\n" + 
+				"HEADER_2</strong>\n" + 
+				"</td>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<td align=\"right\" height=\"20\">\n" + 
+				"<span style=\"font-size: 10pt;\">\n" + 
+				"1</span>\n" + 
+				"</td>\n" + 
+				"<td>\n" + 
+				"<span style=\"font-size: 10pt;\">\n" + 
+				"foobar</span>\n" + 
+				"</td>\n" + 
+				"</tr>\n" +
+				"<tr>\n" + 
+				"<td align=\"right\" height=\"20\">\n" + 
+				"<span style=\"font-size: 10pt;\">\n" + 
+				"2</span>\n" + 
+				"</td>\n" + 
+				"<td>\n" + 
+				"<span style=\"font-size: 10pt;\">\n" + 
+				"words</span>\n" + 
+				"</td>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" +
+				"<td align=\"right\" height=\"20\">\n" + 
+				"<span style=\"font-size: 10pt;\">\n" + 
+				"3</span>\n" + 
+				"</td>\n" + 
+				"<td>\n" + 
+				"<span style=\"font-size: 10pt;\">\n" + 
+				"abc</span>\n" + 
+				"</td>\n" + 
+				"</tr>\n" + 
+				"</tbody>\n" + 
+				"</table>" + 
+				"</uwc>";
+		expected = "{table:border=0|cellpadding=0|cellspacing=0|style=width: 311px;}\n" + 
+				"{tr}\n" + 
+				"{td:height=20|width=115}\n" + 
+				" *HEADER_1*" + 
+				"{td}\n" + 
+				"{td:width=196}\n" + 
+				" *HEADER_2*" + 
+				"{td}\n" + 
+				"{tr}\n" + 
+				"{tr}\n" + 
+				"{td:align=right|height=20}\n" + 
+				"1" + 
+				"{td}\n" + 
+				"{td}\n" + 
+				"foobar" + 
+				"{td}\n" + 
+				"{tr}\n" + 
+				"{tr}\n" + 
+				"{td:align=right|height=20}\n" + 
+				"2" + 
+				"{td}\n" + 
+				"{td}\n" + 
+				"words" + 
+				"{td}\n" + 
+				"{tr}\n" + 
+				"{tr}\n" + 
+				"{td:align=right|height=20}\n" + 
+				"3" + 
+				"{td}\n" + 
+				"{td}\n" + 
+				"abc" + 
+				"{td}\n" + 
+				"{tr}\n" + 
+				"{table}" + 
+				"";
+		actual = parse(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
 	public void testDefaultConverter_NewlineHandling() {
 		String input, expected, actual;
 		events.addEvent("b", "com.atlassian.uwc.converters.xml.example.BoldParser");
