@@ -79,6 +79,22 @@ public class Page implements Comparable {
     private static HashMap<String, Integer> latestVersions = new HashMap<String, Integer>();
     
     /**
+     * Optionally associate the page with a spacekey. The ConverterEngine will use this instead of the spacekey setting.
+     */
+    private String spacekey;
+    /**
+     * keep needed space data here so the ConverterEngine can create the space, if necessary
+     * The key is the spacekey. The value is an array with name and description data in the 0th and 1st indexes,
+     * respectively. The name and description data will only be used if the spacekey is not already in use, and 
+     * therefore a space needs to be created.
+     */
+    private static HashMap<String,String[]> spaces = new HashMap<String, String[]>(); //spacekey -> [name, description]
+    private boolean isBlog = false;
+    private boolean isPersonalSpace = false;
+    private String personalSpaceUsername = null;
+    
+    
+    /**
      * Basic constructor. Creates a page with an empty path.
      * @param file The file to be converted.
      */
@@ -316,5 +332,66 @@ public class Page implements Comparable {
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+	/* Space methods */
+	public String getSpacekey() {
+		return spacekey;
+	}
+	public void setSpacekey(String key) {
+		this.spacekey = key;
+	}
+	
+	/**
+	 * sets the spacekey for this page, and also assigns name and description data
+	 * to a map so that if the space needs to be created, we have that information.
+	 * @param key
+	 * @param name
+	 * @param desc
+	 */
+	public void setSpace(String key, String name, String desc) {
+		setSpacekey(key);
+		String[] newdata = {name, desc};
+		this.spaces.put(key, newdata);
+	}
+	/**
+	 * gets the space data that's been saved for a particular spacekey, or null if no data exists for that key
+	 * @param key
+	 * @return array. 0th index is the name of the space, 1st index is the description
+	 */
+	public String[] getSpaceData(String key) {
+		if (spaces.containsKey(key)) return spaces.get(key);
+		return null;
+	}
+	/**
+	 * true if the spaces data map has an entry for the given key
+	 * @param key
+	 * @return
+	 */
+	public boolean hasSpace(String key) {
+		return spaces.containsKey(key);
+	}
+	
+	public boolean isBlog() {
+		return isBlog;
+	}
+	
+	public void setIsBlog(boolean isBlog) {
+		this.isBlog = isBlog;
+	}
+
+	public boolean isPersonalSpace() {
+		return isPersonalSpace;
+	}
+	
+	public void setIsPersonalSpace(boolean isPersonalSpace) {
+		this.isPersonalSpace = isPersonalSpace;
+	}
+	
+	public String getPersonalSpaceUsername() {
+		return this.personalSpaceUsername;
+	}
+	
+	public void setPersonalSpaceUsername(String username) {
+		this.personalSpaceUsername = username;
 	}
 }

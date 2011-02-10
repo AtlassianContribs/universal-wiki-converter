@@ -27,10 +27,12 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import biz.artemis.confluence.xmlrpcwrapper.AttachmentForXmlRpc;
+import biz.artemis.confluence.xmlrpcwrapper.BlogForXmlRpc;
 import biz.artemis.confluence.xmlrpcwrapper.CommentForXmlRpc;
 import biz.artemis.confluence.xmlrpcwrapper.ConfluenceServerSettings;
 import biz.artemis.confluence.xmlrpcwrapper.PageForXmlRpc;
 import biz.artemis.confluence.xmlrpcwrapper.RemoteWikiBroker;
+import biz.artemis.confluence.xmlrpcwrapper.SpaceForXmlRpc;
 
 import com.atlassian.uwc.converters.Converter;
 import com.atlassian.uwc.converters.IllegalLinkNameConverter;
@@ -938,6 +940,232 @@ public class ConverterEngineTest extends TestCase {
 		//get page
 		updatePageForTest(page, parentid, settings, title);	
 	}
+	
+	public void testSendPage_spacekey() {
+		//create a space test
+		Page page = new Page(null);
+		String parentid = "0"; //XXX I don't think this settings currently matters?
+		ConfluenceServerSettings confsettings = new ConfluenceServerSettings();
+		String testpropslocation = "test.basic.properties";
+		loadSettingsFromFile(confsettings, testpropslocation);
+		UWCUserSettings settings = new UWCUserSettings();
+		settings.setLogin(confsettings.login);
+		settings.setUrl(confsettings.url);
+		settings.setPassword(confsettings.password);
+		settings.setSpace("uwctest"); //wrong space - this will be overridden by the page settings
+		String title = "Test In New Space"; //Might as well use "Home". There's always a home.
+		String spacekey = "testspace";
+		page.setName(title);
+		String spacename = "New Test Space";
+		String spacedesc = "This is a test space tada!";
+		page.setSpace(spacekey, spacename, spacedesc);
+		
+		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+		PageForXmlRpc startPage = null;
+		//check that space does not exists
+		try {
+			SpaceForXmlRpc space = broker.getSpace(confsettings, spacekey);
+			assertNull(space); //this will fail if the space is not deleted before the test
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+		//change content
+		//send page with changed content 
+		String testcontent = "Testing adding page to new space";
+		page.setConvertedText(testcontent);
+		tester.sendPage(page, parentid, settings);
+		
+		//get page
+		PageForXmlRpc endPage = null;
+		String id = null;
+		try {
+			//test space was created
+			SpaceForXmlRpc space = broker.getSpace(confsettings, spacekey);
+			assertNotNull(space);
+			assertNotNull(space.getSpaceName());
+			assertEquals(spacename, space.getSpaceName());
+			assertNotNull(space.getDescription());
+			assertEquals("<p>"+spacedesc+"</p>", space.getDescription());
+			
+			//test page was created
+			id = broker.getPageIdFromConfluence(confsettings, spacekey, title);
+			endPage = broker.getPage(confsettings, id);
+			assertNotNull(endPage);
+			assertEquals(title, endPage.getTitle());
+			//test that content is the new content
+			String newcontent = endPage.getContent();
+			assertNotNull(newcontent);
+			assertEquals(testcontent, newcontent);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		} finally {
+			deletePage(id, confsettings);
+		}
+		
+		//use the created space
+		page.setName(title);
+		String spacename2 = "New Test Space 2"; //shouldn't be changed. space will already exist at this point.
+		page.setSpace(spacekey, spacename2, spacedesc);
+		tester.sendPage(page, parentid, settings);
+		//get page
+		endPage = null;
+		id = null;
+		try {
+			//test space was created
+			SpaceForXmlRpc space = broker.getSpace(confsettings, spacekey);
+			assertNotNull(space);
+			assertNotNull(space.getSpaceName());
+			assertEquals(spacename, space.getSpaceName()); //compare against original space name, not new one.
+			
+			//test page was created
+			id = broker.getPageIdFromConfluence(confsettings, spacekey, title);
+			endPage = broker.getPage(confsettings, id);
+			assertNotNull(endPage);
+			assertEquals(title, endPage.getTitle());
+			//test that content is the new content
+			String newcontent = endPage.getContent();
+			assertNotNull(newcontent);
+			assertEquals(testcontent, newcontent);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		} finally {
+			deletePage(id, confsettings);
+		}
+		
+	}
+	
+	public void testSendPage_spacekey_personalspacecreation() {
+		//create a space test
+		Page page = new Page(null);
+		String parentid = "0"; //XXX I don't think this settings currently matters?
+		ConfluenceServerSettings confsettings = new ConfluenceServerSettings();
+		String testpropslocation = "test.basic.properties";
+		loadSettingsFromFile(confsettings, testpropslocation);
+		UWCUserSettings settings = new UWCUserSettings();
+		settings.setLogin(confsettings.login);
+		settings.setUrl(confsettings.url);
+		settings.setPassword(confsettings.password);
+		settings.setSpace("uwctest"); //wrong space - this will be overridden by the page settings
+		String title = "Test In New Space"; //Might as well use "Home". There's always a home.
+		String spacekey = "~"+confsettings.login; //isn't really used by confluence, but needs to be unique for Page object
+		page.setName(title);
+		String spacename = "Personal Space";
+		String spacedesc = "This is a test personal space tada!";
+		page.setSpace(spacekey, spacename, spacedesc);
+		page.setIsPersonalSpace(true);
+		page.setPersonalSpaceUsername(confsettings.login); 
+		
+		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+		PageForXmlRpc startPage = null;
+		//check that space does not exists
+		try {
+			SpaceForXmlRpc space = broker.getSpace(confsettings, spacekey);
+			assertNull(space); //this will fail if the space is not deleted before the test
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+		//change content
+		//send page with changed content 
+		String testcontent = "Testing adding page to new personal space";
+		page.setConvertedText(testcontent);
+		tester.sendPage(page, parentid, settings);
+		
+		//get page
+		PageForXmlRpc endPage = null;
+		String id = null;
+		try {
+			//test space was created
+			SpaceForXmlRpc space = broker.getSpace(confsettings, spacekey);
+			assertNotNull(space);
+			assertNotNull(space.getSpaceName());
+			assertEquals(spacename, space.getSpaceName());
+			assertNotNull(space.getDescription());
+			assertEquals("<p>"+spacedesc+"</p>", space.getDescription());
+			
+			//test page was created
+			id = broker.getPageIdFromConfluence(confsettings, spacekey, title);
+			endPage = broker.getPage(confsettings, id);
+			assertNotNull(endPage);
+			assertEquals(title, endPage.getTitle());
+			//test that content is the new content
+			String newcontent = endPage.getContent();
+			assertNotNull(newcontent);
+			assertEquals(testcontent, newcontent);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		} finally {
+			deletePage(id, confsettings);
+		}
+		
+	}
+	
+	public void testSendPage_blog() {
+		//create a space test
+		Page page = new Page(null);
+		String parentid = "0"; //XXX I don't think this settings currently matters?
+		ConfluenceServerSettings confsettings = new ConfluenceServerSettings();
+		String testpropslocation = "test.basic.properties";
+		loadSettingsFromFile(confsettings, testpropslocation);
+		UWCUserSettings settings = new UWCUserSettings();
+		settings.setLogin(confsettings.login);
+		settings.setUrl(confsettings.url);
+		settings.setPassword(confsettings.password);
+		settings.setSpace(confsettings.spaceKey); 
+		String title = "Test Blog"; 
+		page.setName(title);
+		page.setIsBlog(true);
+		
+		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+		PageForXmlRpc startPage = null;
+		//check that space does not exists
+		try {
+			BlogForXmlRpc blog = broker.getBlog(confsettings, confsettings.spaceKey, title);
+		} catch (Exception e) {
+			; //should not exist
+		}
+		//change content
+		//send page with changed content 
+		String testcontent = "Testing adding blog to a space";
+		page.setConvertedText(testcontent);
+		tester.sendPage(page, parentid, settings);
+		
+		//get page
+		PageForXmlRpc endPage = null;
+		String id = null;
+		try {
+			//test blog was created
+			BlogForXmlRpc blog = broker.getBlog(confsettings, confsettings.spaceKey, title);
+			assertNotNull(blog);
+			assertEquals(title, blog.getTitle());
+			assertEquals(testcontent, blog.getContent());
+			id = blog.getId();
+			
+			//test updating the blog
+			String testcontent2 = "Testing updated content";
+			page.setConvertedText(testcontent2);
+			tester.sendPage(page, parentid, settings);
+			blog = broker.getBlog(confsettings, confsettings.spaceKey, title);
+			assertNotNull(blog);
+			assertEquals(testcontent2, blog.getContent());
+			String newid = blog.getId();
+			assertEquals(id, newid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		} finally {
+			deletePage(id, confsettings);
+		}
+		
+	}
+
 	
 	public void testCheckConfluenceSettings() {
 		if (numExclusiveTests++ > 0) fail("Only one 'exclusive' test can be run at a time.");
@@ -3015,7 +3243,7 @@ public class ConverterEngineTest extends TestCase {
 		ConfluenceServerSettings confSettings = new ConfluenceServerSettings();
 		loadSettingsFromFile(confSettings, "test.basic.properties");
 		confSettings.spaceKey = space;
-        confSettings.url="localhost:8082";
+        confSettings.url="localhost:1990/confluence";
 
         if (pageExists(pageTitle, space, confSettings)) {
         	deletePage(pageTitle, space, confSettings);
