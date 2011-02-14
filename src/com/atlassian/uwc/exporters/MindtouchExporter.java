@@ -552,7 +552,7 @@ public class MindtouchExporter implements Exporter {
 	protected String createApiUrl(String input) {
 		if (!input.endsWith("/")) input += "/";
 		input += "@api/deki/";
-		if (!input.startsWith("http:")) input = "http://" + input;
+		if (!input.startsWith("http")) input = "http://" + input;
 		return input;
 	}
 
