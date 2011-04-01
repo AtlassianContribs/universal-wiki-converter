@@ -571,18 +571,18 @@ public class IllegalLinkNameConverterTest extends TestCase {
 		assertFalse(tester.hasSpace(pagename));
 	}
 	
-	public void testRemoveSpace() {
+	public void testRemoveItem() {
 		String input, expected, actual;
 		input = "Space:Pagename";
 		String space = "Space:";
 		expected = "Pagename";
-		actual = tester.removeSpace(input, space);
+		actual = tester.removeItem(input, space);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 		
 		input = "Space:Pagename:illegal";
 		expected = "Pagename:illegal";
-		actual = tester.removeSpace(input, space);
+		actual = tester.removeItem(input, space);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 		
@@ -683,6 +683,27 @@ public class IllegalLinkNameConverterTest extends TestCase {
 		String input, expected, actual;
 		input = "[foo|http://foo.com/foo.dll?bar=gah]";
 		expected = "[foo|http://foo.com/foo.dll?bar=gah]";
+		actual = getActual(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testBlogLinkProblem() {
+		String input, expected, actual;
+		input = "[foo|spacekey:/2010/01/31/Blogpost Tada]";
+		expected = input;
+		actual = getActual(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		input = "[foo|/2010/01/31/Blogpost Tada]";
+		expected = input;
+		actual = getActual(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		input = "[foo|spacekey:/2010/01/31/Blogpost/Tada]";
+		expected = "[foo|spacekey:/2010/01/31/Blogpost-Tada]";
 		actual = getActual(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);

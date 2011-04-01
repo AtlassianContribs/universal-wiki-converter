@@ -1,0 +1,5 @@
+{jive-export-meta:id=1001|version=1|type=BLOG|containertype=14|containerid=1001}
+{user:username}
+{timestamp:1225587974791}
+{{title: SampleJive-InputBlog }}
+<body><p>Testing 123</p></body>

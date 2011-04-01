@@ -1,0 +1,6 @@
+internalDocId	objtype	attid	filename	type	timestamp
+9009	102	1000	cow.jpg	image	1234567890000
+9009	102	1002	doublefacepalm.jpg	attachment	1234567890000
+9009	102	1003	test.txt	binaryBody	1234567890000
+9009	102	1004	cow.jpg	image	1235567890000
+9010	102	1005	foo.jpg	image	1235567890000

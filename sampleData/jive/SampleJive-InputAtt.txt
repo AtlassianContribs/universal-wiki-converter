@@ -1,0 +1,5 @@
+{jive-export-meta:id=9009|version=1|type=DOC|containertype=14|containerid=201}
+{user:username}
+{timestamp:1276704425267}
+{{title: SampleJive-InputAtt }}
+<body><h2>Testing Attachments: INLINE:</h2> <p align="center"><img __jive_ID="1004" __jive_id="1004" alt="cow.jpg" src="cow.jpg" width="70"/></p> <h2>ATT LINK:</h2><p><a _jive_internal="true" href="/servlet/JiveServlet/download/9009-28-1003/test.txt">Test File</a> </p> <h2>Image in Table:</h2> <table><tr><td>Cow!</td><td><p align="center"><img __jive_ID="1004" __jive_id="1004" alt="cow.jpg" src="cow.jpg" width="70"/></p></td></tr></table> <h2>External Inline Image</h2><p><img height="0" src="http://localhost:1990/confluence/download/attachments/3867278/doublefacepalm.jpg" width="0"/></p><p>thumbnail: <img __jive_ID="1004" __jive_id="1004" alt="cow.jpg" src="cow.jpg" width="70" class="jive-image-thumbnail jive-image"/></p><p>whitespace problem: <img __jive_ID="1004" __jive_id="1004" alt="cow.jpg" src="cow.jpg" /><img __jive_ID="1004" __jive_id="1004" alt="cow.jpg" src="cow.jpg" />some text</p></body>

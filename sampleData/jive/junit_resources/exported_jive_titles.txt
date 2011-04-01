@@ -1,0 +1,7 @@
+objid	objtype	containerid	containertype	version	title
+1101	102	200	600	1	Testing Titles
+2002	102	201	14	3	Testing Titles With Bad ;Characters
+3003	38	202	14	2	/2011/1/31/Foo Bar
+9010	102	201	14	1	Other Page
+9050	102	100	2020	1	Doc in User Container
+9051	102	200	600	1	Filtered By Tag

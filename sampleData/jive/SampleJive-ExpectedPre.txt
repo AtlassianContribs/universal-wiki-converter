@@ -1,0 +1,19 @@
+Simple
+
+{code}Testing {color:red} {code}
+
+{code}Testing {color:red} {code}
+
+Has Html tags
+
+{code}simple extraneous html problem
+{code}
+
+Has html Entities
+
+{code}<foo:bar>
+{code}
+
+block elements get newlines, but block elements don't
+
+{code}Testing "foo" bar {code}

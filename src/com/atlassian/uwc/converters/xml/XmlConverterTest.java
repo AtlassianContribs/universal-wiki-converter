@@ -1,5 +1,7 @@
 package com.atlassian.uwc.converters.xml;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.Set;
 
@@ -7,6 +9,8 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+
+import biz.artemis.util.FileUtils;
 
 import com.atlassian.uwc.ui.Page;
 
@@ -119,21 +123,67 @@ public class XmlConverterTest extends TestCase {
 		String input, expected, actual;
 		events.addEvent("b", "com.atlassian.uwc.converters.xml.BasicParser");
 		events.addEvent("i", "com.atlassian.uwc.converters.xml.BasicParser");
+		events.addEvent("br", "com.atlassian.uwc.converters.xml.BasicParser");
 		input = "<outer><b>italics\n" +
 				"</b></outer>";
-		expected = " *italics* ";
+		expected = "*italics* ";
 		actual = parse(input);
 		assertNotNull(actual);
 		
 		input = "<outer><b>italics\n" +
 				"<i>bah</i></b></outer>";
-		expected = " *italics _bah_*";
+		expected = "*italics _bah_* ";
 		actual = parse(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 		input = "<outer><b>italics\n" +
 				"bah blah</b></outer>";
-		expected = " *italics bah blah*";
+		expected = "*italics bah blah* ";
+		actual = parse(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	public void testConvert_BasicParser_Breaks() {
+		String input, expected, actual;
+		events.addEvent("b", "com.atlassian.uwc.converters.xml.BasicParser");
+		events.addEvent("i", "com.atlassian.uwc.converters.xml.BasicParser");
+		events.addEvent("s", "com.atlassian.uwc.converters.xml.BasicParser");
+		events.addEvent("u", "com.atlassian.uwc.converters.xml.BasicParser");
+		events.addEvent("blockquote", "com.atlassian.uwc.converters.xml.BasicParser");
+		events.addEvent("strong", "com.atlassian.uwc.converters.xml.BasicParser");
+		events.addEvent("em", "com.atlassian.uwc.converters.xml.BasicParser");
+		events.addEvent("br", "com.atlassian.uwc.converters.xml.BasicParser");
+		input = "<outer><strong style=\"text-decoration: underline; \">Test Quote Header<br/>" +
+				" </strong><br/>" +
+				"<blockquote>Testing<br/>" +
+				"1<br/>" +
+				"</blockquote><br/>" +
+				"<b><s>2</s><br/></b>" +
+				"3<br/>" +
+				"</outer>";
+		expected = "*Test Quote Header* \n" +
+				"{quote}\n" +
+				"Testing\n" +
+				"1\n" +
+				"\n" +
+				"{quote}\n" +
+				"*-2-* " +
+				"3\n" +
+				"";
+		actual = parse(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testConvert_Basic_Quotes() {
+		String input, expected, actual;
+		events.addEvent("b", "com.atlassian.uwc.converters.xml.BasicParser");
+		events.addEvent("i", "com.atlassian.uwc.converters.xml.BasicParser");
+		events.addEvent("blockquote", "com.atlassian.uwc.converters.xml.BasicParser");
+		input = "<outer><blockquote><b>test</b></blockquote></outer>\n";
+		expected = "{quote}\n" +
+				"*test*\n" +
+				"{quote} ";
 		actual = parse(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
@@ -493,6 +543,23 @@ public class XmlConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
+	
+	public void testConvert_LinksWithBreaks() {
+		String input, expected, actual;
+		events.addEvent("a", "com.atlassian.uwc.converters.xml.LinkParser");
+		events.addEvent("br", "com.atlassian.uwc.converters.xml.BasicParser");
+		input = "<uwc>" +
+				"<a href=\"http://www.google.com/\">http://www.google.com<br/></a>" +
+				"<a href=\"http://www.google.com/\"><br/></a>" +
+				"<a href=\"http://www.google.com/\">Google</a>" +
+				"</uwc>";
+		expected = "[http://www.google.com|http://www.google.com/]\n" +
+				"[http://www.google.com/]\n" +
+				"[Google|http://www.google.com/]";
+		actual = parse(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 
 	public void testConvert_SimpleTables() {
 		String input, expected, actual;
@@ -706,10 +773,10 @@ public class XmlConverterTest extends TestCase {
 		expected = "{table:border=0|cellpadding=0|cellspacing=0|style=width: 311px;}\n" + 
 				"{tr}\n" + 
 				"{td:height=20|width=115}\n" + 
-				" *HEADER_1*" + 
+				"*HEADER_1* " + 
 				"{td}\n" + 
 				"{td:width=196}\n" + 
-				" *HEADER_2*" + 
+				"*HEADER_2* " + 
 				"{td}\n" + 
 				"{tr}\n" + 
 				"{tr}\n" + 
@@ -920,6 +987,30 @@ public class XmlConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 	
+	public void testConvert_Encoding() {
+		try {
+			byte[] bytesFromFile = FileUtils.getBytesFromFile(new File("sampleData/engine/encoding/mdash.txt"));
+			String input = new String(bytesFromFile, "utf-8");
+			String expected = input;
+			input = "<body><p>" + input + "</p></body>";
+			String actual = parse(input);
+			assertNotNull(actual);
+			assertEquals(expected, actual);
+			
+			//with html tidy
+			Properties properties = new Properties();
+			properties.setProperty("xml-use-htmltidy", "true");
+			tester.setProperties(properties);
+			
+			actual = parse(input);
+			assertNotNull(actual);
+			assertEquals(expected, actual);
+			
+		} catch (IOException e) {
+			fail("Missing file?");
+		}
+	}
+	
 	private String parse(String input) {
 		Page page = new Page(null);
 		page.setOriginalText(input);
@@ -927,5 +1018,6 @@ public class XmlConverterTest extends TestCase {
 		String actual = page.getConvertedText();
 		return actual;
 	}
+	
 	
 }

@@ -169,7 +169,11 @@ public class HierarchyNode {
 		if (child.getPage() == null) {
 			return child.getName();
 		}
-		String pagename = child.getPage().getFile().getName();
+		String pagename = null;
+		if (child.getPage().getFile() != null)
+			pagename = child.getPage().getFile().getName();
+		else
+			pagename = child.getPage().getName();
 		Matcher extFinder = ext.matcher(pagename);
 		if (extFinder.find()) 
 			pagename = extFinder.replaceFirst("");

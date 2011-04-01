@@ -1,0 +1,15 @@
+Simple: [Google|http://www.google.com]
+
+Mailto: [laura.kolker@gmail.com|mailto:laura.kolker@gmail.com]
+
+Has params: [https://test/|https://test.com/display/test/Test?foo=bar]
+
+Internal link: [http://wiki.abc.com/clearspace/docs/DOC-1000]
+
+Internal link 2: [Testing 123 Title|http://wiki.abc.com/docs/10001]
+
+Internal link 3: [http://foobar.com/DOC-10002#Section_|http://wiki.abc.com/docs/DOC-10002]
+
+Internal link 4: [Foobar|http://abc.def.com/cgi-bin/FooBarFOO.pl?foo_bar=1234%1w23%3e89&bar=123&SOMETHIG_N=value]
+ 
+ 

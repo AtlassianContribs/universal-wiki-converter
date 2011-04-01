@@ -1,0 +1,4 @@
+{jive-export-meta:id=1001|version=1|type=COMMENT|commentparent=0|referrertype=102|referrerid=1234}
+{user:foo}
+{timestamp:1277935786314}
+<body><p><b>tada</b></p></body>

@@ -1,0 +1,5 @@
+{jive-export-meta:id=1234|version=9|type=DOC|containertype=14|containerid=1234}
+{user:foo}
+{timestamp:1290114532941}
+{{title: SampleJive-InputLink }}
+<body><p>Simple: <a href="http://www.google.com">Google</a></p><p>Mailto: <a class="jive-link-email-small" href="mailto:laura.kolker@gmail.com" target="_blank">laura.kolker@gmail.com</a></p><p>Has params: <a class="jive-link-external-small" href="https://test.com/display/test/Test?foo=bar" target="_blank">https://test/</a></p><p>Internal link: <a _jive_internal="true" href="/clearspace/docs/DOC-1000" target="_blank">http://wiki.abc.com/clearspace/docs/DOC-1000</a></p><p>Internal link 2: <a __default_attr="10001" __jive_macro_name="document" class="jive_macro jive_macro_document" href="" title="Testing 123 Title"></a></p><p>Internal link 3: <a _jive_internal="true" href="/docs/DOC-10002" target="_blank">http://foobar.com/DOC-10002#Section_</a></p><p>Internal link 4: <a href="http://abc.def.com/cgi-bin/FooBarFOO.pl?foo_bar=1234%1w23%3e89&amp;bar=123&amp;SOMETHIG_N=value"> Foobar </a> </p> </body>

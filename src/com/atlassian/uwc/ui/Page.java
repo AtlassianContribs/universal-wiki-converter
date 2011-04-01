@@ -46,7 +46,7 @@ public class Page implements Comparable {
     /**
      * set of attachments associated with this page
      */
-    private Set<File> attachments;
+    private Set<Attachment> attachments;
 	/**
 	 * page version, used by the UWC Page History Framework. 
 	 * @see http://confluence.atlassian.com/display/CONFEXT/UWC+Page+History+Framework
@@ -62,7 +62,7 @@ public class Page implements Comparable {
      * as all other comment parameters either (a) can't be set with 
      * the remote api or (b) will not need to be assocated seperately (page id) 
      */
-    private Vector<String> comments; //It's a vector instead of a set to preserver order
+    private Vector<Comment> comments; //It's a vector instead of a set to preserver order
     /**
      * username of author who updated this page. If null, the administrator running the UWC will be used
      */
@@ -119,9 +119,9 @@ public class Page implements Comparable {
      */
     private void init(File file, String path) {
         this.file = file;
-        attachments = new HashSet<File>();
+        attachments = new HashSet<Attachment>();
         labels = new HashSet<String>();
-        comments = new Vector<String>();
+        comments = new Vector<Comment>();
         setPath(path);
     }
 
@@ -158,7 +158,11 @@ public class Page implements Comparable {
      */
     public void addAttachment(File newAttachment) {
         assert newAttachment != null;
-        attachments.add(newAttachment);
+        attachments.add(new Attachment(newAttachment));
+    }
+    
+    public void addAttachment(File attachment, String name) {
+    	attachments.add(new Attachment(attachment, name));
     }
 
 	/* Getters and Setters */
@@ -222,13 +226,25 @@ public class Page implements Comparable {
     }
 
     public Set<File> getAttachments() {
-        return attachments;
+    	HashSet<File> justFiles = new HashSet<File>();
+    	for (Attachment att : this.attachments) {
+			justFiles.add(att.getFile());
+		}
+        return justFiles;
     }
 
     public void setAttachments(Set<File> attachments) {
         assert attachments != null;
-        this.attachments = attachments;
+        this.attachments.clear();
+        for (File file : attachments) {
+			this.attachments.add(new Attachment(file));
+		}
     }
+    
+
+	public Set<Attachment> getAllAttachmentData() {
+		return this.attachments;
+	}
 
     public void setVersion(int version) {
     	//save latest version data
@@ -296,24 +312,42 @@ public class Page implements Comparable {
 	 */
 	public void addLabel(String label) {
 		label = label.trim();
-		label = label.replaceAll("[_ !#&()*,.:;<>?@\\[\\]\\^]", ""); //remove disallowed confluence tag chars
+		label = label.replaceAll("[ !#&()*,.:;<>?@\\[\\]\\^]", ""); //remove disallowed confluence tag chars
 		label = label.toLowerCase();
 		
 		this.labels.add(label);
 	}
 
 	public Vector<String> getComments() {
-		return comments;
+		Vector<String> commentStrings = new Vector<String>();
+		for (Comment comment : this.comments) {
+			commentStrings.add(comment.text);
+		}
+		return commentStrings;
+	}
+	
+	public Vector<Comment> getAllCommentData() {
+		return this.comments;
 	}
 
 	public void setComments(Vector <String> comments) {
-		this.comments = comments;
+		for (String comment : comments) {
+			this.comments.add(new Comment(comment));
+		}
 	}
 	
 	public void addComment(String comment) {
-		this.comments.add(comment);
+		this.comments.add(new Comment(comment));
 	}
 
+	public void addComment(Comment comment) {
+		this.comments.add(comment);
+	}
+	
+	public void addComment(String comment, String creator, String date) {
+		this.comments.add(new Comment(comment, creator, date));
+	}
+	
 	public boolean hasComments() {
 		return !this.comments.isEmpty();
 	}
@@ -394,4 +428,5 @@ public class Page implements Comparable {
 	public void setPersonalSpaceUsername(String username) {
 		this.personalSpaceUsername = username;
 	}
+
 }

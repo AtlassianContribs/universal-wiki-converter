@@ -1,0 +1,5 @@
+{jive-export-meta:id=1234|version=1|type=DOC|containertype=14|containerid=201}
+{user:username}
+{timestamp:1276704425267}
+{{title: SampleJive-InputBrace }}
+<body><p><span style="font-family:serif;font-style:italic;">foo-bar</span> = <span style="font-family:serif;font-style:italic;">foo-bar</span>, { <span style="font-family:serif;font-style:italic;">foo-bar</span> }</p></body>

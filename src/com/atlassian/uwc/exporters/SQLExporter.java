@@ -21,6 +21,10 @@ public abstract class SQLExporter implements Exporter {
 
 	//log4j
 	Logger log = Logger.getLogger(this.getClass());
+	/**
+	 * if you want to see every sql statement called as a debug message, set this to true
+	 */
+	public boolean sqlDebugMessage = false; 
 
 	//default cancel handling - the UI uses this to pass a cancel signal. 
 	//To use: set the running param to true when you start the export, and false when you end it
@@ -96,7 +100,7 @@ public abstract class SQLExporter implements Exporter {
 		try {
 			message = "Creating statement: "  + sql; 
 			sqlStatement = con.createStatement();
-			log.debug(message);
+			if (sqlDebugMessage) log.debug(message);
 			message = "Executing statement: " + sql; 
 			if (isUpdate) {
 				sqlStatement.executeUpdate(sql);
@@ -104,7 +108,7 @@ public abstract class SQLExporter implements Exporter {
 			else {
 				result = sqlStatement.executeQuery(sql);
 			}
-			log.debug(message);
+			if (sqlDebugMessage) log.debug(message);
 			SQLWarning warn = sqlStatement.getWarnings();
 			while (warn != null) {
 				log.warn(warn.getErrorCode() + "\n" + 
@@ -137,6 +141,19 @@ public abstract class SQLExporter implements Exporter {
 	protected void writeFile(String path, String text, String encoding) {
 	    try {
 	    	FileOutputStream fw = new FileOutputStream(path);
+	    	OutputStreamWriter outstream = new OutputStreamWriter(fw, encoding);
+	        BufferedWriter out = new BufferedWriter(outstream);
+	        out.write(text);
+	        out.close();
+	    } catch (IOException e) {
+	    	log.error("Problem writing to file: " + path);
+	    	e.printStackTrace();
+	    }
+	}
+	
+	protected void appendToFile(String path, String text, String encoding) {
+	    try {
+	    	FileOutputStream fw = new FileOutputStream(path, true);
 	    	OutputStreamWriter outstream = new OutputStreamWriter(fw, encoding);
 	        BufferedWriter out = new BufferedWriter(outstream);
 	        out.write(text);

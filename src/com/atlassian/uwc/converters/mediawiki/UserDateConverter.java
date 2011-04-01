@@ -14,7 +14,7 @@ import com.atlassian.uwc.ui.Page;
 
 public class UserDateConverter extends BaseConverter {
 
-	Logger log = Logger.getLogger(this.getClass());
+	protected Logger log = Logger.getLogger(this.getClass());
 	public void convert(Page page) {
 		log.debug("Adding User and Date metadata - Starting");
 		String input = page.getOriginalText();
@@ -34,7 +34,7 @@ public class UserDateConverter extends BaseConverter {
 	}
 	
 	Pattern username = Pattern.compile("^\\{user:([^}]*)\\}\n");
-	protected String getUser(String input) {
+	public String getUser(String input) {
 		Matcher userFinder = username.matcher(input);
 		if (userFinder.find()) {
 			return userFinder.group(1);
@@ -42,7 +42,7 @@ public class UserDateConverter extends BaseConverter {
 		return null;
 	}
 
-	Pattern date = Pattern.compile("(?:\n|^)\\{timestamp:([^}]*)\\}\n");
+	protected Pattern date = Pattern.compile("(?:\n|^)\\{timestamp:([^}]*)\\}\n");
 	protected Date getDate(String input) {
 		Matcher dateFinder = date.matcher(input);
 		if (dateFinder.find()) {

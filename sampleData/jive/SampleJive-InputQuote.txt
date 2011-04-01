@@ -1,0 +1,5 @@
+{jive-export-meta:id=23491|version=1|type=DOC|containertype=14|containerid=2458}
+{user:username}
+{timestamp:1279064585423}
+{{title: SampleJive-InputQuote }}
+<body><p>Test paragraph</p><blockquote class="jive-quote"><span style="font-family: Calibri,Verdana,Helvetica,Arial;"><strong style="text-decoration: underline; ">Test Quote Header<br/> </strong></span> <ul><li><span style="font-family: Calibri,Verdana,Helvetica,Arial;">List Item -&gt; </span></li><li><span style="font-family: Calibri,Verdana,Helvetica,Arial;">list item 2</span></li></ul></blockquote><p><span style="font-family: Calibri,Verdana,Helvetica,Arial;"><br/> Post quote text <br/> </span></p></body>

@@ -1,0 +1,21 @@
+h1. Toc Syntax 1
+
+
+{toc}
+
+h1. Toc Syntax 2
+
+
+{toc}
+
+h1. Toc Syntax 3
+
+
+{toc}
+
+h1. Toc Syntax 4
+
+
+{toc}
+
+ 

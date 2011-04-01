@@ -163,6 +163,7 @@ public class ConverterEngine implements FeedbackHandler {
 	//Error handlers
 	private ConverterErrors errors = new ConverterErrors();
 	private boolean hadConverterErrors;
+	private HashMap<String, String> homepages = new HashMap<String, String>();
 
 	/* START CONSTRUCTORS */
     
@@ -426,9 +427,12 @@ public class ConverterEngine implements FeedbackHandler {
      * @param converterStrings a list of converter strings of the form "key=value"
      * @return a list of converters
      */
-    protected ArrayList<Converter> createConverters(List<String> converterStrings) {
+    public ArrayList<Converter> createConverters(List<String> converterStrings) {
+    	return createConverters(converterStrings, true);
+    }
+    public ArrayList<Converter> createConverters(List<String> converterStrings, boolean runningState) {
     	String message = "Initializing Converters...";
-		this.state.updateNote(message);
+		if (runningState) this.state.updateNote(message);
 		log.info(message);
 		
         new DefaultXmlEvents().clearAll(); 	//everytime this method is called, have a clean slate of events
@@ -436,8 +440,8 @@ public class ConverterEngine implements FeedbackHandler {
         ArrayList<Converter> converters = new ArrayList<Converter>(); 
         this.numNonConverterProperties = 0; 
         for (String converterStr : converterStrings) {
-        	this.state.updateProgress();
-        	if (!this.running) {
+        	if (runningState) this.state.updateProgress();
+        	if (runningState && !this.running) {
         		this.feedback = Feedback.CANCELLED;
         		return null;
         	}
@@ -453,7 +457,7 @@ public class ConverterEngine implements FeedbackHandler {
         	}
         	converters.add(converter);
         }
-        addDefaultMiscProperties();
+        if (runningState) addDefaultMiscProperties();
         
         return converters;
     }
@@ -702,7 +706,7 @@ public class ConverterEngine implements FeedbackHandler {
 
     	if (values.isEmpty()) return null;
     	
-    	FilterChain chain = new FilterChain(values);
+    	FilterChain chain = new FilterChain(values, this.miscProperties);
     	return chain.getFilter();
     }
     
@@ -757,7 +761,7 @@ public class ConverterEngine implements FeedbackHandler {
         }
         else { //some other problem
         	String message = "Could not find file: '" +
-			        			fileOrDir.getName() +
+			        			fileOrDir.getAbsolutePath() +
 			        			"'.\n" +
 			        			"Check existence and permissions.";
 			log.warn(message);
@@ -1316,24 +1320,28 @@ public class ConverterEngine implements FeedbackHandler {
      * @param confSettings
      * @return the attachment object we sent. used by junit tests
      */
-    protected AttachmentForXmlRpc sendAttachment(File file, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings)
+    protected AttachmentForXmlRpc sendAttachment(File file, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings) {
+    	return sendAttachment(new Attachment(file), broker, pageId, confSettings);
+    }
+    protected AttachmentForXmlRpc sendAttachment(Attachment attachment, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings)
     {
-    	AttachmentForXmlRpc attachment = new AttachmentForXmlRpc();
+    	File file = attachment.getFile();
+    	AttachmentForXmlRpc attachmentRpc = new AttachmentForXmlRpc();
         if (tooBig(file) || doesNotExist(file)) 
         	return null;
-        attachment.setFileName(file.getName());
-        attachment.setFileLocation(file.getAbsolutePath());
-        attachment.setContentType(determineContentType(file));
-        attachment.setComment(getAttachmentUploadComment());
-        String errorMessage = "Couldn't send attachment " +
-        		file.getAbsolutePath() + ". Skipping attachment.";
+        attachmentRpc.setFileName(attachment.getName()); 
+        attachmentRpc.setFileLocation(file.getAbsolutePath());
+        attachmentRpc.setContentType(determineContentType(file)); //XXX Note: if the filename is different from the file, the content type determining might be foiled
+        attachmentRpc.setComment(getAttachmentUploadComment());
+        String errorMessage = "Couldn't send attachmentRpc " +
+        		file.getAbsolutePath() + ". Skipping attachmentRpc.";
         if (usingWebdav()) {
         	String webdavPath = getWebdavPath();
-        	sendAttachmentWebdav(broker, pageId, confSettings, attachment, webdavPath, errorMessage);
+        	sendAttachmentWebdav(broker, pageId, confSettings, attachmentRpc, webdavPath, errorMessage);
         }
         else 
-        	sendAttachmentRemoteAPI(broker, pageId, confSettings, attachment, errorMessage);
-        return attachment;//for junit tests
+        	sendAttachmentRemoteAPI(broker, pageId, confSettings, attachmentRpc, errorMessage);
+        return attachmentRpc;//for junit tests
     }
 
 	private String getAttachmentUploadComment() {
@@ -1609,7 +1617,7 @@ public class ConverterEngine implements FeedbackHandler {
     		SpaceForXmlRpc space2 = broker.getSpace(confSettings, spacekey); 
     		// Conf 3.x will not throw an exception but will return null
     		if (space2 == null) { //Confluence 3.x
-    			String note = "Creating space with spacekey '" + spacekey + "'";
+    			String note = "Creating space with spacekey '" + spacekey + "' and name: " + name;
 				log.info(note);
     			this.state.updateNote(note);
     			try {
@@ -1626,7 +1634,7 @@ public class ConverterEngine implements FeedbackHandler {
     		}
     	} catch (Exception e) { //Confluence 2.x
     		try { //exception! So, try adding the space
-    			String note = "Creating space with spacekey '" + spacekey + "'";
+    			String note = "Creating space with spacekey '" + spacekey + "' and name: " + name;
 				log.info(note);
     			this.state.updateNote(note);
     			broker.addSpace(confSettings, space);
@@ -1712,6 +1720,22 @@ public class ConverterEngine implements FeedbackHandler {
 		String parentid = null;
 		if (pageTable.containsKey("parentId"))
 			parentid = (String) pageTable.get("parentId");
+		else { //We would like to put pages, by default, under the homepage.  
+			if (this.homepages.containsKey(confSettings.spaceKey)) {//is there a known Home page in the space?
+				parentid = this.homepages.get(confSettings.spaceKey);
+				if ("-1".equals(parentid)) parentid = null;// no homepage in this space
+			}
+			else { //can we find the home page for this space?
+				try {
+					parentid = broker.getPageIdFromConfluence(confSettings, confSettings.spaceKey, "Home");
+					this.homepages.put(confSettings.spaceKey, parentid);
+				} catch (Exception e) {
+					parentid = null;
+					this.homepages.put(confSettings.spaceKey, "-1");
+				}
+			}
+			
+		}
 		if (parentid != null) {
 			try {
 				broker.movePage(confSettings, newPage.getId(), parentid, RemoteWikiBroker.Position.APPEND);
@@ -1838,10 +1862,10 @@ public class ConverterEngine implements FeedbackHandler {
     private void sendAttachments(Page page, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings) {
     	log.debug("Examining attachments for page: " + page.getName());
 		// Send the attachments
-        for (File file : page.getAttachments()) {
-        	if (alreadyAttached(page, file))
+        for (Attachment attachment : page.getAllAttachmentData()) {
+        	if (alreadyAttached(page, attachment.getFile()))
         		continue;
-        	sendAttachment(file, broker, pageId, confSettings);
+        	sendAttachment(attachment, broker, pageId, confSettings);
         }
 	}
     
@@ -1882,13 +1906,22 @@ public class ConverterEngine implements FeedbackHandler {
     	if (page.hasComments()) {
     		log.debug("Sending comments for page: " + page.getName());
     		try {
-    			for (String comment : page.getComments()) {
+    			for (Comment comment : page.getAllCommentData()) {
     				//create page that broker can use
     				CommentForXmlRpc brokerComment = new CommentForXmlRpc();
-    				brokerComment.setContent(comment);
     				brokerComment.setPageId(pageId);
+    				brokerComment.setContent(comment.text);
     				//upload comment
-    				broker.addComment(confSettings, brokerComment);
+    				CommentForXmlRpc uploadedComment = broker.addComment(confSettings, brokerComment);
+    				if (comment.hasCreator()) {
+    					boolean usersMustExist = false;
+						broker.setCreator(confSettings, comment.creator, uploadedComment.getId(), usersMustExist);
+						broker.setLastModifier(confSettings, comment.creator, uploadedComment.getId(), usersMustExist);
+    				}
+    				if (comment.hasTimestamp()) {
+    					broker.setCreateDate(confSettings, comment.timestamp, uploadedComment.getId());
+    					broker.setLastModifiedDate(confSettings, comment.timestamp, uploadedComment.getId());
+    				}
     			}
     		} catch (Exception e) {
     			String errorMessage = null;

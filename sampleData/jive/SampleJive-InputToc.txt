@@ -1,0 +1,5 @@
+{jive-export-meta:id=21188|version=19|type=DOC|containertype=14|containerid=2467}
+{user:user}
+{timestamp:1270239854189}
+{{title: SampleJive-InputToc }}
+<body><h1><span>Toc Syntax 1</span><br/></h1><p><img __jive_macro_name="toc" class="jive_macro jive_macro_toc" src="/4.0.6/images/tiny_mce3/plugins/jiveemoticons/images/spacer.gif"/></p><h1><span>Toc Syntax 2</span><br/></h1><p><img __jive_macro_name="toc" class="jive_macro jive_macro_toc"/></p><h1><span>Toc Syntax 3</span><br/></h1><p><span __jive_macro_name="toc"/></p><h1><span>Toc Syntax 4</span><br/></h1><p><span __jive_macro_name="toc"></span></p></body>

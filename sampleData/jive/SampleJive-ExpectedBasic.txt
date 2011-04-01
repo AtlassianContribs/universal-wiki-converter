@@ -1,0 +1,22 @@
+Testing 123 *tada!* 
+
+Testing
+Breaks
+
+Repeated strong, em, and pre:
+
+*Strong* 
+
+_emph_ 
+
+{code}public static void main (String[] args) {}{code}
+
+h1. *header with bolds* 
+
+
+
+{code}test // test
+
+test2{code}
+
+ 

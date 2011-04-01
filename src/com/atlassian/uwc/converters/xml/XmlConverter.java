@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.w3c.tidy.Configuration;
 import org.w3c.tidy.Tidy;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -57,6 +58,7 @@ public class XmlConverter extends BaseConverter {
 		XMLReader reader = getXmlReader();
 		if (reader == null) return;
 		//make sure incoming text is parsable
+		String backup = page.getOriginalText();
 		page.setOriginalText(enforceValidity(page.getOriginalText()));
 		
 		//prepare parser
@@ -70,7 +72,13 @@ public class XmlConverter extends BaseConverter {
 		reader.setErrorHandler(parser);
 		
 		//parse - this will change the page object's contents directly
-		parse(page.getOriginalText(), reader, parser); 
+		try {
+			parse(page.getOriginalText(), reader, parser);
+		} catch (RuntimeException e) {
+			log.debug("Problem parsing xml. Reverting to backedup original text.");
+			page.setOriginalText(backup);
+			page.setConvertedText(backup);
+		}
 		log.debug("Xml Parser - Completed");
 	}
 
@@ -121,7 +129,7 @@ public class XmlConverter extends BaseConverter {
 			reader.parse(source);
 		} catch (Exception e) {
 			String message = "Error while parsing xml. Skipping";
-			log.error(message);
+			log.error(message, e);
 			addError(Feedback.CONVERTER_ERROR, message, true);
 			throw new RuntimeException(e); //Skipping
 		}
@@ -192,22 +200,23 @@ public class XmlConverter extends BaseConverter {
 		tidy.setDropFontTags(false);
 		tidy.setDocType(getDoctype());
 		tidy.setConfigurationFromProps(getTidyProps());
+		tidy.setCharEncoding(Configuration.UTF8); //XXX Support alternative encodings?
 		InputStream in = null;
-		String encoding = "utf-8";
+		String encoding = "utf-8"; //XXX Support alternative encodings?
 		try {
 			in = new ByteArrayInputStream(input.getBytes(encoding));
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			tidy.parseDOM(in, out);
+			log.info("Cleaning HTML with JTidy: Completed.");
+			String output = out.toString(encoding);
+			output = removeNewlines(output);//otherwise tidy will add newlines I don't want
+			output = revertNewlines(output);//get back my original newlines
+			return output;
 		} catch (UnsupportedEncodingException e) {
 			log.error("Could not use encoding: " + encoding);
 			e.printStackTrace();
 		}
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		tidy.parseDOM(in, out);
-		log.info("Cleaning HTML with JTidy: Completed.");
-		String output = out.toString();
-		
-		output = removeNewlines(output);//otherwise tidy will add newlines I don't want
-		output = revertNewlines(output);//get back my original newlines
-		return output;
+		return input;
 	}
 
 	private Properties getTidyProps() {

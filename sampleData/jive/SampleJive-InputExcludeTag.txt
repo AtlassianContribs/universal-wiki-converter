@@ -1,0 +1,6 @@
+{jive-export-meta:id=123|version=25|type=DOC|containertype=14|containerid=1234}
+{user:user}
+{timestamp:1290843590370}
+{tags: exclude, foo, bar}
+{{title: SampleJive-InputExcludeTag }}
+<body><p><span>Set the filterbytag-excluderegex to value: exclude, and this page should not be uploaded.</span></p></body>

@@ -1,0 +1,6 @@
+{jive-export-meta:id=12345|version=9|type=DOC|containertype=600|containerid=123}
+{user:user}
+{timestamp:1283554359682}
+{tags: migrate}
+{{title: SampleJive-InputTable }}
+<body><p><table border="1" cellpadding="3" cellspacing="0" style="width: 100%; border: 1px solid #000000;"><tbody><tr><th align="center" style="background-color:#6690BC;" valign="middle"><span style="color: #ffffff;"><strong>col</strong></span></th><th align="center" style="background-color:#6690BC;" valign="middle"><span style="color: #ffffff;"><strong>col2</strong></span></th><th align="center" style="background-color:#6690BC;" valign="middle"><span style="color: #ffffff;"><strong>col3</strong></span></th></tr><tr><td><pre ___default_attr="java" jivemacro="code">abc</pre></td><td>foo</td><td>Description</td></tr></tbody></table></p></body>

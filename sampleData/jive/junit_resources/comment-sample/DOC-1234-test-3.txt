@@ -1,0 +1,4 @@
+{jive-export-meta:id=1234|version=3|type=DOC|containertype=14|containerid=2458}
+{user:foo}
+{timestamp:1277324592824}
+<body><p>tada</p></body>

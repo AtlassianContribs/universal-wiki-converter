@@ -1,0 +1,6 @@
+{jive-export-meta:id=1234|version=1|type=DOC|containertype=14|containerid=201}
+{user:username}
+{timestamp:1276704425267}
+{{title: SampleJive-InputPre }}
+<body><p>Simple</p><p><pre>Testing {color:red} </pre></p><p><code>Testing {color:red} </code></p><p>Has Html tags</p><p><pre __default_attr="java" __jive_macro_name="code" class="jive_text_macro jive_macro_code"><p>simple extraneous html problem</p></pre></p><p>Has html Entities</p><p><pre __default_attr="xml" __jive_macro_name="code" class="jive_text_macro jive_macro_code"><div id="_mcePaste">&lt;foo:bar&gt;</div></pre></p><p>block elements get newlines, but block elements don't</p><p><pre __jive_macro_name="quote" class="jive_text_macro jive_macro_quote">Testing "<strong>foo</strong>" bar </pre></p></body>
+

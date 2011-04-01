@@ -1,0 +1,4 @@
+{jive-export-meta:id=1011|version=1|type=DOC|containertype=14|containerid=1001}
+{user:user}
+{timestamp:1256164442262}
+{{title: SampleJive-InputNoText }}

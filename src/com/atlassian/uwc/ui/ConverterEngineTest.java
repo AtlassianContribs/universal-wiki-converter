@@ -354,6 +354,72 @@ public class ConverterEngineTest extends TestCase {
 		}
 	}
 	
+	public void testSendPage_comments_author_timestamp() {
+		Page page = new Page(null);
+		String parentid = "0"; //XXX I don't think this settings currently matters?
+		ConfluenceServerSettings settings = new ConfluenceServerSettings();
+		String testpropslocation = "test.basic.properties";
+		loadSettingsFromFile(settings, testpropslocation);
+		String title = "Home"; //Might as well use "Home". There's always a home.
+		page.setName(title);
+		String input = "test comment author and timestamp";
+		String timestamp = "1901:11:30:13:49:44:59";
+		String creator = "foobar";
+		page.addComment(input, creator, timestamp);
+		Properties props = tester.handleMiscellaneousProperties("wiki.1234.users-must-exist.property", "false");
+		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+		PageForXmlRpc startPage = null;
+		try {
+			String id = broker.getPageIdFromConfluence(settings, settings.spaceKey, title);
+			startPage = broker.getPage(settings, id);
+			page.setConvertedText(startPage.getContent()); //we're doing this just to set the converted text so we don't NPE
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		//send the page
+		tester.sendPage(page, parentid, settings);
+		
+		//test the results
+		PageForXmlRpc endPage = null;
+		try {
+			String id = broker.getPageIdFromConfluence(settings, settings.spaceKey, title);
+			endPage = broker.getPage(settings, id);
+			//test that a comment has been set
+			XmlRpcClient client = new XmlRpcClient(settings.url + "/rpc/xmlrpc");
+			String loginToken = broker.getLoginToken(settings);
+			Vector paramsVector = new Vector();
+			paramsVector.add(loginToken);
+			paramsVector.add(id);
+			Vector actual = (Vector) client.execute("confluence1.getComments", paramsVector);
+			assertNotNull(actual);
+			assertEquals(1, actual.size());
+			Hashtable commenttable = (Hashtable) actual.get(0);
+			assertNotNull(commenttable);
+			CommentForXmlRpc comment = new CommentForXmlRpc();
+			comment.setCommentParams(commenttable);
+			assertNotNull(comment);
+			assertNotNull(comment.getTitle());
+			assertEquals("Re: Home", comment.getTitle());
+			assertNotNull(comment.getContent());
+			assertEquals(input, comment.getContent());
+			assertNotNull(comment.getCreator());
+			assertEquals(creator, comment.getCreator());
+			assertNotNull(comment.getCreated());
+			assertEquals("Sat Nov 30 13:49:44 EST 1901", comment.getCreated());
+			String commentid = comment.getId();
+			//get rid of comment -- we have to do this within the try/catch block 
+			paramsVector.clear();
+			paramsVector.add(loginToken);
+			paramsVector.add(commentid);
+			client.execute("confluence1.removeComment", paramsVector);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
 	public void testSendLabels_noversion() {
 		Page page = new Page(null);
 		String parentid = "0"; //XXX I don't think this settings currently matters?
@@ -549,32 +615,49 @@ public class ConverterEngineTest extends TestCase {
 		Hashtable page = getPage(client, newtitle, settings.spaceKey, settings);
 		String parentid = (String) page.get("parentId");
 		assertNotNull(parentid);
-		assertEquals("0", parentid);
+//		assertEquals("0", parentid);//default is no longer nothing. now it's home
 		
 		//get Home's id
 		Hashtable home = getPage(client, "Home", settings.spaceKey, settings);
 		String homeId = (String) home.get("id");
 		assertNotNull(homeId);
 		assertFalse("0".equals(homeId));
+		String newid = "0";
 		
-		//send page with Home as parent id
-		pageTable.put("parentId", homeId);
-		tester.sendPage(broker, pageTable, settings);
-		
-		//get page
 		try {
+			//get page
 			page = null;
 			page = getPage(client, newtitle, settings.spaceKey, settings);
 			parentid = (String) page.get("parentId");
 			assertNotNull(parentid);
 			assertEquals(homeId, parentid);
+			//create a different page
+			Hashtable parentTable = new Hashtable();
+			parentTable.put("content", "testing");
+			parentTable.put("title", "Parent"); 
+			newid = tester.sendPage(broker, parentTable, settings);
+
+
+			//send page with Home as parent id
+			pageTable.put("parentId", newid);
+			tester.sendPage(broker, pageTable, settings);
+
+			//get page
+			page = null;
+			page = getPage(client, newtitle, settings.spaceKey, settings);
+			parentid = (String) page.get("parentId");
+			assertNotNull(parentid);
+			assertEquals(newid, parentid);
 		} finally {
 			//clean up
 			deletePage((String) page.get("id"), settings);
+			deletePage((String) newid, settings);
 		}
 	}
 
 	
+	//XXX This test will fail if test.comment.properties does not use a 
+	//currently on confluence url, with a login that does not have comment permissions
 	public void testSendComments_ErrorHandlingPerms() {
 		//user doesn't have permission to add comment
 		Page page = new Page(null);
@@ -634,6 +717,7 @@ public class ConverterEngineTest extends TestCase {
 		String testpropslocation = "test.basic.properties";
 		loadSettingsFromFile(settings, testpropslocation);
 		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+		Properties props = tester.handleMiscellaneousProperties("wiki.1234.users-must-exist.property", "false");
 		
 		//create a unique id
 		String unique = String.valueOf((new Date()).getTime());
@@ -672,6 +756,8 @@ public class ConverterEngineTest extends TestCase {
 	public void testSendPage_Author_Versions() throws XmlRpcException, IOException {
 		ConfluenceServerSettings settings = new ConfluenceServerSettings();
 		String testpropslocation = "test.basic.properties";
+		Properties props = tester.handleMiscellaneousProperties("wiki.1234.users-must-exist.property", "false");
+		
 		loadSettingsFromFile(settings, testpropslocation);
 		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
 		
@@ -1951,6 +2037,49 @@ public class ConverterEngineTest extends TestCase {
 
 	}
 	
+	public void testSendAttachmentRemoteAPI_differentfilename() {
+		String location = TEST_SETTING_DIR + TEST_PROPS;	
+		UWCUserSettings settings = new UWCUserSettings(location);
+		tester.getState(settings);
+		ConfluenceServerSettings csettings = new ConfluenceServerSettings();
+		Properties props = loadSettingsFromFile(csettings, "test.basic.properties");
+		//check they're loaded
+		assertEquals(csettings.spaceKey, settings.getSpace());
+		settings.setWikitype("Unit Test");
+		
+		String page1 = "sampleData/engine/attachments/SampleEngine-InputAttachments.txt"; 
+		List<File> files = new Vector<File>();
+		File file = new File(page1);
+		assertTrue(file.exists());
+		files.add(file);
+		
+		List<String> converters = new Vector<String>();
+		converters.add("Test.0001.nosvn.filter=com.atlassian.uwc.filters.NoSvnFilter"); //avoiding .svn files
+		converters.add("Test.0002.addattachment.class=com.atlassian.uwc.converters.test.TestAttachmentsFilename");
+		tester.convert(files, converters, settings);
+
+		//get page
+		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+		PageForXmlRpc startPage = null;
+		String pageTitle = "SampleEngine-InputAttachments.txt";
+		String id = null;
+		try {
+			id = broker.getPageIdFromConfluence(csettings, csettings.spaceKey, pageTitle);
+			startPage = broker.getPage(csettings, id);
+			List<AttachmentForXmlRpc> attachments = broker.getAttachments(csettings, id);
+			assertNotNull(attachments);
+			assertEquals(1, attachments.size());
+			assertEquals("NameIsNotcow.jpg", attachments.get(0).getFileName());
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		} finally {
+			//clean up after the test
+			deletePage(id, csettings);
+		}
+
+	}
+	
 	public void testSendAttachmentWebdav() {
 		String location = TEST_SETTING_DIR + TEST_PROPS;	
 		UWCUserSettings settings = new UWCUserSettings(location);
@@ -3158,7 +3287,7 @@ public class ConverterEngineTest extends TestCase {
 		assertFalse(tester.tooBig(file)); //this file is 6K in size
 		
 		filename = "confluence-2.2-std.zip";
-		dir = "/Users/laura/Spike/Work/Confluence/Zips/";		
+		dir = "/Volumes/Greebo/Spike/Work/Confluence/Zips/";		
 		absPath = dir + filename;
 		file = new File(absPath);
 		assertTrue(file.exists()); //no point if the file doesn't exist.

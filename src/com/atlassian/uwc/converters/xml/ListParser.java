@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import com.atlassian.uwc.converters.tikiwiki.RegexUtil;
+
 
 /**
  * Used to transform html style lists to confluence style lists.
@@ -113,9 +115,38 @@ public class ListParser extends DefaultXmlParser {
 		input = input.replaceAll("([\n][ \t]*){2,}", "\n"); //remove extra newlines
 		input = input.replaceAll("^[ \t]+", ""); 	//get rid of non-newline ws at beginning
 		input = input.replaceFirst("^\n+", "");		//get rid of opening newlines
-		input = input.replaceAll("(?<=[*#] )\n", "");
+		input = fixNLByCombining(input); //sometimes an extra newline ends up between list delim and content
 		input = input.replaceAll("(?<=\n|^)[*#] +\n", ""); //get rid of empty items
 		if (!getOutput().endsWith("\n") && !input.startsWith("\n")) input = "\n" + input;
+		return input;
+	}
+
+	Pattern fixNLCombining = Pattern.compile("(?<=\n|^)([*#]+ )\n");
+	//ok, we want to turn situations like this:
+	//* 
+	//content
+	//into:
+	//* content
+	//but not situations
+	//* *bolded*
+	//** stuff
+	//into
+	//* *bolded* ** stuff
+	protected String fixNLByCombining(String input) {
+		Matcher nlFinder = fixNLCombining.matcher(input);
+		StringBuffer sb = new StringBuffer();
+		boolean found = false;
+		while (nlFinder.find()) {
+			found = true;
+			String delims = nlFinder.group(1);
+			String replacement = delims;
+			replacement = RegexUtil.handleEscapesInReplacement(replacement);
+			nlFinder.appendReplacement(sb, replacement);
+		}
+		if (found) {
+			nlFinder.appendTail(sb);
+			return sb.toString();
+		}
 		return input;
 	}
 

@@ -1,0 +1,22 @@
+h2. Testing Attachments: INLINE:
+   
+!cow.jpg|width=70px!
+   
+h2. ATT LINK:
+
+[Test File|^test.txt]
+   
+h2. Image in Table:
+   {table:class=mig-table}
+{tr}{td}Cow!{td}{td}
+!cow.jpg|width=70px!{td}{tr}{table}
+   
+h2. External Inline Image
+
+!http://localhost:1990/confluence/download/attachments/3867278/doublefacepalm.jpg|height=0px,width=0px!
+
+thumbnail: !cow.jpg|thumbnail!
+
+whitespace problem: !cow.jpg! !cow.jpg! some text
+
+ 

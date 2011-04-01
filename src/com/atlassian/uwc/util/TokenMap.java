@@ -28,6 +28,10 @@ public class TokenMap {
     private static HashMap<String, String> tokenCache = new HashMap<String, String>();
     private static Stack<String> keyStack = new Stack<String>();
     private static long tokenCounter = (new Date()).getTime();
+    
+    //backup (in case comment converter is used internally)
+    private static HashMap<String, String> backupCache = new HashMap<String, String>();
+    private static Stack<String> backupKeys = new Stack<String>();
 
     public synchronized static String add(String textToReplaceWithToken) {
         // assemble token
@@ -115,10 +119,32 @@ public class TokenMap {
         return result;
     }
 
-	private synchronized static Stack<String> getKeys() {
+	public synchronized static Stack<String> getKeys() {
 		return keyStack;
 	}
-
+	
+	/**
+	 * If you are running an engine within a converter that might call the detokenizer, 
+	 * call backupTokens first, so that your page's tokens aren't lost. Then when you're done
+	 * with your internal engine, call revertTokens.
+	 */
+	public synchronized static void backupTokens() {
+		backupCache.putAll(tokenCache);
+		backupKeys.addAll(keyStack);
+	}
+	
+	/**
+	 * If you are running an engine within a converter that might call the detokenizer, 
+	 * call backupTokens first, so that your page's tokens aren't lost. Then when you're done
+	 * with your internal engine, call revertTokens.
+	 */
+	public synchronized static void revertTokens() {
+		tokenCache.putAll(backupCache);
+		keyStack.addAll(backupKeys);
+		backupCache.clear();
+		backupKeys.clear();
+	}
+	
     /**
      * calls replaceAndTokenize with no flags
      *

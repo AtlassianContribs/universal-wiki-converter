@@ -1,0 +1,6 @@
+{jive-export-meta:id=1234|version=1|type=DOC|containertype=14|containerid=201}
+{user:username}
+{timestamp:1276704425267}
+{{title: SampleJive-InputBasic }}
+<body><p>Testing 123 <b>tada!</b></p><p>Testing<br/>Breaks</p><p>Repeated strong, em, and pre:</p><p><strong><strong><strong>Strong</strong></strong></strong></p><p><em><em>emph</em></em></p><p><pre><pre><pre __default_attr="java" __jive_macro_name="code" class="jive_text_macro jive_macro_code">public static void main (String[] args) {}</pre></pre></pre></p><p><h1><strong><strong>header with bolds</strong></strong></h1></p><p><pre ___default_attr="java" jivemacro="code"><pre __default_attr="java" __jive_macro_name="code" class="jive_text_macro jive_macro_code"><span style="text-decoration: line-through;">test</span> // test<br/><br/>test2</pre>
+</pre></p></body>

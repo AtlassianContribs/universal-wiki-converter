@@ -2,6 +2,7 @@ package com.atlassian.uwc.filters;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
@@ -10,9 +11,15 @@ import org.apache.log4j.Logger;
 public class FilterChain {
 
 	private Set<String> values;
+	private Properties properties;
 	Logger log = Logger.getLogger(this.getClass());
 	public FilterChain(Set<String> values) {
 		this.values = values;
+	}
+
+	public FilterChain(Set<String> values, Properties properties) {
+		this(values);
+		this.properties = properties;
 	}
 
 	public FileFilter getFilter() {
@@ -42,7 +49,11 @@ public class FilterChain {
 		try {
 			log.debug("Pages filtered from class: " + val);
 			c = Class.forName(val);
-			return (FileFilter) c.newInstance();
+			FileFilter instance = (FileFilter) c.newInstance();
+			if (instance instanceof UWCFilter) {
+				((UWCFilter) instance).setProperties(this.properties);
+			}
+			return instance;
 		} catch (Exception e) {
 			log.error("Problem creating FileFilter: " + val);
 			e.printStackTrace();
@@ -85,15 +96,27 @@ public class FilterChain {
 			if (this.filters == null) filters = new Vector<FileFilter>();
 		}
 
+		//What we are trying to accomplish is that
+		//- any non-endswith filter if it excludes a file will force the file to be excluded
+		//- if there are any endswith filters, then only one of those filters needs to succeed for 
+		//  the file to be included
 		public boolean accept(File file) {
 			Boolean accepted = null;
+			Boolean endswithAccepted = null;
 			for (FileFilter filter : filters) {
-				boolean acceptable = filter.accept(file);
+				boolean acceptable = filter.accept(file); //the current filter's result on this file
 				if (accepted == null) accepted = acceptable;
-				if (filter instanceof Endswith) accepted |= acceptable;
-				else accepted &= acceptable;
+				if (filter instanceof Endswith) {
+					if (endswithAccepted == null) endswithAccepted = acceptable;
+					else endswithAccepted |= acceptable; //endswith: only one needs to succeed
+				}
+				else {
+					accepted &= acceptable; //non-endswith: only one needs to fail
+					if (!accepted) return accepted; //if non-endswith failed at any point, then return false 
+				}
 			}
-			return accepted;
+			if (endswithAccepted == null) endswithAccepted = true;//if no endswith filters, then autosuceeed
+			return endswithAccepted && accepted; 
 		}
 	}
 }

@@ -1,0 +1,6 @@
+{jive-export-meta:id=123|version=25|type=DOC|containertype=14|containerid=1234}
+{user:user}
+{timestamp:1290843590370}
+{tags: foo, bar}
+{{title: SampleJive-InputTag }}
+<body><p><span>Testing tags. should be two tags: foo and bar</span></p></body>

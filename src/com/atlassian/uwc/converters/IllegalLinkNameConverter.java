@@ -190,14 +190,19 @@ public class IllegalLinkNameConverter extends IllegalNameConverter {
 				String space = "";
 				if (hasSpace(pagename)) {
 					space = identifySpace(pagename);
-					pagename = removeSpace(pagename, space);
+					pagename = removeItem(pagename, space);
+				}
+				String blogdate = "";
+				if (isBlogpost(pagename)) {
+					blogdate = identifyBlogdate(pagename);
+					pagename = removeItem(pagename, blogdate);
 				}
 				//important for syntax like shortcut links 
 				this.setAllowAt(allowsAt());
 				this.setAllowTilde(allowsTilde());
 				pagename = convertIllegalName(pagename); //get rid of the illegal chars here.
-				//rebuild with space
-				pagename = space + pagename;
+				//rebuild with parts that were put aside
+				pagename = space + blogdate + pagename;
 			}
 
 			String replacement = alias + anchor + pagename + otherAnchor;
@@ -246,10 +251,22 @@ public class IllegalLinkNameConverter extends IllegalNameConverter {
 		return "";
 	}
 
-	protected String removeSpace(String pagename, String space) {
-		log.debug("space = '" + space + "' pagename='" + pagename +"'");
-		space = "\\Q" + space + "\\E"; 
-		return RegexUtil.loopRegex(pagename, space, "");
+	protected String removeItem(String pagename, String item) {
+		item = "\\Q" + item + "\\E"; 
+		return RegexUtil.loopRegex(pagename, item, "");
+	}
+	
+	Pattern blogdate = Pattern.compile("^\\/\\d{4,4}\\/\\d{2,2}\\/\\d{2,2}\\/");
+	protected boolean isBlogpost(String pagename) {
+		return blogdate.matcher(pagename).lookingAt();
+	}
+
+	protected String identifyBlogdate(String pagename) {
+		Matcher blogFinder = blogdate.matcher(pagename);
+		if (blogFinder.find()) {
+			return blogFinder.group();
+		}
+		return "";
 	}
 
 	/**

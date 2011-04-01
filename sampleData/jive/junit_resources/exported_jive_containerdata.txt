@@ -1,0 +1,5 @@
+container id	container type	type name	container name	container description	parent id	parent type
+200	600	project	Test Project 1	Test Description 1	1	14
+201	14	community	Test Space 2	Test Description 2	1	14
+202	14	community	Test Space 3		1	14
+300	2020	usercontainer	Personal Space Test	New Personal Space!	1	14
