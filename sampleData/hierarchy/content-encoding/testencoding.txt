@@ -1,0 +1,4 @@
+Testing Euro in cp1252 encoding
+Euro: €
+
+{orig-title:Euro€}

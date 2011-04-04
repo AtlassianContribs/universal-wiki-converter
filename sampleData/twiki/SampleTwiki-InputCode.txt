@@ -1,0 +1,26 @@
+
+<code>
+Foo
+-bar
+foo -bar
+testing -bar-
+run-this -example 
+</code>
+
+<verbatim>
+Foo
+-bar
+foo -bar
+testing -bar-
+run-this -example 
+</verbatim>
+
+<pre>
+Foo
+-bar
+foo -bar
+testing -bar-
+run-this -example 
+</pre>
+
+
