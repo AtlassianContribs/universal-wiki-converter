@@ -543,4 +543,26 @@ public class TableConverterTest extends TestCase {
 		assertEquals(expected, actual);
 		
 	}
+	
+	public void testConvertTables_HandlingExtraWS() {
+		String input, expected, actual;
+		input = "{| class=\"wikitable\" border=\"1\"\n" + 
+				"   |-\n" +  //extra ws before row shouldn't foil regex
+				"||r1c1||r1c2||r1c3\n" + 
+				"|-\n" + 
+				"|r2c1\n" + 
+				"|r2c2\n" + 
+				"|r2c3\n" +
+				"|}\n" +
+				"lalala";
+		expected = "| r1c1 | r1c2 | r1c3 |\n" + 
+				"| r2c1 | r2c2 | r2c3 |\n" +
+				"lalala";
+		Page page = new Page(null);
+		page.setOriginalText(input);
+		tester.convert(page);
+		actual = page.getConvertedText();
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 }

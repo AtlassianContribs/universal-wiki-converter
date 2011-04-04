@@ -23,6 +23,7 @@ import com.atlassian.uwc.ui.Page;
  */
 public class TableConverter extends BaseConverter {
 	
+	private static final String UNTIL_NL_PIPE_OR_BANG = ".*?(?=\n\\s*[|!])";
 	private static final String TOKEN_NL = "~UWCTOKENNEWLINE~";
 	private static final String CAPTION_PARAMS = "|borderStyle=dashed|borderColor=#ccc|bgColor=#fff";
 	private static final String DEFAULT_OUTPUT = "confluence";
@@ -111,7 +112,7 @@ public class TableConverter extends BaseConverter {
 	
 	Pattern row = Pattern.compile("(?<=\n|^)([|!][-+]?)(.*?)($|\n+(?=[|!]))", Pattern.DOTALL);
 	protected String getReplacement(String input) {
-		input = input.replaceFirst(".*?(?=\n[|!])", "");
+		input = input.replaceFirst(UNTIL_NL_PIPE_OR_BANG, "");
 		input = input.trim();
 		Matcher rowFinder = row.matcher(input);
 		StringBuffer sb = new StringBuffer();
@@ -174,7 +175,7 @@ public class TableConverter extends BaseConverter {
 
 	private String getContentFormattingReplacement(String input) {
 		String tableparams = getTableParams(input);
-		input = input.replaceFirst(".*?(?=\n[|!])", "");
+		input = input.replaceFirst(UNTIL_NL_PIPE_OR_BANG, "");
 		input = input.trim();
 		Matcher rowFinder = row.matcher(input);
 		StringBuffer sb = new StringBuffer();
