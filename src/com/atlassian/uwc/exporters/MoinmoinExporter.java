@@ -8,8 +8,14 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -29,8 +35,18 @@ public class MoinmoinExporter implements Exporter {
 	private static final String CURRENT = "current";
     private static final String REVISIONS = "revisions";
     private static final String BADCONTENT = "BadContent";
+    private static final String CATEGORY = "CategoryRoot";
     private static final String EXTENSION = ".txt";
+    public static final String REVLOG = "edit-log";
+
 	
+    private class RevInfo{
+    	public String userid;
+    	public Date timestamp;
+    	public String revComment;
+    	public Integer revision;
+    }
+    
 	public void cancel() {
 		log.info("Cancelling Moinmoin Export");
 		this.running = false;
@@ -110,17 +126,24 @@ public class MoinmoinExporter implements Exporter {
 		String[] pages = pagesDir.list(new PageDirFileFilter());
         String current = null;
 
+        Map<String, String> usernames = getUserNameInfo(getSrc() + File.separator + ".." );
+        
         for (int i = 0; i < pages.length; i++) {
-            if (!pages[i].startsWith(BADCONTENT)) { //ignore BADCONTENT page
+            if (!pages[i].startsWith(BADCONTENT) && !pages[i].startsWith(CATEGORY) ) { //ignore BADCONTENT page
 					log.debug("page: " + pages[i]);
             	if (exportHistory()) {
-            		String revisiondir = getSrc() + File.separator + pages[i] + File.separator + REVISIONS;
-						log.debug("revision dir: " + revisiondir);
+            		final String pagedir = getSrc() + File.separator + pages[i];
+            		final String revisiondir = pagedir + File.separator + REVISIONS;
+            		log.debug("revision dir: " + revisiondir );
+            		
             		String[] revisions = new File(revisiondir).list();
-						if (revisions == null) {
-							log.error("Revisions directory was null. Skipping.");
-							continue;
-						}
+					if (revisions == null) {
+						log.error("Revisions directory was null. Skipping.");
+						continue;
+					}
+					
+					Map<Integer, RevInfo> revmap = readRevisionsInfo(pagedir, usernames);
+					
             		for (String revision : revisions) {
             			if (!revision.matches("\\d+")) continue; //ignore non-numbers
 						int num = Integer.parseInt(revision);
@@ -129,6 +152,8 @@ public class MoinmoinExporter implements Exporter {
 								            							File.separator + REVISIONS + File.separator + revision);
 	            			File outfile = new File(getOut() + File.separator + pages[i] + "-" + num + EXTENSION);
 							copyFile(srcfile,outfile);
+							//addTimestampData(outfile, new Date(srcfile.lastModified()));
+							addRevData(outfile, revmap.get(num));
 							addTitleData(outfile, pages[i]);
 	            		} catch (FileNotFoundException e) {
 	            			log.info("Page \"" + pages[i] + "\" has been deleted and will be ignored.");
@@ -160,6 +185,121 @@ public class MoinmoinExporter implements Exporter {
 		
 	}
 	
+
+	final Charset charset = Charset.forName("windows-1252");
+	
+
+	private Map<String, String> getUserNameInfo(String srcDir) {
+		Map<String, String> res = new HashMap<String, String>();
+		String usersrc = srcDir + File.separator + "user";
+		log.debug("read UserInfo: " + usersrc);
+		
+		Pattern namefinder = Pattern.compile("^name=(\\S+)", Pattern.MULTILINE);
+		
+		try{
+			File userdir = new File(usersrc);
+			
+			for( File f : userdir.listFiles() ){
+				
+				log.debug("reading userfile: " + f.getName());
+				
+				// leave directories out
+				if( f.isDirectory() ) continue;
+				
+				String key = f.getName();
+				String cont = FileUtils.readTextFile(f, charset);
+				Matcher m = namefinder.matcher(cont);
+				if(m.find()){
+					String name = m.group(1);
+					log.debug(String.format(" Key: %s \t Name %s", key, name));
+					res.put(key, name);
+				}
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return res;
+	}
+
+	private void addRevData(File outfile, RevInfo revInfo) {
+		final String tsData = "{timestamp:" + fm.format(revInfo.timestamp) + "}\n";
+		final String userid = "{userid:" + revInfo.userid + "}\n";
+		final String revComment = "{revcomment:" + revInfo.revComment + "}\n";
+		
+		String filecontents;
+		try {
+			filecontents = FileUtils.readTextFile(outfile);
+		} catch (IOException e) {
+			log.error("Could not read output file: " + outfile.getAbsolutePath());
+			e.printStackTrace();
+			return;
+		}
+		String newcontents = tsData + userid + revComment + filecontents;
+		FileUtils.writeFile(newcontents, outfile.getAbsolutePath());
+		
+	}
+
+	private Map<Integer, RevInfo> readRevisionsInfo(String pagedir, Map<String, String> usermap) {
+		final File revlogf = new File( pagedir + File.separator + REVLOG);
+		final Map<Integer, RevInfo> res = new HashMap<Integer, RevInfo>();
+		log.debug("Read reflog file: " + revlogf.getAbsolutePath() );
+		
+		try {
+			final String filecontens = FileUtils.readTextFile(revlogf, charset);
+			for( String line : filecontens.split("\\n") ){
+				log.debug("read line of revisions file: " + line);
+				String[] s = line.split("\\t");
+				
+				RevInfo r = new RevInfo();
+				
+				r.revision = Integer.parseInt(s[1]);
+				res.put(r.revision, r);
+				
+				if(usermap.containsKey(s[6])){
+					r.userid = usermap.get(s[6]);
+				} else {
+					// use the plain number, user was deleted 
+					r.userid = s[6];
+				}
+				if(r.userid.trim().equals("")){
+					r.userid = "SYSTEM";
+				}
+				
+				r.revComment = s[8].trim();
+				long time = Long.parseLong(s[0]) / 1000; //convert micro to milliseconds
+				r.timestamp = new Date(time);
+				
+
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		
+		return res;
+	}
+
+	static private SimpleDateFormat fm = new SimpleDateFormat("yyyyMMddHHmmss");
+	
+	private void addTimestampData(File outfile, Date timestamp) {
+		String tsData = "{timestamp:" + fm.format(timestamp) + "}\n";
+		String filecontents;
+		try {
+			filecontents = FileUtils.readTextFile(outfile);
+		} catch (IOException e) {
+			log.error("Could not read output file: " + outfile.getAbsolutePath());
+			e.printStackTrace();
+			return;
+		}
+		String newcontents = tsData + filecontents;
+		FileUtils.writeFile(newcontents, outfile.getAbsolutePath());
+	}
+
+	
 	protected void addTitleData(File outfile, String title) {
 		title = title.replaceAll("\\(2f\\)", "/");
 		String titledata = "{orig-title:" + title + "}\n";
@@ -178,6 +318,11 @@ public class MoinmoinExporter implements Exporter {
 	private boolean exportHistory() {
 		if (this.properties == null) return false;
 		return Boolean.parseBoolean((String) this.properties.get("history"));
+	}
+	
+	private boolean exportHistoryComments() {
+		if (this.properties == null) return false;
+		return Boolean.parseBoolean((String) this.properties.get("histcomment"));
 	}
 
 	/**
@@ -232,6 +377,7 @@ public class MoinmoinExporter implements Exporter {
 			dstChannel.close();
 			if (!newFile.exists()) log.error("Copying file unsuccessful. New file does not exist: " + newFile.getAbsolutePath());
 		}
+		
 	}
 	
 	  /**

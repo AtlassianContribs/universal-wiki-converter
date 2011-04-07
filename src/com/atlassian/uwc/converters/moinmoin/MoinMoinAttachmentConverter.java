@@ -96,9 +96,31 @@ public class MoinMoinAttachmentConverter extends BaseConverter {
 
         // Fix the name and path of the page.
         setupNameAndPath(page);
-        if (log.isDebugEnabled()) {
-            log.debug("<convert(" + page.getName() + ")");
+        
+        log.debug("<convert(" + page.getName() + ")");
+
+        
+        String pagename = page.getName();
+        // Remove the extension, if present
+        if (pagename.endsWith(MoinMoinPreparation.EXTENSION)) {
+            pagename = pagename.substring(0, pagename.length() - MoinMoinPreparation.EXTENSION.length());
         }
+       
+        String baseDir = this.getAttachmentDirectory() + File.separator + pagename + File.separator + ATTACHMENT_DIR;
+        
+        log.info("Attachment Path: " + baseDir);
+        
+        File base = new File(baseDir);
+        log.info("Attachment File: " + (base == null ? "(null)" : base.toString()) );
+        if (base != null && base.exists()){
+	        for(File f : base.listFiles()){
+	        	if(f.isFile()){ 
+	        		log.info("Adding Attachment:  " + f.getAbsolutePath() );
+	        		page.addAttachment(f);
+	        	}
+	        }
+        }
+        
     }
     
     Pattern attachment = Pattern.compile("([{\\[])"+

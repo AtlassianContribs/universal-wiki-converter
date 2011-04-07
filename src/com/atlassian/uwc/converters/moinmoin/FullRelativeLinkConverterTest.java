@@ -37,4 +37,5 @@ public class FullRelativeLinkConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
+
 }

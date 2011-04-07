@@ -27,17 +27,13 @@ public class FileUtils {
     /**
      * Reads a text file into a String object line by line, converting line breaks to the local format.
      *
-     * @todo The character set is hard coded to UTF-8, but it should be configurable by the user.
-     * The best thing would be to fill a combo box with all available character sets, obtained from
-     * Charset.availableCharsets().
-     *
      * @param inputFile The name of and path to the file
+     * @param charset The Charset of the file
      * @return a String with the file contents.
      * @throws java.io.IOException
      */
-    public static String readTextFile(File inputFile) throws IOException {
+    public static String readTextFile(File inputFile, Charset charset) throws IOException {
         FileInputStream fis = new FileInputStream(inputFile);
-        Charset charset = Charset.forName("UTF-8");
         InputStreamReader isr = new InputStreamReader(fis, charset);
         BufferedReader reader = new BufferedReader(isr);
 
@@ -51,6 +47,23 @@ public class FileUtils {
         isr.close();
         return contents.toString();
     }
+    
+    /**
+     * Reads a text file into a String object line by line, converting line breaks to the local format.
+     *
+     * @todo The character set is hard coded to UTF-8, but it should be configurable by the user.
+     * The best thing would be to fill a combo box with all available character sets, obtained from
+     * Charset.availableCharsets().
+     *
+     * @param inputFile The name of and path to the file
+     * @return a String with the file contents.
+     * @throws java.io.IOException
+     */
+    public static String readTextFile(File inputFile) throws IOException {
+    	Charset charset = Charset.forName("UTF-8");
+    	return readTextFile(inputFile, charset);
+    }
+    
 
     /**
      * Creates or truncates a file and then writes a string to it.
@@ -63,7 +76,8 @@ public class FileUtils {
     public static void writeFile(String text, String filePath) {
         BufferedWriter writer = null;
         try {
-            writer = new BufferedWriter(new FileWriter(filePath));
+            //writer = new BufferedWriter(new FileWriter(filePath));
+        	writer =  new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath),"UTF8"));
             writer.write(text);
         } catch (IOException e) {
             String message = "Error writing to file " + filePath +
