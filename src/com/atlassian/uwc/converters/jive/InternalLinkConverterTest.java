@@ -20,6 +20,7 @@ public class InternalLinkConverterTest extends TestCase {
 	Properties props = null;
 	protected void setUp() throws Exception {
 		tester = new InternalLinkConverter();
+		tester.titledata = null;
 		PropertyConfigurator.configure("log4j.properties");
 		props = new Properties();
 		props.put("internaljivedomain", "http://wiki.abc.com");
@@ -137,6 +138,45 @@ public class InternalLinkConverterTest extends TestCase {
 		"";
 
 		pageWithLinks = new Page(null);
+		pageWithLinks.setOriginalText(input);
+		pageWithLinks.setConvertedText(input);
+
+		tester.convert(pageWithLinks);
+
+		actual = pageWithLinks.getConvertedText();
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testConvertLink_Filtered_JustTags() {
+		String input, expected, actual;
+		input = "Link to migrated page: <a ___default_attr=\"1101\" jivemacro=\"document\">migrated</a>\n" +
+		"Link to not exported page: <a ___default_attr=\"8999\" jivemacro=\"document\">not exported</a>\n" +
+		"Link to filtered page (doc in UC): <a ___default_attr=\"9050\" jivemacro=\"document\">filtered doc from User Container</a>\n" +
+		"Link to filtered page (by tag): <a ___default_attr=\"9051\" jivemacro=\"document\">filtered doc by tag</a>\n" +
+		"";
+
+		//same but don't filter docs by user container
+		props.setProperty("internallink-usercontainerfilter", "false");
+		props.setProperty("filterbytag-includeregex", "^migrate(-cleanup)?$");
+		
+		TagFilter tagFilter = new TagFilter();
+		tagFilter.setProperties(props);
+		
+		File sampleDir = new File("sampleData/jive/junit_resources/filter-sample/600-200");
+		sampleDir.listFiles(tagFilter); //runs the filter on all files in the directory
+		sampleDir = new File("sampleData/jive/junit_resources/filter-sample/2020-100");
+		sampleDir.listFiles(tagFilter); //runs the filter on all files in the directory
+		
+		expected = "Link to migrated page: [migrated|testconf:Testing Titles]\n" +
+		"Link to not exported page: [not exported|http://wiki.abc.com/docs/8999]\n" +
+		"Link to filtered page (doc in UC): [filtered doc from User Container|null:Doc in User Container]\n" +
+		"Link to filtered page (by tag): [filtered doc by tag|http://wiki.abc.com/docs/9051]\n" +
+		"";
+
+		Page pageWithLinks = new Page(null);
+		pageWithLinks.setName("Testing 123");
+		pageWithLinks.setSpacekey("testconf");
 		pageWithLinks.setOriginalText(input);
 		pageWithLinks.setConvertedText(input);
 

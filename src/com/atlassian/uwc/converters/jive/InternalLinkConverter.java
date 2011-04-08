@@ -307,7 +307,7 @@ public class InternalLinkConverter extends BaseConverter {
 			return title;
 		}
 		public String toString() {
-			return title;
+			return title + ", " + filtered;
 		}
 	}
 }
