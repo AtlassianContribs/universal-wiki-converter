@@ -1,7 +1,7 @@
 Date: Tue, 10 Jan 2006 20:24:55+00:00
 Mime-Version: 1.0 (Produced by Tiki)
 Content-Type: application/x-tikiwiki;
-  pagename=testPage;
+  pagename=testPage3;
   flags="";
   author=xxxxxxxx;
   version=1;

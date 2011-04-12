@@ -1,0 +1,10 @@
+Tests for some converter property changes in UWC-494
+
+{toc}
+
+testing \\ linebreaks
+
+remove ws around [brackets] 
+
+{color:blue}testing color with delimiter{color}
+{color:red}testing color with no closing delimiter{color}

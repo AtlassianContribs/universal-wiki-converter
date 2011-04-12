@@ -60,6 +60,9 @@ echo "21"
 echo "ImageNoAttach"
 ./compare.sh ImageNoAttach
 
+echo "UWC494"
+./compare.sh UWC494
+
 
 echo "*****************"
 echo "OPTIONAL CONVERTERS"

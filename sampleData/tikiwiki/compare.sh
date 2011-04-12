@@ -27,6 +27,15 @@ INFILE="$PREF$IN$SUF"
 OUTFILE="$PREF$OUT$SUF"
 EXPFILE="$PREF$EXP$SUF"
 
+## special title handling
+if [ $NUM == "3" ]
+then
+	INFILE="testPage3"
+elif [ $NUM == "4" ]
+then
+	INFILE="MYSQL"
+fi
+
 OUTPUTDIR="../../target/uwc/output/output"
 cp $OUTPUTDIR/$INFILE $OUTFILE
 

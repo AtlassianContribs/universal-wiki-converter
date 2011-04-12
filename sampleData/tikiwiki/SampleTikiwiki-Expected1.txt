@@ -52,7 +52,7 @@ Thumbnail image
 !hobbespounce.gif!
 !Wiki.png!
 
-{toc:type=list|outline=true|printable=false}
+{toc}
 
 Tables
 
