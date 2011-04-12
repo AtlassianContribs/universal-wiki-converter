@@ -1332,7 +1332,7 @@ public class ConverterEngine implements FeedbackHandler {
         attachmentRpc.setFileName(attachment.getName()); 
         attachmentRpc.setFileLocation(file.getAbsolutePath());
         attachmentRpc.setContentType(determineContentType(file)); //XXX Note: if the filename is different from the file, the content type determining might be foiled
-        attachmentRpc.setComment(getAttachmentUploadComment());
+        attachmentRpc.setComment(attachment.getComment() == null?getAttachmentUploadComment():attachment.getComment());
         String errorMessage = "Couldn't send attachmentRpc " +
         		file.getAbsolutePath() + ". Skipping attachmentRpc.";
         if (usingWebdav()) {

@@ -2027,6 +2027,20 @@ public class ConverterEngineTest extends TestCase {
 			assertNotNull(attachments);
 			assertEquals(1, attachments.size());
 			assertEquals("cow.jpg", attachments.get(0).getFileName());
+
+			//test a custom attachment comment
+			String comment = "Test Comment";
+			Attachment attachment = new Attachment("test2.jpg", new File("sampleData/engine/attachments/cow.jpg"), "testuser", null, comment);
+			tester.sendAttachment(attachment, broker, id, csettings);
+			
+			id = broker.getPageIdFromConfluence(csettings, csettings.spaceKey, pageTitle);
+			startPage = broker.getPage(csettings, id);
+			attachments = null;
+			attachments = broker.getAttachments(csettings, id);
+			assertNotNull(attachments);
+			assertEquals(2, attachments.size());
+			assertEquals("test2.jpg", attachments.get(1).getFileName());
+			assertEquals(comment, attachments.get(1).getComment());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -2034,6 +2048,7 @@ public class ConverterEngineTest extends TestCase {
 			//clean up after the test
 			deletePage(id, csettings);
 		}
+		
 
 	}
 	
@@ -2081,6 +2096,7 @@ public class ConverterEngineTest extends TestCase {
 	}
 	
 	public void testSendAttachmentWebdav() {
+		fail("Comment this if you've made sure the test confluence has webdav plugin installed");
 		String location = TEST_SETTING_DIR + TEST_PROPS;	
 		UWCUserSettings settings = new UWCUserSettings(location);
 		tester.getState(settings);
@@ -2125,6 +2141,7 @@ public class ConverterEngineTest extends TestCase {
 	}
 	
 	public void testSendAttachmentWebdav_QuestionMarkTitle() { //UWC-407
+		fail("Comment this if you've made sure the test confluence has webdav plugin installed");
 		String location = TEST_SETTING_DIR + TEST_PROPS;	
 		UWCUserSettings settings = new UWCUserSettings(location);
 		tester.getState(settings);

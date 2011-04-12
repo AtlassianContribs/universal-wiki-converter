@@ -164,6 +164,10 @@ public class Page implements Comparable {
     public void addAttachment(File attachment, String name) {
     	attachments.add(new Attachment(attachment, name));
     }
+    
+    public void addAttachment(Attachment attachment) {
+    	attachments.add(attachment);	
+    }
 
 	/* Getters and Setters */
 

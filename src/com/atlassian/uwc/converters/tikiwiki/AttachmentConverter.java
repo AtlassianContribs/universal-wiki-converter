@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 import com.atlassian.uwc.converters.BaseConverter;
+import com.atlassian.uwc.ui.Attachment;
 import com.atlassian.uwc.ui.FileUtils;
 import com.atlassian.uwc.ui.Page;
 import com.atlassian.uwc.ui.UWCUserSettings.Setting;
@@ -39,8 +40,8 @@ import com.atlassian.uwc.util.PropertyFileManager;
  */
 public class AttachmentConverter extends BaseConverter {
 	private static final String PREF_COL = "value";
-	protected static final String FILE_GAL_PREF_SQL = "select value from tiki_preferences where name=\"fgal_use_dir\";";
-	protected static final String IMAGE_GAL_PREF_SQL = "select value from tiki_preferences where name=\"gal_use_dir\";";
+	protected static final String FILE_GAL_PREF_SQL = "select value from tiki_preferences where name='fgal_use_dir';";
+	protected static final String IMAGE_GAL_PREF_SQL = "select value from tiki_preferences where name='gal_use_dir';";
 	protected static String FILE_SEP = System.getProperty("file.separator");
 	Logger log = Logger.getLogger(this.getClass());
 	private Connection con; //DB connection
@@ -105,12 +106,43 @@ public class AttachmentConverter extends BaseConverter {
     	if (paths == null) paths = uploadPaths; //no gallery paths
     	attach(paths, page);
 
+    	if (Boolean.parseBoolean(getProperties().getProperty("attachments-attachall", "false")))//default is false
+    		addAttachmentsNotReferredInMarkup(page);
+    	
     	//save changes to image syntax
     	page.setConvertedText(standardized);
     	closeDB();
     }
 
-    /**
+    private void addAttachmentsNotReferredInMarkup(Page page) {
+    	String defaultsql = "select filename, path, \"user\", created, comment from tiki_wiki_attachments where page ='"+page.getName()+"'"; //yes, this is ugly
+    	String sql = getProperties().getProperty("attachments-attachall-sql", defaultsql);
+    	sql = sql.replaceAll("[?]", page.getName());
+    	String defaultencoding = "utf-8";
+    	String encoding = getProperties().getProperty("attachments-attachall-dbencoding", defaultencoding);
+    	log.debug("Adding all attachments with sql: " + sql);
+        // NOTE: postgres has a keyword "user", so we must use double quotes to "escape" unless we want the pg connect user...
+        ResultSet rs = sql(sql);
+        try {
+            while (rs.next()) {
+                // pageAttachments.add(new String[] { rs.getString(1), rs.getString(2) } );
+                String attName = rs.getString(1);
+				attName = new String(attName.getBytes(encoding), "utf-8");
+                File attFile = new File(getAttachmentDirectory(), rs.getString(2));
+                if (!attFile.exists() || !attFile.canRead()) {
+                    log.error("attachments '"+attName+"' (file '"+attFile.getAbsolutePath()+"' for page='"+page.getName()+"' not found or unreadable");
+                }
+                String attUser = rs.getString(3);
+                Long attEpoch = rs.getLong(4);
+                String attComment = rs.getString(5);
+                page.addAttachment(new Attachment(attName, attFile, attUser, attEpoch, attComment));
+            }
+        } catch (Exception e) {
+            log.error("failed retrieving attachments for page='"+page.getName()+"'", e);
+        }
+	}
+
+	/**
      * translates any references to images with id numbers,
      * to images with filenames
      * @param input wiki syntax
@@ -118,13 +150,15 @@ public class AttachmentConverter extends BaseConverter {
      */
     protected String replaceIdsWithNames(String input) {
     	//fix image gallery ids
-    	String sql = "select imageId,name from tiki_images;";
+    	String defaultsql = "select imageId,name from tiki_images;";
+    	String sql = getProperties().getProperty("attachments-imagegalids-sql", defaultsql);
     	String colId = "imageId";
     	String colName = "name";
 		HashMap<String,String> imageNames = getIdsAndNames(sql, colId, colName);
 		
 		//fix file gallery ids
-		sql = "select fileId, fileName from tiki_files;";//XXX refactor!
+		defaultsql = "select fileId, fileName from tiki_files;";
+		sql = getProperties().getProperty("attachments-filegalids-sql", defaultsql);
 		colId = "fileId";
 		colName = "fileName";
 		HashMap<String,String> fileNames = getIdsAndNames(sql, colId, colName);
@@ -397,27 +431,7 @@ public class AttachmentConverter extends BaseConverter {
 		return input;
 	}
 
-	String imgParam = 
-		"(" +								//start capturing (group1)
-			"\\{" +							//open curly brace
-			"img" +							//the string 'img'
-			"\\s+" +						//at least one space until
-			"src=" +						//the string 'src='
-			"\"" +							//a double quote
-			"(" +							//start capturing (group 2)
-				"(?:show_image)" +			//non capturing group and string 'show_image'
-				"|" +						//or 
-				"(?:tiki-download_file)" +	//non captring group and string 'tiki-download_file.php'
-			")" +							//end capturing (group 2)
-			"\\.php\\?" +					//the string '.php?'
-		")" +								//end capturing (group1)
-		"(?:" +								//non capturing group
-			"(?i)" +						//case insensitivity going forward
-			"name=" +						//the string 'name='
-		")" +								//close non-capturing group
-		"(" +								//start capturing (group 3)
-			"[^\"&}]+" +					//slurp greedily anything not a double quote, space, or &
-		")"; 								//end capturing (group3)
+	String imgParam = "\\[\\^(.*)\\]";
 	Pattern imgParamPattern = Pattern.compile(imgParam);
 
 	/**
@@ -438,9 +452,9 @@ public class AttachmentConverter extends BaseConverter {
 		connectToDB(this.properties);
 		String pathCol = "path";
 		while (imgNameFinder.find()) {
-			String name = imgNameFinder.group(3);
+			String name = imgNameFinder.group(1);
 			name = name.trim();
-			String filenameSql = "select "+pathCol+" from "+table+" where "+column+" like \"" + name + "\";";
+			String filenameSql = "select "+pathCol+" from "+table+" where "+column+" like '" + name + "';";
 			ResultSet filenameData = sql(filenameSql);
 			try {
 				String path = null;
@@ -493,8 +507,8 @@ public class AttachmentConverter extends BaseConverter {
 		connectToDB(this.properties);
 		String dataCol = "data";
 		while (imgNameFinder.find()) {
-			String name = imgNameFinder.group(3);
-			String filenameSql = "select "+dataCol+" from "+table+" where "+column+" like \"" + name + "\";";
+			String name = imgNameFinder.group(1);
+			String filenameSql = "select "+dataCol+" from "+table+" where "+column+" like '" + name + "';";
 			ResultSet filenameData = sql(filenameSql);
 			try {
 				byte[] data = null;
@@ -663,7 +677,10 @@ public class AttachmentConverter extends BaseConverter {
 	 */
 	protected String replaceImageIds(
 			String input, HashMap<String, String> idsAndNames, GalleryType type) {
-		Matcher imgIdFinder = imgIdPattern.matcher(input);
+		String opt = getProperties().getProperty("attachments-imgId-regex", null);
+		Matcher imgIdFinder = (opt != null)         //if opt is not null
+				?Pattern.compile(opt).matcher(input)//use opt pattern
+				:imgIdPattern.matcher(input);		//otherwise use default pattern
 		log.debug("Replacing ids with names");
 		StringBuffer sb = new StringBuffer();
 		boolean found = false;
