@@ -107,7 +107,7 @@ public class SpaceConverterTest extends TestCase {
 	
 	public void testSpaceConverter_isPersonalSpace() {
 		String input, expected, actual;
-		input = "{jive-export-meta:id=1001|version=2|type=DOC|containertype=2020|containerid=300|usercontainername=admin}\n" + 
+		input = "{jive-export-meta:id=1001|version=2|type=BLOG|containertype=2020|containerid=300|usercontainername=admin}\n" + 
 				"<p>Page Content</p>";
 		Page page = new Page(null);
 		page.setName("Test Page");
@@ -122,7 +122,30 @@ public class SpaceConverterTest extends TestCase {
 		
 		String[] spaceData = page.getSpaceData(expected);
 		assertNotNull(spaceData);
-		assertEquals("Personal Space Test", spaceData[0]);
+		assertEquals("admin", spaceData[0]);
+		assertEquals("New Personal Space!", spaceData[1]);
+		assertTrue(page.isPersonalSpace());
+		assertEquals("admin", page.getPersonalSpaceUsername());
+	}
+	
+	public void testSpaceConverter_DOCinPersonalSpace() {
+		String input, expected, actual;
+		input = "{jive-export-meta:id=1001|version=2|type=DOC|containertype=2020|containerid=300}\n" + 
+				"<p>Page Content</p>";
+		Page page = new Page(null);
+		page.setName("Test Page");
+		page.setConvertedText(input);
+		page.setOriginalText(input);
+		tester.convert(page);
+		
+		actual = page.getSpacekey();
+		expected = "~admin";
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		String[] spaceData = page.getSpaceData(expected);
+		assertNotNull(spaceData);
+		assertEquals("admin", spaceData[0]);
 		assertEquals("New Personal Space!", spaceData[1]);
 		assertTrue(page.isPersonalSpace());
 		assertEquals("admin", page.getPersonalSpaceUsername());

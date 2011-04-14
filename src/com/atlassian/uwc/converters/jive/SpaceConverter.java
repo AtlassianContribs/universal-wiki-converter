@@ -30,6 +30,9 @@ public class SpaceConverter extends BaseConverter {
 		String spacekey = null;
 		if ("2020".equals(info.type)) {
 			page.setIsPersonalSpace(true);
+			if (info.username == null) {
+				info.username = this.spacenames.get(info.getSimpleKey());
+			}
 			page.setPersonalSpaceUsername(info.username);
 			spacekey = "~" + info.username;
 		}
