@@ -52,6 +52,7 @@ import com.atlassian.uwc.converters.xml.XmlEvents;
 import com.atlassian.uwc.filters.FilterChain;
 import com.atlassian.uwc.hierarchies.HierarchyBuilder;
 import com.atlassian.uwc.hierarchies.HierarchyNode;
+import com.atlassian.uwc.splitters.PageSplitter;
 import com.atlassian.uwc.ui.listeners.FeedbackHandler;
 import com.atlassian.uwc.ui.listeners.TestSettingsListener;
 
@@ -386,6 +387,12 @@ public class ConverterEngine implements FeedbackHandler {
 			//check for namespace collisions and emit errors if found
 			listCollisions(allPages);
 			
+			//handling page histories and not sorting on create
+			if (isHandlingPageHistories() && 
+					!(isPageHistorySortOnCreate())) {
+				allPages = sortByHistory(allPages);
+			}
+			
 	    	//upload pages, if the user approves
 			if (sendToConfluence && this.running) {
 				if (hierarchyHandler == HierarchyHandler.HIERARCHY_BUILDER && hierarchyBuilder != null) {
@@ -413,6 +420,10 @@ public class ConverterEngine implements FeedbackHandler {
     	}	
     	log.info("Conversion Complete");
     }
+
+	protected boolean isPageHistorySortOnCreate() {
+		return Boolean.parseBoolean(this.miscProperties.getProperty("page-history-sortoncreate", "true"));
+	}
 
     /**
      * handle any cleanup
@@ -731,7 +742,7 @@ public class ConverterEngine implements FeedbackHandler {
             allPages.addAll(pages);
         }
         
-        if (isHandlingPageHistories()) {
+        if (isHandlingPageHistories() && isPageHistorySortOnCreate()) {
         	return sortByHistory(allPages);
         }
         return allPages;
@@ -749,8 +760,13 @@ public class ConverterEngine implements FeedbackHandler {
         assert fileOrDir != null;
         List<Page> result = new LinkedList<Page>();
         if (fileOrDir.isFile()) {									//it's a file AND
-        	if (filter == null || filter.accept(fileOrDir)) 		//there's no filter OR the filter accepts the file
-            	result.add(new Page(fileOrDir));
+        	if (filter == null || filter.accept(fileOrDir)) {		//there's no filter OR the filter accepts the file
+        		PageSplitter splitter = getPageSplitter();
+        		if (splitter == null)
+        			result.add(new Page(fileOrDir));
+        		else 
+        			result.addAll(splitter.split(fileOrDir));
+        	}
             else 
             	log.debug("Filtering out filename: " + fileOrDir.getName());
         } else if (fileOrDir.isDirectory()) {
@@ -770,7 +786,28 @@ public class ConverterEngine implements FeedbackHandler {
         return result;
     }
 
-    /**
+    private PageSplitter getPageSplitter() {
+    	String classname = this.miscProperties.getProperty("pagesplitter", null);
+    	if (classname == null) return null;
+    	Class c;
+		try {
+			c = Class.forName(classname);
+		} catch (ClassNotFoundException e) {
+			log.error("Could not find pagesplitter class named: " + classname, e);
+			return null;
+		}
+		try {
+			PageSplitter splitter = (PageSplitter) c.newInstance();
+			return splitter;
+		} catch (InstantiationException e) {
+			log.error("Could not instantiate pagesplitter class named: " + classname, e);
+		} catch (IllegalAccessException e) {
+			log.error("Pagesplitter class can not legally be accessed: " + classname, e);
+		}
+		return null;
+	}
+
+	/**
      * Set the names of the pages and performs any other setup needed. Called by recurse().
      * If the user selected a directory and this file is inside it, the base directory's
      * path is removed and the rest is used as the page name.
@@ -791,7 +828,7 @@ public class ConverterEngine implements FeedbackHandler {
             String path = getPath(pagePath);
             page.setPath(path);
             page.setName(pageName);
-            if (isHandlingPageHistories()) preserveHistory(page, pageName);
+            if (isHandlingPageHistoriesFromFilename()) preserveHistory(page, pageName);
         }
     }
 
@@ -913,11 +950,14 @@ public class ConverterEngine implements FeedbackHandler {
 			long startTimeStamp = conversionBookkeepingNextPage(page);
 
             //get the file's contents
-            File file = getFileContents(page);
-            if (file == null) {
-            	iter.remove(); //get rid of this page from the iterator.
-            	continue;
-            }
+			
+			if (page.getOriginalText() == null || "".equals(page.getOriginalText())) {
+	            File file = getFileContents(page);
+	            if (file == null) {
+	            	iter.remove(); //get rid of this page from the iterator.
+	            	continue;
+	            }
+			} //else we used a PageSplitter to set the original text, so we can go straight to conversion
             
             //convert the page
             convertPage(converters, page);
@@ -2379,6 +2419,13 @@ public class ConverterEngine implements FeedbackHandler {
      */
     public boolean isHandlingPageHistories() {
     	return this.handlingPageHistories;
+    }
+    
+    /**
+     * @return true if the converter should handle page histories
+     */
+    public boolean isHandlingPageHistoriesFromFilename() {
+    	return this.handlingPageHistories && this.pageHistorySuffix != null;
     }
     
     /**

@@ -371,7 +371,7 @@ Content-Type: application/x-tikiwiki;
   pagename=testPage;
   flags="";
   author=xxxxxxxx;
-  version=2;
+  version=1;
   lastmodified=1168015749;
   author_id=xxxxxxxxxxxxx;
   summary="";

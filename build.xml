@@ -253,6 +253,7 @@
             <zipfileset src="${module.uwc.basedir}/lib/Tidy.jar"/>
             <zipfileset src="${module.uwc.basedir}/lib/wsdl4j-1.5.1.jar"/>
             <zipfileset src="${module.uwc.basedir}/lib/xmlrpc-2.0.1.jar"/>
+				<zipfileset src="${module.uwc.basedir}/lib/apache-mime4j-0.6.1.jar"/>
             <manifest>
                 <attribute name="Main-Class" value="com.atlassian.uwc.ui.UWCForm3"/>
             </manifest>
