@@ -198,7 +198,12 @@ public class InternalLinkConverter extends BaseConverter {
 
 	private String getSpacekey(String containerid, String containertype) {
 		HashMap<String, String> spacekeys = SpaceConverter.getSpacekeys(); //XXX for unit tests we need to insert this somehow
-		return spacekeys.get(generateDocKey(containerid, containertype));
+		String spacekey = spacekeys.get(generateDocKey(containerid, containertype));
+		if (spacekey == null && "2020".equals(containertype)) { //if it's a user container, spacekey might be null
+			spacekey = SpaceConverter.getSpacename(containerid + "-" + containertype);
+			if (spacekey != null) spacekey = "~" + spacekey;
+		}
+		return spacekey;
 	}
 	
 	protected String createConfPageTitle(String spacekey,String title){

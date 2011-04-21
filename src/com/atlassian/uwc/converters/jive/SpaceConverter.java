@@ -139,6 +139,16 @@ public class SpaceConverter extends BaseConverter {
 			}
 		}
 	}
+	/**
+	 * return the spacename for the given key , or null if it does not exist
+	 * or if the spacenames map does not exist
+	 * @param simplekey id + "-" + type
+	 * @return
+	 */
+	public static String getSpacename(String simplekey) {
+		if (spacenames != null) return spacenames.get(simplekey);
+		return null;
+	}
 
 	public class ContainerInfo {
 		public String id;
@@ -153,4 +163,5 @@ public class SpaceConverter extends BaseConverter {
 			return id + "-" + type;
 		}
 	}
+
 }
