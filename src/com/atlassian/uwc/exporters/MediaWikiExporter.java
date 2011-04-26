@@ -228,15 +228,13 @@ public class MediaWikiExporter extends SQLExporter {
 		Vector pages = null;
 		//get syntax data from db
 		if (existsSqlProperties()) {
-			pages = getMediaWikiPages(
+			getMediaWikiPages(
 					optPageSql, optTextSql, optTitleCol, optTextCol, 
 					optNamespaceCol, optPageIdCol, optTextIdCol);
 		} 
 		else {
-			pages = getMediaWikiPages();
+			getMediaWikiPages();
 		}
-		//create files and send to output
-		createFilesLocally(pages);
 	}
 
 	/**
@@ -307,95 +305,103 @@ public class MediaWikiExporter extends SQLExporter {
 	 * @return Vector of MediaWikiPage objects containing titles and text, etc.
 	 * @throws SQLException if an error occurs when executing the sql command
 	 */
-	private Vector getMediaWikiPages() throws SQLException {
-		Vector pages = new Vector();
-		//get pages 
-		String pageSql = "select " + 
-				COL_ID + ", " + 
-				COL_NAMESPACE +", " +
-				COL_TITLE + ", " +
-				COL_LATEST + " " + 
-				"from " + prefix + PAGE_TABLE + " " +
-				getNamespaceWhereClause() + ";"; 					 
-		ResultSet pagedata = sql(pageSql);
-	
+	private void getMediaWikiPages() throws SQLException {
+		ResultSet pagedata = null;
 		try {
-			while (pagedata.next()) {
-				if (!this.running) return null;
-				// page data
-				String id = pagedata.getString(COL_ID); 
-				String latest = pagedata.getString(COL_LATEST);
-				String namespace = pagedata.getString(COL_NAMESPACE); 
-				byte[] bytes2 = pagedata.getBytes(COL_TITLE); //get bytes, 'cause we might have unicode issues
-				String title = null;
-				try {
-					title = getTitle(bytes2);
-				} catch (UnsupportedEncodingException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				//get all the revision ids we need
-				Vector<String> allRevs = new Vector<String>();
-				if (gettingHistory()) {
-					allRevs = getAllRevIds(id); //handle histories
-				}
-				else {
-					allRevs.add(latest); //just the latest revision id
-				}
-				
-				//user timestamp data
-				HashMap<String,String[]>revUdmfMap = null;
-				String udmfSql = "select " + COL_REV_USER + "," + COL_REV_DATE + "," + COL_REV + 
-								 " from " + prefix + REV_TABLE +
-								 " where " + COL_REV_PAGE + "='" + id + "';";
-				if (gettingUserdate()) { 
-					revUdmfMap = getUserDateMap(udmfSql); //rev_id -> [username,timestamp]
-				}
-				
-				int numRevs = 1;
-				for (String rev : allRevs) {
-					//get the text id
-					String textIdSql = "select " + COL_REV_TEXT + " from " + prefix + REV_TABLE + 
-										" where " + COL_REV + "='" + rev + "';"; 
-					ResultSet revdata = sql(textIdSql);
-					String textid = "";
-					while (revdata.next()) {
-						textid = revdata.getString(COL_REV_TEXT); 
+			//get pages 
+			String pageSql = "select " + 
+			COL_ID + ", " + 
+			COL_NAMESPACE +", " +
+			COL_TITLE + ", " +
+			COL_LATEST + " " + 
+			"from " + prefix + PAGE_TABLE + " " +
+			getNamespaceWhereClause() + ";"; 					 
+			pagedata = sql(pageSql);
+
+			try {
+				while (pagedata.next()) {
+					if (!this.running) return;
+					// page data
+					String id = pagedata.getString(COL_ID); 
+					String latest = pagedata.getString(COL_LATEST);
+					String namespace = pagedata.getString(COL_NAMESPACE); 
+					byte[] bytes2 = pagedata.getBytes(COL_TITLE); //get bytes, 'cause we might have unicode issues
+					String title = null;
+					try {
+						title = getTitle(bytes2);
+					} catch (UnsupportedEncodingException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
-					//get the text
-					String textSql = "select " + COL_TEXT + " from " + prefix + TEXT_TABLE + 
-										" where " + COL_TEXT_ID +  "='" + textid + "';";
-					ResultSet textdata = sql(textSql);
-					String text = "";
-					while (textdata.next() ) {
-						if (!this.running) return null;
-						byte[] bytes = textdata.getBytes(COL_TEXT);
-						try {
-							text = new String(bytes, encoding);
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+
+					//get all the revision ids we need
+					Vector<String> allRevs = new Vector<String>();
+					if (gettingHistory()) {
+						allRevs = getAllRevIds(id); //handle histories
+					}
+					else {
+						allRevs.add(latest); //just the latest revision id
+					}
+
+					//user timestamp data
+					HashMap<String,String[]>revUdmfMap = null;
+					String udmfSql = "select " + COL_REV_USER + "," + COL_REV_DATE + "," + COL_REV + 
+					" from " + prefix + REV_TABLE +
+					" where " + COL_REV_PAGE + "='" + id + "';";
+					if (gettingUserdate()) { 
+						revUdmfMap = getUserDateMap(udmfSql); //rev_id -> [username,timestamp]
+					}
+
+					int numRevs = 1;
+					for (String rev : allRevs) {
+						//get the text id
+						String textIdSql = "select " + COL_REV_TEXT + " from " + prefix + REV_TABLE + 
+						" where " + COL_REV + "='" + rev + "';"; 
+						ResultSet revdata = sql(textIdSql);
+						String textid = "";
+						while (revdata.next()) {
+							textid = revdata.getString(COL_REV_TEXT); 
 						}
+						//get the text
+						String textSql = "select " + COL_TEXT + " from " + prefix + TEXT_TABLE + 
+						" where " + COL_TEXT_ID +  "='" + textid + "';";
+						ResultSet textdata = sql(textSql);
+						String text = "";
+						while (textdata.next() ) {
+							if (!this.running) return;
+							byte[] bytes = textdata.getBytes(COL_TEXT);
+							try {
+								text = new String(bytes, encoding);
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						if (gettingUserdate()) { //date for udmf framework: usernames and timestamps 
+							if (!this.running) return;
+							String userdate = getUserDateData(rev, revUdmfMap);
+							text = userdate + text;
+						}
+
+						//save the data into a local object
+						MediaWikiPage mwpage = new MediaWikiPage(title, text, namespace, id, (numRevs++)+""); 
+						//next: 1) handle URL decoding when converting, 2) handle other getMEdiawikiPages method, 3)refactor
+						//next: refactor you can use the jdb URL to set the UTF-8 encoding?
+
+
+						//output the file to the system
+						createFileLocally(mwpage);
+						revdata.close();
+						textdata.close();
 					}
-					if (gettingUserdate()) { //date for udmf framework: usernames and timestamps 
-						if (!this.running) return null;
-						String userdate = getUserDateData(rev, revUdmfMap);
-						text = userdate + text;
-					}
-					
-					//save the data into a local object
-					MediaWikiPage mwpage = new MediaWikiPage(title, text, namespace, id, (numRevs++)+""); 
-					pages.add(mwpage);
-					//next: 1) handle URL decoding when converting, 2) handle other getMEdiawikiPages method, 3)refactor
-					//next: refactor you can use the jdb URL to set the UTF-8 encoding?
 				}
-			}
-		} catch (SQLException e) {
-			log.error("Problem while examining data.");
-			e.printStackTrace();
+			} catch (SQLException e) {
+				log.error("Problem while examining data.");
+				e.printStackTrace();
+			} 
+		} finally {
+			pagedata.close();
 		}
-		return pages;
 	}
 
 	protected String getNamespaceWhereClause() {
@@ -449,7 +455,7 @@ public class MediaWikiExporter extends SQLExporter {
 	 * @return Vector of MediaWikiPage objects containing titles and text, etc.
 	 * @throws SQLException if an error occurs while executing the SQL command
 	 */
-	private Vector getMediaWikiPages(
+	private void getMediaWikiPages(
 			String pageSql, 
 			String textSql,
 			String titleColumn,
@@ -457,15 +463,14 @@ public class MediaWikiExporter extends SQLExporter {
 			String namespaceColumn,
 			String pageIdColumn,
 			String textIdColumn) throws SQLException {
-		Vector pages = new Vector();
 		String message = null;
+		ResultSet pageData, textData, textIdData;
+		pageData = textData = textIdData = null;
 		try {
-			ResultSet pageData, textData, textIdData;
-			pageData = textData = textIdData = null;
 			message = pageSql;
 			pageData = sql(pageSql);
 			while (pageData.next()) {
-				if (!this.running) return null;
+				if (!this.running) return;
 				//get the relevant strings
 				String latest = pageData.getString(textIdColumn); 
 				String namespace = pageData.getString(namespaceColumn); 
@@ -538,7 +543,7 @@ public class MediaWikiExporter extends SQLExporter {
 					textIdData = sql(textIdSql);
 					String textid = "";
 					while (textIdData.next()) {
-						if (!this.running) return null;
+						if (!this.running) return;
 						textid = textIdData.getString(1); //get first column result
 					}
 					
@@ -548,7 +553,7 @@ public class MediaWikiExporter extends SQLExporter {
 					textData = sql(textSqlAdj);
 					String text = "";
 					while (textData.next() ) {
-						if (!this.running) return null;
+						if (!this.running) return;
 						byte[] bytes = textData.getBytes(COL_TEXT);
 						try {
 							text = new String(bytes, encoding);
@@ -559,7 +564,7 @@ public class MediaWikiExporter extends SQLExporter {
 					}
 					
 					if (gettingUserdate()) { //date for udmf framework: usernames and timestamps 
-						if (!this.running) return null;
+						if (!this.running) return;
 						String userdate = getUserDateData(rev, revUdmfMap);
 						text = userdate + text;
 					}
@@ -571,15 +576,20 @@ public class MediaWikiExporter extends SQLExporter {
 					
 					//save the data into a local object
 					MediaWikiPage mwpage = new MediaWikiPage(title, text, namespace, id, (numRevs++)+""); 
-					pages.add(mwpage);
-				
+					
+					//output the file to the system
+					createFileLocally(mwpage);
+					
+					textData.close();
+					textIdData.close();
 				}
 			}
 		} catch (SQLException e) {
 			log.error("Problem while running custom SQL: " + message);
 			throw e;
+		} finally {
+			pageData.close();
 		}
-		return pages;
 	}
 
 	protected String getTitle(byte[] rawbytes) throws UnsupportedEncodingException {
@@ -599,17 +609,26 @@ public class MediaWikiExporter extends SQLExporter {
 		for (Iterator iter = pages.iterator(); iter.hasNext();) {
 			if (!this.running) return;
 			MediaWikiPage page = (MediaWikiPage) iter.next();
-			String filename = gettingHistory()?
-					createFilename(page.title, page.namespace, page.versionId):
-					createFilename(page.title, page.namespace);
-			if (gettingOrigTitle()) {
-				log.debug("Adding original title to content: " + page.title);
-				page.text += "\n" + "{orig-title:" + page.title +"}\n";
-			}
-			String filecontents = page.text;
-			String parent = getParent(page.namespace);
-			createFileLocally(filename, parent, filecontents);
+			createFileLocally(page);
 		}
+	}
+
+	/**
+	 * creates one file for the given MediaWikiPage object
+	 * @param page
+	 */
+	protected void createFileLocally(MediaWikiPage page) {
+		if (!this.running) return;
+		String filename = gettingHistory()?
+				createFilename(page.title, page.namespace, page.versionId):
+				createFilename(page.title, page.namespace);
+		if (gettingOrigTitle()) {
+			log.debug("Adding original title to content: " + page.title);
+			page.text += "\n" + "{orig-title:" + page.title +"}\n";
+		}
+		String filecontents = page.text;
+		String parent = getParent(page.namespace);
+		createFileLocally(filename, parent, filecontents);
 	}
 
 	/**
@@ -783,14 +802,20 @@ public class MediaWikiExporter extends SQLExporter {
 	 * @throws SQLException
 	 */
 	private Vector<String> getAllRevIds(String sql, String col) throws SQLException {
-		ResultSet data = sql(sql);
-		Vector<String> all = new Vector<String>();
-		while (data.next()) {
-			if (!this.running) return null;
-			String rev = data.getString(col);
-			all.add(rev);
+		ResultSet data = null;
+		try {
+			data = sql(sql);
+			Vector<String> all = new Vector<String>();
+			while (data.next()) {
+				if (!this.running) return null;
+				String rev = data.getString(col);
+				all.add(rev);
+			}
+			return all;
 		}
-		return all;
+		finally {
+			data.close();
+		}
 	}
 	
 	/* End History Methods */
@@ -811,22 +836,27 @@ public class MediaWikiExporter extends SQLExporter {
 	}
 	private HashMap<String, String[]> getUserDateMap(String sql, String[] returncols) throws SQLException {
 		HashMap<String, String[]> map = new HashMap<String, String[]>();
-		ResultSet data = sql(sql);
-		String user = "", date = "", rev = "";
+		ResultSet data = null;
+		try {
+			data = sql(sql);
+			String user = "", date = "", rev = "";
 
-		while (data.next()) {
-			rev = data.getString(returncols[0].trim());
-			byte[] userbytes = data.getBytes(returncols[1].trim());
-			try {
-				user = new String(userbytes, encoding);
-			} catch (UnsupportedEncodingException e) {
-				log.warn("Problem with encoding: " + encoding);
-				e.printStackTrace();
-				user = data.getString(returncols[1].trim()); 
+			while (data.next()) {
+				rev = data.getString(returncols[0].trim());
+				byte[] userbytes = data.getBytes(returncols[1].trim());
+				try {
+					user = new String(userbytes, encoding);
+				} catch (UnsupportedEncodingException e) {
+					log.warn("Problem with encoding: " + encoding);
+					e.printStackTrace();
+					user = data.getString(returncols[1].trim()); 
+				}
+				date = data.getString(returncols[2].trim());
+				String[] val = {user,date};
+				map.put(rev, val);
 			}
-			date = data.getString(returncols[2].trim());
-			String[] val = {user,date};
-			map.put(rev, val);
+		} finally { 
+			data.close();
 		}
 		return map;
 	}
