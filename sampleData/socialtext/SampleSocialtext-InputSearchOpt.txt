@@ -3,6 +3,7 @@ From: laura.kolker@gmail.com
 Date: 2009-08-03 12:00:00 EDT
 Category: test
 Encoding: utf-8
+
 Test page for the search macro with configuration options
 
 *search with a tag*

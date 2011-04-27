@@ -1,3 +1,4 @@
+
 This is a sample page for lists.
 
 Socialtext lists appear to have the same syntax as Confluence, but it's still a good idea to have a sample file to ensure that syntax converters don't interfere.

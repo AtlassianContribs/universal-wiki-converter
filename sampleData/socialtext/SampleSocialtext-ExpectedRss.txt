@@ -1,3 +1,4 @@
+
 This is a sample page for fetchrss widgets to be transformed to rss macros.
 
 Google News Feed

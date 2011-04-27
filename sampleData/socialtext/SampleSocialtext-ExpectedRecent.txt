@@ -1,3 +1,4 @@
+
 Test file for the recently changed macro.
 
 {recently-updated}

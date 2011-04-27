@@ -1,3 +1,4 @@
+
 This is a sample page for transforming tag_list widget to contentbylabel
 
 Basic label:
