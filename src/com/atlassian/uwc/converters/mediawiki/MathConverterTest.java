@@ -18,7 +18,10 @@ public class MathConverterTest extends TestCase {
 		String input, expected, actual;
 		input = "<math>g(x,y)\\,</math>\n" + 
 				"\n" + 
-				"<math>f(x) = \\int_0^1 e^{-t} g(t) \\, dt.</math>\n" + 
+				"<math>f(x) = \\int_0^1 e^{-t} g(t) \\, dt.</math>\n" +
+				"\n" +
+				"<math>A_{B} = 100% - 200% + C_{D}</math>\n" + 
+				"\n" + 
 				"";
 		expected = "{latex}\n" +
 				"\\begin{eqnarray}\n" + 
@@ -35,7 +38,15 @@ public class MathConverterTest extends TestCase {
 				"}\n" + 
 				"\\end{eqnarray}\n" + 
 				"{latex}\n" + 
-				"";
+				"\n" +
+				"{latex}\n" + 
+				"\\begin{eqnarray}\n" + 
+				"{\n" + 
+				"A_{B} = 100\\% - 200\\% + C_{D}\n" + 
+				"}\n" + 
+				"\\end{eqnarray}\n" + 
+				"{latex}\n" + 
+				"\n";
 		actual = tester.convertMath(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);

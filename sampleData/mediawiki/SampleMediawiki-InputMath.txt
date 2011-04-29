@@ -4,3 +4,6 @@ This sample is for testing math syntax
 
 <math>f(x) = \int_0^1 e^{-t} g(t) \, dt.</math>
 
+Escaping percents:
+<math>A_{B} = 100% - C_{D}</math>
+<math>A_{B} = 100% - 200% + C_{D}</math>

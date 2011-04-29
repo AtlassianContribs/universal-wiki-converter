@@ -23,6 +23,7 @@ public class MathConverter extends BaseConverter {
 		while (mathFinder.find()) {
 			found = true;
 			String mathbits = mathFinder.group(1);
+			mathbits = escapePercents(mathbits);
 			String replacement = "{latex}\n" +
 					"\\begin{eqnarray}\n" +
 					"{\n" + mathbits +"\n}\n" +
@@ -34,6 +35,15 @@ public class MathConverter extends BaseConverter {
 		if (found) {
 			mathFinder.appendTail(sb);
 			return sb.toString();
+		}
+		return input;
+	}
+	
+	Pattern percents = Pattern.compile("[%]");
+	private String escapePercents(String input) {
+		Matcher percFinder = percents.matcher(input);
+		if (percFinder.find()) {
+			return percFinder.replaceAll("\\\\%");
 		}
 		return input;
 	}

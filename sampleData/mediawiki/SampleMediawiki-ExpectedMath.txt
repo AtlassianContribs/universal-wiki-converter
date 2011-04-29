@@ -16,3 +16,18 @@ f(x) = \int_0^1 e^{-t} g(t) \, dt.
 \end{eqnarray}
 {latex}
 
+Escaping percents:
+{latex}
+\begin{eqnarray}
+{
+A_{B} = 100\% - C_{D}
+}
+\end{eqnarray}
+{latex}
+{latex}
+\begin{eqnarray}
+{
+A_{B} = 100\% - 200\% + C_{D}
+}
+\end{eqnarray}
+{latex}
