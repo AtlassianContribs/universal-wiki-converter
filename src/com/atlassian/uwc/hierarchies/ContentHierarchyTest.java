@@ -780,6 +780,66 @@ public class ContentHierarchyTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
+	
+	public void testBuildHierarchy_Setname_NoHistory() throws Exception {
+		Properties props = new Properties();
+		props.setProperty(ContentHierarchy.PROP_SETNAME, "true");
+		tester.setProperties(props);
+		
+		Vector<Page> pages = new Vector<Page>();
+		File sampledir = new File("sampleData/hierarchy/content-setname-nohistory/");
+		assertTrue(sampledir.exists() && sampledir.isDirectory());
+		
+		for (File file : sampledir.listFiles(new NoSvnFilter())) {
+			if (file.isDirectory()) continue;
+			Page page = new Page(file);
+			page.setOriginalText(readFile(file));
+			page.setConvertedText(page.getOriginalText());
+			page.setUnchangedSource(page.getOriginalText());
+			page.setName(guessName(file.getName()).replaceFirst("-\\d$", ""));
+			page.setVersion(1);
+			pages.add(page);
+		}
+		
+		HierarchyNode actual = tester.buildHierarchy(pages);
+		assertNotNull(actual); //root node
+		assertNull(actual.getName());
+		assertNull(actual.getPage());
+		assertNull(actual.getParent());
+		assertNotNull(actual.getChildren());
+
+		Set<HierarchyNode> children1 = actual.getChildren();
+		assertEquals(1, children1.size());
+		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
+		nodes1.addAll(children1);
+		assertTrue((nodes1.get(0)).getName().equals("TestPage"));
+
+		Set<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
+		assertEquals(3, children2.size());
+		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
+		nodes2.addAll(children2);
+		assertTrue((nodes2.get(0)).getName().equals("Child2"));
+		assertTrue((nodes2.get(1)).getName().equals("Child3"));
+		assertTrue((nodes2.get(2)).getName().equals("Parent0"));
+
+		HierarchyNode parent0node = nodes2.get(2); 
+		
+		Set<HierarchyNode> p0children = parent0node.getChildren();
+		assertEquals(2, p0children.size());
+		Vector<HierarchyNode> p0 = new Vector<HierarchyNode>();
+		p0.addAll(p0children);
+		HierarchyNode node1 = p0.get(0);
+		HierarchyNode node2 = p0.get(1);
+		
+		assertNotNull(node1);
+		assertEquals("Child0", node1.getName());
+		assertEquals(1, node1.getPage().getVersion());
+		assertNotNull(node2);
+		assertEquals("Child1", node2.getName());
+		assertEquals(1, node2.getPage().getVersion());
+	}
+
+	
 	private String readBytes(File file, String encoding) throws IOException {
 		byte[] pagebytes = FileUtils.getBytesFromFile(file);
 		return new String(pagebytes, encoding);

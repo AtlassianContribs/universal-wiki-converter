@@ -1,0 +1,8 @@
+{orig-title:TestPage}
+Omschrijf TestPage hier.
+.
+
+ *[[/Parent0]]
+ *[[/Parent0/Child1| A Child]]
+ *[[/Parent1|A Parent]]
+

@@ -104,13 +104,15 @@ public class ContentHierarchy implements HierarchyBuilder {
 	 * @param ancestors
 	 */
 	private void setNodeName(HierarchyNode node, Vector<String> ancestors) {
-		if (shouldSetName() && !preservingHistory()) { //set name based on ancestors hierarchy discovered
-			String leafname = ancestors.lastElement();
+		if (shouldSetName() && !preservingHistory()) { //name = last node of first element
+			String[] nodes = ancestors.firstElement().split(getDelim());
+			int index = nodes.length-1; //example: Plants/Trees
+			String leafname = nodes[index];
 			node.setName(leafname);
 			node.getPage().setName(leafname);
 		}
 		else if (shouldSetName() && preservingHistory()) { //name = penultimate node
-			String[] nodes = ancestors.firstElement().split("/");
+			String[] nodes = ancestors.firstElement().split(getDelim());
 			int index = nodes.length>1?nodes.length-2:0; //example: Plants/Trees/1
 			String leafname = nodes[index];
 			node.setName(leafname);
