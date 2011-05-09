@@ -33,7 +33,7 @@ public class UserDateConverter extends BaseConverter {
 		log.debug("Adding User and Date metadata - Complete");
 	}
 	
-	Pattern username = Pattern.compile("^\\{user:([^}]*)\\}\n");
+	Pattern username = Pattern.compile("^\\{user:([^}]*)\\}\r?\n");
 	public String getUser(String input) {
 		Matcher userFinder = username.matcher(input);
 		if (userFinder.find()) {
@@ -42,7 +42,7 @@ public class UserDateConverter extends BaseConverter {
 		return null;
 	}
 
-	protected Pattern date = Pattern.compile("(?:\n|^)\\{timestamp:([^}]*)\\}\n");
+	protected Pattern date = Pattern.compile("(?:\n|^)\\{timestamp:([^}]*)\\}\r?\n");
 	protected Date getDate(String input) {
 		Matcher dateFinder = date.matcher(input);
 		if (dateFinder.find()) {
