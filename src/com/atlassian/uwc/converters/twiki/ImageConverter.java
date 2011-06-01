@@ -26,15 +26,24 @@ public class ImageConverter extends PropertyConverter {
 	Pattern htmlImage = Pattern.compile("<img([^>]*?)src=\"([^\"]+)\"([^>]+)>");
 	Pattern lastSlash = Pattern.compile("^(.*)\\/([^/]+)$");
 	private String convertHtmlImage(String input) {
+		HashMap<String,String> removes = getRemovals();
 		Matcher htmlImageFinder = htmlImage.matcher(input);
 		StringBuffer sb = new StringBuffer();
 		boolean found = false;
 		while (htmlImageFinder.find()) {
 			found = true;
 			String src = htmlImageFinder.group(2);
+			for (Iterator iter = removes.keySet().iterator(); iter.hasNext();) {
+				String remove = removes.get((String) iter.next());
+				src = src.replaceAll("\\Q" + remove + "\\E", "");
+			}
 			Matcher slashFinder = lastSlash.matcher(src);
 			if (slashFinder.find()) {
 				src = slashFinder.group(1) + "^" + slashFinder.group(2);
+				slashFinder = lastSlash.matcher(src); //in case we have a slash between web and page
+				if (slashFinder.find()) {
+					src = slashFinder.group(1) + ":" + slashFinder.group(2);
+				}
 			}
 			String attributes = htmlImageFinder.group(1).trim() + " " + htmlImageFinder.group(3).trim();
 			attributes = convertImageAttributes(attributes);

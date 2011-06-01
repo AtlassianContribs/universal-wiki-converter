@@ -21,6 +21,7 @@ public class ImageConverterTest extends TestCase {
 		props.setProperty("vars-web", "~UWCTOKENCURRENTSPACE~");
 		props.setProperty("spacekey", "foobar"); //will be provided by converter engine, not converter properties
 		props.setProperty("remove-twiki-path-1", "http://192.168.2.104/twiki/bin/viewfile/");
+		props.setProperty("remove-twiki-path-2", "/twiki/pub/");
 		props.setProperty("extensions-image", "bmp,jpg,jpeg,png,gif");
 		props.setProperty("extensions-file", "xls,zip,doc,ppt,pdf,tar.gz,tar");
 		tester.setProperties(props);
@@ -112,6 +113,16 @@ public class ImageConverterTest extends TestCase {
 				"uwctest/SampleTwiki-InputAttachments2/cow.jpg\" width=\"88\" height=\"31\" border=\"0\" " +
 				"alt=\"logo\" />";
 		expected = "!uwctest:SampleTwiki-InputAttachments2^cow.jpg|width=\"88\", height=\"31\", border=\"0\", alt=\"logo\"!";
+		actual = tester.convertImage(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testConvertImage_imghtml_withremove() {
+		String input, expected, actual;
+		input = "<img width=\"200\" alt=\"Img.jpg\" src=\"/twiki/pub/Web/PageName/Img.jpg\" height=\"200\" />\n" + 
+				"";
+		expected = "!Web:PageName^Img.jpg|width=\"200\", alt=\"Img.jpg\", height=\"200\"!\n";
 		actual = tester.convertImage(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);

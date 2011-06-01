@@ -36,7 +36,7 @@ public class SpaceConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
-
+	
 	public void testConvertSpaces_Ignore() {
 		String input, expected, actual;
 		input = "!Sandbox.jpg!";
