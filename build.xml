@@ -234,7 +234,7 @@
             <zipfileset src="${module.uwc.basedir}/lib/commons-httpclient-3.0.jar"/>
 				<zipfileset src="${module.uwc.basedir}/lib/commons-lang-2.1.jar"/>
             <zipfileset src="${module.uwc.basedir}/lib/commons-logging-1.0.4.jar"/>
-            <zipfileset src="${module.uwc.basedir}/lib/confluence-xmlrpc-wrapper-v4.18.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/confluence-xmlrpc-wrapper-v4.19.jar"/>
             <zipfileset src="${module.uwc.basedir}/lib/dom4j-1.4-full.jar"/>
             <zipfileset src="${module.uwc.basedir}/lib/forms_rt.jar"/>
             <zipfileset src="${module.uwc.basedir}/lib/jakarta-oro-2.0.8.jar"/>
