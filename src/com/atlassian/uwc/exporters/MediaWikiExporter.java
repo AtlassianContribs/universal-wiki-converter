@@ -699,10 +699,10 @@ public class MediaWikiExporter extends SQLExporter {
 				nsName = getNamespaceDirName(nsId);
 			}
 			else nsName = namespaces[nsId];
-			parent = output + "/" + nsName + "/";			
+			parent = output + File.separator + nsName + File.separator;			
 		} catch (ArrayIndexOutOfBoundsException e) {
 			//this shouldn't happen, but we'll handle this just in case
-			parent = output + "/Misc/";
+			parent = output + File.separator + "Misc" + File.separator;
 		}
 		log.debug("Parent directory = " + parent);
 		return parent;
@@ -746,7 +746,7 @@ public class MediaWikiExporter extends SQLExporter {
 	 */
 	private void createFileLocally(String filename, String parentDir, String filecontents) {
 		File parent = new File(parentDir);
-		String fullpath = parent + "/" + filename;
+		String fullpath = parent + File.separator + filename;
 		File file = new File(fullpath);
 		String message = "";
 		try {
