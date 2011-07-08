@@ -180,7 +180,7 @@ public class TestSettingsListener implements ActionListener, FeedbackHandler {
 	public static Feedback getConnectionFeedback(ConfluenceServerSettings settings, boolean autoDetection) {
 		RemoteWikiBroker rwb = RemoteWikiBroker.getInstance();
 		
-		String connection = rwb.checkConnectivity(settings);
+		String connection = rwb.checkConnectivity(settings); //FIXME Can throw ConnectException! Then what?
 		if (autoDetection) {
 			return getFeedback(connection, null, null, autoDetection);
 		}

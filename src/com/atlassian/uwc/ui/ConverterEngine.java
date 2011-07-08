@@ -380,9 +380,11 @@ public class ConverterEngine implements FeedbackHandler {
     		// do final required conversions. This step is seperate, due to state saving issues
     		convertWithRequiredConverters(allPages);
 
-        	//save pages
-			// TODO: This is not needed for the converter, and there should really be an option to turn it off.
-			savePages(allPages, filterPattern);
+        	//save pages if engine-saves-to-disk property is true. Useful for debugging.
+    		//We are making this opt-in because users that don't need it will get a speed boost with fewer disk calls
+    		if (Boolean.parseBoolean(this.miscProperties.getProperty("engine-saves-to-disk", "false")))
+    				savePages(allPages, filterPattern);
+    		else log.debug("Engine Saves To Disk setting turned off.");
 			
 			//check for namespace collisions and emit errors if found
 			listCollisions(allPages);
