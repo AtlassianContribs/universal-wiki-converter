@@ -338,6 +338,13 @@ public class MediaWikiExporterTest extends TestCase {
 		actual = tester.getTitle(bytes);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
+		
+		input = "foo?";
+		expected = "foo%3F";
+		bytes = input.getBytes();
+		actual = tester.getTitle(bytes);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
 	}
 
 	public void testOriginalTitleOptions() throws FileNotFoundException, IOException, ClassNotFoundException, SQLException {

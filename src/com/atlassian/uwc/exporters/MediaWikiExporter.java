@@ -189,6 +189,8 @@ public class MediaWikiExporter extends SQLExporter {
 		if (prefix == null) prefix = "";
 		encoding = (String) props.get(EXPORTER_PROPERTIES_ENCODING);
 		if (encoding == null) encoding = DEFAULT_ENCODING;
+		urlencoding = (String) props.get(EXPORTER_PROPERTIES_URLENCODING);
+		if (urlencoding == null) urlencoding = "false";
 		history = (String) props.get(EXPORTER_PROPERTIES_HISTORY);
 		if (history == null) history = "false";
 		historySuffix = (String) props.get(EXPORTER_PROPERTIES_HISTORYSUFFIX);
