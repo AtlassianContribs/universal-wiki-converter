@@ -73,5 +73,29 @@ public class FilenameHierarchyLinkConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 
+	public void testConvertLinks_handleimage() {
+		String input, expected, actual;
+		input = "!PageTitle/file.png!\n" + 
+				"!PageTitle/Subpage/file.png!\n" + 
+				"";
+		expected = "!PageTitle^file.png!\n" + 
+				"!Subpage^file.png!\n" +
+				"";
+		actual = tester.handleImage(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
 
+	}
+	
+	public void testConvertLinks_nothtmlcomment() {
+		String input, expected, actual;
+		input = "<!--PageTitle/file.png-->\n" + 
+				"<!--lalala-->";
+		expected = input;
+		actual = tester.handleImage(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+
+	}
+	
 }

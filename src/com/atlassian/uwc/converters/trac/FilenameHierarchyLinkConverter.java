@@ -13,7 +13,32 @@ public class FilenameHierarchyLinkConverter extends BaseConverter {
 	public void convert(Page page) {
 		String input = page.getOriginalText();
 		String converted = convertLink(input);
+		converted = handleImage(converted);
 		page.setConvertedText(converted);
+	}
+
+	Pattern image = Pattern.compile("!([^!\n]+)!");
+	protected String handleImage(String input) {
+		Matcher imageFinder = image.matcher(input);
+		StringBuffer sb = new StringBuffer();
+		boolean found = false;
+		while (imageFinder.find()) {
+			found = true;
+			String image = imageFinder.group(1);
+			if (!image.contains("/")) continue;
+			String[] parts = image.split("\\/");
+			if (parts.length < 2) continue;
+			String pagetitle = parts[parts.length-2];
+			String file = parts[parts.length-1];
+			String replacement = "!" + pagetitle + "^" + file + "!";
+			replacement = RegexUtil.handleEscapesInReplacement(replacement);
+			imageFinder.appendReplacement(sb, replacement);
+		}
+		if (found) {
+			imageFinder.appendTail(sb);
+			return sb.toString();
+		}
+		return input;
 	}
 
 	Pattern link = Pattern.compile("\\[([^\\]]+)\\]");

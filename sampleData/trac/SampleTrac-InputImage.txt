@@ -1,0 +1,11 @@
+
+Embed attached images
+[[Image(myImage.png)]]
+
+different wiki pages: 
+[[Image(wiki:WikiFormatting:picture.gif)]]
+[[Image(wiki:WikiToc:toc.gif)]]
+
+external link (but still internal image)
+[[Image(https://mytrac.com/context/raw-attachment/wiki/PageTitle/file.png)]]
+[[Image(https://mytrac.com/context/raw-attachment/wiki/PageTitle/Subpage/file.png)]]

@@ -12,3 +12,6 @@ echo "Links"
 echo "Macros"
 ./compare.sh Macros
 
+echo "Image"
+./compare.sh Image
+
