@@ -1,0 +1,5 @@
+For testing macro transformations
+PageOutline to toc
+[[PageOutline]]
+[[PageOutline(opt params)]]
+

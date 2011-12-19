@@ -9,3 +9,6 @@ echo "Stack"
 echo "Links"
 ./compare.sh Links 
 
+echo "Macros"
+./compare.sh Macros
+
