@@ -7,7 +7,7 @@ a line break. It contains *bold*, _italic_, *_bold italic_*, +underline+, {{mono
 
 The second paragraph has some links: First we have internal wiki links like [TracGuide], [TracWiki] and to an [^Attached_File.pdf]. Links can be given a more descriptive title by writing the link followed by a space and a title and all this inside square brackets, like in [Trac Overview|TracOverview]. Links can be avoided by EscapingWikiNames.
 
-Of course, there can also be external links. URLs like http://www.google.com/search?q=Confluence are automatically linked but they can also be put inside square brackets: [http://www.google.de/search?hl=de&q=Confluence+Trac+importer&btnG=Suche&meta=], even with titles like [Google search for "trac export"|http://www.google.de/search?hl=de&q=trac+export&btnG=Suche&meta=]. We add some [relative links|#Relativelinks] and [links to|MainPage-SubWikiPage] [WikiPage-SubPages] just for fun.
+Of course, there can also be external links. URLs like http://www.google.com/search?q=Confluence are automatically linked but they can also be put inside square brackets: [http://www.google.de/search?hl=de&q=Confluence+Trac+importer&btnG=Suche&meta=], even with titles like [Google search for "trac export"|http://www.google.de/search?hl=de&q=trac+export&btnG=Suche&meta=]. We add some [relative links|#Relativelinks] and [links to|SubWikiPage] [SubPages] just for fun.
 
 bq. This text is a quote from someone else, rendered as blockquote.
   

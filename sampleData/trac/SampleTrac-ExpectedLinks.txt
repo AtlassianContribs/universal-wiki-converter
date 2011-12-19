@@ -1,0 +1,33 @@
+
+internal wiki links 
+[TracGuide]
+[TracWiki] 
+[Somepage]
+[Somepage]
+
+attachment links
+[^Attached_File.pdf]. 
+
+links with aliases
+[Trac Overview|TracOverview] 
+[Trac Guide with some German umlauts: ä ö ü|TracGuide]. 
+[This is another link to ticket number one|ticket].
+[the sandbox|SandBox]
+
+anchors
+[relative links|#Relativelinks] 
+[relative links|#Relativelinks]
+
+escape links
+EscapingWikiNames.
+
+hierarchy
+[SubWikiPage] 
+[SubWikiPage] 
+[alias|SubWikiPage] 
+[see next sibling|Sibling] 
+[see next sibling|Sibling]
+
+breaks 
+(included here because very much like link syntax)
+

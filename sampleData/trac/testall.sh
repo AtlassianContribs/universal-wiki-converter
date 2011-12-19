@@ -6,3 +6,6 @@ echo "Base"
 echo "Stack"
 ./compare.sh Stack
 
+echo "Links"
+./compare.sh Links 
+
