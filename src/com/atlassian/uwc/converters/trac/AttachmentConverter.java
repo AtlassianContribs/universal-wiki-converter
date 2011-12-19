@@ -5,6 +5,7 @@ import java.io.File;
 import org.apache.log4j.Logger;
 
 import com.atlassian.uwc.converters.BaseConverter;
+import com.atlassian.uwc.converters.IllegalLinkNameConverter;
 import com.atlassian.uwc.ui.Page;
 
 /**
@@ -31,7 +32,9 @@ public class AttachmentConverter extends BaseConverter {
      * @param page object to attach pages to
      */
     protected void addAttachmentsToPage(Page page, String attachmentDir) {
-        File attachmentPageDir = new File(attachmentDir + "/" + page.getName());
+        String pathtopage = page.getName();
+        if (pathtopage.contains("%")) pathtopage = urldecode(pathtopage);
+		File attachmentPageDir = new File(attachmentDir + File.separator + pathtopage);
         log.debug("Examining attachment directory: "
                 + attachmentPageDir.getAbsolutePath());
         File attachments[] = attachmentPageDir.listFiles();
@@ -42,7 +45,13 @@ public class AttachmentConverter extends BaseConverter {
         }
 
         for (File file : attachments) {
-            page.addAttachment(file);
+        	if (file.isFile())
+        		page.addAttachment(file);
         }
     }
+
+	private String urldecode(String pathtopage) {
+		IllegalLinkNameConverter converter = new IllegalLinkNameConverter(); 
+		return converter.decodeUrl(pathtopage);
+	}
 }
