@@ -2,7 +2,9 @@
 
 == Paragraphs ==
 
-This is the first paragraph with[[BR]]a line break. It contains '''bold''', ''italic'', '''''bold italic''''', __underline__, {{{monospace1}}}, `monospace2`, ~~strike-through~~, ^superscript^ and ,,subscript,, text.
+This is the first paragraph with[[BR]]a line break. It contains '''bold''', ''italic'', '''''bold italic''''', __underline__, {{{monospace1}}}, ~~strike-through~~, ^superscript^ and ,,subscript,, text.
+
+`monospace2`
 
 The second paragraph has some links: First we have internal wiki links like [wiki:TracGuide], ["TracWiki"] and to an [attachment:Attached_File.pdf]. Links can be given a more descriptive title by writing the link followed by a space and a title and all this inside square brackets, like in [TracOverview Trac Overview]. Links can be avoided by !EscapingWikiNames.
 
