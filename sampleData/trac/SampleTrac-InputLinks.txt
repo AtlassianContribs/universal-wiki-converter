@@ -29,4 +29,5 @@ hierarchy
 [[../Sibling|see next sibling]]
 
 breaks [[BR]] (included here because very much like link syntax)
+and case insensitive:[[br]]please
 

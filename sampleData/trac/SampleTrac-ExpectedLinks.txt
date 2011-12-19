@@ -30,4 +30,6 @@ hierarchy
 
 breaks 
 (included here because very much like link syntax)
+and case insensitive:
+please
 
