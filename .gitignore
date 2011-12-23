@@ -1,0 +1,7 @@
+conf-local/
+dist/
+target/
+standalone-confluence/
+.classpath
+.project
+*.log
