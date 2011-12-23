@@ -1,11 +1,14 @@
 package com.atlassian.uwc.converters.trac;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
 import com.atlassian.uwc.converters.BaseConverter;
 import com.atlassian.uwc.converters.IllegalLinkNameConverter;
+import com.atlassian.uwc.converters.tikiwiki.RegexUtil;
 import com.atlassian.uwc.ui.Page;
 
 /**
@@ -25,8 +28,8 @@ public class AttachmentConverter extends BaseConverter {
 		log.info("Converting Trac Attachments -- complete");
 
 	}
-	
-    /**
+
+	/**
      * determines which attachments are present for the specified page in the
      * Trac attachments directory and attaches them all
      * @param page object to attach pages to
@@ -45,8 +48,10 @@ public class AttachmentConverter extends BaseConverter {
         }
 
         for (File file : attachments) {
-        	if (file.isFile())
-        		page.addAttachment(file);
+        	if (file.isFile()) {
+        		String name = urldecode(file.getName());
+        		page.addAttachment(file, name);
+        	}
         }
     }
 

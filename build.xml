@@ -217,7 +217,8 @@
 
         <delete dir="target/uwc/output"/>
         <antcall target="CreateExecutableJarFileWithExternalLibrary"/>
-        <zip basedir="target" excludes="uwc/classes/**, uwc/lib/**, target/uwc/lib/**" excludesfile="bin/run_uwc_devel.sh" destfile="../dist/uwc.zip"/>
+        <mkdir dir="./dist"/>
+        <zip basedir="target" excludes="uwc/classes/**, uwc/lib/**, target/uwc/lib/**" excludesfile="bin/run_uwc_devel.sh" destfile="./dist/uwc.zip"/>
     </target>
 
     <target name="CreateExecutableJarFileWithExternalLibrary">
@@ -286,7 +287,7 @@
     </target>
 
 	<target name="package-spoof" description="Create spoof jar for use with APR">
-		<jar jarfile="../dist/uwc-spoof.jar">
+		<jar jarfile="./dist/uwc-spoof.jar">
 			<fileset dir="./src/etc"/>	
 		</jar>
 	</target>

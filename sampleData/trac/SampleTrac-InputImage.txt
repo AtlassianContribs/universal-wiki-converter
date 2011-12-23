@@ -9,3 +9,7 @@ different wiki pages:
 external link (but still internal image)
 [[Image(https://mytrac.com/context/raw-attachment/wiki/PageTitle/file.png)]]
 [[Image(https://mytrac.com/context/raw-attachment/wiki/PageTitle/Subpage/file.png)]]
+
+image with parameters
+[[Image(wiki:pagename:filename.png, width=230px align=right)]]
+

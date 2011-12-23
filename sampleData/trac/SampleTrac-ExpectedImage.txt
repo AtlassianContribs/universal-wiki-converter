@@ -9,3 +9,7 @@ different wiki pages:
 external link (but still internal image)
 !PageTitle^file.png!
 !Subpage^file.png!
+
+image with parameters
+!pagename^filename.png|width=230px,align=right!
+
