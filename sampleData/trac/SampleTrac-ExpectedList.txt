@@ -1,0 +1,31 @@
+
+Basic List handling
+* Item 1
+** Item 1.1
+*** Item 1.1.1
+*** Item 1.1.2     * Item 1.1.3   * Item 1.2
+* Item 2
+
+# Item 1
+# Item 2
+# Item 3
+
+
+Mixed lists
+# foo
+#* foo 2
+# bar
+
+Dashed lists and with macros
+- foo
+-- bar \- {code}
+abcdef\!
+{code}
+-- aslkdj
+- _abc_ def
+-- {code}
+abcdef
+{code}
+
+These dashes should still \-\-be escaped\-\- 
+

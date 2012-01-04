@@ -22,7 +22,7 @@ public class ImageParamConverter extends BaseConverter {
 	}
 	
 	Pattern image = Pattern.compile("(?<!\\\\)!([^!|]+\\|)([^!]+)(?<!\\\\)!");
-    private String convertImageParams(String input) {
+    protected String convertImageParams(String input) {
 		Matcher imageFinder = image.matcher(input);
 		StringBuffer sb = new StringBuffer();
 		boolean found = false;
@@ -31,12 +31,31 @@ public class ImageParamConverter extends BaseConverter {
 			String filename = imageFinder.group(1);
 			String params = imageFinder.group(2);
 			params = params.replaceAll(" +", ",");
+			params = handleNoKeyWidth(params);
 			String replacement = "!" + filename + params +"!";
 			replacement = RegexUtil.handleEscapesInReplacement(replacement);
 			imageFinder.appendReplacement(sb, replacement);
 		}
 		if (found) {
 			imageFinder.appendTail(sb);
+			return sb.toString();
+		}
+		return input;
+	}
+    
+    Pattern nokey = Pattern.compile("(?<=^|,)\\s*\\d+%?(?=,|$)");
+	private String handleNoKeyWidth(String input) {
+		Matcher nokeyFinder = nokey.matcher(input);
+		StringBuffer sb = new StringBuffer();
+		boolean found = false;
+		while (nokeyFinder.find()) {
+			found = true;
+			String replacement = "thumbnail";
+			replacement = RegexUtil.handleEscapesInReplacement(replacement);
+			nokeyFinder.appendReplacement(sb, replacement);
+		}
+		if (found) {
+			nokeyFinder.appendTail(sb);
 			return sb.toString();
 		}
 		return input;

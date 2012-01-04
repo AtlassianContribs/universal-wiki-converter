@@ -19,6 +19,7 @@ public class FilenameHierarchyTest extends TestCase {
 
 	FilenameHierarchy tester = null;
 	private final String SAMPLEDIR_SIMPLE = "sampleData/hierarchy/filename/simple";
+	private final String SAMPLEDIR_ENCODED = "sampleData/hierarchy/filename/urlencoded";
 	Logger log = Logger.getLogger(this.getClass());
 	Vector<Page> pages = null;
 	Properties props = null;
@@ -187,6 +188,52 @@ public class FilenameHierarchyTest extends TestCase {
 		assertTrue(child.getChildren().isEmpty());
 	}
 
+	public void testBuildHierarchy_UrlEncoded() {
+		File dir = new File(SAMPLEDIR_ENCODED);
+		File[] listFiles = dir.listFiles(new NoSvnFilter());
+		assertEquals(5, listFiles.length);
+		for (File file : listFiles) {
+			pages.add(new Page(file));
+		}
+		
+		HierarchyNode actual = tester.buildHierarchy(pages);
+		assertNotNull(actual);
+		
+		Vector<HierarchyNode> nodes = asVector(actual.getChildren());
+		assertNotNull(nodes);
+		assertEquals(1, nodes.size());
+		HierarchyNode root = nodes.get(0);
+		assertNotNull(root.getPage());
+		assertEquals("Parent", root.getName());
+		assertEquals("Parent", root.getPage().getName());
+		
+		Vector<HierarchyNode> nodes2 = asVector(root.getChildren());
+		assertNotNull(nodes2);
+		assertEquals(4, nodes2.size());
+
+		for (HierarchyNode node: nodes2) {
+			assertNotNull(node.getPage());
+			assertTrue(node.getChildren().isEmpty());
+			
+			String exp = null;
+			if (node.getName().endsWith("Foo")) {
+				exp = "Child Foo";
+			} 
+			else if (node.getName().endsWith("Bar")) {
+				exp = "Child,Bar";
+			}
+			else if (node.getName().endsWith("Baz")) {
+				exp = "Child'Baz";
+			}
+			else if (node.getName().endsWith("Xyz")) {
+				exp = "Child&Xyz";
+			}
+			else fail("Wrong Node name: " + exp);
+			assertEquals(exp, node.getName());
+			assertEquals(exp, node.getPage().getName());
+		}
+		
+	}
 
 	// helper methods
 

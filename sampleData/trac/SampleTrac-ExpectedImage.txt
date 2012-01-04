@@ -13,3 +13,8 @@ external link (but still internal image)
 image with parameters
 !pagename^filename.png|width=230px,align=right!
 
+image with percentage width, but no key
+!myImage.png|thumbnail!
+
+image with dashes
+!dashed-Image.png!

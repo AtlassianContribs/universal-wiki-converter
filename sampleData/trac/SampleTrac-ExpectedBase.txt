@@ -3,7 +3,7 @@ h1. First testpage
 h2. Paragraphs
 
 This is the first paragraph with
-a line break. It contains *bold*, _italic_, *_bold italic_*, +underline+, {{monospace1}}, -strike-through-, ^superscript^ and ~subscript~ text.
+a line break. It contains *bold*, _italic_, *_bold italic_*, +underline+, {{monospace1}}, -strike\-through-, ^superscript^ and ~subscript~ text.
 
 {code}
 monospace2

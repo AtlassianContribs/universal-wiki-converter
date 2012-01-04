@@ -3,6 +3,7 @@ package com.atlassian.uwc.converters.trac;
 import java.io.File;
 import java.util.Date;
 import java.util.Properties;
+import java.util.Vector;
 
 import junit.framework.TestCase;
 
@@ -33,6 +34,8 @@ public class UserDateConverterTest extends TestCase {
 		tester.convert(page);
 		assertNotNull(page.getAuthor());
 		assertEquals("user1", page.getAuthor());
+		assertNotNull(page.getComments());
+		assertTrue(page.getComments().isEmpty());
 	}
 	
 	public void testDateSimple() {
@@ -113,4 +116,27 @@ public class UserDateConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 
+	
+	public void testArchiveCreator() {
+		Properties props = tester.getProperties();
+		props.setProperty("archivecreator-filepath", "/Users/laura/Code/Git/uwc/sampleData/trac/testuserdata.txt");
+		props.setProperty("archivecreator-comment", "Testing %username%");
+		tester.setProperties(props);
+		
+		File file = new File("Testpage");
+		Page page = new Page(file);
+		page.setName(file.getName());
+		assertNull(page.getAuthor());
+		tester.convert(page);
+		assertNotNull(page.getAuthor());
+		assertEquals("user1", page.getAuthor());
+		
+		Vector<String> actual = page.getComments();
+		assertNotNull(actual);
+		assertFalse(actual.isEmpty());
+		assertEquals(1, actual.size());
+		String comment = actual.get(0);
+		assertNotNull(comment);
+		assertEquals("Testing user1", comment);
+	}
 }

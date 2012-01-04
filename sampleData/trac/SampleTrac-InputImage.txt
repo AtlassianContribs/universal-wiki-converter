@@ -13,3 +13,8 @@ external link (but still internal image)
 image with parameters
 [[Image(wiki:pagename:filename.png, width=230px align=right)]]
 
+image with percentage width, but no key
+[[Image(myImage.png, 50%)]]
+
+image with dashes
+[[Image(dashed-Image.png)]]

@@ -15,15 +15,20 @@ import com.atlassian.uwc.ui.Page;
 public class UserDateConverter extends BaseConverter {
 
 	private static final String PROPKEY_FILE = "userdata-filepath";
+	private static final String PROPKEY_ARCHIVECREATOR_FILE = "archivecreator-filepath";
+	private static final String PROPKEY_ARCHIVECREATOR_COMMENT = "archivecreator-comment";
+	private static final String ARCHIVECREATOR_VAR = "%username%";
 
 	Logger log = Logger.getLogger(this.getClass());
 	
 	private static HashMap<String,UserDate> data; 
+	private static HashMap<String,UserDate> archivedata; 
 	
 	@Override
 	public void convert(Page page) {
 		log.debug("Processing User and Timestamp.");
 		initUserDateData();
+		//page author and timestamp. 
 		UserDate data = getData(page);
 		if (data == null) {
 			log.warn("No User and Timestamp data for this pagename: " + page.getName());
@@ -31,17 +36,38 @@ public class UserDateConverter extends BaseConverter {
 		}
 		page.setAuthor(data.author);
 		page.setTimestamp(data.timestamp);
+		
+		//if the user has assigned a different file for archiving authorname, we add a comment
+		//useful if they are uploading only the latest version, but want to archive the original creator
+		if (archivedata != null && getProperties().containsKey(PROPKEY_ARCHIVECREATOR_FILE)) {
+			UserDate archivedataitem = getData(page, archivedata);
+			if (getProperties().containsKey(PROPKEY_ARCHIVECREATOR_COMMENT)) {
+				String template = getProperties().getProperty(PROPKEY_ARCHIVECREATOR_COMMENT, null);
+				if (template != null) {
+					String comment = template.replaceAll(ARCHIVECREATOR_VAR, archivedataitem.author);
+					page.addComment(comment);
+				}
+			}
+			else {
+				log.warn("No property associated with property: " + PROPKEY_ARCHIVECREATOR_COMMENT);
+			}
+		}
 	}
 	private void initUserDateData() {
 		if (data == null) {
 			String filepath = getDataFilepath();
 			if (filepath == null) return;
-			initDataFromFile(filepath);
+			data = initDataFromFile(filepath);
+		}
+		if (archivedata == null && getProperties().containsKey(PROPKEY_ARCHIVECREATOR_FILE)) { 
+			String filepath = getDataFilepath(PROPKEY_ARCHIVECREATOR_FILE);
+			if (filepath == null) return;
+			archivedata = initDataFromFile(filepath);
 		}
 	}
 	
-	public void initDataFromFile(String filepath) {
-		data = new HashMap<String, UserDateConverter.UserDate>(); 
+	public HashMap<String, UserDate> initDataFromFile(String filepath) {
+		HashMap<String, UserDate> thisdata = new HashMap<String, UserDateConverter.UserDate>(); 
 		String line;
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(filepath));
@@ -55,18 +81,22 @@ public class UserDateConverter extends BaseConverter {
 				String user = parts[1].trim();
 				String timestamp = parts[2].trim();
 				UserDate userdate = new UserDate(user, timestamp);
-				data.put(page, userdate);
+				thisdata.put(page, userdate);
 			}
 			reader.close();
 		} catch (Exception e) {
 			log.error("Problem reading file: " + filepath, e);
 		}
+		return thisdata;
 	}
 	
 	public String getDataFilepath() {
-		String filepath = getProperties().getProperty(PROPKEY_FILE, null);
+		return getDataFilepath(PROPKEY_FILE);
+	}
+	public String getDataFilepath(String propkey) {
+		String filepath = getProperties().getProperty(propkey, null);
 		if (filepath == null) {
-			log.error("No user date filepath supplied for property key: " + PROPKEY_FILE);
+			log.error("No user date filepath supplied for property key: " + propkey);
 			return null;
 		}
 		File file = new File(filepath);
@@ -78,12 +108,15 @@ public class UserDateConverter extends BaseConverter {
 	}
 	
 	private UserDate getData(Page page) {
+		return getData(page, data);
+	}
+	private UserDate getData(Page page, HashMap<String, UserDate> thisdata) {
 		String pagename = page.getName();
 		if (pagename.contains("%")) { //uridecode 
 			IllegalPageNameConverter decoder = new IllegalPageNameConverter();
 			pagename = decoder.decodeUrl(pagename);
 		}
-		return data.get(pagename);
+		return thisdata.get(pagename);
 	}
 	public class UserDate {
 		public String author;

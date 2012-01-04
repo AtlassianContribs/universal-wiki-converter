@@ -15,3 +15,6 @@ echo "Macros"
 echo "Image"
 ./compare.sh Image
 
+echo "List"
+./compare.sh List 
+

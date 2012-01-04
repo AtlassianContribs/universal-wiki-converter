@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import com.atlassian.uwc.converters.IllegalLinkNameConverter;
 import com.atlassian.uwc.ui.Page;
 
 /**
@@ -19,6 +20,7 @@ public class FilenameHierarchy implements HierarchyBuilder {
 	Properties props = new Properties();
 	Logger log = Logger.getLogger(this.getClass());
 	private String delim = DEFAULT_DELIM;
+	private IllegalLinkNameConverter decoder;
 	
 	@Override
 	public HierarchyNode buildHierarchy(Collection<Page> pages) {
@@ -75,9 +77,15 @@ public class FilenameHierarchy implements HierarchyBuilder {
 			if (child.getName().equalsIgnoreCase(name)) return child;
 		}
 		HierarchyNode newnode = new HierarchyNode();
-		newnode.setName(name);
+		newnode.setName(urldecode(name));
 		return newnode;
 	}
+
+	private String urldecode(String name) {
+		if (this.decoder == null) this.decoder = new IllegalLinkNameConverter();
+		return this.decoder.decodeUrl(name);
+	}
+	
 
 	@Override
 	public void setProperties(Properties properties) {

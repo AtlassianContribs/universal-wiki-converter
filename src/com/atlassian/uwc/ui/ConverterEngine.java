@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -2008,6 +2009,11 @@ public class ConverterEngine implements FeedbackHandler {
 			log.debug("Sending timestamp data.");
 			try {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss:SS"); //XXX Settable?
+				if (this.miscProperties.getProperty("user-timezone", null) != null) {
+					String timezone = this.miscProperties.getProperty("user-timezone", null);
+					timezone = timezone.trim();
+					dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
+				}
 			    String timestamp = dateFormat.format(page.getTimestamp());
 
 				if (page.getVersion() == 1) { //only set the creator if its the first version

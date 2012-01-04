@@ -5,3 +5,4 @@ standalone-confluence/
 .classpath
 .project
 *.log
+sampleData/*/*Output*
