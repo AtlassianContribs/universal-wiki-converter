@@ -7,6 +7,8 @@ internal wiki links
 
 attachment links
 [^Attached_File.pdf]. 
+[alias|^foo.gif]
+[alias|^foo.gif]
 
 links with aliases
 [Trac Overview|TracOverview] 
@@ -32,4 +34,13 @@ breaks
 (included here because very much like link syntax)
 and case insensitive:
 please
+
+links with alias and quotes
+[FB|Foo Bar] 
+[FB|Foo]
+[FB|Foo Bar]
+
+links with dashes (escaped in listconverter)
+[Bar|Foo - Bar] 
+[Some Document|^123-4.doc]
 

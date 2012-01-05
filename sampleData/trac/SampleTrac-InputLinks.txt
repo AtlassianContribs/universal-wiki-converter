@@ -7,6 +7,8 @@ internal wiki links
 
 attachment links
 [attachment:Attached_File.pdf]. 
+[attachment:foo.gif alias]
+[[attachment:foo.gif|alias]]
 
 links with aliases
 [TracOverview Trac Overview] 
@@ -30,4 +32,13 @@ hierarchy
 
 breaks [[BR]] (included here because very much like link syntax)
 and case insensitive:[[br]]please
+
+links with alias and quotes
+[wiki:"Foo Bar" "FB"] 
+[wiki:Foo "FB"]
+[wiki:"Foo Bar" FB]
+
+links with dashes (escaped in listconverter)
+[wiki:"Foo - Bar" "Bar"] 
+[attachment:"123-4.doc" "Some Document"]
 
