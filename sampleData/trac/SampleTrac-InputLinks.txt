@@ -42,3 +42,5 @@ links with dashes (escaped in listconverter)
 [wiki:"Foo - Bar" "Bar"] 
 [attachment:"123-4.doc" "Some Document"]
 
+links with extraneous whitespace
+[wiki:Abcdef  Foo Bar]

@@ -72,3 +72,13 @@ Second table with spaces:
 h3. Images
 
 Embed attached images: !myImage.png!, also from different wiki pages: !WikiFormatting^picture.gif!, !WikiToc^toc.gif!
+
+h3. header with leading space
+testing 123 
+
+h3. another header with leading space
+testing 123 
+
+h3. header with no closing space
+testing 123
+

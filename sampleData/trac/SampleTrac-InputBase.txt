@@ -69,3 +69,13 @@ Second table with spaces:
 === Images ===
 
 Embed attached images: [[Image(myImage.png)]], also from different wiki pages: [[Image(wiki:WikiFormatting:picture.gif)]], [[Image(wiki:WikiToc:toc.gif)]]
+
+   === header with leading space ===
+testing 123 
+
+  === another header with leading space ===
+testing 123 
+
+=== header with no closing space===
+testing 123
+

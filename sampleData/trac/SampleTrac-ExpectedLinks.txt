@@ -44,3 +44,5 @@ links with dashes (escaped in listconverter)
 [Bar|Foo - Bar] 
 [Some Document|^123-4.doc]
 
+links with extraneous whitespace
+[Foo Bar|Abcdef]
