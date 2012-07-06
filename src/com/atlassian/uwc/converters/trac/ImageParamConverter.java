@@ -21,7 +21,7 @@ public class ImageParamConverter extends BaseConverter {
 
 	}
 	
-	Pattern image = Pattern.compile("(?<!\\\\)!([^!|]+\\|)([^!]+)(?<!\\\\)!");
+	Pattern image = Pattern.compile("(?<!\\\\)!([^!|\n]+\\|)([^!\n]+)(?<!\\\\)!");
     protected String convertImageParams(String input) {
 		Matcher imageFinder = image.matcher(input);
 		StringBuffer sb = new StringBuffer();

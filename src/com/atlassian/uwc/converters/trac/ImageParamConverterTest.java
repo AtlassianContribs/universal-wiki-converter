@@ -27,9 +27,9 @@ public class ImageParamConverterTest extends TestCase {
 	
 	public void testConvertImageParams_WidthNoKey() {
 		String input, expected, actual;
-		input = "!pagename:filename.png|50%!\n" + 
+		input = "\n!pagename:filename.png|50%!\n" + 
 				"";
-		expected = "!pagename:filename.png|thumbnail!\n";
+		expected = "\n!pagename:filename.png|thumbnail!\n";
 		actual = tester.convertImageParams(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
@@ -40,5 +40,29 @@ public class ImageParamConverterTest extends TestCase {
 		actual = tester.convertImageParams(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
+	}
+	
+	public void testConvertImageParams_AvoidProblemCase() {
+		String input, expected, actual;
+		//problem with newline in there was sidestepped by adding newline to neg char class
+		input = "!abc.gif! random \n | pipe !def.gif! tada ";
+		expected = input;
+		actual = tester.convertImageParams(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		//problem with no newlines is harder and less likely
+//		input = "!abc.gif! random  | pipe !def.gif! tada ";
+//		expected = input;
+//		actual = tester.convertImageParams(input);
+//		assertNotNull(actual);
+//		assertEquals(expected, actual);
+
+		//don't match
+		input = "abc \\!abc.gif|50%!";
+		expected = input;
+		actual = tester.convertImageParams(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+
 	}
 }
