@@ -6,3 +6,4 @@ standalone-confluence/
 .project
 *.log
 sampleData/*/*Output*
+output
