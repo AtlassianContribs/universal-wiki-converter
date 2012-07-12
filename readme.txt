@@ -12,4 +12,4 @@ To run the newly built UWC
 
 For more info, please see:
 
-http://confluence.atlassian.com/display/CONFEXT/Universal+Wiki+Converter
+https://studio.plugins.atlassian.com/wiki/display/UWC/Universal+Wiki+Converter
