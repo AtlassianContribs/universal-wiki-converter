@@ -265,7 +265,7 @@ public class ConverterEngineTest extends TestCase {
 		//test with uploading
 		//pages = 3, converters = 34, uploading = true
 		boolean sendToConfuence = true;
-		int expected = 36 + 3 + (36 * 3) + 2 + (2*3) + 3 + 3 ;
+		int expected = 34 + 3 + (34 * 3) + 2 + (2*3) + 3 + 3 ;
 		int actual = tester.getNumberOfSteps(files, converters, sendToConfuence);
 		assertEquals(expected, actual);
 
@@ -275,15 +275,7 @@ public class ConverterEngineTest extends TestCase {
 		expected -= 3;
 		actual = tester.getNumberOfSteps(files, converters, sendToConfuence);
 		assertEquals(expected, actual);
-		
-		//test with illegal handling disabled
-		//pages = 3, converters = 35, uploading = false, illegal handling = false
-		tester.handleNonConverterProperty(NONCONVERTER_ILLEGAL);
-		assertFalse(tester.isIllegalHandlingEnabled());
-		expected -= 8; //2 + (2*3) = conv + (conv * pages)
-		actual = tester.getNumberOfSteps(files, converters, sendToConfuence);
-		assertEquals(expected, actual);
-		
+				
 	}
 	
 	public void testSendPage_basic() {
@@ -343,7 +335,7 @@ public class ConverterEngineTest extends TestCase {
 			assertNotNull(comment.getTitle());
 			assertEquals("Re: Home", comment.getTitle());
 			assertNotNull(comment.getContent());
-			assertEquals(input, comment.getContent());
+			assertEquals("<p>"+input+"</p>", comment.getContent());
 			assertNotNull(comment.getCreator());
 			assertEquals(settings.login, comment.getCreator());
 			String commentid = comment.getId();
@@ -407,7 +399,7 @@ public class ConverterEngineTest extends TestCase {
 			assertNotNull(comment.getTitle());
 			assertEquals("Re: Home", comment.getTitle());
 			assertNotNull(comment.getContent());
-			assertEquals(input, comment.getContent());
+			assertEquals("<p>"+input+"</p>", comment.getContent());
 			assertNotNull(comment.getCreator());
 			assertEquals(creator, comment.getCreator());
 			assertNotNull(comment.getCreated());
@@ -613,54 +605,54 @@ public class ConverterEngineTest extends TestCase {
 		String testpropslocation = "test.basic.properties";
 		loadSettingsFromFile(settings, testpropslocation);
 		
+		List<Page> pages = new Vector<Page>();
+		Page badpage = new Page(null);
+		badpage.setName("$BAD NAME"); //This should cause an exception. 
+		badpage.setConvertedText("testing");
+		
+		Page goodpage = new Page(null);
+		goodpage.setName("Good page");
+		goodpage.setConvertedText("testing");
+		
+		pages.add(badpage);
+		pages.add(goodpage); 
+		tester.writePages(pages , settings.spaceKey);
+		//firstly - if we do this wrong, the above throws an exception.
+		ConverterErrors errors = tester.getErrors();
 		//FIXME Illegal Page names appears to no longer be a thing?!
-//		List<Page> pages = new Vector<Page>();
-//		Page badpage = new Page(null);
-//		badpage.setName("$BAD NAME"); //This should cause an exception. 
-//		badpage.setConvertedText("testing");
-//		
-//		Page goodpage = new Page(null);
-//		goodpage.setName("Good page");
-//		goodpage.setConvertedText("testing");
-//		
-//		pages.add(badpage);
-//		pages.add(goodpage); 
-//		tester.writePages(pages , settings.spaceKey);
-//		//firstly - if we do this wrong, the above throws an exception.
-//		ConverterErrors errors = tester.getErrors();
-//		assertFalse(errors.getErrors().isEmpty());
-//		ConverterError error = (ConverterError) errors.getErrors().get(0);
-//		assertEquals(Feedback.REMOTE_API_ERROR, error.type);
-//		assertEquals("REMOTE_API_ERROR The Remote API threw an exception when it tried to upload page: \"$BAD NAME\".\n", error.getFeedbackWindowMessage());
-//		
-//		tester.getErrors().clear();
-//		pages.clear();
-//		badpage.setName("$BAD NAME 2");
-//		goodpage.setName("Good page 2");
-//		pages.add(badpage);
-//		pages.add(goodpage);
-//		
-//		FilepathHierarchy hierarchy = new FilepathHierarchy();
-//		HierarchyNode root = hierarchy.buildHierarchy(pages);
-//		tester.writeHierarchy(root, 0, settings.spaceKey);
-//		error = (ConverterError) errors.getErrors().get(0);
-//		assertEquals(Feedback.REMOTE_API_ERROR, error.type);
-//		assertEquals("REMOTE_API_ERROR The Remote API threw an exception when it tried to upload page: \"$BAD NAME 2\".\n", error.getFeedbackWindowMessage());
-//		
-//		//what happens if confluence fails in a way that does not throw an exception. See UWC-404
-//		tester.getErrors().clear();
-//		pages.clear();
-//		Page badcontent = new Page(null);
-//		badcontent.setName("OK Pagename");
-//		String badtext = "\u001F";
-//		badcontent.setConvertedText(badtext);
-//		pages.add(badcontent);
-//		tester.writePages(pages, settings.spaceKey);
-//		assertFalse(errors.getErrors().isEmpty());
-//		error = (ConverterError) errors.getErrors().get(0);
-//		assertEquals(Feedback.REMOTE_API_ERROR, error.type);
-//		assertEquals("REMOTE_API_ERROR Unknown problem occured while sending page \'OK Pagename\'. See atlassian-confluence.log for more details.\n", error.getFeedbackWindowMessage());
-//		
+		assertFalse(errors.getErrors().isEmpty());
+		ConverterError error = (ConverterError) errors.getErrors().get(0);
+		assertEquals(Feedback.REMOTE_API_ERROR, error.type);
+		assertEquals("REMOTE_API_ERROR The Remote API threw an exception when it tried to upload page: \"$BAD NAME\".\n", error.getFeedbackWindowMessage());
+		
+		tester.getErrors().clear();
+		pages.clear();
+		badpage.setName("$BAD NAME 2");
+		goodpage.setName("Good page 2");
+		pages.add(badpage);
+		pages.add(goodpage);
+		
+		FilepathHierarchy hierarchy = new FilepathHierarchy();
+		HierarchyNode root = hierarchy.buildHierarchy(pages);
+		tester.writeHierarchy(root, 0, settings.spaceKey);
+		error = (ConverterError) errors.getErrors().get(0);
+		assertEquals(Feedback.REMOTE_API_ERROR, error.type);
+		assertEquals("REMOTE_API_ERROR The Remote API threw an exception when it tried to upload page: \"$BAD NAME 2\".\n", error.getFeedbackWindowMessage());
+		
+		//what happens if confluence fails in a way that does not throw an exception. See UWC-404
+		tester.getErrors().clear();
+		pages.clear();
+		Page badcontent = new Page(null);
+		badcontent.setName("OK Pagename");
+		String badtext = "\u001F";
+		badcontent.setConvertedText(badtext);
+		pages.add(badcontent);
+		tester.writePages(pages, settings.spaceKey);
+		assertFalse(errors.getErrors().isEmpty());
+		error = (ConverterError) errors.getErrors().get(0);
+		assertEquals(Feedback.REMOTE_API_ERROR, error.type);
+		assertEquals("REMOTE_API_ERROR Unknown problem occured while sending page \'OK Pagename\'. See atlassian-confluence.log for more details.\n", error.getFeedbackWindowMessage());
+		
 	}
 	
 	public void testSendPage_MovePage() throws XmlRpcException, IOException {
@@ -1300,7 +1292,7 @@ public class ConverterEngineTest extends TestCase {
 			BlogForXmlRpc blog = broker.getBlog(confsettings, confsettings.spaceKey, title);
 			assertNotNull(blog);
 			assertEquals(title, blog.getTitle());
-			assertEquals(testcontent, blog.getContent());
+			assertEquals("<p>"+testcontent+"</p>", blog.getContent());
 			id = blog.getId();
 			
 			//test updating the blog
@@ -1309,7 +1301,7 @@ public class ConverterEngineTest extends TestCase {
 			tester.sendPage(page, parentid, settings);
 			blog = broker.getBlog(confsettings, confsettings.spaceKey, title);
 			assertNotNull(blog);
-			assertEquals(testcontent2, blog.getContent());
+			assertEquals("<p>"+testcontent2+"</p>", blog.getContent());
 			String newid = blog.getId();
 			assertEquals(id, newid);
 		} catch (Exception e) {
@@ -2971,18 +2963,6 @@ public class ConverterEngineTest extends TestCase {
 			fail("Not a BaseHierarchy!");
 	}
 	
-	public void testHandleNonConverterDisableIllegalHandling() {
-//		test use switch
-		String input = "Mywiki.0001.switch.illegal-handling=false";
-		//haven't set handler yet, so should be default
-		ConverterEngine.HierarchyHandler handler = tester.getHierarchyHandler();
-		assertEquals(ConverterEngine.HierarchyHandler.DEFAULT, handler);
-		//setting the handler
-		assertTrue(tester.isIllegalHandlingEnabled());
-		tester.handleNonConverterProperty(input);
-		assertFalse(tester.isIllegalHandlingEnabled());
-	}
-	
 	public void testUsingPagenameHierarchy() {
 		ConverterEngine.HierarchyHandler handler = tester.getHierarchyHandler();
 		assertEquals(ConverterEngine.HierarchyHandler.DEFAULT, handler);
@@ -3057,6 +3037,7 @@ public class ConverterEngineTest extends TestCase {
 		inputPages.add(page2);
 
 		//XXX Why twice?
+		tester.handleIllegalHandling("enable", "true");
 		tester.convertWithRequiredConverters(inputPages);
 		tester.convertWithRequiredConverters(inputPages);
 		
@@ -3183,6 +3164,7 @@ public class ConverterEngineTest extends TestCase {
 		tester.handleNonConverterProperty("abc.0000.illegalnames-urldecode.property=true");
 		
 		//do the tests
+		tester.handleIllegalHandling("enable", "true");
 		tester.convertWithRequiredConverters(pages);
 
 		assertNotNull(pages);

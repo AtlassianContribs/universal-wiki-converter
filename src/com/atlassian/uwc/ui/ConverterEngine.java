@@ -98,7 +98,7 @@ public class ConverterEngine implements FeedbackHandler {
 	 * We want to allow users to override this so they can handle it themselves
 	 * with converters. 
 	 */
-	private boolean illegalHandlingEnabled = true; //default = true
+	private boolean illegalHandlingEnabled = false; //default = false, as of Confluence 4.2 doesn't appear to be necessary
 	private boolean autoDetectSpacekeys = false; //default = false
 	private HashSet<String> attachedFiles;
 	
@@ -492,9 +492,6 @@ public class ConverterEngine implements FeedbackHandler {
 			converters = createOneConverter(illegallinksConvStr);
 			convertPages(pages, converters, "Checking for links to illegal pagenames.");
 		} 
-		else {
-			log.warn("Illegal Name and Link Handling has been disabled. Skipping required converters.");
-		}
     }
     
     /**
@@ -1848,6 +1845,8 @@ public class ConverterEngine implements FeedbackHandler {
     protected String sendPage(Page page, String parentId, ConfluenceServerSettings confSettings) {
     	//create wiki broker
     	RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+    	//update page content to be xhtml
+    	page = pageContentToXhtml(broker, confSettings, page);
     	//create page that broker can use
     	Hashtable pageTable = createPageTable(page, parentId);
      	//check for problems with settings 
@@ -1876,6 +1875,20 @@ public class ConverterEngine implements FeedbackHandler {
     	return id;
     }
 
+
+	private Page pageContentToXhtml(RemoteWikiBroker broker,
+			ConfluenceServerSettings confSettings, Page page) {
+		try {
+			String xhtml = getContentAsXhtmlFormat(broker, confSettings, page.getConvertedText());
+			page.setConvertedText(xhtml);
+		} catch (Exception e) {
+			String errorMessage = "Could not transform wiki content in page: '"+page.getName()+
+					"' from markup to xhtml.";
+    		log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage);
+    		this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
+		}
+		return page;
+	}
 
 	/**
      * creates a parameter table with the given page and parentId.
@@ -2242,7 +2255,7 @@ public class ConverterEngine implements FeedbackHandler {
     }
     
     protected void handleIllegalHandling(String key, String value) {
-    	boolean enabled = true; //default
+    	boolean enabled = false; //default, confluence 4 doesn't appear to need this
     	value = value.trim();
     	if ("false".equals(value))
     		enabled = false;
