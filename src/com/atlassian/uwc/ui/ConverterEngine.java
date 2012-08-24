@@ -65,7 +65,7 @@ import com.atlassian.uwc.ui.listeners.TestSettingsListener;
  */
 public class ConverterEngine implements FeedbackHandler {
     
-	private static final String DEFAULT_ATTACHMENT_UPLOAD_COMMENT = "Added by UWC, the Universal Wiki Converter";
+
 	/* START CONSTANTS */
 	private static final int NUM_REQ_CONVERTERS = 2;
 	private static final String REQUIRED_CONVERTER_ILLEGAL_LINKS = "MyWiki.9999.illegal-links.class=com.atlassian.uwc.converters.IllegalLinkNameConverter";
@@ -84,11 +84,11 @@ public class ConverterEngine implements FeedbackHandler {
 	private static final String CONVERTERTYPE_CLASS = ".class";
 
 	private static final String XMLEVENT_PROP_ERROR = "Xmlevent Property must follow this format convention: {tag}xmltag{class}com.something.Class";
-
 	private static final String PROP_ATTACHMENT_SIZE_MAX = "attachment.size.max";
 	private static final int DEFAULT_NUM_STEPS = 1000;
 	private static final String ORPHAN_ATTACHMENTS_PAGE_TITLE="Orphan attachments";
-	
+	private static final String DEFAULT_ATTACHMENT_UPLOAD_COMMENT = "Added by UWC, the Universal Wiki Converter";
+	public static final String PROPKEY_ENGINE_SAVES_TO_DISK = "engine-saves-to-disk";	
 	
 	/* START FIELDS */
 	public boolean running = false; //Methods check this to see if the conversion needs to be cancelled
@@ -383,7 +383,7 @@ public class ConverterEngine implements FeedbackHandler {
 
         	//save pages if engine-saves-to-disk property is true. Useful for debugging.
     		//We are making this opt-in because users that don't need it will get a speed boost with fewer disk calls
-    		if (Boolean.parseBoolean(this.miscProperties.getProperty("engine-saves-to-disk", "false")))
+    		if (Boolean.parseBoolean(this.miscProperties.getProperty(PROPKEY_ENGINE_SAVES_TO_DISK, "false")))
     				savePages(allPages, filterPattern);
     		else log.debug("Engine Saves To Disk setting turned off.");
 			
