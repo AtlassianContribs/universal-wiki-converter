@@ -424,6 +424,70 @@ public class ConverterEngineTest extends TestCase {
 		}
 	}
 	
+	public void testSendPage_comments_formatting() {
+		Page page = new Page(null);
+		String parentid = "0"; //XXX I don't think this settings currently matters?
+		ConfluenceServerSettings settings = new ConfluenceServerSettings();
+		String testpropslocation = "test.basic.properties";
+		loadSettingsFromFile(settings, testpropslocation);
+		String title = "Home"; //Might as well use "Home". There's always a home.
+		page.setName(title);
+		String input = "test formatting: *bold*\n" +
+				"* list item\n" +
+				"* list item\n" +
+				"";
+		page.addComment(input);
+		
+		//the test
+		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+		PageForXmlRpc startPage = null;
+		try {
+			String id = broker.getPageIdFromConfluence(settings, settings.spaceKey, title);
+			startPage = broker.getPage(settings, id);
+			page.setConvertedText(startPage.getContent());
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+		tester.sendPage(page, parentid, settings);
+		
+		//get page again
+		PageForXmlRpc endPage = null;
+		try {
+			String id = broker.getPageIdFromConfluence(settings, settings.spaceKey, title);
+			endPage = broker.getPage(settings, id);
+			//test that a comment has been set
+			XmlRpcClient client = new XmlRpcClient(settings.url + "/rpc/xmlrpc");
+			String loginToken = broker.getLoginToken(settings);
+			Vector paramsVector = new Vector();
+			paramsVector.add(loginToken);
+			paramsVector.add(id);
+			Vector actual = (Vector) client.execute(API + ".getComments", paramsVector);
+			assertNotNull(actual);
+			assertEquals(1, actual.size());
+			Hashtable commenttable = (Hashtable) actual.get(0);
+			assertNotNull(commenttable);
+			CommentForXmlRpc comment = new CommentForXmlRpc();
+			comment.setCommentParams(commenttable);
+			assertNotNull(comment);
+			assertNotNull(comment.getTitle());
+			assertEquals("Re: Home", comment.getTitle());
+			assertNotNull(comment.getContent());
+			assertFalse(comment.getContent().contains("*bold*"));
+			assertNotNull(comment.getCreator());
+			assertEquals(settings.login, comment.getCreator());
+			String commentid = comment.getId();
+			//get rid of comment
+			paramsVector.clear();
+			paramsVector.add(loginToken);
+			paramsVector.add(commentid);
+			client.execute(API + ".removeComment", paramsVector);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
 	public void testSendLabels_noversion() {
 		Page page = new Page(null);
 		String parentid = "0"; //XXX I don't think this settings currently matters?

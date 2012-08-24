@@ -1953,7 +1953,7 @@ public class ConverterEngine implements FeedbackHandler {
     				//create page that broker can use
     				CommentForXmlRpc brokerComment = new CommentForXmlRpc();
     				brokerComment.setPageId(pageId);
-    				brokerComment.setContent(comment.text);
+    				brokerComment.setContent(getContentAsXhtmlFormat(broker, confSettings, comment.text));
     				//upload comment
     				CommentForXmlRpc uploadedComment = broker.addComment(confSettings, brokerComment);
     				if (comment.hasCreator()) {
@@ -1983,6 +1983,10 @@ public class ConverterEngine implements FeedbackHandler {
     	}
     	else log.debug("Page has no comments."); //DELETE
     }
+
+	public String getContentAsXhtmlFormat(RemoteWikiBroker broker, ConfluenceServerSettings confSettings, String text) throws XmlRpcException, IOException {
+		return broker.convertWikiToStorageFormat(confSettings, text);
+	}
 	private void sendAuthor(Page page, RemoteWikiBroker broker, String id, ConfluenceServerSettings confSettings) {
 		if (page.getAuthor() != null) {
 			log.debug("Sending author data.");
