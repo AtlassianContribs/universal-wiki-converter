@@ -3587,6 +3587,54 @@ public class ConverterEngineTest extends TestCase {
 		}
 	}
 	
+	public void testCreateSpace() throws XmlRpcException, IOException {
+		Page page = new Page(null);
+		page.setName("Test1");
+		page.setOriginalText("123");
+		page.setConvertedText("234");
+		String spacekey = "foo";
+		page.setSpacekey(spacekey);
+		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+		ConfluenceServerSettings settings = new ConfluenceServerSettings();
+		String testpropslocation = "test.basic.properties";
+		loadSettingsFromFile(settings, testpropslocation);
+		try {
+			SpaceForXmlRpc space = broker.getSpace(settings, spacekey);
+			assertNull(space);
+		} catch (Exception e) { }
+		tester.sendPage(page, null, basesettings);
+		try {
+			SpaceForXmlRpc space = broker.getSpace(settings, spacekey);
+			assertNotNull(space);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		} finally {
+			deleteSpace(spacekey, settings); //cleanup
+		}
+		
+	}
+
+	private void deleteSpace(String space, ConfluenceServerSettings confSettings) throws XmlRpcException, IOException {
+		confSettings.url = confSettings.url.replaceFirst("https?://", "");
+		XmlRpcClient client = getXmlRpcClient(confSettings);
+
+		Vector paramsVector = new Vector();
+		try {
+			paramsVector.add(RemoteWikiBroker.getInstance().getLoginToken(confSettings));
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+    	
+    	//method parameters to be passed to the service
+        paramsVector.add(space);
+
+        String method = "removeSpace";
+        String completeMethod = API + "." + method;
+
+        client.execute(completeMethod, paramsVector);
+	}
+	
 	private void deletePage(String pageTitle, String space, ConfluenceServerSettings confSettings) {
 		confSettings.url = confSettings.url.replaceFirst("https?://", "");
 		XmlRpcClient client = getXmlRpcClient(confSettings);

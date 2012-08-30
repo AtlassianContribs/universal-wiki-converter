@@ -1662,6 +1662,10 @@ public class ConverterEngine implements FeedbackHandler {
     			this.state.updateNote(note);
     			try {
     				broker.addSpace(confSettings, space);
+    				//at some point in Confluence 4.x, the Home page stopped being set to Home, so let's prestore the homepage id
+    				Vector newspacepages = broker.getAllServerPageSummaries(confSettings, space.getSpaceKey());
+    				PageForXmlRpc newhome = (PageForXmlRpc) newspacepages.get(0); //should only be one at this point
+    				this.homepages.put(space.getSpaceKey(), newhome.getId());
     			} catch (Exception e) {
         			getErrors().addError(Feedback.BAD_LOGIN, 
         					"Could not create space: " + spacekey +
