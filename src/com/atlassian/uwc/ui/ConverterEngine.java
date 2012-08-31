@@ -46,6 +46,7 @@ import com.atlassian.uwc.converters.IllegalLinkNameConverter;
 import com.atlassian.uwc.converters.IllegalPageNameConverter;
 import com.atlassian.uwc.converters.JavaRegexConverter;
 import com.atlassian.uwc.converters.PerlConverter;
+import com.atlassian.uwc.converters.RequiresEngineConverter;
 import com.atlassian.uwc.converters.twiki.JavaRegexAndTokenizerConverter;
 import com.atlassian.uwc.converters.twiki.TWikiRegexConverterCleanerWrapper;
 import com.atlassian.uwc.converters.xml.DefaultXmlEvents;
@@ -573,6 +574,9 @@ public class ConverterEngine implements FeedbackHandler {
                 return null;
             }
             converter.setProperties(this.miscProperties);
+            if (converter instanceof RequiresEngineConverter) {
+            	((RequiresEngineConverter) converter).setEngine(this);
+            }
         } catch (ClassNotFoundException e) {
             this.errors.addError(Feedback.BAD_CONVERTER_CLASS, "Converter ignored -- the Java class " + value + " was not found", true);
             return null;
@@ -1582,14 +1586,7 @@ public class ConverterEngine implements FeedbackHandler {
     	//XXX why are we setting these up every page. Most of these are global. 
     	//XXX If we set these up earlier in the process, we could do the checkConfluenceSettings call 
     	//(currently in the next sendPage) earlier in the process as well
-    	ConfluenceServerSettings confSettings = new ConfluenceServerSettings(); 
-    	confSettings.login = settings.getLogin();
-    	confSettings.password = settings.getPassword();
-    	confSettings.url = settings.getUrl(); 
-    	confSettings.spaceKey = settings.getSpace();
-    	confSettings.truststore = settings.getTruststore();
-    	confSettings.trustpass = settings.getTrustpass();
-    	confSettings.trustallcerts = settings.getTrustall();
+    	ConfluenceServerSettings confSettings = getConfluenceServerSettings(settings);
     	
     	//check to see if we've assigned a space to the page
     	if (page.getSpacekey() != null && !"".equals(page.getSpacekey())) { 
@@ -1620,6 +1617,19 @@ public class ConverterEngine implements FeedbackHandler {
     		
     	return sendPage(page, parentId, confSettings);
     }
+
+	public ConfluenceServerSettings getConfluenceServerSettings(
+			UWCUserSettings settings) {
+		ConfluenceServerSettings confSettings = new ConfluenceServerSettings(); 
+    	confSettings.login = settings.getLogin();
+    	confSettings.password = settings.getPassword();
+    	confSettings.url = settings.getUrl(); 
+    	confSettings.spaceKey = settings.getSpace();
+    	confSettings.truststore = settings.getTruststore();
+    	confSettings.trustpass = settings.getTrustpass();
+    	confSettings.trustallcerts = settings.getTrustall();
+		return confSettings;
+	}
     
     /**
      * creates a space for the spacekey in the given settings, if it
@@ -1850,7 +1860,11 @@ public class ConverterEngine implements FeedbackHandler {
     	//create wiki broker
     	RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
     	//update page content to be xhtml
-    	page = pageContentToXhtml(broker, confSettings, page);
+    	if (Boolean.parseBoolean(this.miscProperties.getProperty("engine-markuptoxhtml", "true"))) {
+    		page = pageContentToXhtml(broker, confSettings, page);
+    	} else {
+    		log.debug("Engine: markup to xhtml property set to false");
+    	}
     	//create page that broker can use
     	Hashtable pageTable = createPageTable(page, parentId);
      	//check for problems with settings 
@@ -1878,8 +1892,20 @@ public class ConverterEngine implements FeedbackHandler {
     	//return the page id
     	return id;
     }
-
-
+    
+    public String markupToXhtml(String markup) {
+    	RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+    	ConfluenceServerSettings confSettings = getConfluenceServerSettings(this.settings);
+    	try {
+			return getContentAsXhtmlFormat(broker, confSettings, markup);
+    	} catch (Exception e) {
+    		String errorMessage = "Could not transform wiki content from markup to xhtml.";
+    		log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage);
+    		this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
+    		return null;
+    	}
+    }
+    
 	private Page pageContentToXhtml(RemoteWikiBroker broker,
 			ConfluenceServerSettings confSettings, Page page) {
 		try {
