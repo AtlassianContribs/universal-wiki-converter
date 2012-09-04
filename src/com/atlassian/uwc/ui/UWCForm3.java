@@ -92,7 +92,7 @@ public class UWCForm3 {
 	private static final String LOGIN_TOOLTIP = "This is the username of an account on the Confluence server with write privileges to the space where you\'re adding content.";
 	private static final String ADDRESS_TOOLTIP = "This is the url to Confluence. Example: 'localhost:8080'";
 	private static final String VERSION_INDICATOR = ""; 
-	public static final String VERSION_NUMBER = "3.13.1_Snapshot_011212";
+	public static final String VERSION_NUMBER = "4.0-SNAPSHOT-090412";
 	private static final Dimension TABBEDPANE_SIZE = new Dimension(420, 475);
 	public static final String APP_NAME = "Universal Wiki Converter";
 	private static final int BASIC_RIGHT_MARGIN = 35;

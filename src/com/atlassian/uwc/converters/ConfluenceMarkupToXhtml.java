@@ -17,6 +17,7 @@ public class ConfluenceMarkupToXhtml extends RequiresEngineConverter {
 	public void convert(Page page) {
 		String input = page.getOriginalText();
 		String converted = this.engine.markupToXhtml(input);
-		page.setConvertedText(converted);
+		if (converted != null)
+			page.setConvertedText(converted);
 	}
 }
