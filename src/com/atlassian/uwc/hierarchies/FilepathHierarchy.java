@@ -238,7 +238,8 @@ public class FilepathHierarchy implements HierarchyBuilder {
 			}
 			else
 				thisname = child.getName();
-			if (childname.equals(thisname)) {
+			log.debug("...... -> comparing child with: " + thisname);
+			if (childname.equalsIgnoreCase(thisname)) {
 				log.debug("...... -> found child.");
 				return child;
 			}

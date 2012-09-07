@@ -24,11 +24,15 @@ public class DokuwikiHierarchyTest extends TestCase {
 	protected void setUp() throws Exception {
 		tester = new DokuwikiHierarchy();
 		PropertyConfigurator.configure("log4j.properties");
-		
+		Properties props = tester.getProperties();
+		//changing some default handling, so need to set these now
+		props.put("hierarchy-homepage-position", "child"); //default is child
+		props.put("hierarchy-homepage-dokuwiki-filename", "start"); //default is empty. means the nodename
+		tester.setProperties(props);
 	}
 
 	public void testBuildHierarchy() {
-		Properties props = new Properties();
+		Properties props = tester.getProperties();
 		props.setProperty("spacekey", "food");
 		props.setProperty("collision-titles-food", "Apple");
 		props.put("filepath-hierarchy-ext", "");
@@ -91,20 +95,22 @@ public class DokuwikiHierarchyTest extends TestCase {
 		for (int i = 0; i < exp.length; i++) {
 			String expected = exp[i];
 			boolean found = false;
+			String msg = "";
 			for (Iterator iter = nodes.iterator(); iter.hasNext();) {
 				HierarchyNode node = (HierarchyNode) iter.next();
 				String actual = node.getName();
+				msg = "act: " + actual + ", exp: " + expected;
 				if (expected.equals(actual)) {
 					found = true; 
 					break;
 				}
 			}
-			assertTrue(found);
+			assertTrue(msg, found);
 		}
 	}
 	
 	public void testBuildHierarchy_midlevelstartpages() {
-		Properties props = new Properties();
+		Properties props = tester.getProperties();
 		props.setProperty("spacekey", "food");
 		props.setProperty("collision-titles-food", "Apple");
 		props.put("filepath-hierarchy-ext", "");
@@ -150,7 +156,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 	
 	
 	public void testBuildHierarchy_collision_levelprop() {
-		Properties props = new Properties();
+		Properties props = tester.getProperties();
 		props.setProperty("spacekey", "food");
 		props.setProperty("collision-titles-food", "Apple,Fruit");
 		props.put("filepath-hierarchy-ext", "");
@@ -207,9 +213,86 @@ public class DokuwikiHierarchyTest extends TestCase {
 
 	}
 	
+	public void testBuildHierarchy_multspaces() {
+		Properties props = tester.getProperties();
+		props.put("filepath-hierarchy-ext", "");
+		props.put("filepath-hierarchy-ignorable-ancestors", "sampleData/hierarchy/dokuwiki");
+		props.setProperty("collision-titles-pie", "Apple");
+		tester.setProperties(props);
+		
+		File sampledir = new File("sampleData/hierarchy/dokuwiki");
+		Collection<Page> pages = new Vector<Page>();
+		assertTrue(sampledir.exists());
+		File[] files = sampledir.listFiles(new NoSvnFilter());
+		pages = createPages(pages, files);
+		//set some spacekeys (as if SpaceConverter had set this)
+		for (Page page : pages) {
+			if (page.getFile().getPath().matches(".*?Food\\/Pie\\/.*")) {
+				page.setSpacekey("pie");
+			}
+			else if (page.getFile().getPath().matches(".*?Drink\\/.*")) {
+				page.setSpacekey("drink");
+			}
+			else {
+				page.setSpacekey("food");
+			}
+		}
+		
+		HierarchyNode root = tester.buildHierarchy(pages);
+		assertNotNull(root); //root node
+		assertNull(root.getName());
+		assertNull(root.getPage());
+		assertNull(root.getParent());
+		assertNotNull(root.getChildren());
+		
+		Set<HierarchyNode> top = root.getChildren();
+		assertEquals(3, top.size());
+		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
+		nodes0.addAll(top);
+		String[] exp = {"Drink", "Food", "Pie"};
+		testNodeResults(nodes0, exp);
+		
+		//needs more than one level of parent to avoid collision
+		HierarchyNode drink1 = getNode("Drink", nodes0);
+		assertNotNull(drink1);
+		assertNotNull(drink1.getPage());
+		assertEquals(2, drink1.getChildren().size());
+		Vector<HierarchyNode> fruitnodes1 = new Vector<HierarchyNode>();
+		fruitnodes1.addAll(drink1.getChildren());
+		String[] exp2 = {"Juice", "Water"};
+		testNodeResults(fruitnodes1, exp2);
+
+		HierarchyNode pie = getNode("Pie", nodes0);
+		assertNotNull(pie);
+		assertEquals(3, pie.getChildren().size());
+		Vector<HierarchyNode> pienodes = new Vector<HierarchyNode>();
+		pienodes.addAll(pie.getChildren());
+		String[] exppie = {"Pie Apple", "Fruit", "Start"};
+		testNodeResults(pienodes, exppie);
+		
+		HierarchyNode piefruit = getNode("Fruit", pienodes);
+		assertNotNull(piefruit);
+		assertNotNull(piefruit.getPage());
+		assertEquals(1, piefruit.getChildren().size());
+		Vector<HierarchyNode> fruitnodes2 = new Vector<HierarchyNode>();
+		fruitnodes2.addAll(piefruit.getChildren());
+		String[] expfruit = {"Fruit Apple"};
+		testNodeResults(fruitnodes2, expfruit);
+		
+		HierarchyNode food = getNode("Food", nodes0);
+		assertNotNull(food);
+		assertEquals(2, food.getChildren().size());
+		Vector<HierarchyNode> foodnodes = new Vector<HierarchyNode>();
+		foodnodes.addAll(food.getChildren());
+		String[] expfood = {"Baklava", "Fruit"};
+		testNodeResults(foodnodes, expfood);
+	}
+	
+	
+	
 	public void testBuildHierarchy_attachimages() {
 		
-		Properties props = new Properties();
+		Properties props = tester.getProperties();
 		props.setProperty("spacekey", "image");
 		props.setProperty("space-image", "images,wiki,test,playground");
 		props.put("filepath-hierarchy-ext", "");
@@ -284,7 +367,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 	}
 	
 	public void testBuildHierarchy_fixBranchNames() {
-		Properties props = new Properties();
+		Properties props = tester.getProperties();
 		props.setProperty("spacekey", "food");
 		props.setProperty("collision-titles-food", "Apple");
 		props.put("filepath-hierarchy-ext", "");
@@ -338,6 +421,164 @@ public class DokuwikiHierarchyTest extends TestCase {
 		juicenodes.addAll(juice.getChildren());
 		assertEquals(1, juicenodes.size());
 		assertEquals("Juice Apple", juicenodes.get(0).getName());
+	}
+	
+	public void testBuildHierarchy_startpropfalse() {
+		Properties props = tester.getProperties();
+		props.setProperty("collision-titles-food", "Apple,Fruit");
+		props.put("filepath-hierarchy-ext", "");
+		String samplepath = "sampleData/hierarchy/dokuwiki-nodehome"; 
+		props.put("filepath-hierarchy-ignorable-ancestors", samplepath);
+		//set a property to identify the position of the homepage file
+		props.put("hierarchy-homepage-position", "sibling"); //default is child
+		//set a property to identify the homepage file 
+		props.put("hierarchy-homepage-dokuwiki-filename", ""); //default is empty. means the nodename
+		tester.setProperties(props);
+		
+		File sampledir = new File(samplepath);
+		Collection<Page> pages = new Vector<Page>();
+		assertTrue(sampledir.exists());
+		File[] files = sampledir.listFiles(new NoSvnFilter());
+		pages = createPages(pages, files);
+
+		HierarchyNode root = tester.buildHierarchy(pages);
+		assertNotNull(root); //root node
+		assertNull(root.getName());
+		assertNull(root.getPage());
+		assertNull(root.getParent());
+		assertNotNull(root.getChildren());
+		
+		Set<HierarchyNode> top = root.getChildren();
+		assertEquals(2, top.size());
+		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
+		nodes0.addAll(top);
+		String[] exp = {"Drink", "Food" };
+		testNodeResults(nodes0, exp);
+		
+		//needs more than one level of parent to avoid collision
+		HierarchyNode drink = getNode("Drink", nodes0);
+		assertNotNull(drink);
+		assertNotNull(drink.getPage());
+		assertEquals(2, drink.getChildren().size());
+		Vector<HierarchyNode> drinknodes1 = new Vector<HierarchyNode>();
+		drinknodes1.addAll(drink.getChildren());
+		String[] exp2 = {"Juice", "Water"};
+		testNodeResults(drinknodes1, exp2);
+		
+		HierarchyNode juice = getNode("Juice", drinknodes1);
+		assertNotNull(juice);
+		assertNotNull(juice.getPage());
+		assertEquals(1, juice.getChildren().size());
+		Vector<HierarchyNode> juicenodes1 = new Vector<HierarchyNode>();
+		juicenodes1.addAll(juice.getChildren());
+		String[] exp3 = {"Juice Apple"};
+		testNodeResults(juicenodes1, exp3);
+
+		HierarchyNode food = getNode("Food", nodes0);
+		assertNotNull(food);
+		assertNotNull(food.getPage());
+		assertEquals(3, food.getChildren().size());
+		Vector<HierarchyNode> foodnodes = new Vector<HierarchyNode>();
+		foodnodes.addAll(food.getChildren());
+		String[] exppie = {"Baklava", "Food Fruit", "Pie"};
+		testNodeResults(foodnodes, exppie);
+		
+		HierarchyNode piefruit = getNode("Pie", foodnodes);
+		assertNotNull(piefruit);
+		assertNull(piefruit.getPage());
+		assertEquals(2, piefruit.getChildren().size());
+		Vector<HierarchyNode> pienodes2 = new Vector<HierarchyNode>();
+		pienodes2.addAll(piefruit.getChildren());
+		String[] exppie2 = {"Pie Apple","Pie Fruit"};
+		testNodeResults(pienodes2, exppie2);
+		
+		HierarchyNode piefruit2 = getNode("Pie Fruit", pienodes2);
+		assertNotNull(piefruit2);
+		assertNotNull(piefruit2.getPage());
+		assertEquals(1, piefruit2.getChildren().size());
+		Vector<HierarchyNode> pienodes3 = new Vector<HierarchyNode>();
+		pienodes3.addAll(piefruit2.getChildren());
+		String[] expfruit = {"Pie Fruit Apple"};
+		testNodeResults(pienodes3, expfruit);
+	}
+	
+	public void testBuildHierarchy_sethomepagetitle() {
+		Properties props = tester.getProperties();
+		props.setProperty("collision-titles-food", "Apple,Fruit");
+		props.put("filepath-hierarchy-ext", "");
+		String samplepath = "sampleData/hierarchy/dokuwiki-nodehome"; 
+		props.put("filepath-hierarchy-ignorable-ancestors", samplepath);
+		//set a property to identify the position of the homepage file
+		props.put("hierarchy-homepage-position", "sibling"); //default is child
+		//set a property to identify the homepage file 
+		props.put("hierarchy-homepage-dokuwiki-filename", ""); //default is empty. means the nodename
+		tester.setProperties(props);
+		
+		File sampledir = new File(samplepath);
+		Collection<Page> pages = new Vector<Page>();
+		assertTrue(sampledir.exists());
+		File[] files = sampledir.listFiles(new NoSvnFilter());
+		pages = createPages(pages, files);
+
+		HierarchyNode root = tester.buildHierarchy(pages);
+		assertNotNull(root); //root node
+		assertNull(root.getName());
+		assertNull(root.getPage());
+		assertNull(root.getParent());
+		assertNotNull(root.getChildren());
+		
+		Set<HierarchyNode> top = root.getChildren();
+		assertEquals(2, top.size());
+		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
+		nodes0.addAll(top);
+		String[] exp = {"Drink", "Food" };
+		testNodeResults(nodes0, exp);
+		
+		//needs more than one level of parent to avoid collision
+		HierarchyNode drink = getNode("Drink", nodes0);
+		assertNotNull(drink);
+		assertNotNull(drink.getPage());
+		assertEquals(2, drink.getChildren().size());
+		Vector<HierarchyNode> drinknodes1 = new Vector<HierarchyNode>();
+		drinknodes1.addAll(drink.getChildren());
+		String[] exp2 = {"Juice", "Water"};
+		testNodeResults(drinknodes1, exp2);
+		
+		HierarchyNode juice = getNode("Juice", drinknodes1);
+		assertNotNull(juice);
+		assertNotNull(juice.getPage());
+		assertEquals(1, juice.getChildren().size());
+		Vector<HierarchyNode> juicenodes1 = new Vector<HierarchyNode>();
+		juicenodes1.addAll(juice.getChildren());
+		String[] exp3 = {"Juice Apple"};
+		testNodeResults(juicenodes1, exp3);
+
+		HierarchyNode food = getNode("Food", nodes0);
+		assertNotNull(food);
+		assertNotNull(food.getPage());
+		assertEquals(3, food.getChildren().size());
+		Vector<HierarchyNode> foodnodes = new Vector<HierarchyNode>();
+		foodnodes.addAll(food.getChildren());
+		String[] exppie = {"Baklava", "Food Fruit", "Pie"};
+		testNodeResults(foodnodes, exppie);
+		
+		HierarchyNode piefruit = getNode("Pie", foodnodes);
+		assertNotNull(piefruit);
+		assertNull(piefruit.getPage());
+		assertEquals(2, piefruit.getChildren().size());
+		Vector<HierarchyNode> pienodes2 = new Vector<HierarchyNode>();
+		pienodes2.addAll(piefruit.getChildren());
+		String[] exppie2 = {"Pie Apple","Pie Fruit"};
+		testNodeResults(pienodes2, exppie2);
+		
+		HierarchyNode piefruit2 = getNode("Pie Fruit", pienodes2);
+		assertNotNull(piefruit2);
+		assertNotNull(piefruit2.getPage());
+		assertEquals(1, piefruit2.getChildren().size());
+		Vector<HierarchyNode> pienodes3 = new Vector<HierarchyNode>();
+		pienodes3.addAll(piefruit2.getChildren());
+		String[] expfruit = {"Pie Fruit Apple"};
+		testNodeResults(pienodes3, expfruit);
 	}
 	
 	private Collection<Page> createPages(Collection<Page> pages, File[] files) {

@@ -20,13 +20,14 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 		//run the filepath hierarchy first -
 		HierarchyNode node = super.buildHierarchy(pages);
 		//move spacekeys
-		node = handleSpacekeyBranch(node);
+		node = handleSpacekeyBranchWithProp(node);
 		//handle start pages
-		node = handleStartPages(node, true);
-		String spacekey = getProperties().getProperty("spacekey", "");
-		Vector<String> candidates = getCollisionsCandidates(spacekey);
+		node = handleHomePages(node, true);
+		//handle spacekeys not with a property, but with page.getSpacekey setting
+		node = handleSpacekeyBranchWithPage(node);
+		
 		//fix collisions
-		node = fixCollisions(node, candidates);
+		node = fixCollisions(node);
 		//fix titles
 		node = fixTitles(node);
 		//attach images
@@ -37,7 +38,7 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 		return node;
 	}
 
-	private HierarchyNode handleSpacekeyBranch(HierarchyNode node) {
+	private HierarchyNode handleSpacekeyBranchWithProp(HierarchyNode node) {
 		String spacekey = getProperties().getProperty("spacekey");
 		if (spacekey != null && !"".equals(spacekey)) { 
 			Set<HierarchyNode> top = node.getChildren();
@@ -45,12 +46,7 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 				HierarchyNode topnode = (HierarchyNode) iter.next();
 				if (topnode.getName().toLowerCase().equals(spacekey.toLowerCase())) {
 					//topnode children should be top level
-					Set<HierarchyNode> children = topnode.getChildren();
-					iter.remove(); //Only allowed way to remove from an iterator. 
-					topnode.setParent(null); //since we have to use iter.remove instead of node.removeChild(topnode)
-					for (HierarchyNode child : children) {
-						node.addChild(child);
-					}
+					setTopNodeBranch(node, iter, topnode);
 					break;
 				}
 			}
@@ -58,12 +54,85 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 		return node;
 	}
 
-	private HierarchyNode handleStartPages(HierarchyNode node, boolean top) {
+	private HierarchyNode handleSpacekeyBranchWithPage(HierarchyNode root) {
+		Set<HierarchyNode> top = root.getChildren();
+		Vector<HierarchyNode> ordered = new Vector<HierarchyNode>(top);
+		for (HierarchyNode topnode : ordered) {
+			root = handleSpacekeyBranchTop(root, topnode);
+		}
+		return root;
+	}
+
+	private HierarchyNode handleSpacekeyBranchTop(HierarchyNode root, HierarchyNode node) {
+		if (node.getPage() == null) {
+			//FIXME Do we want to do anything here? or just go straight to children 
+		}
+		else if (node.getPage().getSpacekey() != null) {
+			String spacekey = node.getPage().getSpacekey();
+			node = setAncestorsBySpacekey(root, node, spacekey);
+			if (node.getParent() == null) {
+				Set<HierarchyNode> top = root.getChildren();
+				Vector<HierarchyNode> ordered = new Vector<HierarchyNode>(top);
+				for (HierarchyNode topnode : ordered) {
+					if (spacekey.equals(topnode.getPage().getSpacekey())) {
+						Set<HierarchyNode> children = topnode.getChildren();
+						topnode.setParent(null); //since we have to use iter.remove instead of node.removeChild(topnode)
+						for (HierarchyNode child : children) {
+							root.addChild(child);
+						}
+						break;
+					}
+				}
+			}
+		}
+		Set<HierarchyNode> nextSet = node.getChildren();
+		Vector<HierarchyNode> ordered = new Vector<HierarchyNode>(nextSet);
+		for (HierarchyNode next : ordered) {
+			root = handleSpacekeyBranchTop(root, next);
+		}
+		return root;
+	}
+
+	private HierarchyNode setAncestorsBySpacekey(HierarchyNode root, HierarchyNode node,
+			String spacekey) {
+		HierarchyNode parent = node.getParent();
+		if (parent.getName() == null) { //we're at the root level return
+			return node;
+		}
+		if (parent.getPage() == null) {
+			Page page = createPage(parent.getName());
+			page.setSpacekey(spacekey);
+			parent.setPage(page);
+			parent = setAncestorsBySpacekey(root, parent, spacekey);
+			if (parent.getParent() == null)
+				root.addChild(parent);
+		}
+		else if (parent.getPage().getSpacekey() == null) {
+			parent.getPage().setSpacekey(spacekey);
+			parent = setAncestorsBySpacekey(root, parent, spacekey);
+		}
+		else if (!parent.getPage().getSpacekey().equals(spacekey)) {
+			parent.removeChild(node);
+		}
+		return node;
+	}
+
+	private void setTopNodeBranch(HierarchyNode root, Iterator topiter, HierarchyNode nexttopnode) {
+		Set<HierarchyNode> children = nexttopnode.getChildren();
+		topiter.remove(); //Only allowed way to remove from an iterator. 
+		nexttopnode.setParent(null); //since we have to use iter.remove instead of node.removeChild(topnode)
+		for (HierarchyNode child : children) {
+			root.addChild(child);
+		}
+	}
+
+	private HierarchyNode handleHomePages(HierarchyNode node, boolean top) {
 		Set<HierarchyNode> children = node.getChildren();
 		for (Iterator iter = children.iterator(); iter.hasNext();) { 
 			HierarchyNode child = (HierarchyNode) iter.next();
 			String name = child.getName();
-			if (name.toLowerCase().equals("start") && !top) {
+			String dokuwikiFilename = getDokuwikiHomepageFilename();
+			if (name.toLowerCase().equals(dokuwikiFilename) && !top) {
 				Page page = child.getPage();
 				if (page == null) continue; //mid level start directories
 				iter.remove(); //only allowed way to remove from an iterator
@@ -73,16 +142,22 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 				log.debug("Moving start page to parent. Changing start page name: " + node.getName());
 				node.getPage().setName(node.getName());
 			}
-			child = handleStartPages(child, false);
+			child = handleHomePages(child, false);
 		}
 		return node;
 	}
 
-	private HierarchyNode fixCollisions(HierarchyNode node, Vector<String> collisions) {
-		if (collisions.isEmpty()) return node;
+	public String getDokuwikiHomepageFilename() {
+		return getProperties().getProperty("hierarchy-homepage-dokuwiki-filename", "");
+	}
+
+	private HierarchyNode fixCollisions(HierarchyNode node) {
+		
 		Set<HierarchyNode> children = node.getChildren();
 		for (Iterator iter = children.iterator(); iter.hasNext();) { 
 			HierarchyNode child = (HierarchyNode) iter.next();
+			
+			Vector<String> collisions = getCollisionsForThisNode(child);
 			for (String name : collisions) {
 				String eqname = equalize(name);
 				String childname = equalize(child.getName());
@@ -97,18 +172,29 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 					if (child.getPage() != null) child.getPage().setName(newname);
 				}
 			}
-			child = fixCollisions(child, collisions);
+			child = fixCollisions(child);
 		}
 		return node;
+	}
+
+	public Vector<String> getCollisionsForThisNode(HierarchyNode node) {
+		log.debug("node.getPage: " + node.getPage());
+		if (node.getPage() != null) log.debug("node.getPage.getSpacekey: " + node.getPage().getSpacekey());
+		String spacekey = (node.getPage() != null && node.getPage().getSpacekey() != null)?
+				node.getPage().getSpacekey() :
+				getProperties().getProperty("spacekey", "");
+		return getCollisionsCandidates(spacekey);
 	}
 
 	protected Vector<String> getCollisionsCandidates(String spacekey) {
 		Properties props = getProperties();
 		Vector<String> candidates = new Vector<String>();
+		log.debug("Looking for collisions candidates for spacekey: " + spacekey);
 		for (Iterator iter = props.keySet().iterator();iter.hasNext();) {
 			String key = (String) iter.next();
 			if (key.toLowerCase().startsWith("collision-titles-"+spacekey.toLowerCase())) {
 				String namesraw = props.getProperty(key, "");
+				log.debug("Found collisions data: " + namesraw);
 				if ("".equals(namesraw)) continue;
 				String[] names = namesraw.split(",");
 				for (String name : names) {
@@ -117,6 +203,7 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 				}
 			}
 		}
+		log.debug("candidates size? " + candidates.size());
 		return candidates;
 	}
 
@@ -217,5 +304,65 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 			child = fixTitles(child);
 		}
 		return node;
+	}
+	
+	
+	Page currentpage;
+	HierarchyNode currentParent;
+	boolean combineHomepageNodes = false;
+	@Override 
+	protected void buildRelationships(Page page, HierarchyNode root) {
+		currentpage = page;
+		combineHomepageNodes = false;
+		currentParent = null;
+		//DELETE
+		if (page.getFile().getPath().endsWith("forumdescription.txt")) {
+			int food = 0;
+		}
+		super.buildRelationships(page, root);
+		if (combineHomepageNodes) {
+			combineHomepages(page);
+		}
+	}
+
+	public void combineHomepages(Page page) {
+		Set<HierarchyNode> children = currentParent.getChildren();
+		Vector<HierarchyNode> all = new Vector<HierarchyNode>(children);
+		HierarchyNode first = null, second = null;
+		for (HierarchyNode node : all) {
+			if (node.getName().equalsIgnoreCase(page.getName())) {
+				if (first == null) first = node;
+				else second = node;
+			}
+		}
+		if (first.getPage() == null) {
+			combineHomepages(first, second, page);
+		}
+		else { 
+			combineHomepages(second, first, page);
+		}
+	}
+	
+	private void combineHomepages(HierarchyNode nullPageNode, HierarchyNode noChildrenNode,
+			Page page) {
+		//this one represents the one with all the hierarchy data
+		nullPageNode.setPage(page); 
+		//this one represents the one that (used) to have page data. We don't need it anymore
+		noChildrenNode.getParent().removeChild(noChildrenNode); 
+	}
+
+	@Override
+	protected boolean hasExistingRelationship(HierarchyNode parent, String childname) {
+		boolean hasRel = super.hasExistingRelationship(parent, childname);
+		if (hasRel && "".equals(getProperties().getProperty("hierarchy-homepage-dokuwiki-filename"))) {
+			if (parent.getPage() == null && currentpage.getName().equalsIgnoreCase(childname)) {
+				combineHomepageNodes = true;
+				currentParent = parent;
+				return false;
+			}
+			return hasRel;
+		}
+		return hasRel;
+			
 	}
 }

@@ -1996,7 +1996,11 @@ public class ConverterEngine implements FeedbackHandler {
     				//create page that broker can use
     				CommentForXmlRpc brokerComment = new CommentForXmlRpc();
     				brokerComment.setPageId(pageId);
-    				brokerComment.setContent(getContentAsXhtmlFormat(broker, confSettings, comment.text));
+    				String commentcontent = comment.text;
+    				if (!comment.isXhtml()) {
+						commentcontent = getContentAsXhtmlFormat(broker, confSettings, comment.text);
+					}
+    				brokerComment.setContent(commentcontent);
     				//upload comment
     				CommentForXmlRpc uploadedComment = broker.addComment(confSettings, brokerComment);
     				if (comment.hasCreator()) {

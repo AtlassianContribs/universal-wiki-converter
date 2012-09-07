@@ -48,6 +48,9 @@ public class DokuwikiUserDate extends BaseConverter {
 	}
 
 	private String createChangeFilename(String path) {
+		return getMetaFilename(path, ".changes");
+	}
+	protected String getMetaFilename(String path, String filetype) {
 		String metadir = getProperties().getProperty("meta-dir", null);
 		if (metadir == null) {
 			log.warn("Could not handle user and date data. meta-dir property must be set. Skipping");
@@ -59,7 +62,7 @@ public class DokuwikiUserDate extends BaseConverter {
 			return null;
 		}
 		String relative = path.replaceFirst("\\Q" + ignorable + "\\E", "");
-		relative = relative.replaceFirst("\\.txt$", ".changes");
+		relative = relative.replaceFirst("\\.txt$", filetype);
 		if (relative.startsWith(File.separator) && metadir.endsWith(File.separator))
 			relative = relative.substring(1);
 		if (!relative.startsWith(File.separator) && !metadir.endsWith(File.separator))

@@ -20,6 +20,7 @@ public class PrepColSpansConverter extends BaseConverter {
 
 	Pattern colspan = Pattern.compile("[|]{2,}");
 	protected String prep(String input) {
+		input = removeEmptyColspanLines(input);
 		Matcher spanFinder = colspan.matcher(input);
 		StringBuffer sb = new StringBuffer();
 		boolean found = false;
@@ -33,6 +34,23 @@ public class PrepColSpansConverter extends BaseConverter {
 		}
 		if (found) {
 			spanFinder.appendTail(sb);
+			return sb.toString();
+		}
+		return input;
+	}
+	Pattern emptycolspan = Pattern.compile("(\n{2,})\\|+(?=\n)");
+	private String removeEmptyColspanLines(String input) {
+		Matcher emptyFinder = emptycolspan.matcher(input);
+		StringBuffer sb = new StringBuffer();
+		boolean found = false;
+		while (emptyFinder.find()) {
+			found = true;
+			String replacement = emptyFinder.group(1);
+			replacement = RegexUtil.handleEscapesInReplacement(replacement);
+			emptyFinder.appendReplacement(sb, replacement);
+		}
+		if (found) {
+			emptyFinder.appendTail(sb);
 			return sb.toString();
 		}
 		return input;

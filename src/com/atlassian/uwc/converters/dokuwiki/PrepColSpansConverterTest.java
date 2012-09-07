@@ -27,7 +27,7 @@ public class PrepColSpansConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 	
-	public void testPropComplicated() {
+	public void testPrepComplicated() {
 		String input, expected, actual;
 		input = "^ Heading 1      ^ Heading 2       ^ Heading 3          ^\n" + 
 				"| Row 1 Col 1    | Row 1 Col 2     | Row 1 Col 3        |\n" + 
@@ -58,4 +58,46 @@ public class PrepColSpansConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 
+	public void testPrepExtraColspanRow() {
+		String input, expected, actual;
+		input = "^ H1  ^ H2 ^ H3 ^ H4 ^ H5 ^ H6 ^\n" + 
+				"^ rowspan starts      |  r1c1 | r1c2 | r1c3  | r1c4  | r1c5 |\n" + 
+				"^ :::          |                           |                               |                                |                                | tada  |\n" + 
+				"^ :::          |                           |                               |                                |                                |  foo |\n" + 
+				"|              |                           |                               |                                |                                | bar  |\n" + 
+				"| last row | tada |                               |                                |                                |                                                 |\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"|||||\n" + 
+				"\n" + 
+				"^ H1-2 ^ H2-2^\n" + 
+				"^ Simple table | http://backoffice.do.dev.euc  |\n"; 
+		expected = "^ H1  ^ H2 ^ H3 ^ H4 ^ H5 ^ H6 ^\n" + 
+				"^ rowspan starts      |  r1c1 | r1c2 | r1c3  | r1c4  | r1c5 |\n" + 
+				"^ :::          |                           |                               |                                |                                | tada  |\n" + 
+				"^ :::          |                           |                               |                                |                                |  foo |\n" + 
+				"|              |                           |                               |                                |                                | bar  |\n" + 
+				"| last row | tada |                               |                                |                                |                                                 |\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"^ H1-2 ^ H2-2^\n" + 
+				"^ Simple table | http://backoffice.do.dev.euc  |\n"; 
+		actual = tester.prep(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 }

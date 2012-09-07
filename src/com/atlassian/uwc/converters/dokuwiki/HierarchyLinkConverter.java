@@ -13,19 +13,26 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 
 	public void convert(Page page) {
 		String input = page.getOriginalText();
-		String converted = convertLink(input, getCurrentPath(page));
+		String converted = convertLink(input, getCurrentPath(page), getSpacekey(page));
 		page.setConvertedText(converted);
 
+	}
+	
+	public String getSpacekey(Page page) {
+		if (page != null && page.getSpacekey() != null) {
+			return page.getSpacekey();
+		}
+		return getProperties().getProperty("spacekey", null);
 	}
 
 	Pattern link = Pattern.compile("(?<=\\[)\\[([^\\]]*)\\](?=\\])");
 	Pattern onecolon = Pattern.compile("^([^:]*:)([^:]*)$");
 	protected String convertLink(String input) {
-		return convertLink(input, null);
+		return convertLink(input, null, getSpacekey(null));
 	}
-	protected String convertLink(String input, String currentPath) {
+	protected String convertLink(String input, String currentPath, String spacekey) {
 		Matcher linkFinder = link.matcher(input);
-		String currentSpacekey = getProperties().getProperty("spacekey", null);
+		String currentSpacekey = spacekey;
 		Vector<String> allspaces = getSpaces();
 		HashMap<String,String> namespaces = getDokuDirectories();
 		StringBuffer sb = new StringBuffer();

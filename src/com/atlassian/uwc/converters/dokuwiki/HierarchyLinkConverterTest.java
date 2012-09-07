@@ -7,6 +7,8 @@ import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.atlassian.uwc.ui.Page;
+
 public class HierarchyLinkConverterTest extends TestCase {
 
 	HierarchyLinkConverter tester = null;
@@ -85,7 +87,8 @@ public class HierarchyLinkConverterTest extends TestCase {
 				"[Alias|food:Drink]\n" + 
 				"[Fruit Drink|food:Drink Fruit]\n" +
 				"[food:Cranberry]";
-		actual = tester.convertLink(input, "drink/");
+		String spacekey = "food";
+		actual = tester.convertLink(input, "drink/", spacekey);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
@@ -97,5 +100,19 @@ public class HierarchyLinkConverterTest extends TestCase {
 		actual = tester.convertLink(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual); 
+	}
+	
+	public void testConvertWithPageByPageSpaces() {
+		Page page = new Page(null);
+		page.setOriginalText("[[.:home]]\n" +
+				"[[drink:start]]\n");
+		String spacekey = "otherspace";
+		page.setSpacekey(spacekey);//default spacekey is 'food'
+		tester.convert(page);
+		String actual = page.getConvertedText();
+		String expected = "[" + spacekey + ":Home]\n" + //this one users the current home
+				"[food:Drink]\n"; //this one uses the mapping (drink points to food)
+		assertNotNull(actual);
+		assertEquals(expected, actual);
 	}
 }

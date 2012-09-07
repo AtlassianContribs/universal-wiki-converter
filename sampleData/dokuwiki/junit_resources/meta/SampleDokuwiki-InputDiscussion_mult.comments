@@ -1,0 +1,12 @@
+a:5:{s:5:"title";N;s:6:"status";i:1;s:8:"comments";a:2:{s:32:"5efeab0c9a77feb0248e8d84029b345f";a:8:{s:4:"user";a:5:{s:2:"id";s:3:"foo";s:4:"name";s:11:"Foo Bar";s:4:"mail";s:22:"foo@bar.org.br";s:7:"address";s:0:"";s:3:"url";s:0:"";}s:4:"date";a:1:{s:7:"created";i:1253800808;}s:4:"show";b:1;s:3:"raw";s:110:"tralala";s:5:"xhtml";s:122:"
+<p>
+tralala
+
+</p>
+";s:6:"parent";N;s:7:"replies";a:0:{}s:3:"cid";s:32:"5efeab0c9a77feb0248e8d84029b345f";}s:32:"daa35c667fbb6b1c369a711aeb5adad6";a:8:{s:4:"user";a:5:{s:2:"id";s:3:"ella";s:4:"name";s:11:"Ella Fitzgerald";s:4:"mail";s:24:"ella@jazz.org";s:7:"address";s:0:"";s:3:"url";s:0:"";}s:4:"date";a:1:{s:7:"created";i:1254911413;}s:4:"show";b:1;s:3:"raw";s:122:"bedoobedoo whoa!";s:5:"xhtml";s:212:"
+<p>
+bedoobedoo <b>whoa!</b>
+
+</p>
+";s:6:"parent";N;s:7:"replies";a:0:{}s:3:"cid";s:32:"daa35c667fbb6b1c369a711aeb5adad6";}}s:6:"number";i:2;s:11:"subscribers";N;}
+
