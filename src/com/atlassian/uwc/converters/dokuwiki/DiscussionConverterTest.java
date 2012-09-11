@@ -194,5 +194,24 @@ public class DiscussionConverterTest extends TestCase {
 		
 		assertNotNull(page.getAllCommentData());
 		assertEquals(0, page.getAllCommentData().size());
+	}	
+	
+	public void testConvert_NoID() throws IOException {
+		String path = PAGESDIR+"/SampleDokuwiki-InputDiscussion_noid.txt";
+		File file = new File(path);
+		Page page = new Page(file);
+		page.setOriginalText(FileUtils.readTextFile(file));
+		tester.convert(page);
+		Vector<Comment> actual = page.getAllCommentData();
+		assertNotNull(actual);
+		for (Comment comment : actual) {
+			assertNotNull(comment);
+			assertEquals("myrnaloy@thinman.org", comment.creator);
+			assertEquals("\n" + 
+					"<p>\n" + 
+					"Asta!\n" + 
+					"\n" + 
+					"</p>\n", comment.text);
+		}
 	}
 }

@@ -99,20 +99,24 @@ public class DiscussionConverter extends DokuwikiUserDate {
 	}
 
 	Pattern commentP = Pattern.compile("" +
-			"s:32:\"\\w{32,32}\";a:8:\\{s:4:\"user\";a:\\d:\\{s:2:\"id\";s:\\d+:\"([^\"]+)" + //username
+			"s:32:\"\\w{32,32}\";a:8:\\{s:4:\"user\";a:\\d+:\\{" +
+			"(?:s:2:(\"id\");s:\\d+:\"([^\"]+))?" + //id = username?
+			".*?s:4:(\"mail\");s:\\d+:\"([^\"]+)" + //email = username?
 			".*?\\}s:4:\"date\\\";a:\\d:\\{.*?s:7:\"created\";i:(\\d+)" + //timestamp
 			".*?s:5:\"xhtml\";s:\\d+:\"(.*?)\";s:6:\"parent\";N;", //text 
 			Pattern.DOTALL);
 	protected Comment parseComment(String input) {
 		Matcher commentFinder = commentP.matcher(input);
 		while (commentFinder.find()) {
-			String creator = commentFinder.group(1);
-			String timestamp = commentFinder.group(2);
-			String text = commentFinder.group(3);
+			String creator = commentFinder.group(2); //username from id
+			if (creator == null) creator = commentFinder.group(4); //no id? username from mail
+			String timestamp = commentFinder.group(5);
+			String text = commentFinder.group(6);
 			timestamp = formatTimestamp(timestamp);
 			boolean isXhtml = true;
 			return new Comment(text, creator, timestamp, isXhtml);
 		}
+		addError(Feedback.CONVERTER_ERROR, "Problem finding comment for: " + input, false);
 		return null;
 	}
 

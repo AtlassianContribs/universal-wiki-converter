@@ -73,5 +73,29 @@ public class UserDateConverterTest extends TestCase {
 		Date timestamp = page.getTimestamp();
 		assertNull(timestamp);
 	}
+	
+	public void testConvert_ADdomain() {
+		String input, expected, actual;
+		input = "{user:ad\\foobar}\n" +
+		"{timestamp:20011231235959}\n" +
+		"Testing 123";
+		expected = "Testing 123";
+		Page page = new Page(null);
+		page.setOriginalText(input);
+		tester.convert(page);
+		actual = page.getConvertedText();
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		actual = page.getAuthor();
+		expected = "ad\\foobar";
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		Date timestamp = page.getTimestamp();
+		Date expTime = new Date(2001-1900, 11, 31, 23, 59, 59);
+		assertEquals(expTime.getTime(), timestamp.getTime());
+		
+	}
 
 }

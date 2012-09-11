@@ -1993,6 +1993,11 @@ public class ConverterEngine implements FeedbackHandler {
     		log.debug("Sending comments for page: " + page.getName());
     		try {
     			for (Comment comment : page.getAllCommentData()) {
+    				if (comment == null) {
+    					log.error("Comment was null! SKIPPING");
+    					this.errors.addError(Feedback.CONVERTER_ERROR, "Comment should not be null!", true);
+    					continue; 
+    				}
     				//create page that broker can use
     				CommentForXmlRpc brokerComment = new CommentForXmlRpc();
     				brokerComment.setPageId(pageId);
@@ -2015,7 +2020,11 @@ public class ConverterEngine implements FeedbackHandler {
     			}
     		} catch (Exception e) {
     			String errorMessage = null;
-    			if (e.getMessage().contains("NotPermittedException")) {
+    			if (e.getMessage() == null) {
+    				log.error("Problem with comments!", e);
+    				return;
+    			}
+    			else if (e.getMessage().contains("NotPermittedException")) {
     				errorMessage = "User is not permitted to add comments to page: " + page.getName() + "'";
     			}
     			else if (e.getMessage().contains("does not exist")) {
