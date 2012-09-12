@@ -161,8 +161,8 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 			for (String name : collisions) {
 				String eqname = equalize(name);
 				String childname = equalize(child.getName());
+				log.debug("Examining collisions candidate: '" + eqname + "' for this child: '" + childname + "'");
 				if (childname.equals(eqname)) {
-					log.debug("Fixing collisions? " + eqname + " vs. " + childname);
 					String parent = child.getParent().getName();
 					log.debug("parent = " + parent);
 					if (parent == null) continue;
@@ -178,8 +178,6 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 	}
 
 	public Vector<String> getCollisionsForThisNode(HierarchyNode node) {
-		log.debug("node.getPage: " + node.getPage());
-		if (node.getPage() != null) log.debug("node.getPage.getSpacekey: " + node.getPage().getSpacekey());
 		String spacekey = (node.getPage() != null && node.getPage().getSpacekey() != null)?
 				node.getPage().getSpacekey() :
 				getProperties().getProperty("spacekey", "");
@@ -315,10 +313,7 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 		currentpage = page;
 		combineHomepageNodes = false;
 		currentParent = null;
-		//DELETE
-		if (page.getFile().getPath().endsWith("forumdescription.txt")) {
-			int food = 0;
-		}
+
 		super.buildRelationships(page, root);
 		if (combineHomepageNodes) {
 			combineHomepages(page);
@@ -345,6 +340,7 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 	
 	private void combineHomepages(HierarchyNode nullPageNode, HierarchyNode noChildrenNode,
 			Page page) {
+		if (noChildrenNode.getPage() == null) return;//indicates this isn't the right scenario to combine
 		//this one represents the one with all the hierarchy data
 		nullPageNode.setPage(page); 
 		//this one represents the one that (used) to have page data. We don't need it anymore

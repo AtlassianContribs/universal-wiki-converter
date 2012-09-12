@@ -581,6 +581,82 @@ public class DokuwikiHierarchyTest extends TestCase {
 		testNodeResults(pienodes3, expfruit);
 	}
 	
+	public void testAncestorSameName() {
+		
+		Properties props = tester.getProperties();
+		props.setProperty("collision-titles-food", "Fruit");
+		props.put("filepath-hierarchy-ext", "");
+		String samplepath = "sampleData/hierarchy/dokuwiki-samename"; 
+		props.put("filepath-hierarchy-ignorable-ancestors", samplepath);
+		//set a property to identify the position of the homepage file
+		props.put("hierarchy-homepage-position", "sibling"); //default is child
+		//set a property to identify the homepage file 
+		props.put("hierarchy-homepage-dokuwiki-filename", ""); //default is empty. means the nodename
+		tester.setProperties(props);
+		
+		File sampledir = new File(samplepath);
+		Collection<Page> pages = new Vector<Page>();
+		assertTrue(sampledir.exists());
+		File[] files = sampledir.listFiles(new NoSvnFilter());
+		pages = createPages(pages, files);
+		
+		HierarchyNode actual = tester.buildHierarchy(pages);
+		assertNotNull(actual);
+		String title = "Apple Fruit";
+		assertTrue(foundNode(actual, title));
+		assertEquals(1, howManyNodesWithThisTitle(actual, title));
+	}
+	
+	private int howManyNodesWithThisTitle(HierarchyNode node, String title) {
+		if (node.getChildren().size() > 0) {
+			int count = 0;
+			for (Iterator<HierarchyNode> iter = node.getChildIterator(); iter.hasNext();) {
+				HierarchyNode child = iter.next();
+				count += howManyNodesWithThisTitle(child, title);
+			}
+			return count;
+		}
+		else {
+			if (title.equals(node.getPage().getName())) {
+				return 1;
+			}
+			return 0;
+		}
+	}
+
+	private static Logger slog = Logger.getLogger(DokuwikiHierarchyTest.class);
+	public static boolean foundNode(HierarchyNode node, String title) {
+		if (node.getChildren().size() > 0) {
+			for (Iterator<HierarchyNode> iter = node.getChildIterator(); iter.hasNext();) {
+				HierarchyNode child = iter.next();
+				if (foundNode(child, title)) {
+					slog.debug(child.getName());
+					return true;
+				}
+			}
+			return false;
+		}
+		else {
+			if (title.equals(node.getPage().getName())) {
+				return true;
+			}
+			return false;
+		}
+	}
+
+	private void lastNodeShouldHaveTitle(HierarchyNode node, String title) {
+		if (node.getChildren().size() > 0) {
+			for (Iterator<HierarchyNode> iter = node.getChildIterator(); iter.hasNext();) {
+				HierarchyNode child = iter.next();
+				lastNodeShouldHaveTitle(child, title);
+			}
+		}
+		else {
+			assertEquals(title, node.getName());
+		}
+		
+	}
+
 	private Collection<Page> createPages(Collection<Page> pages, File[] files) {
 		for (File file : files) {
 			if (file.getName().endsWith(".swp")) continue;

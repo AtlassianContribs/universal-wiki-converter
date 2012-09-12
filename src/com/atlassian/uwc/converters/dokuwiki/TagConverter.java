@@ -36,6 +36,7 @@ public class TagConverter extends BaseConverter {
 			}
 			String[] tagarray = all.split(" ");
 			for (String tag : tagarray) {
+				if ("".equals(tag.trim())) continue;
 				log.debug("adding label: " + tag);
 				page.addLabel(tag);
 			}

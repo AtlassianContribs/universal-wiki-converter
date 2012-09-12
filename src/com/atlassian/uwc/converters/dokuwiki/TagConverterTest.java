@@ -49,5 +49,18 @@ public class TagConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
+	
+	public void testConvertTags_none() {
+		Page page = new Page(null);
+		String input, expected, actual;
+		input = "{{tag>}}\n" + 
+				"";
+		page.setOriginalText(input);
+		tester.convert(page);
+		assertNotNull(page.getLabels());
+		assertEquals(0, page.getLabels().size());
+		actual = page.getLabelsAsString();
+		assertNull(actual);
+	}
 
 }

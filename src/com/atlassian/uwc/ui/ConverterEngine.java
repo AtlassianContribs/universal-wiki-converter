@@ -52,6 +52,7 @@ import com.atlassian.uwc.converters.twiki.TWikiRegexConverterCleanerWrapper;
 import com.atlassian.uwc.converters.xml.DefaultXmlEvents;
 import com.atlassian.uwc.converters.xml.XmlEvents;
 import com.atlassian.uwc.filters.FilterChain;
+import com.atlassian.uwc.hierarchies.DokuwikiHierarchyTest;
 import com.atlassian.uwc.hierarchies.HierarchyBuilder;
 import com.atlassian.uwc.hierarchies.HierarchyNode;
 import com.atlassian.uwc.splitters.PageSplitter;
@@ -1515,7 +1516,6 @@ public class ConverterEngine implements FeedbackHandler {
     		this.feedback = Feedback.CANCELLED;
     		return progress;
     	}
-        
     	// First upload the page contained in this node
         Page page = node.getPage();
         // create missing nodes - like a directory that didn't have a corresponding page
