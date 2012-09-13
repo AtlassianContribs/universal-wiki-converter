@@ -290,81 +290,81 @@ public class DokuwikiHierarchyTest extends TestCase {
 	
 	
 	
-	public void testBuildHierarchy_attachimages() {
-		
-		Properties props = tester.getProperties();
-		props.setProperty("spacekey", "image");
-		props.setProperty("space-image", "images,wiki,test,playground");
-		props.put("filepath-hierarchy-ext", "");
-		props.put("filepath-hierarchy-ignorable-ancestors", "sampleData/hierarchy/doku-pages");
-		props.put("attachmentdirectory", "sampleData/hierarchy/doku-media");
-		tester.setProperties(props);
-		
-		File sampledir = new File("sampleData/hierarchy/doku-pages");
-		Collection<Page> pages = new Vector<Page>();
-		assertTrue(sampledir.exists());
-		File[] files = sampledir.listFiles(new NoSvnFilter());
-		pages = createPages(pages, files);
-
-		HierarchyNode root = tester.buildHierarchy(pages);
-		assertNotNull(root); //root node
-		assertNull(root.getName());
-		assertNull(root.getPage());
-		assertNull(root.getParent());
-		assertNotNull(root.getChildren());
-		
-		Set<HierarchyNode> top = root.getChildren();
-		assertEquals(6, top.size());
-		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
-		nodes0.addAll(top);
-		String[] exp = {"Images", "Playground", "Test", "Wiki", "Start", "Test Images" };
-		testNodeResults(nodes0, exp);
-		
-		//needs more than one level of parent to avoid collision
-		HierarchyNode start = getNode("Start", nodes0);
-		assertNotNull(start);
-		assertNotNull(start.getPage());
-		assertNotNull(start.getPage().getAttachments());
-		Vector<File> startAtt = new Vector<File>();
-		startAtt.addAll(start.getPage().getAttachments());
-		assertEquals(1, startAtt.size());
-		assertEquals("cow.jpg", startAtt.get(0).getName());
-		
-		HierarchyNode images = getNode("Images", nodes0);
-		assertNotNull(images);
-		assertNotNull(images.getPage());
-		assertNotNull(images.getPage().getAttachments());
-		Vector<File> imageAtt = new Vector<File>();
-		imageAtt.addAll(images.getPage().getAttachments());
-		assertEquals(2, imageAtt.size());
-		assertTrue("cow.jpg".equals(imageAtt.get(0).getName()) || 
-				"hobbespounce.gif".equals(imageAtt.get(0).getName()));
-		assertTrue("cow.jpg".equals(imageAtt.get(1).getName()) || 
-				"hobbespounce.gif".equals(imageAtt.get(1).getName()));
-		
-		Vector<HierarchyNode> imagesNodes = new Vector<HierarchyNode>();
-		imagesNodes.addAll(images.getChildren());
-		HierarchyNode cows = getNode("Cows", imagesNodes);
-		assertNotNull(cows);
-		assertNotNull(cows.getPage());
-		assertNotNull(cows.getPage().getAttachments());
-		Vector<File> cowAtt = new Vector<File>();
-		cowAtt.addAll(cows.getPage().getAttachments());
-		assertEquals(1, cowAtt.size());
-		assertEquals("cow.jpg", cowAtt.get(0).getName());
-		
-		Vector<HierarchyNode> cowNodes = new Vector<HierarchyNode>();
-		cowNodes.addAll(cows.getChildren());
-		HierarchyNode jpgs = getNode("Jpgs", cowNodes);
-		assertNotNull(jpgs);
-		assertNotNull(jpgs.getPage());
-		assertNotNull(jpgs.getPage().getAttachments());
-		Vector<File> jpgsAtt = new Vector<File>();
-		jpgsAtt.addAll(jpgs.getPage().getAttachments());
-		assertEquals(1, jpgsAtt.size());
-		assertEquals("cow.jpg", jpgsAtt.get(0).getName());
-		
-	}
+//	public void testBuildHierarchy_attachimages() {
+//		
+//		Properties props = tester.getProperties();
+//		props.setProperty("spacekey", "image");
+//		props.setProperty("space-image", "images,wiki,test,playground");
+//		props.put("filepath-hierarchy-ext", "");
+//		props.put("filepath-hierarchy-ignorable-ancestors", "sampleData/hierarchy/doku-pages");
+//		props.put("attachmentdirectory", "sampleData/hierarchy/doku-media");
+//		tester.setProperties(props);
+//		
+//		File sampledir = new File("sampleData/hierarchy/doku-pages");
+//		Collection<Page> pages = new Vector<Page>();
+//		assertTrue(sampledir.exists());
+//		File[] files = sampledir.listFiles(new NoSvnFilter());
+//		pages = createPages(pages, files);
+//
+//		HierarchyNode root = tester.buildHierarchy(pages);
+//		assertNotNull(root); //root node
+//		assertNull(root.getName());
+//		assertNull(root.getPage());
+//		assertNull(root.getParent());
+//		assertNotNull(root.getChildren());
+//		
+//		Set<HierarchyNode> top = root.getChildren();
+//		assertEquals(6, top.size());
+//		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
+//		nodes0.addAll(top);
+//		String[] exp = {"Images", "Playground", "Test", "Wiki", "Start", "Test Images" };
+//		testNodeResults(nodes0, exp);
+//		
+//		//needs more than one level of parent to avoid collision
+//		HierarchyNode start = getNode("Start", nodes0);
+//		assertNotNull(start);
+//		assertNotNull(start.getPage());
+//		assertNotNull(start.getPage().getAttachments());
+//		Vector<File> startAtt = new Vector<File>();
+//		startAtt.addAll(start.getPage().getAttachments());
+//		assertEquals(1, startAtt.size());
+//		assertEquals("cow.jpg", startAtt.get(0).getName());
+//		
+//		HierarchyNode images = getNode("Images", nodes0);
+//		assertNotNull(images);
+//		assertNotNull(images.getPage());
+//		assertNotNull(images.getPage().getAttachments());
+//		Vector<File> imageAtt = new Vector<File>();
+//		imageAtt.addAll(images.getPage().getAttachments());
+//		assertEquals(2, imageAtt.size());
+//		assertTrue("cow.jpg".equals(imageAtt.get(0).getName()) || 
+//				"hobbespounce.gif".equals(imageAtt.get(0).getName()));
+//		assertTrue("cow.jpg".equals(imageAtt.get(1).getName()) || 
+//				"hobbespounce.gif".equals(imageAtt.get(1).getName()));
+//		
+//		Vector<HierarchyNode> imagesNodes = new Vector<HierarchyNode>();
+//		imagesNodes.addAll(images.getChildren());
+//		HierarchyNode cows = getNode("Cows", imagesNodes);
+//		assertNotNull(cows);
+//		assertNotNull(cows.getPage());
+//		assertNotNull(cows.getPage().getAttachments());
+//		Vector<File> cowAtt = new Vector<File>();
+//		cowAtt.addAll(cows.getPage().getAttachments());
+//		assertEquals(1, cowAtt.size());
+//		assertEquals("cow.jpg", cowAtt.get(0).getName());
+//		
+//		Vector<HierarchyNode> cowNodes = new Vector<HierarchyNode>();
+//		cowNodes.addAll(cows.getChildren());
+//		HierarchyNode jpgs = getNode("Jpgs", cowNodes);
+//		assertNotNull(jpgs);
+//		assertNotNull(jpgs.getPage());
+//		assertNotNull(jpgs.getPage().getAttachments());
+//		Vector<File> jpgsAtt = new Vector<File>();
+//		jpgsAtt.addAll(jpgs.getPage().getAttachments());
+//		assertEquals(1, jpgsAtt.size());
+//		assertEquals("cow.jpg", jpgsAtt.get(0).getName());
+//		
+//	}
 	
 	public void testBuildHierarchy_fixBranchNames() {
 		Properties props = tester.getProperties();
@@ -603,6 +603,32 @@ public class DokuwikiHierarchyTest extends TestCase {
 		HierarchyNode actual = tester.buildHierarchy(pages);
 		assertNotNull(actual);
 		String title = "Apple Fruit";
+		assertTrue(foundNode(actual, title));
+		assertEquals(1, howManyNodesWithThisTitle(actual, title));
+	}
+	
+	public void testAncestorFixTitlesProblem() {
+		
+		Properties props = tester.getProperties();
+		props.setProperty("collision-titles-food", "Global");
+		props.put("filepath-hierarchy-ext", "");
+		String samplepath = "/Users/laura/Code/Clients/AppFusions/projects/TAMigration/dokuwikiexport/wiki/data/pages/develop/teams/teammagritte"; 
+		props.put("filepath-hierarchy-ignorable-ancestors", samplepath);
+		//set a property to identify the position of the homepage file
+		props.put("hierarchy-homepage-position", "sibling"); //default is child
+		//set a property to identify the homepage file 
+		props.put("hierarchy-homepage-dokuwiki-filename", ""); //default is empty. means the nodename
+		tester.setProperties(props);
+		
+		File sampledir = new File(samplepath);
+		Collection<Page> pages = new Vector<Page>();
+		assertTrue(sampledir.exists());
+		File[] files = sampledir.listFiles(new NoSvnFilter());
+		pages = createPages(pages, files);
+		
+		HierarchyNode actual = tester.buildHierarchy(pages);
+		assertNotNull(actual);
+		String title = "Environments Global";
 		assertTrue(foundNode(actual, title));
 		assertEquals(1, howManyNodesWithThisTitle(actual, title));
 	}

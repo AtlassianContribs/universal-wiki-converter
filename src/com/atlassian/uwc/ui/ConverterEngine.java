@@ -389,9 +389,6 @@ public class ConverterEngine implements FeedbackHandler {
     				savePages(allPages, filterPattern);
     		else log.debug("Engine Saves To Disk setting turned off.");
 			
-			//check for namespace collisions and emit errors if found
-			listCollisions(allPages);
-			
 			//handling page histories and not sorting on create
 			if (isHandlingPageHistories() && 
 					!(isPageHistorySortOnCreate())) {
@@ -414,10 +411,17 @@ public class ConverterEngine implements FeedbackHandler {
 					}
 					//build the hierarchy
 					HierarchyNode root = hierarchyBuilder.buildHierarchy(allPages);
-					writeHierarchy(root, allPages.size(), settings.getSpace());
+					int currenttotal = allPages.size();
+					if (hierarchyBuilder.getProperties().containsKey("newpagecount"))
+						currenttotal = Integer.parseInt(hierarchyBuilder.getProperties().getProperty("newpagescount"));
+					writeHierarchy(root, currenttotal, settings.getSpace());
 				} else { //no hierarchy - just write the pages
 					writePages(allPages, settings.getSpace());
 				}
+				//check for namespace collisions and emit errors if found
+				//(after hierarchy has had a chance to make changes)
+				listCollisions(allPages);
+
 			}
 			else if (!sendToConfluence){
 				log.debug("Send To Confluence setting turned off. --> Not uploading pages.");

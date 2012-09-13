@@ -1,25 +1,56 @@
 package com.atlassian.uwc.converters.dokuwiki;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.atlassian.uwc.converters.BaseConverter;
-import com.atlassian.uwc.converters.tikiwiki.RegexUtil;
+import org.apache.log4j.Logger;
+
+import com.atlassian.uwc.ui.FileUtils;
 import com.atlassian.uwc.ui.Page;
 
-public class HierarchyTitleConverter extends BaseConverter {
+public class HierarchyTitleConverter extends DokuwikiUserDate {
 
+	Logger log = Logger.getLogger(this.getClass());
 	public void convert(Page page) {
 		String name = page.getName();
+		//check the metadata for a title
+		name = getMetaTitle(page);
 		// Strip trailing file name extension.
 		name = fixTitle(name);
+		log.debug("Changing title from '"+ page.getName() + "' to '" + name + "'");
 		page.setName(name);
+	}
+	
+	Pattern title = Pattern.compile("s:5:\"title\";" + 
+			"s:\\d+:\"(.*?)\";" + 
+			"s:11:\"description\";");
+	public String getMetaTitle(Page page) {
+		if (page == null) return page.getName();
+		if (page.getFile() == null) return page.getName();
+		String metaFilename = getMetaFilename(page.getFile().getPath(), ".meta");
+		if (metaFilename == null) return page.getName();
+		String contents = null;
+		try {
+			contents = FileUtils.readTextFile(new File(metaFilename));
+		} catch (IOException e) {
+			log.debug("Problem reading meta file: " + metaFilename,e);
+			return page.getName();
+		}
+		Matcher titleFinder = title.matcher(contents);
+		if (titleFinder.find()) {
+			return titleFinder.group(1);
+		}
+		return page.getName();
 	}
 
 	public static String fixTitle(String name) {
 		if (name.endsWith(".txt")) {
 			name = name.substring(0, name.length()-4);
 		}
+		//replace slashes
+		name = name.replaceAll("[\\\\\\/]", " ");
 		// Replace underscores with spaces
 		name = name.replaceAll("_", " ");
 

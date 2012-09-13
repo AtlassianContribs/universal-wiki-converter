@@ -16,6 +16,8 @@ import com.atlassian.uwc.ui.Page;
 
 public class DokuwikiHierarchy extends FilepathHierarchy {
 
+	int newpagescount = 0;
+	
 	public HierarchyNode buildHierarchy(Collection<Page> pages) {
 		//run the filepath hierarchy first -
 		HierarchyNode node = super.buildHierarchy(pages);
@@ -30,11 +32,16 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 		node = fixCollisions(node);
 		//fix titles
 		node = fixTitles(node);
-		//attach images
-		String attdirRaw = getProperties().getProperty("attachmentdirectory", "");
-		Vector<File> attdirs = getAttDirs(attdirRaw);
-		if (attdirs.isEmpty()) return node;
-		node = attachAllImages(node, attdirs, true);
+		//attach images - old attachment handling. Idea is to put the attachments in the 
+		//new confluence page corresponding with the media directory for that namespace
+		//but this doesn't work if the media dir doesn't correspond to an existing pages namespace
+//		String attdirRaw = getProperties().getProperty("attachmentdirectory", "");
+//		Vector<File> attdirs = getAttDirs(attdirRaw);
+//		if (attdirs.isEmpty()) return node;
+//		node = attachAllImages(node, attdirs, true);
+		
+		getProperties().setProperty("newpagescount", newpagescount+"");
+		
 		return node;
 	}
 
@@ -161,8 +168,8 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 			for (String name : collisions) {
 				String eqname = equalize(name);
 				String childname = equalize(child.getName());
-				log.debug("Examining collisions candidate: '" + eqname + "' for this child: '" + childname + "'");
 				if (childname.equals(eqname)) {
+					log.debug("Examining collisions candidate: '" + eqname + "' for this child: '" + childname + "'");
 					String parent = child.getParent().getName();
 					log.debug("parent = " + parent);
 					if (parent == null) continue;
@@ -209,23 +216,29 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 		Set<HierarchyNode> children = node.getChildren();
 		for (Iterator iter = children.iterator(); iter.hasNext();) { 
 			HierarchyNode child = (HierarchyNode) iter.next();
-			if (child.getPage() == null) child.setPage(createPage(child.getName()));
+			String name = getOrigChildName(child);
+			if (child.getPage() == null) child.setPage(createPage(name));
 			for (File attdir : attdirs) {
-				if (top && equalize(child.getName()).equals(equalize(attdir.getName()))) {
+				log.debug ("Examining attachment directory: " + attdir);
+				log.debug(equalize(name)+" ... " + equalize(attdir.getName()));
+				if (top && equalize(name).equals(equalize(attdir.getName()))) {
 					doAttach(child, attdir);
 					Vector<File> thisfile = new Vector<File>();
 					thisfile.add(attdir);
 					attachAllImages(child, thisfile, false);
 				}
 				File[] files = attdir.listFiles(getSvnFilter());
+				log.debug("files["+files.length+"]");
 				for (File file : files) {
-					if (top && file.isFile() && child.getName().equals("Start")) {
-						log.debug("Attaching: " + file.getName() + " to " + child.getName());
+					if (top && file.isFile() && name.equals("Start")) {
+						log.debug("Attaching: " + file.getName() + " to " + name);
 						child.getPage().addAttachment(file);
 					}
-					if (file.isFile()) continue;
+					if (file.isFile()) 
+						continue;
 					String filename = equalize(file.getName());
-					String childname = equalize(child.getName());
+					log.debug("filename: " + filename);
+					String childname = equalize(name);
 					Vector<File> thisfile = new Vector<File>();
 					thisfile.add(file);
 					if (filename.equals(childname)) {
@@ -240,7 +253,18 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 		return node;
 	}
 
+	Pattern leafpath = Pattern.compile("[^\\"+File.separator+"]+$");
+	public String getOrigChildName(HierarchyNode child) {
+		if (child.getPage() != null) {
+			String path = child.getPage().getPath();
+			Matcher leafFinder = leafpath.matcher(path);
+			if (leafFinder.find()) return leafFinder.group();
+		}
+		return child.getName();
+	}
+	
 	private void doAttach(HierarchyNode child, File file) {
+		log.debug("doAttach: " + child.getName() + " ... " + file.getName());
 		File[] attachments = file.listFiles(getSvnFilter());
 		for (File att : attachments) {
 			if (att.isFile()) {
@@ -261,7 +285,8 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
          page.setName(name);
          page.setOriginalText("");
          page.setConvertedText("");
-         page.setPath(name); 
+         page.setPath(name);
+         newpagescount++;
          return page;
 	}
 
@@ -296,8 +321,9 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 			if (child.getPage() == null)
 				child.setName(titleConverter.fixTitle(child.getName()));
 			else {
-				titleConverter.convert(child.getPage());
-				child.setName(child.getPage().getName());
+				String fixed = titleConverter.fixTitle(child.getPage().getName());
+				child.setName(fixed);
+				child.getPage().setName(fixed);
 			}
 			child = fixTitles(child);
 		}

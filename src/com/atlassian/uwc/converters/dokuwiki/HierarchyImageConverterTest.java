@@ -7,6 +7,8 @@ import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.atlassian.uwc.ui.Page;
+
 public class HierarchyImageConverterTest extends TestCase {
 
 	HierarchyImageConverter tester = null;
@@ -107,4 +109,25 @@ public class HierarchyImageConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 
+	
+	public void testConvertImages_Spacekey() {
+		String input, expected, actual;
+		input = "{{:cow.jpg|}}\n" + 
+				"{{wiki:dokuwiki-128.png}}\n";
+		expected = "!foobar:Start^cow.jpg!\n" +
+				"!foobar:Wiki^dokuwiki-128.png!\n";
+		
+		Page page =new Page(null);
+		page.setOriginalText(input);
+		page.setName("tada");
+		page.setSpacekey("foobar");
+		
+		tester.convert(page);
+		
+		actual = page.getConvertedText();
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+
+	
 }

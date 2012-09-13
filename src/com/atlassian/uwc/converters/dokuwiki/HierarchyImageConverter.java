@@ -18,7 +18,9 @@ public class HierarchyImageConverter extends HierarchyTarget {
 	public void convert(Page page) {
 		//images will be attached in the DokuwikiHierarchy
 		String input = page.getOriginalText();
-		String converted = convertImages(input, getCurrentPath(page));
+		String converted = (page.getSpacekey() == null)?
+				convertImages(input, getCurrentPath(page)):
+				convertImages(input, getCurrentPath(page), page.getSpacekey());	
 		page.setConvertedText(converted);
 		
 	}
@@ -31,6 +33,9 @@ public class HierarchyImageConverter extends HierarchyTarget {
 	Pattern params = Pattern.compile("(\\d+)(x(\\d+))?");
 	protected String convertImages(String input, String currentPath) {
 		String currentSpacekey = getProperties().getProperty("spacekey", null);
+		return convertImages(input, currentPath, currentSpacekey);
+	}
+	protected String convertImages(String input, String currentPath, String currentSpacekey) {
 		Vector<String> allspaces = getSpaces();
 		HashMap<String,String> namespaces = getDokuDirectories();
 		Matcher imageFinder = image.matcher(input);
@@ -132,7 +137,7 @@ public class HierarchyImageConverter extends HierarchyTarget {
 		return input;
 	}
 	
-	private boolean isImage(String image) {
+	protected boolean isImage(String image) {
 		String ext = image.replaceFirst("^.*\\.", "");
 		boolean isimage = false;
 		String mimes = getMimetypes();
@@ -146,7 +151,7 @@ public class HierarchyImageConverter extends HierarchyTarget {
 		return isimage;
 	}
 	String mimetypes;
-	private String getMimetypes() {
+	protected String getMimetypes() {
 		if (mimetypes != null) return mimetypes;
 		mimetypes = "";
 		String line;
