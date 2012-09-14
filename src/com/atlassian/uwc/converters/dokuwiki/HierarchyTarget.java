@@ -8,11 +8,17 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import com.atlassian.uwc.converters.BaseConverter;
 import com.atlassian.uwc.ui.Page;
 
 public abstract class HierarchyTarget extends BaseConverter {
 	Pattern space = Pattern.compile("space-([^-]*)");
+	protected Pattern metaFile = Pattern.compile("([\\\\/])([^\\\\/]+)(\\.meta)$");
+	
+	Logger log = Logger.getLogger(this.getClass());
+	
 	protected Vector<String> getSpaces() {
 		Properties props = getProperties();
 		Vector<String> spaces = new Vector<String>();
@@ -43,16 +49,31 @@ public abstract class HierarchyTarget extends BaseConverter {
 		return directories;
 	}
 	protected String fixCollisions(String target, String hierarchy, String linkSpacekey) {
+		return fixCollisions(target, hierarchy, linkSpacekey, null);
+	}
+	protected String fixCollisions(String target, String hierarchy, String linkSpacekey, String targetMetaFilename) {
 		Vector<String> collisionsCandidates = getCollisionsCandidates(linkSpacekey);
 		target = HierarchyTitleConverter.casify(target);
 		if (collisionsCandidates.contains(target)) {
 			String parentsRaw = hierarchy.replaceFirst("\\Q" + target + "\\E.*$", "");
 			String[] parents = parentsRaw.split(":");
+			if (parents.length < 2) return target;
 			boolean again = false;
-			for (int i = parents.length-1;i>=0;i--) {
+			for (int i = parents.length-2;i>=0;i--) {
 				String parent = parents[i];
+				log.debug("HT: parent = '" + parent + "', targetMetaFilename:'" + targetMetaFilename + "'");
 				if (parent.toLowerCase().equals(target.toLowerCase())) continue;
 				if ("".equals(parent)) continue;
+				if (targetMetaFilename != null) {
+					Matcher metaFinder = metaFile.matcher(targetMetaFilename);
+					if (metaFinder.find()) {
+						String parentMetaFilename = metaFinder.replaceFirst(".meta");
+						log.debug("HT: parentMetaFilename: '" +  parentMetaFilename + "'");
+						String tmpparent = HierarchyTitleConverter.getMetaTitle(parentMetaFilename);
+						log.debug("HT: tmpparent: '" +  tmpparent + "'");
+						if (tmpparent != null && !"".equals(tmpparent)) parent = tmpparent;
+					}
+				}
 				parent = HierarchyTitleConverter.fixTitle(parent);
 				//how many parents do we need? if the parent is a collision, we need its parent
 				if (collisionsCandidates.contains(parent)) again = true;

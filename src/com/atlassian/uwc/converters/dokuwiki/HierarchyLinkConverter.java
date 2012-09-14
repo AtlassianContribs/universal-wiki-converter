@@ -89,7 +89,7 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 					target = target.replaceFirst("^.*:", ""); //remove everything to the last colon
 				else //title was set with metadata
 					target = metatitle;
-				target = HierarchyTitleConverter.casify(target); //foo_bar becomes Foo Bar
+				target = HierarchyTitleConverter.fixTitle(target); //foo_bar becomes Foo Bar
 				//fix collisions
 				String linkSpacekey = currentSpacekey;
 				targetPart1 = targetPart1.replaceAll(":", File.separator);
@@ -98,7 +98,7 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 					linkSpacekey = namespaces.get(targetPart1); 
 				}
 				if (containsSpace) linkSpacekey = targetPart1;
-//				target = fixCollisions(target, hierarchy, linkSpacekey);//collisions handling has to happen elsewhere?
+				target = fixCollisions(target, hierarchy, linkSpacekey, metaFilename);
 				//underscores to spaces
 				target = target.replaceAll("_", " ");
 				log.debug("link target = " + target);
@@ -122,7 +122,6 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 	}
 	
 	
-	Pattern metaFile = Pattern.compile("([\\\\/])([^\\\\/]+)(\\.meta)$");
 	protected String getTargetMetaFilename(String target, String metaFilename, boolean isOne) {
 		target=target.replaceAll(":+", File.separator);
 		if (!target.startsWith(File.separator)) target = File.separator + target;

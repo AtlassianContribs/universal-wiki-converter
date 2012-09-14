@@ -65,8 +65,8 @@ public class HierarchyLinkConverterTest extends TestCase {
 				"[food:Water]\n" + 
 				"[Food|food:Start]\n" + 
 				"[food:Baklava]\n" + 
-				"[food:Fruit]\n" + 
-				"[food:Fruit Apple]\n" + 
+				"[food:Food Fruit]\n" + 
+				"[food:Food Fruit Apple]\n" + 
 				"[food:Pie]\n" + 
 				"[food:Pie Apple]\n" + 
 				"[food:Pie Fruit]\n" + 
@@ -154,11 +154,17 @@ public class HierarchyLinkConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 	
-	public void testConvertWithAnotherSpacekey() {
-		fail();
-	}
-	
 	public void testConvertWithCollision() {
-		fail();
+		tester.getProperties().setProperty("collision-titles-xyz", "Harumph BAr");
+		String input, expected, actual;
+		input = "[[.:foo]]\n" +
+				"[[:foo:bar]]\n";
+		expected = "[xyz:Foo Tralala]\n" +
+				"[xyz:Foo Tralala Harumph BAr]\n";
+		tester.getProperties().setProperty("filepath-hierarchy-ignorable-ancestors", "/Users/laura/Code/Git/uwc/sampleData/dokuwiki/junit_resources/pages");
+		String pretendthispagepath = "/Users/laura/Code/Git/uwc/sampleData/dokuwiki/junit_resources/pages/test.txt";
+		actual = tester.convertLink(input, "", "xyz", pretendthispagepath);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
 	}
 }
