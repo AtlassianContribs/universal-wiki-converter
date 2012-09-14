@@ -1,5 +1,6 @@
 package com.atlassian.uwc.converters.dokuwiki;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
@@ -88,4 +89,22 @@ public abstract class HierarchyTarget extends BaseConverter {
 		return full.replaceAll("\\Q"+ignorable + "\\E", "");
 	}
 
+	protected String getMetaFilename(String path, String filetype) {
+		String metadir = getProperties().getProperty("meta-dir", null);
+		if (metadir == null) {
+			return null;
+		}
+		String ignorable = getProperties().getProperty("filepath-hierarchy-ignorable-ancestors", null);
+		if (ignorable == null) {
+			return null;
+		}
+		String relative = path.replaceFirst("\\Q" + ignorable + "\\E", "");
+		relative = relative.replaceFirst("\\.txt$", filetype);
+		if (relative.startsWith(File.separator) && metadir.endsWith(File.separator))
+			relative = relative.substring(1);
+		if (!relative.startsWith(File.separator) && !metadir.endsWith(File.separator))
+			relative = File.separator + relative;
+		return metadir + relative;
+	}
+	
 }

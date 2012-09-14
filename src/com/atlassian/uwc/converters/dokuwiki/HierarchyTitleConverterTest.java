@@ -18,9 +18,9 @@ public class HierarchyTitleConverterTest extends TestCase {
 	HierarchyTitleConverter tester = null;
 	Logger log = Logger.getLogger(this.getClass());
 	
-	private static final String METADIR = "sampleData/dokuwiki/junit_resources/meta";
+	static final String METADIR = "sampleData/dokuwiki/junit_resources/meta";
 	private static final String SAMPLEMETA = METADIR + "/SampleDokuwiki-InputTitle.meta";
-	private static final String PAGESDIR = "sampleData/dokuwiki/junit_resources/pages";
+	static final String PAGESDIR = "sampleData/dokuwiki/junit_resources/pages";
 	private static final String SAMPLEPAGE = PAGESDIR+"/SampleDokuwiki-InputTitle.txt";
 	
 	protected void setUp() throws Exception {

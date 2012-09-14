@@ -12,7 +12,7 @@ import com.atlassian.uwc.ui.Page;
 
 public class HierarchyTitleConverter extends DokuwikiUserDate {
 
-	Logger log = Logger.getLogger(this.getClass());
+	static Logger log = Logger.getLogger(HierarchyTitleConverter.class);
 	public void convert(Page page) {
 		String name = page.getName();
 		//check the metadata for a title
@@ -23,26 +23,32 @@ public class HierarchyTitleConverter extends DokuwikiUserDate {
 		page.setName(name);
 	}
 	
-	Pattern title = Pattern.compile("s:5:\"title\";" + 
+	static Pattern title = Pattern.compile("s:5:\"title\";" + 
 			"s:\\d+:\"(.*?)\";" + 
 			"s:11:\"description\";");
 	public String getMetaTitle(Page page) {
 		if (page == null) return page.getName();
 		if (page.getFile() == null) return page.getName();
 		String metaFilename = getMetaFilename(page.getFile().getPath(), ".meta");
-		if (metaFilename == null) return page.getName();
+		String title = getMetaTitle(metaFilename);
+		if (title == null) return page.getName();
+		return title;
+	}
+
+	public static String getMetaTitle(String metaFilename) {
+		if (metaFilename == null) return null;
 		String contents = null;
 		try {
 			contents = FileUtils.readTextFile(new File(metaFilename));
 		} catch (IOException e) {
-			log.debug("Problem reading meta file: " + metaFilename,e);
-			return page.getName();
+			log.debug("Problem reading meta file: " + metaFilename);
+			return null;
 		}
 		Matcher titleFinder = title.matcher(contents);
 		if (titleFinder.find()) {
 			return titleFinder.group(1);
 		}
-		return page.getName();
+		return null;
 	}
 
 	public static String fixTitle(String name) {

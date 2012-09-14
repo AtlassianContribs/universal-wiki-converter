@@ -12,6 +12,9 @@ echo "Mailto"
 echo "Lists"
 ./compare.sh Lists
 
+echo "Tables"
+./compare.sh Tables 
+
 ## Not completely implemented yet
 #echo "Image"
 #./compare.sh Image

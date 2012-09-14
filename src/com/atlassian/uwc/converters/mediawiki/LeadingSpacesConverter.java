@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 import com.atlassian.uwc.converters.BaseConverter;
+import com.atlassian.uwc.converters.LeadingSpacesBaseConverter;
 import com.atlassian.uwc.converters.tikiwiki.RegexUtil;
 import com.atlassian.uwc.ui.Page;
 
@@ -27,21 +28,9 @@ import com.atlassian.uwc.ui.Page;
  * @author Laura Kolker
  *
  */
-public class LeadingSpacesConverter extends BaseConverter {
+public class LeadingSpacesConverter extends LeadingSpacesBaseConverter {
 	Logger log = Logger.getLogger(this.getClass());
-
-	//regex parts
-	String newline = "\n";
-	String space = " ";
-	String noNewlines = "[^\n]+";
-	String leadingSpaceLine = "(" + space + noNewlines + newline + ")"; //2nd group
-	String manyLeadingSpaceLines = "(" + leadingSpaceLine + "+)"; //1st group
-	String optNoSpace = "([^ ]?)"; //3rd group
-	//is equivalent to: String regex = "\n(( [^\n]+\n)+)([^ ])?";
-	String regex = "(?:\n|^)" + manyLeadingSpaceLines + optNoSpace;
-	Pattern p = Pattern.compile(regex);
-
-	Pattern leadingspaces = Pattern.compile("" +
+	private Pattern leadingspaces = Pattern.compile("" +
 			"(?<=\n|^) +[^\n]+");
 	public void convert(Page page) {
 		log.debug("Converting Leading Spaces - starting");
@@ -70,29 +59,18 @@ public class LeadingSpacesConverter extends BaseConverter {
 		}
 		else {
 			log.debug("leading spaces -> panel");
-			String replacement = getReplacement(); //newlines were giving me trouble in the properties file
-			try {
-				Matcher m = p.matcher(input);
-				if (m.find()) {
-					log.debug("Leading Spaces - regex found: " + m.group());
-					converted = m.replaceAll(replacement);
-				}
-			} catch (StackOverflowError e) {
-				log.debug("Too much backtracking. Skipping.");
-				return;
-			}
+			converted = convertLeadingSpacesReplaceAll(input, leadingSpacesPattern, getReplacement());
 		}
 		
 		page.setConvertedText(converted);
 		log.debug("Converting Leading Spaces - complete");
 	}
 	
+	
 	private String getReplacement() {
 		String delim = getProperties().getProperty("leading-spaces-delim", "panel");
 		log.debug("Leading spaces replacement delim: " + delim);
-		return "\n{" + delim +
-				"}\n$1{" + delim + 
-				"}\n$3";
+		return getReplacement("{"+delim+"}");
 	}
 
 }

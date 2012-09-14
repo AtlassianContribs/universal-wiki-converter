@@ -7,11 +7,12 @@ import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.atlassian.uwc.converters.LeadingSpacesBaseConverter;
 import com.atlassian.uwc.ui.Page;
 
 public class LeadingSpacesConverterTest extends TestCase {
 
-	LeadingSpacesConverter tester = null;
+	LeadingSpacesBaseConverter tester = null;
 	Logger log = Logger.getLogger(this.getClass());
 	protected void setUp() throws Exception {
 		tester = new LeadingSpacesConverter();
