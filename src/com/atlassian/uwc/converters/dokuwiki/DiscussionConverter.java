@@ -51,6 +51,7 @@ public class DiscussionConverter extends DokuwikiUserDate {
 	 */
 	protected String getCommentData(File pagefile) {
 		String metaFilename = getMetaFilename(pagefile.getPath(), ".comments");
+		if (metaFilename == null) return "";
 		File meta = new File(metaFilename);
 		try {
 			return FileUtils.readTextFile(meta);
@@ -109,9 +110,15 @@ public class DiscussionConverter extends DokuwikiUserDate {
 		Matcher commentFinder = commentP.matcher(input);
 		while (commentFinder.find()) {
 			String creator = commentFinder.group(2); //username from id
-			if (creator == null) creator = commentFinder.group(4); //no id? username from mail
+			String email = null;
+			if (creator == null) {
+				email = commentFinder.group(4); //no id? username from mail
+			}
 			String timestamp = commentFinder.group(5);
 			String text = commentFinder.group(6);
+			if (creator == null && email != null) {
+				text = addEmailAsOrigCommenter(email, text);
+			}
 			timestamp = formatTimestamp(timestamp);
 			boolean isXhtml = true;
 			return new Comment(text, creator, timestamp, isXhtml);
@@ -119,6 +126,25 @@ public class DiscussionConverter extends DokuwikiUserDate {
 		addError(Feedback.CONVERTER_ERROR, "Problem finding comment for: " + input, false);
 		return null;
 	}
+
+	Pattern lastpara = Pattern.compile("(</p>\\s*)$");
+	private String addEmailAsOrigCommenter(String email, String text) {
+		Matcher paraEndFinder = lastpara.matcher(text);
+		StringBuffer sb = new StringBuffer();
+		boolean found = false;
+		while (paraEndFinder.find()) {
+			found = true;
+			String replacement = paraEndFinder.group(1) + "<p><b>Original Dokuwiki Commenter:</b> "+email+"</p>\n";
+			replacement = RegexUtil.handleEscapesInReplacement(replacement);
+			paraEndFinder.appendReplacement(sb, replacement);
+		}
+		if (found) {
+			paraEndFinder.appendTail(sb);
+			return sb.toString();
+		}
+		return text;
+	}
+
 
 	private String formatTimestamp(String timestamp) {
 		long timestring = Long.parseLong(timestamp);

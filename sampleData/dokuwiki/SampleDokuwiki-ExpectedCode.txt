@@ -1,7 +1,7 @@
-This is a sample page for testing uwc-221, code tags in dokuwiki.
+<p>This is a sample page for testing uwc-221, code tags in dokuwiki.</p>
 
-Example provided by dokuwiki's syntax page:
-{code:java}
+<p>Example provided by dokuwiki's syntax page:</p>
+<ac:macro ac:name="code"><ac:default-parameter>java</ac:default-parameter><ac:plain-text-body><![CDATA[
 /** 
  * The HelloWorldApp class implements an application that
  * simply displays "Hello World!" to the standard output.
@@ -11,46 +11,45 @@ class HelloWorldApp {
         System.out.println("Hello World!"); //Display the string.
     }
 }
-{code}
+]]></ac:plain-text-body></ac:macro>
 
-Example for unsupported languages:
-{code:perl}
+<p>Example for unsupported languages:</p>
+<ac:macro ac:name="code"><ac:default-parameter>perl</ac:default-parameter><ac:plain-text-body><![CDATA[
 if (s/abc/def/) {
 tada();
 }
 elsif (s/def/abc/) {
 whosit();
 }
-{code}
+]]></ac:plain-text-body></ac:macro>
 
-UWC-221
-{code}
+<p>UWC-221</p>
+<ac:macro ac:name="code"><ac:plain-text-body><![CDATA[
 this is my code
-{code}
+]]></ac:plain-text-body></ac:macro>
 
-UWC-446
-Some text here
+<p>UWC-446<br/>
+Some text here</p>
 
-{code:bash}
+<ac:macro ac:name="code"><ac:default-parameter>bash</ac:default-parameter><ac:plain-text-body><![CDATA[
 etckeeper init
-{code}
+]]></ac:plain-text-body></ac:macro>
 
-Some text here
+<p>Some text here</p>
 
-{code:bash}
+<ac:macro ac:name="code"><ac:default-parameter>bash</ac:default-parameter><ac:plain-text-body><![CDATA[
 etckeeper init
-{code}
+]]></ac:plain-text-body></ac:macro>
 
-UWC-447
-{code}
+<p>UWC-447</p>
+<ac:macro ac:name="code"><ac:plain-text-body><![CDATA[
 $ git show HEAD   # last commit
 $ git show HEAD^  # pre-last commit
 $ git show HEAD^^ # pre-pre-last commit
-{code}
+]]></ac:plain-text-body></ac:macro>
 
-UWC-448
-{code:bash}
+<p>UWC-448</p>
+<ac:macro ac:name="code"><ac:default-parameter>bash</ac:default-parameter><ac:plain-text-body><![CDATA[
 $ git checkout [rev] file                  # Fetch file from revision
 $ git ls-files -d | xargs git checkout --  # Restore removed files
-{code}
-
+]]></ac:plain-text-body></ac:macro>

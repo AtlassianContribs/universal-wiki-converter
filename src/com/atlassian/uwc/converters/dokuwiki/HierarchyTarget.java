@@ -15,9 +15,10 @@ import com.atlassian.uwc.ui.Page;
 
 public abstract class HierarchyTarget extends BaseConverter {
 	Pattern space = Pattern.compile("space-([^-]*)");
-	protected Pattern metaFile = Pattern.compile("([\\\\/])([^\\\\/]+)(\\.meta)$");
 	
 	Logger log = Logger.getLogger(this.getClass());
+	static HashMap<String,String> directories;
+	static HashMap<String, String[]> relatedPaths;
 	
 	protected Vector<String> getSpaces() {
 		Properties props = getProperties();
@@ -32,9 +33,15 @@ public abstract class HierarchyTarget extends BaseConverter {
 		return spaces;
 	}
 	
+	protected String[] getRelatedPaths(String path) {
+		if (relatedPaths == null) getDokuDirectories();
+		return relatedPaths.get(path);
+	}
 	protected HashMap<String,String> getDokuDirectories() {
 		Properties props = getProperties();
-		HashMap<String,String> directories = new HashMap<String,String>();
+		if (directories != null) return directories;
+		directories = new HashMap<String,String>();
+		relatedPaths = new HashMap<String, String[]>();
 		for (Iterator iter = props.keySet().iterator();iter.hasNext();) {
 			String key = (String) iter.next(); 
 			Matcher spaceFinder = space.matcher(key);
@@ -42,41 +49,53 @@ public abstract class HierarchyTarget extends BaseConverter {
 				String confspace = spaceFinder.group(1);
 				String dokuDirsRaw = (String) props.get(key); //dokuwiki directories/namespaces
 				String[] dokuDirs = dokuDirsRaw.split(",");
-				for (String dir : dokuDirs) 
+				for (String dir : dokuDirs) { 
 					directories.put(dir,confspace);
+					relatedPaths.put(dir, dokuDirs);
+				}
 			}
 		}
 		return directories;
 	}
+	
+	//useful for unit testing, because we keep some static fields
+	protected void clear() {
+		directories = null;
+		relatedPaths = null;
+	}
+	
 	protected String fixCollisions(String target, String hierarchy, String linkSpacekey) {
 		return fixCollisions(target, hierarchy, linkSpacekey, null);
 	}
+	protected Pattern metaFile = Pattern.compile("([\\\\/])([^\\\\/]+)(\\.meta)$");
 	protected String fixCollisions(String target, String hierarchy, String linkSpacekey, String targetMetaFilename) {
 		Vector<String> collisionsCandidates = getCollisionsCandidates(linkSpacekey);
 		target = HierarchyTitleConverter.casify(target);
-		if (collisionsCandidates.contains(target)) {
+		if (isCollisionCandidate(target, collisionsCandidates)) {
 			String parentsRaw = hierarchy.replaceFirst("\\Q" + target + "\\E.*$", "");
 			String[] parents = parentsRaw.split(":");
 			if (parents.length < 2) return target;
 			boolean again = false;
+			String tmpMetaFilename = targetMetaFilename;
 			for (int i = parents.length-2;i>=0;i--) {
 				String parent = parents[i];
-				log.debug("HT: parent = '" + parent + "', targetMetaFilename:'" + targetMetaFilename + "'");
+				log.debug("HT: parent = '" + parent + "', tmpMetaFilename:'" + tmpMetaFilename + "'");
 				if (parent.toLowerCase().equals(target.toLowerCase())) continue;
 				if ("".equals(parent)) continue;
-				if (targetMetaFilename != null) {
-					Matcher metaFinder = metaFile.matcher(targetMetaFilename);
+				if (tmpMetaFilename != null) {
+					Matcher metaFinder = metaFile.matcher(tmpMetaFilename);
 					if (metaFinder.find()) {
 						String parentMetaFilename = metaFinder.replaceFirst(".meta");
 						log.debug("HT: parentMetaFilename: '" +  parentMetaFilename + "'");
 						String tmpparent = HierarchyTitleConverter.getMetaTitle(parentMetaFilename);
 						log.debug("HT: tmpparent: '" +  tmpparent + "'");
 						if (tmpparent != null && !"".equals(tmpparent)) parent = tmpparent;
+						tmpMetaFilename = parentMetaFilename; //in case we have to go again
 					}
 				}
 				parent = HierarchyTitleConverter.fixTitle(parent);
 				//how many parents do we need? if the parent is a collision, we need its parent
-				if (collisionsCandidates.contains(parent)) again = true;
+				if (isCollisionCandidate(parent, collisionsCandidates)) again = true;
 				else again = false;
 				//add the parent to the link
 				target = parent + " " + target;
@@ -84,6 +103,14 @@ public abstract class HierarchyTarget extends BaseConverter {
 			}
 		}
 		return target;
+	}
+
+	public boolean isCollisionCandidate(String target,
+			Vector<String> collisionsCandidates) {
+		for (String candidate : collisionsCandidates) {
+			if (candidate.equalsIgnoreCase(target)) return true;
+		}
+		return false;
 	}
 	protected Vector<String> getCollisionsCandidates(String spacekey) {
 		Properties props = getProperties();

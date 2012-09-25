@@ -1785,7 +1785,8 @@ public class ConverterEngine implements FeedbackHandler {
 			}
 			else { //can we find the home page for this space?
 				try {
-					parentid = broker.getPageIdFromConfluence(confSettings, confSettings.spaceKey, "Home");
+					SpaceForXmlRpc space = broker.getSpace(confSettings, confSettings.spaceKey);
+					parentid = space.getSpaceParams().get("homePage");
 					this.homepages.put(confSettings.spaceKey, parentid);
 				} catch (Exception e) {
 					parentid = null;
@@ -2219,7 +2220,9 @@ public class ConverterEngine implements FeedbackHandler {
     protected boolean alreadyAttached(Page page, File file) {
 		String pagename = page.getName();
 		String filename = file.getName();
-		String attachmentId = pagename + filename;
+		boolean isblog = page.isBlog();
+		String attachmentId = pagename + filename + isblog;
+		if (page.getSpacekey() != null) attachmentId = page.getSpacekey() + attachmentId;
 		if (attachedFiles == null) 
 			attachedFiles = new HashSet<String>();
 		boolean attached = attachedFiles.contains(attachmentId);

@@ -1,0 +1,6 @@
+Testing Basic syntax
+
+**bold**
+
+This too ** bold ** tada
+

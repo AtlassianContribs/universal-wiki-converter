@@ -9,6 +9,8 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import sun.tools.tree.AddExpression;
+
 import com.atlassian.uwc.converters.dokuwiki.HierarchyTitleConverter;
 import com.atlassian.uwc.converters.tikiwiki.RegexUtil;
 import com.atlassian.uwc.filters.NoSvnFilter;
@@ -19,6 +21,7 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 	int newpagescount = 0;
 	
 	public HierarchyNode buildHierarchy(Collection<Page> pages) {
+		log.debug("Number of hierarchy pages: " + pages.size());
 		//run the filepath hierarchy first -
 		HierarchyNode node = super.buildHierarchy(pages);
 		//move spacekeys
@@ -42,8 +45,13 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 		
 		getProperties().setProperty("newpagescount", newpagescount+"");
 		
+		if (log.isDebugEnabled()) {
+			printTree(node);
+		}
+		
 		return node;
 	}
+
 
 	private HierarchyNode handleSpacekeyBranchWithProp(HierarchyNode node) {
 		String spacekey = getProperties().getProperty("spacekey");
@@ -81,8 +89,13 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 				Set<HierarchyNode> top = root.getChildren();
 				Vector<HierarchyNode> ordered = new Vector<HierarchyNode>(top);
 				for (HierarchyNode topnode : ordered) {
+					if (topnode.getPage() == null) {
+						log.debug("NULL! (Skipping) topnode.getName() = " + topnode.getName());
+						continue;
+					}
 					if (spacekey.equals(topnode.getPage().getSpacekey())) {
 						Set<HierarchyNode> children = topnode.getChildren();
+						log.debug("Moving topnode: " + topnode.getPage().getName());
 						topnode.setParent(null); //since we have to use iter.remove instead of node.removeChild(topnode)
 						for (HierarchyNode child : children) {
 							root.addChild(child);
@@ -102,11 +115,15 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 
 	private HierarchyNode setAncestorsBySpacekey(HierarchyNode root, HierarchyNode node,
 			String spacekey) {
+		log.debug("setAncestorsBySpacekey: node.getName():'" + node.getName() + "' spacekey " + spacekey); 
+//		printTree(node);
 		HierarchyNode parent = node.getParent();
 		if (parent.getName() == null) { //we're at the root level return
+			log.debug("...parent name is null");
 			return node;
 		}
 		if (parent.getPage() == null) {
+			log.debug("...parent page is null. creating for... " + parent.getName());
 			Page page = createPage(parent.getName());
 			page.setSpacekey(spacekey);
 			parent.setPage(page);
@@ -115,11 +132,20 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 				root.addChild(parent);
 		}
 		else if (parent.getPage().getSpacekey() == null) {
+			log.debug("...parent page spacekey is null. Setting to: " + spacekey);
 			parent.getPage().setSpacekey(spacekey);
 			parent = setAncestorsBySpacekey(root, parent, spacekey);
 		}
 		else if (!parent.getPage().getSpacekey().equals(spacekey)) {
+			log.debug("...parent.getPage().getSpacekey: " + parent.getPage().getSpacekey() + "... and spacekey: " + spacekey);
+			log.debug("Copying branch to new parent because of spacekey: " + node.getName());
+			HierarchyNode newparent = new HierarchyNode();
+			newparent.setName(parent.getName());
+			Page page = createPage(parent.getName());
+			page.setSpacekey(spacekey);
 			parent.removeChild(node);
+			newparent.addChild(node);
+			parent.getParent().addChild(newparent);
 		}
 		return node;
 	}
@@ -334,6 +360,7 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 	Page currentpage;
 	HierarchyNode currentParent;
 	boolean combineHomepageNodes = false;
+	private int count;
 	@Override 
 	protected void buildRelationships(Page page, HierarchyNode root) {
 		currentpage = page;
@@ -344,6 +371,7 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 		if (combineHomepageNodes) {
 			combineHomepages(page);
 		}
+		log.debug("++count: "+(count++) +", completed building relationship for page: " + page.getName());
 	}
 
 	public void combineHomepages(Page page) {
@@ -367,6 +395,11 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 	private void combineHomepages(HierarchyNode nullPageNode, HierarchyNode noChildrenNode,
 			Page page) {
 		if (noChildrenNode.getPage() == null) return;//indicates this isn't the right scenario to combine
+		if (noChildrenNode.getChildren().size() > 0) {
+			log.error("Combining Homepages - noChildrenNode has children!: " + noChildrenNode.getName());
+			return;
+		}
+		log.debug("Combining: " + page.getName());
 		//this one represents the one with all the hierarchy data
 		nullPageNode.setPage(page); 
 		//this one represents the one that (used) to have page data. We don't need it anymore
@@ -386,5 +419,19 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 		}
 		return hasRel;
 			
+	}
+	
+
+	private void printTree(HierarchyNode node) {
+		log.debug("PRINTTREE: " + node.getName());
+		printTree(node.getChildren(), "");
+	}
+
+	private void printTree(Set<HierarchyNode> children, String delim) {
+		for (HierarchyNode child : children) {
+			String newdelim = delim + " ";
+			log.debug("PRINTTREE: " + newdelim + child.getName());
+			printTree(child.getChildren(), newdelim);
+		}
 	}
 }

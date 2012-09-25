@@ -206,12 +206,13 @@ public class DiscussionConverterTest extends TestCase {
 		assertNotNull(actual);
 		for (Comment comment : actual) {
 			assertNotNull(comment);
-			assertEquals("myrnaloy@thinman.org", comment.creator);
+			assertNull(comment.creator);
 			assertEquals("\n" + 
 					"<p>\n" + 
 					"Asta!\n" + 
 					"\n" + 
-					"</p>\n", comment.text);
+					"</p>\n" +
+					"<p><b>Original Dokuwiki Commenter:</b> myrnaloy@thinman.org</p>\n", comment.text);
 		}
 	}
 }

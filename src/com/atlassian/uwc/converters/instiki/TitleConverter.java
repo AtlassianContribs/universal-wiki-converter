@@ -13,7 +13,7 @@ public class TitleConverter extends IllegalNameConverter {
 	public void convert(Page page) {
 		String input = page.getName();
 		String converted = decodeUrl(input);
-		converted = converted.replaceFirst("[.]xhtml$", "");
+		converted = converted.replaceFirst("[.]x?html$", "");
 		converted = HierarchyTitleConverter.casify(converted);
 		log.debug("Page title: " + converted);
 		page.setName(converted);

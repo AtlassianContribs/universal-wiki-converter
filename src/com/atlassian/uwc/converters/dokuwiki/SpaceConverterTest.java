@@ -18,6 +18,7 @@ public class SpaceConverterTest extends TestCase {
 		tester = new SpaceConverter();
 		PropertyConfigurator.configure("log4j.properties");
 		Properties properties = tester.getProperties();
+		tester.clear(); //important for the space-X settings
 		properties.setProperty("space-foo", "sampleData/dokuwiki,sampleData/engine");
 		properties.setProperty("space-bar", "bin");
 	}
@@ -62,4 +63,89 @@ public class SpaceConverterTest extends TestCase {
 		assertNull(page.getSpacekey());
 	}
 
+
+	public void testConvert_SpacenameRule_nocase() {
+		tester.getProperties().setProperty("spacename-rule-regex", "en[g]");//if you see this regex in any directory
+		tester.getProperties().setProperty("spacename-rule-prefix", "Prefixed "); //add this prefix to the spacename
+		tester.getProperties().setProperty("spacename-rule-uppercase", "false"); //to upper case each first letter of a word 
+		String path = "sampleData/dokuwiki/SampleDokuwiki-InputLists.txt";
+		String expkey = "foo";
+		String expected = "Prefixed foo";
+		File file = new File(path);
+		assertTrue(file.exists());
+		Page page = new Page(file);
+		assertNull(page.getSpacekey());
+		tester.convert(page);
+		assertNotNull(page.getSpacekey());
+		assertEquals(expkey, page.getSpacekey());
+ 		assertTrue(page.hasSpace(page.getSpacekey()));
+		String[] spaceData = page.getSpaceData(page.getSpacekey());
+		assertEquals(expected, spaceData[0]);
+		
+	}
+	public void testConvert_SpacenameRule_nomatch() {
+		tester.getProperties().setProperty("spacename-rule-regex", "bar");//if you see this regex in any directory
+		tester.getProperties().setProperty("spacename-rule-prefix", "Prefixed "); //add this prefix to the spacename
+		tester.getProperties().setProperty("spacename-rule-uppercase", "false");
+		String path = "sampleData/dokuwiki/SampleDokuwiki-InputLists.txt";
+		String expkey = "foo";
+		File file = new File(path);
+		assertTrue(file.exists());
+		Page page = new Page(file);
+		assertNull(page.getSpacekey());
+		tester.convert(page);
+		assertNotNull(page.getSpacekey());
+		assertEquals(expkey, page.getSpacekey());
+		
+	}
+	
+	public void testConvert_SpacenameRule_case() {
+		tester.getProperties().setProperty("spacename-rule-regex", "en[g]");//if you see this regex in any directory
+		tester.getProperties().setProperty("spacename-rule-prefix", "Prefixed "); //add this prefix to the spacename
+		tester.getProperties().setProperty("spacename-rule-uppercase", "true"); //to upper case each first letter of a word 
+		String path = "sampleData/dokuwiki/SampleDokuwiki-InputLists.txt";
+		String expkey = "foo";
+		String expected = "Prefixed Foo";
+		File file = new File(path);
+		assertTrue(file.exists());
+		Page page = new Page(file);
+		assertNull(page.getSpacekey());
+		tester.convert(page);
+		assertNotNull(page.getSpacekey());
+		assertEquals(expkey, page.getSpacekey());
+		assertTrue(page.hasSpace(page.getSpacekey()));
+		String[] spaceData = page.getSpaceData(page.getSpacekey());
+		assertEquals(expected, spaceData[0]);
+	}
+	
+	
+	public void testConvert_SpacenameRule_casenomatch() {
+		tester.getProperties().setProperty("spacename-rule-regex", "bar");//if you see this regex in any directory
+		tester.getProperties().setProperty("spacename-rule-prefix", "Prefixed "); //add this prefix to the spacename
+		tester.getProperties().setProperty("spacename-rule-uppercase", "true"); //to upper case each first letter of a word 
+		String path = "sampleData/dokuwiki/SampleDokuwiki-InputLists.txt";
+		String expkey = "foo";
+		String expected = "Foo";
+		File file = new File(path);
+		assertTrue(file.exists());
+		Page page = new Page(file);
+		assertNull(page.getSpacekey());
+		tester.convert(page);
+		assertNotNull(page.getSpacekey());
+		assertEquals(expkey, page.getSpacekey());
+	}
+	
+	public void testConvert_siblingfile() {
+		tester.getProperties().setProperty("space-lala","sampleData/dokuwiki/SampleDokuwiki-InputLists");
+		String path = "sampleData/dokuwiki/SampleDokuwiki-InputLists.txt";
+		String expkey = "lala";
+		File file = new File(path);
+		assertTrue(file.exists());
+		Page page = new Page(file);
+		assertNull(page.getSpacekey());
+		tester.convert(page);
+		assertNotNull(page.getSpacekey());
+		assertEquals(expkey, page.getSpacekey());
+	}
+	
 }

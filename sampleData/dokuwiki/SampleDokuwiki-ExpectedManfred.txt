@@ -1,77 +1,105 @@
-h2.  Test Page 
-This is a page containing Dokuwiki syntax - it may be used in order to check proper conversion from Dokuwiki to Confluence using atlassian's UWC.
 
-Additional to the 'core' syntax of Dokuwiki, this page also contains syntax code of common plug-ins and dokuwiki extensions.
-If one does not use those plug-ins, the regarding code snippets just may be removed.
+<h2>Test Page </h2>
+<p>This is a page containing Dokuwiki syntax - it may be used in order to check proper conversion from Dokuwiki to Confluence using atlassian's UWC.</p>
 
-h4.  Lists 
-
-h5.  Unsorted Lists 
-* unsorted 1
-* unsorted 1
-* unsorted 1
-
-h5.  Sorted Lists 
-# sorted 1
-# sorted 2
-# sorted 3
-
-h4.  Links 
-* german Wikipedia link: [Ant|http://de.wikipedia.org/wiki/Ant]
-* german Wikipedia link with alias: [Ant Tool|http://de.wikipedia.org/wiki/Ant]
-* english Wikipedia link: [Ant|http://en.wikipedia.org/wiki/Ant]
-* general link: [Atlassian's Homepage|http://www.atlassian.com/]
-
-h4.  Notes & Co. 
-{info}text{info}
-
-{info}
-* a link: [Atlassian's Homepage|http://www.atlassian.com/]
-* just plain text
-{info}
+<p>Additional to the 'core' syntax of Dokuwiki, this page also contains syntax code of common plug-ins and dokuwiki extensions.<br/>
+If one does not use those plug-ins, the regarding code snippets just may be removed.</p>
 
 
-{note}
-* a link: [Atlassian's Homepage|http://www.atlassian.com/]
-* just plain text
-{note}
+<h4>Lists </h4>
 
-{warning}
-* a link: [Atlassian's Homepage|http://www.atlassian.com/]
-* just plain text
-{warning}
 
-{tip}
-* a link: [Atlassian's Homepage|http://www.atlassian.com/]
-* just plain text
-{tip}
+<h5>Unsorted Lists </h5>
+<ul>
+	<li>unsorted 1</li>
+	<li>unsorted 1</li>
+	<li>unsorted 1</li>
+</ul>
 
-h4.  Code Sections 
 
-{code}Class.forName(){code}
 
-{code}
+<h5>Sorted Lists </h5>
+<ol>
+	<li>sorted 1</li>
+	<li>sorted 2</li>
+	<li>sorted 3</li>
+</ol>
+
+
+
+<h4>Links </h4>
+<ul>
+	<li>german Wikipedia link: <a href="http://de.wikipedia.org/wiki/Ant">Ant</a></li>
+	<li>german Wikipedia link with alias: <a href="http://de.wikipedia.org/wiki/Ant">Ant Tool</a></li>
+	<li>english Wikipedia link: <a href="http://en.wikipedia.org/wiki/Ant">Ant</a></li>
+	<li>general link: <a href="http://www.atlassian.com/">Atlassian's Homepage</a></li>
+</ul>
+
+
+
+<h4>Notes &amp; Co. </h4>
+<ac:macro ac:name="info"><ac:rich-text-body><p>text</p></ac:rich-text-body></ac:macro>
+
+<ac:macro ac:name="info"><ac:rich-text-body>
+<ul>
+	<li>a link: <a href="http://www.atlassian.com/">Atlassian's Homepage</a></li>
+	<li>just plain text</li>
+</ul>
+
+</ac:rich-text-body></ac:macro>
+
+
+<ac:macro ac:name="note"><ac:rich-text-body>
+<ul>
+	<li>a link: <a href="http://www.atlassian.com/">Atlassian's Homepage</a></li>
+	<li>just plain text</li>
+</ul>
+
+</ac:rich-text-body></ac:macro>
+
+<ac:macro ac:name="warning"><ac:rich-text-body>
+<ul>
+	<li>a link: <a href="http://www.atlassian.com/">Atlassian's Homepage</a></li>
+	<li>just plain text</li>
+</ul>
+
+</ac:rich-text-body></ac:macro>
+
+<ac:macro ac:name="tip"><ac:rich-text-body>
+<ul>
+	<li>a link: <a href="http://www.atlassian.com/">Atlassian's Homepage</a></li>
+	<li>just plain text</li>
+</ul>
+
+</ac:rich-text-body></ac:macro>
+
+
+<h4>Code Sections </h4>
+
+<ac:macro ac:name="code"><ac:plain-text-body><![CDATA[Class.forName()]]></ac:plain-text-body></ac:macro>
+
+<ac:macro ac:name="code"><ac:plain-text-body><![CDATA[
 Class.forName()
 Class.forName()
 Class.forName()
-{code}
+]]></ac:plain-text-body></ac:macro>
 
-{code:java}
+<ac:macro ac:name="code"><ac:default-parameter>java</ac:default-parameter><ac:plain-text-body><![CDATA[
 Class.forName()
 Class.forName()
 Class.forName()
-{code}
-
-h4.  Misc Formatting elements 
-
-Clear line break:
+]]></ac:plain-text-body></ac:macro>
 
 
-Some explicit new lines:
-\\ \\ \\ 
-\\ 
+<h4>Misc Formatting elements </h4>
 
-This is a text that is annotated with a tooltip(this is a tooltip)
+<p>Clear line break:</p>
 
+
+<p>Some explicit new lines:
+<br class="atl-forced-newline" /> <br class="atl-forced-newline" /> <br class="atl-forced-newline" /> 
+<br class="atl-forced-newline" /> </p>
+
+<p>This is a text that is annotated with a tooltip(this is a tooltip)</p>
 
 

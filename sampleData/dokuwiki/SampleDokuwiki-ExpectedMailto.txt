@@ -1,10 +1,10 @@
-Sample page for mailto links
+<p>Sample page for mailto links</p>
 
-Requested conversion:
-[mailto:abc@abc.com]
-[Foo Bar|mailto:abc@abc.com]
-[Foo Bar|mailto:abc@abc.com]
-Email header?:
->> From: Foo Bar \[mailto:abc@abc.com]
-Described in dokuwiki.org/syntax as email link:
-[mailto:abc@someplace.org]
+<p>Requested conversion:<br/>
+<a href="mailto:abc@abc.com">abc@abc.com</a><br/>
+<a href="mailto:abc@abc.com">Foo Bar</a><br/>
+<a href="mailto:abc@abc.com">Foo Bar</a><br/>
+Email header?:<br/>
+&gt;&gt; From: Foo Bar [mailto:abc@abc.com]<br/>
+Described in dokuwiki.org/syntax as email link:<br/>
+<a href="mailto:abc@someplace.org">abc@someplace.org</a></p>

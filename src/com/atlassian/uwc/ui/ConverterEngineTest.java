@@ -3385,7 +3385,8 @@ public class ConverterEngineTest extends TestCase {
 		//not attached
 		tester = new ConverterEngine();
 		Page page = new Page(null);
-		page.setName("testPage");
+		String pagename = "testPage";
+		page.setName(pagename);
 		assertFalse(tester.alreadyAttached(page, file));
 		
 		//empty
@@ -3412,6 +3413,20 @@ public class ConverterEngineTest extends TestCase {
 		assertEquals(2, attachments2.size());
 		assertFalse(tester.alreadyAttached(page, file));
 		assertTrue(tester.alreadyAttached(page, file));
+		
+		//what about different spacekeys
+		Page pageSpacekey = new Page(null);
+		pageSpacekey.setName(pagename);
+		assertTrue(tester.alreadyAttached(pageSpacekey, file));
+		pageSpacekey.setSpacekey("foo");
+		assertFalse(tester.alreadyAttached(pageSpacekey, file));
+		
+		//what about blogpost vs page?
+		Page pageBlogpost = new Page(null);
+		pageBlogpost.setName(pagename);
+		assertTrue(tester.alreadyAttached(pageBlogpost, file));
+		pageBlogpost.setIsBlog(true);
+		assertFalse(tester.alreadyAttached(pageBlogpost, file));
 	}
 	
 	public void testTooBig() {

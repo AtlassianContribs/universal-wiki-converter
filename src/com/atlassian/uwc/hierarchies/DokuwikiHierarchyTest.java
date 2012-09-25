@@ -2,12 +2,14 @@ package com.atlassian.uwc.hierarchies;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileReader;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 import junit.framework.TestCase;
 
@@ -44,7 +46,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		File sampledir = new File("sampleData/hierarchy/dokuwiki");
 		Collection<Page> pages = new Vector<Page>();
 		assertTrue(sampledir.exists());
-		File[] files = sampledir.listFiles(new NoSvnFilter());
+		File[] files = sampledir.listFiles(getLocalFilter());
 		pages = createPages(pages, files);
 
 		HierarchyNode root = tester.buildHierarchy(pages);
@@ -84,9 +86,19 @@ public class DokuwikiHierarchyTest extends TestCase {
 	
 
 	private HierarchyNode getNode(String name, Vector<HierarchyNode> nodes) {
+		return getNode(name, nodes, 0);
+	}
+	private HierarchyNode getNode(String name, Vector<HierarchyNode> nodes, int index) {
+		int tmpindex = 0;
 		for (Iterator iter = nodes.iterator(); iter.hasNext();) {
 			HierarchyNode node = (HierarchyNode) iter.next();
-			if (node.getName().toLowerCase().equals(name.toLowerCase())) return node;
+			boolean equals = node.getName().toLowerCase().equals(name.toLowerCase());
+			if (equals && tmpindex == index) { 
+				return node;
+			}
+			else if (equals) {
+				tmpindex++;
+			}
 		}
 		return null;
 	}
@@ -120,7 +132,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		File sampledir = new File("sampleData/hierarchy/dokuwiki");
 		Collection<Page> pages = new Vector<Page>();
 		assertTrue(sampledir.exists());
-		File[] files = sampledir.listFiles(new NoSvnFilter());
+		File[] files = sampledir.listFiles(getLocalFilter());
 		pages = createPages(pages, files);
 
 		HierarchyNode root = tester.buildHierarchy(pages);
@@ -166,7 +178,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		File sampledir = new File("sampleData/hierarchy/dokuwiki");
 		Collection<Page> pages = new Vector<Page>();
 		assertTrue(sampledir.exists());
-		File[] files = sampledir.listFiles(new NoSvnFilter());
+		File[] files = sampledir.listFiles(getLocalFilter());
 		pages = createPages(pages, files);
 
 		HierarchyNode root = tester.buildHierarchy(pages);
@@ -223,7 +235,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		File sampledir = new File("sampleData/hierarchy/dokuwiki");
 		Collection<Page> pages = new Vector<Page>();
 		assertTrue(sampledir.exists());
-		File[] files = sampledir.listFiles(new NoSvnFilter());
+		File[] files = sampledir.listFiles(getLocalFilter());
 		pages = createPages(pages, files);
 		//set some spacekeys (as if SpaceConverter had set this)
 		for (Page page : pages) {
@@ -249,7 +261,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		assertEquals(3, top.size());
 		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
 		nodes0.addAll(top);
-		String[] exp = {"Drink", "Food", "Pie"};
+		String[] exp = {"Drink", "Food", "Food"};
 		testNodeResults(nodes0, exp);
 		
 		//needs more than one level of parent to avoid collision
@@ -262,7 +274,9 @@ public class DokuwikiHierarchyTest extends TestCase {
 		String[] exp2 = {"Juice", "Water"};
 		testNodeResults(fruitnodes1, exp2);
 
-		HierarchyNode pie = getNode("Pie", nodes0);
+		HierarchyNode pie = getNode("Food", nodes0);
+		Vector<HierarchyNode> tmpchildren = new Vector<HierarchyNode>(pie.getChildren());
+		pie = getNode("Pie", tmpchildren);
 		assertNotNull(pie);
 		assertEquals(3, pie.getChildren().size());
 		Vector<HierarchyNode> pienodes = new Vector<HierarchyNode>();
@@ -279,7 +293,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		String[] expfruit = {"Fruit Apple"};
 		testNodeResults(fruitnodes2, expfruit);
 		
-		HierarchyNode food = getNode("Food", nodes0);
+		HierarchyNode food = getNode("Food", nodes0, 1); //get the second one
 		assertNotNull(food);
 		assertEquals(2, food.getChildren().size());
 		Vector<HierarchyNode> foodnodes = new Vector<HierarchyNode>();
@@ -379,7 +393,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		File sampledir = new File("sampleData/hierarchy/dokuwiki");
 		Collection<Page> pages = new Vector<Page>();
 		assertTrue(sampledir.exists());
-		File[] files = sampledir.listFiles(new NoSvnFilter());
+		File[] files = sampledir.listFiles(getLocalFilter());
 		pages = createPages(pages, files);
 		//lowercase all the pagenames, artificially
 		for (Page page : pages) {
@@ -438,7 +452,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		File sampledir = new File(samplepath);
 		Collection<Page> pages = new Vector<Page>();
 		assertTrue(sampledir.exists());
-		File[] files = sampledir.listFiles(new NoSvnFilter());
+		File[] files = sampledir.listFiles(getLocalFilter());
 		pages = createPages(pages, files);
 
 		HierarchyNode root = tester.buildHierarchy(pages);
@@ -517,7 +531,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		File sampledir = new File(samplepath);
 		Collection<Page> pages = new Vector<Page>();
 		assertTrue(sampledir.exists());
-		File[] files = sampledir.listFiles(new NoSvnFilter());
+		File[] files = sampledir.listFiles(getLocalFilter());
 		pages = createPages(pages, files);
 
 		HierarchyNode root = tester.buildHierarchy(pages);
@@ -597,7 +611,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		File sampledir = new File(samplepath);
 		Collection<Page> pages = new Vector<Page>();
 		assertTrue(sampledir.exists());
-		File[] files = sampledir.listFiles(new NoSvnFilter());
+		File[] files = sampledir.listFiles(getLocalFilter());
 		pages = createPages(pages, files);
 		
 		HierarchyNode actual = tester.buildHierarchy(pages);
@@ -607,30 +621,14 @@ public class DokuwikiHierarchyTest extends TestCase {
 		assertEquals(1, howManyNodesWithThisTitle(actual, title));
 	}
 	
-	public void testAncestorFixTitlesProblem() {
-		
-		Properties props = tester.getProperties();
-		props.setProperty("collision-titles-food", "Global");
-		props.put("filepath-hierarchy-ext", "");
-		String samplepath = "/Users/laura/Code/Clients/AppFusions/projects/TAMigration/dokuwikiexport/wiki/data/pages/develop/teams/teammagritte"; 
-		props.put("filepath-hierarchy-ignorable-ancestors", samplepath);
-		//set a property to identify the position of the homepage file
-		props.put("hierarchy-homepage-position", "sibling"); //default is child
-		//set a property to identify the homepage file 
-		props.put("hierarchy-homepage-dokuwiki-filename", ""); //default is empty. means the nodename
-		tester.setProperties(props);
-		
-		File sampledir = new File(samplepath);
-		Collection<Page> pages = new Vector<Page>();
-		assertTrue(sampledir.exists());
-		File[] files = sampledir.listFiles(new NoSvnFilter());
-		pages = createPages(pages, files);
-		
-		HierarchyNode actual = tester.buildHierarchy(pages);
-		assertNotNull(actual);
-		String title = "Environments Global";
-		assertTrue(foundNode(actual, title));
-		assertEquals(1, howManyNodesWithThisTitle(actual, title));
+
+	public FileFilter getLocalFilter() {
+		return new FileFilter() {
+			@Override
+			public boolean accept(File pathname) {
+					return (pathname.isDirectory() || pathname.getPath().endsWith(".txt"));
+			}
+		};
 	}
 	
 	private int howManyNodesWithThisTitle(HierarchyNode node, String title) {
@@ -686,18 +684,23 @@ public class DokuwikiHierarchyTest extends TestCase {
 	private Collection<Page> createPages(Collection<Page> pages, File[] files) {
 		for (File file : files) {
 			if (file.getName().endsWith(".swp")) continue;
-			if (file.isDirectory()) pages = createPages(pages, file.listFiles(new NoSvnFilter()));
+			if (file.isDirectory()) pages = createPages(pages, file.listFiles(getLocalFilter()));
 			else {
-				Page page = new Page(file);
-				page.setName(fixname(file.getName()));
-				page.setOriginalText(readFile(file));
-				page.setConvertedText(page.getOriginalText());
-				page.setUnchangedSource(page.getOriginalText());
-				page.setPath(fixpath(file));
+				Page page = oneNewPage(file);
 				pages.add(page);
 			}
 		}
 		return pages;
+	}
+
+	public Page oneNewPage(File file) {
+		Page page = new Page(file);
+		page.setName(fixname(file.getName()));
+		page.setOriginalText(readFile(file));
+		page.setConvertedText(page.getOriginalText());
+		page.setUnchangedSource(page.getOriginalText());
+		page.setPath(fixpath(file));
+		return page;
 	}
 
 	// yanked from DokuWikiLinkConverter.formatPageName	

@@ -98,6 +98,7 @@ public class DokuwikiAttachmentConverter extends HierarchyImageConverter {
 	}
 	
 	Pattern isRelative = Pattern.compile("^:[^:]+$");
+	Pattern notfilename = Pattern.compile("^(.*?)(:[^:]+)$");
 	protected String createRelativePath(String input, String relativePath) {
 		input = input.trim();
 		if (isRelative.matcher(input).find()) {
@@ -105,6 +106,16 @@ public class DokuwikiAttachmentConverter extends HierarchyImageConverter {
 			relativePath = relativePath.replaceFirst("\\Q"+ignorable+"\\E", "");
 			if (!relativePath.endsWith(File.separator)) relativePath += File.separator;
 			input = input.replaceFirst(":", relativePath);
+		}
+		else { //deal with case sensitivity in parent path
+			Matcher pathFinder = notfilename.matcher(input);
+			if (pathFinder.find()) {
+				String parentpath = pathFinder.group(1);
+				String replacement = parentpath.toLowerCase();
+				if (!replacement.equals(parentpath))
+					log.debug("Attachments: transformed to lower case parent relative path: " + replacement);
+				input = replacement + pathFinder.group(2);
+			}
 		}
 		input = input.replaceAll(":", File.separator);
 		if (!input.startsWith(File.separator)) input = File.separator + input;

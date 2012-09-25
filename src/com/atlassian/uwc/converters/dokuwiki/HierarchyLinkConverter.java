@@ -57,6 +57,13 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 					target = target.replaceAll("^[.]*", "");
 					if (currentPath != null && !currentPath.equals(currentSpacekey)) { //need to add hierarchy in
 						String pre = currentPath.replaceAll("\\/", ":");
+						if (pre.endsWith(".txt")) {
+							pre = pre.replaceFirst("[.]txt$", "");
+							String sibling = target.replaceFirst(":[^:]+$", "");
+							if (pre.endsWith(sibling)) {
+								target = target.replaceFirst("^:[^:]+:", "");
+							}
+						}
 						target = pre + ":" + target;
 					}
 				}
@@ -64,8 +71,12 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 				//figure out if we've already got the space represented
 				String targetPart1 = target.replaceFirst(":[^:]+$", "");
 				boolean containsSpace = false;
+				if (namespaces.containsKey(target.replaceAll(":", "/"))) {
+					targetPart1 = target;
+				}
 				if (allspaces.contains(targetPart1)) 
 					containsSpace = true;
+				log.debug("--LinkConverter");
 				log.debug("targetPart1 =" + targetPart1);
 				//get rid of unnecessary links to start 
 				//(start page content will be moved to parent in DokuwikiHierarchy
@@ -92,19 +103,22 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 				target = HierarchyTitleConverter.fixTitle(target); //foo_bar becomes Foo Bar
 				//fix collisions
 				String linkSpacekey = currentSpacekey;
-				targetPart1 = targetPart1.replaceAll(":", File.separator);
-				log.debug("containsSpace: " + containsSpace + ", ns: "+ namespaces.containsKey(targetPart1));
+				targetPart1 = targetPart1.replaceAll(":+", File.separator);
+				log.debug("containsSpace: " + containsSpace + ", " +
+						"ns: "+ namespaces.containsKey(targetPart1)
+						+", tp1: '" + targetPart1+"'");
 				if (!containsSpace && namespaces.containsKey(targetPart1)) {
 					linkSpacekey = namespaces.get(targetPart1); 
+					log.debug("linkSpacekey = " + linkSpacekey);
 				}
 				if (containsSpace) linkSpacekey = targetPart1;
 				target = fixCollisions(target, hierarchy, linkSpacekey, metaFilename);
 				//underscores to spaces
 				target = target.replaceAll("_", " ");
-				log.debug("link target = " + target);
 				//add spacekey to target if necessary
 				if (!target.contains(":") || containsSpace) 
 					target = linkSpacekey + ":" + target;
+				log.debug("link target = " + target);
 			}
 			//build complete link
 			String replacement = (alias == null)?

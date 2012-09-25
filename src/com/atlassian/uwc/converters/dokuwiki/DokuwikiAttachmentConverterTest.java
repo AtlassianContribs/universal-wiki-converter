@@ -126,5 +126,24 @@ public class DokuwikiAttachmentConverterTest extends TestCase {
 		actual = tester.createRelativePath(input, rel);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
+		
+	}
+	public void testCreateRelativePath_case() {
+		String input, expected, actual;
+		tester.getProperties().setProperty("filepath-hierarchy-ignorable-ancestors", "/foo/bar/");
+		input = ":Notrel:cow.jpg"; //case in the path needs to be lowercased
+		String rel = "/foo/bar/foo";
+		expected = "/notrel/cow.jpg";
+		actual = tester.createRelativePath(input, rel);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+		
+		tester.getProperties().setProperty("filepath-hierarchy-ignorable-ancestors", "/foo/bar/");
+		input = ":Notrel:Cow.jpg"; //but the case in the filename needs to be maintained
+		rel = "/foo/bar/foo";
+		expected = "/notrel/Cow.jpg";
+		actual = tester.createRelativePath(input, rel);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
 	}
 }

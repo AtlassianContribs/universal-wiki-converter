@@ -1,0 +1,5 @@
+<p>Testing Basic syntax</p>
+
+<p><strong>bold</strong></p>
+
+<p>This too <strong>bold</strong> tada</p>

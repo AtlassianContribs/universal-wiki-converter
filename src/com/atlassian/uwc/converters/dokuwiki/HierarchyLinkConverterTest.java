@@ -18,6 +18,7 @@ public class HierarchyLinkConverterTest extends TestCase {
 	Logger log = Logger.getLogger(this.getClass());
 	protected void setUp() throws Exception {
 		tester = new HierarchyLinkConverter();
+		tester.clear();
 		PropertyConfigurator.configure("log4j.properties");
 		Properties props = new Properties();
 		props.setProperty("spacekey", "food");
@@ -33,7 +34,7 @@ public class HierarchyLinkConverterTest extends TestCase {
 		tester.getProperties().setProperty("meta-dir", HierarchyTitleConverterTest.METADIR);
 		tester.getProperties().setProperty("filepath-hierarchy-ignorable-ancestors", HierarchyTitleConverterTest.PAGESDIR);
 	}
-	
+
 	public void testConvertLink() {
 		String input, expected, actual;
 		input = "[[drink:start]]\n" + 
@@ -81,18 +82,18 @@ public class HierarchyLinkConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
-	
+
 	public void testConvertLinks_wCurrentPath() {
 		String input, expected, actual;
 		input = 
 				"[[.drink|Alias]]\n" + 
-				"[[.fruit|Fruit Drink]]\n" +
-				"[[.cranberry]]" + 
-				"";
+						"[[.fruit|Fruit Drink]]\n" +
+						"[[.cranberry]]" + 
+						"";
 		expected = 
 				"[Alias|food:Drink]\n" + 
-				"[Fruit Drink|food:Drink Fruit]\n" +
-				"[food:Cranberry]";
+						"[Fruit Drink|food:Drink Fruit]\n" +
+						"[food:Cranberry]";
 		String spacekey = "food";
 		actual = tester.convertLink(input, "drink/", spacekey, "");
 		assertNotNull(actual);
@@ -107,7 +108,7 @@ public class HierarchyLinkConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual); 
 	}
-	
+
 	public void testConvertWithPageByPageSpaces() {
 		Page page = new Page(new File(HierarchyTitleConverterTest.PAGESDIR+"/SampleDokuwiki-InputTitle.txt"));
 		page.setOriginalText("[[.:home]]\n" +
@@ -121,7 +122,22 @@ public class HierarchyLinkConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
-	
+
+	public void testConvertWithPageByPageSpaces_2() {
+		tester.getProperties().setProperty("space-lala","ns/tada");
+		Page page = new Page(new File(HierarchyTitleConverterTest.PAGESDIR+"/SampleDokuwiki-InputTitle.txt"));
+		page.setOriginalText("[[.:home]]\n" +
+				"[[ns:tada]]\n");
+		String spacekey = "otherspace";
+		page.setSpacekey(spacekey);//default spacekey is 'food'
+		tester.convert(page);
+		String actual = page.getConvertedText();
+		String expected = "[" + spacekey + ":Home]\n" + //this one users the current home
+				"[lala:Tada]\n"; //this one uses the mapping (drink points to food)
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+
 	public void testConvertWithMetaTitle() throws IOException {
 		String input, expected, actual;
 		input = "[[.:foo]]\n" +
@@ -133,9 +149,10 @@ public class HierarchyLinkConverterTest extends TestCase {
 		actual = tester.convertLink(input, "", "xyz", pretendthispagepath);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
-		
+
 	}
-	
+
+
 	public void testGetTargetMetaFilename() {
 		String input, expected, actual;
 		input = "foo";
@@ -144,8 +161,8 @@ public class HierarchyLinkConverterTest extends TestCase {
 		actual = tester.getTargetMetaFilename(input, filename, true);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
-		
-		
+
+
 		input = "abc:def:ghi::jkl";
 		filename = HierarchyTitleConverterTest.METADIR+"/abc/def/ghi/home.meta";
 		expected = HierarchyTitleConverterTest.METADIR+"/abc/def/ghi/jkl.meta";
@@ -153,7 +170,7 @@ public class HierarchyLinkConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
-	
+
 	public void testConvertWithCollision() {
 		tester.getProperties().setProperty("collision-titles-xyz", "Harumph BAr");
 		String input, expected, actual;

@@ -1,16 +1,15 @@
-Sample page for escaping things
+<p>Sample page for escaping things</p>
 
-Escaping single square brackets:
-\[don't do anything]
+<p>Escaping single square brackets:<br/>
+[don't do anything]</p>
 
-Normal link (no escape):
-[Link|Link]
+<p>Normal link (no escape):<br/>
+<ac:link><ri:page ri:content-title="Link" /><ac:link-body>Link</ac:link-body></ac:link></p>
 
-Backslashes in links (windows shares syntax):
-[\\path\to\file.txt]
-[alias|\\path\to\file.txt]
+<p>Backslashes in links (windows shares syntax):<br/>
+<a href="file://path/to/file.txt">\\path\to\file.txt</a><br/>
+<a href="file://path/to/file.txt">alias</a></p>
 
-Removing backslashes at end of line
-Because they're unnecessary.
-But leave these ones\\alone.
-
+<p>Removing backslashes at end of line<br class="atl-forced-newline" />
+Because they're unnecessary.<br/>
+But leave these ones<br class="atl-forced-newline" />alone.</p>

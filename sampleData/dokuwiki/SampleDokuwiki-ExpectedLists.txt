@@ -1,38 +1,82 @@
-Sample page for testing lists
+<p>Sample page for testing lists</p>
 
-Unordered Lists
-* list item 1
-* list item 2
-** list item a
-** list item b
-* list item 3
-** list item c
-*** foo
-**** bar
-*** foo2
-** list item d
+<p>Unordered Lists</p>
+<ul>
+	<li>list item 1</li>
+	<li>list item 2
+	<ul>
+		<li>list item a</li>
+		<li>list item b</li>
+	</ul>
+	</li>
+	<li>list item 3
+	<ul>
+		<li>list item c
+		<ul>
+			<li>foo
+			<ul>
+				<li>bar</li>
+			</ul>
+			</li>
+			<li>foo2</li>
+		</ul>
+		</li>
+		<li>list item d</li>
+	</ul>
+	</li>
+</ul>
 
-Ordered Lists
-# list item 1
-# list item 2
-## list item a
-## list item b
-# list item 3
-## list item c
-### foo
-#### bar
-### foo2
-## list item d
 
-Mixed Lists
-* list item 1
-* list item 2
-*# list item a
-*# list item b
-* list item 3
-*# list item c
-*#* foo
-*#*# bar
-*#* foo2
-*# list item d
+<p>Ordered Lists</p>
+<ol>
+	<li>list item 1</li>
+	<li>list item 2
+	<ol>
+		<li>list item a</li>
+		<li>list item b</li>
+	</ol>
+	</li>
+	<li>list item 3
+	<ol>
+		<li>list item c
+		<ol>
+			<li>foo
+			<ol>
+				<li>bar</li>
+			</ol>
+			</li>
+			<li>foo2</li>
+		</ol>
+		</li>
+		<li>list item d</li>
+	</ol>
+	</li>
+</ol>
+
+
+<p>Mixed Lists</p>
+<ul>
+	<li>list item 1</li>
+	<li>list item 2
+	<ol>
+		<li>list item a</li>
+		<li>list item b</li>
+	</ol>
+	</li>
+	<li>list item 3
+	<ol>
+		<li>list item c
+		<ul>
+			<li>foo
+			<ol>
+				<li>bar</li>
+			</ol>
+			</li>
+			<li>foo2</li>
+		</ul>
+		</li>
+		<li>list item d</li>
+	</ol>
+	</li>
+</ul>
 

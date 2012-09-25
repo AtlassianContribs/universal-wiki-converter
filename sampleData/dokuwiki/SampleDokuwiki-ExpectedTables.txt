@@ -1,0 +1,90 @@
+<p>Complicated Dokuwiki Table with many row and colspans</p>
+
+<table><tbody>
+<tr>
+<th><p> Heading 1      </p></th>
+<th><p> Heading 2       </p></th>
+<th><p> Heading 3          </p></th>
+</tr>
+<tr>
+<td><p> Row 1 Col 1    </p></td>
+<td><p> Row 1 Col 2     </p></td>
+<td><p> Row 1 Col 3        </p></td>
+</tr>
+<tr>
+<td><p> Row 2 Col 1    </p></td>
+<td colspan='2'><p> some colspan (note the double pipe) </p></td>
+</tr>
+<tr>
+<td><p> Row 3 Col 1    </p></td>
+<td><p> Row 3 Col 2     </p></td>
+<td><p> Row 3 Col 3        </p></td>
+</tr>
+<tr>
+<td><p> Row 1 Col 1    </p></td>
+<td rowspan='3'><p> this cell spans vertically </p></td>
+<td><p> Row 1 Col 3        </p></td>
+</tr>
+<tr>
+<td><p> Row 2 Col 1    </p></td>
+
+<td><p> Row 2 Col 3        </p></td>
+</tr>
+<tr>
+<td><p> Row 3 Col 1    </p></td>
+
+<td><p> Row 2 Col 3        </p></td>
+</tr>
+<tr>
+<td><p> Row 1 Col 1    </p></td>
+<td><p> Row 1 Col 2     </p></td>
+<td><p> Row 1 Col 3        </p></td>
+</tr>
+<tr>
+<td colspan='3'><p> some colspan (note the double pipe) </p></td>
+</tr>
+<tr>
+<td rowspan='3'><p> Row 1 Col 1    </p></td>
+<td><p> Row 1 Col 2     </p></td>
+<td><p> Row 1 Col 3        </p></td>
+</tr>
+<tr>
+
+<td colspan='2'><p> Row 2 Col 3        </p></td>
+</tr>
+<tr>
+
+<td colspan='2'><p> Row 2 Col 3        </p></td>
+</tr>
+</tbody></table>
+
+
+
+
+<table><tbody>
+<tr>
+<th><p> Heading 1      </p></th>
+<th><p> Heading 2       </p></th>
+<th><p> Heading 3          </p></th>
+</tr>
+<tr>
+<td><p> Row 1 Col 1    </p></td>
+<td rowspan='4'><p> Row 1 Col 2     </p></td>
+<td rowspan='3'><p> Row 1 Col 3        </p></td>
+</tr>
+<tr>
+<td><p> Row 2 Col 1    </p></td>
+
+
+</tr>
+<tr>
+<td><p> Row 3 Col 1    </p></td>
+
+
+</tr>
+<tr>
+<td><p> Row 4 Col 1    </p></td>
+
+<td><p> Row 1 Col 3        </p></td>
+</tr>
+</tbody></table>

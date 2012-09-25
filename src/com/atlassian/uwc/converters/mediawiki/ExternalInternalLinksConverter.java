@@ -11,9 +11,9 @@ import com.atlassian.uwc.ui.Page;
 
 public class ExternalInternalLinksConverter extends BaseConverter {
 
-	private static final String PROPKEY_IDENTIFIER = "external-internal-links-identifier";
+	protected static final String PROPKEY_IDENTIFIER = "external-internal-links-identifier";
 	IllegalLinkNameConverter illegalNameConverter = new IllegalLinkNameConverter();
-	Logger log = Logger.getLogger(this.getClass());
+	protected Logger log = Logger.getLogger(this.getClass());
 	public void convert(Page page) {
 		String identifier = getExternalLinkIdentifier();
 		log.debug("Converting External Internal Links containing: " + identifier);
@@ -34,6 +34,10 @@ public class ExternalInternalLinksConverter extends BaseConverter {
 	private String convertLinks(String input) {
 		Pattern pattern = Pattern.compile(
 				getExternalLinkIdentifier() + "index\\.php\\/" + "([^\\] <\\s]+)");
+		return convertLinks(input, pattern);
+	}
+	
+	protected String convertLinks(String input, Pattern pattern) {
 		Matcher baseFinder = pattern.matcher(input);
 		StringBuffer sb = new StringBuffer();
 		boolean found = false;
@@ -62,6 +66,9 @@ public class ExternalInternalLinksConverter extends BaseConverter {
 				getExternalLinkIdentifier() +  //property defining mediawiki domain
 				"(?:(?:images\\/)|(?:index.php\\/Image:))" +  //image indentifying text
 				"([^\\]\n]+)");					//everything until the closing bracket
+		return convertImage(input, pattern);
+	}
+	protected String convertImage(String input, Pattern pattern) {
 		Matcher baseFinder = pattern.matcher(input);
 		StringBuffer sb = new StringBuffer();
 		boolean found = false;

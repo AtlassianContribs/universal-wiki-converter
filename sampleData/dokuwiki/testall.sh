@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Basic"
+./compare.sh Basic
+
 echo "Code"
 ./compare.sh Code
 
@@ -15,18 +18,21 @@ echo "Lists"
 echo "Tables"
 ./compare.sh Tables 
 
+echo "Esc"
+./compare.sh Esc
+
+echo "Discussion"
+./compare.sh Discussion
+
 ## Not completely implemented yet
 #echo "Image"
 #./compare.sh Image
 echo "****************************"
 echo "* OPTIONAL CONVERTERS"
 
-echo "Ext"
-./compare.sh Ext
+## This might not work if the user macro hasn't been installed on Confluence 
+## ahead of time as of Conf 4 updates.
+#echo "Ext"
+#./compare.sh Ext
 
-echo "Esc"
-./compare.sh Esc
-
-echo "Discussion"
-./compare.sh Discussion
 
