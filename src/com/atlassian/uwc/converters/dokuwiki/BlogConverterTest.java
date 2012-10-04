@@ -31,25 +31,15 @@ public class BlogConverterTest extends TestCase {
 		assertTrue(page.isBlog());
 		
 	}
-	//DELETE
-	public void testRealEx() throws IOException {
-		tester.getProperties().setProperty("blog-namespaces", "blog/magritte");
-		tester.getProperties().setProperty("space-magritte", "blog/magritte,blog/magritte_closures,develop/teams/teammagritte");
-		File file = new File ("/Users/laura/Code/Clients/AppFusions/projects/TAMigration/dokuwikiexport/wiki/data" +
-		"/pages/blog/magritte.txt");
-		Page page = new Page(file);
-		page.setOriginalText(FileUtils.readTextFile(file));
-		tester.convert(page);
-		assertTrue(page.isBlog());
-		assertTrue(page.getConvertedText().contains(getExpected("5", "magritte")));
-	}
 
 	public void testNamespaceIsBlog() {
 		File file = new File ("sampleData/dokuwiki/SampleDokuwiki-InputLists.txt");
+		assertTrue(tester.namespaceIsBlog("sampleData/dokuwiki"));
 		assertTrue(tester.namespaceIsBlog(file.getPath()));
 		
 		file = new File ("sampleData/engine/README.txt");
 		assertFalse(tester.namespaceIsBlog(file.getPath()));
+		
 	}
 
 	public void testConvertBlogMacro() {

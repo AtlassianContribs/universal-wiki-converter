@@ -4,17 +4,25 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import com.atlassian.uwc.converters.BaseConverter;
 import com.atlassian.uwc.converters.tikiwiki.RegexUtil;
 import com.atlassian.uwc.ui.Page;
+import com.atlassian.uwc.ui.VersionPage;
 
 public class TableRowColSpanConverter extends BaseConverter {
 
+	Logger log = Logger.getLogger(this.getClass());
 	@Override
 	public void convert(Page page) {
 		String input = page.getOriginalText();
-		String converted = convertColspans(input);
-		converted = convertRowspans(converted);
+		String tmpconverted = convertColspans(input);
+		if (!(page instanceof VersionPage) && !input.equals(tmpconverted)) 
+			log.debug("Colspans detected: " + page.getName());
+		String converted = convertRowspans(tmpconverted);
+		if (!(page instanceof VersionPage) && !tmpconverted.equals(converted)) 
+			log.debug("Rowspans detected: " + page.getName());
 		page.setConvertedText(converted);
 	}
 
@@ -57,6 +65,7 @@ public class TableRowColSpanConverter extends BaseConverter {
 	Pattern table = Pattern.compile("<table>(.*?)</table>", Pattern.DOTALL);
 	Pattern rowspan = Pattern.compile(":::");
 	Pattern tablerow = Pattern.compile("<tr>(.*?)</tr>", Pattern.DOTALL);
+	Pattern tdWithColspan = Pattern.compile("<t([dh])(?: colspan='(\\d+)')?>(.*?)</t[dh]>", Pattern.DOTALL);
 	protected String convertRowspans(String input) {
 		Matcher tableFinder = table.matcher(input);
 		StringBuffer sb = new StringBuffer();
@@ -65,6 +74,7 @@ public class TableRowColSpanConverter extends BaseConverter {
 			Vector<Integer> rowindeces = new Vector<Integer>();
 			Vector<Integer> colindeces = new Vector<Integer>();
 			Vector<Integer> rowvals = new Vector<Integer>();
+			Vector<Integer> colclear = new Vector<Integer>();
 			found = true;
 			String tableContents = tableFinder.group(1);
 			Matcher rowspanFinder = rowspan.matcher(tableContents);
@@ -78,40 +88,64 @@ public class TableRowColSpanConverter extends BaseConverter {
 			StringBuffer rowsb = new StringBuffer();
 			boolean rowfound = false;
 			boolean noteindex = true;
+
+			boolean clearrow = false;
 			while (rowFinder.find()) {
 				int lastcol = -1;
 				rowfound = true;
 				boolean newrow = true;
 
 				String rowcontents = rowFinder.group(1);
-				Matcher tdFinder = td.matcher(rowcontents);
+				Matcher tdFinder = tdWithColspan.matcher(rowcontents);
 				StringBuffer tdsb = new StringBuffer();
 				boolean tdfound = false;
 				boolean rowspanfoundLast = true;
 				boolean rowspanfoundCurrent = true;
+				int rowspancountThisRow = 0;
+				int currentColOffset = 0;
 				while (tdFinder.find()) {
 					tdfound = true;
 					lastcol++;
-					String cell = tdFinder.group(2);
+					String cell = tdFinder.group(3);
+					String colspanOffset = tdFinder.group(2);
+
 					rowspanFinder = rowspan.matcher(cell);
 					rowspanfoundLast = rowspanfoundCurrent;
 					rowspanfoundCurrent = rowspanFinder.find();
-					if (!rowspanfoundCurrent) continue;
+					if (!rowspanfoundCurrent) { //no rowspan
+						colclear.add(lastcol+currentColOffset);
+					}
+					else { //found a rowspan!
+						tdFinder.appendReplacement(tdsb, ""); //remove the ::: cells
+						if (newrow && clearrow && rowspanVal > 1) {
+							rowspancount++;
+							fillRowSpanVals(rowindeces, rowvals, rowspanVal);
+							rowspanVal = currentColOffset+1;
+							colindeces.add(lastcol); //note the index of the current cell
+							rowindeces.add(lastrow-1);//note the index of the previous row
+							noteindex = false;
+						}
+						rowspanVal++;
 
-					tdFinder.appendReplacement(tdsb, ""); //remove the ::: cells
-					rowspanVal++;
-					if (noteindex || !newrow) {
-						rowspancount++;
-						colindeces.add(lastcol); //note the index of the current cell
-						rowindeces.add(lastrow-1);//note the index of the previous row
-						noteindex = false;
+						if (noteindex || !newrow) {
+							rowspancount++;
+							rowspancountThisRow++;
+							colindeces.add(lastcol); //note the index of the current cell
+							rowindeces.add(lastrow-1);//note the index of the previous row
+							noteindex = false;
+							if (!newrow && rowspancountThisRow > 0) rowspanVal--;
+							colclear.removeAllElements();
+						}
+						else if (!rowspanfoundLast) {
+							noteindex = true; 
+							rowvals.add(rowspanVal);
+							rowspanVal=currentColOffset+1;
+						}
+
+						newrow = false;
 					}
-					else if (!rowspanfoundLast) {
-						noteindex = true; 
-						rowvals.add(rowspanVal);
-						rowspanVal=1;
-					}
-					newrow = false;
+					if (colspanOffset != null) 
+						currentColOffset += (Integer.parseInt(colspanOffset));
 				}
 				if (tdfound) {
 					tdFinder.appendTail(tdsb);
@@ -125,9 +159,16 @@ public class TableRowColSpanConverter extends BaseConverter {
 				replacement = RegexUtil.handleEscapesInReplacement(replacement);
 				rowFinder.appendReplacement(rowsb, replacement);
 				lastrow++;
+				boolean tmpclear = true;
+				for (int i = 0; i < lastcol-1; i++) {
+					if (!colclear.contains(i+currentColOffset)) tmpclear = false; 
+				}
+				clearrow = tmpclear;
+				colclear.removeAllElements();
 			}
 			if (rowfound) {
-				rowvals.add(rowspanVal);
+				fillRowSpanVals(rowindeces, rowvals, rowspanVal);
+				rowspanVal=1;
 				rowFinder.appendTail(rowsb);
 				tableContents = rowsb.toString();
 			}
@@ -170,7 +211,7 @@ public class TableRowColSpanConverter extends BaseConverter {
 						rowcontents = tdsb.toString();
 					}
 				}
-				
+
 				String replacement = "<tr>"+rowcontents+"</tr>";
 				replacement = RegexUtil.handleEscapesInReplacement(replacement);
 				rowFinder.appendReplacement(rowsb, replacement);
@@ -191,6 +232,14 @@ public class TableRowColSpanConverter extends BaseConverter {
 		}
 		return input;
 	}
-
+	public void fillRowSpanVals(Vector<Integer> indeces, Vector<Integer> vals, int val) {
+		vals.add(val);
+		int last = indeces.get(vals.size()-1);
+		while (indeces.size() > vals.size()) {
+			if (indeces.get(vals.size()-1) == last)
+				vals.add(val);
+			else break;
+		}
+	}
 
 }

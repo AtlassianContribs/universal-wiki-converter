@@ -2917,6 +2917,176 @@ public class ConverterEngineTest extends TestCase {
 
 	}
 	
+	public void testPreserveHistories_LoadAsAncestors() throws IOException {
+		//create stub page
+		String currentPageFilename = "page.txt";
+		String path = "sampleData/engine/history/pages/foo/" + currentPageFilename;
+		File file1 = new File(path);
+		Page page1 = new Page(file1);
+		page1.setName("page");
+		String content = FileUtils.readTextFile(file1);
+		page1.setOriginalText(content);
+		page1.setConvertedText(content);
+		String pagePath = file1.getPath();
+        if (pagePath.lastIndexOf(File.separator) >= 0) 
+        	pagePath = pagePath.substring(0, pagePath.lastIndexOf(File.separator));
+		else pagePath = "";
+        page1.setPath(pagePath);
+
+        //path to directories with same file structure
+        String ignorable = "sampleData/engine/history/pages/";
+		String ancestorpath = "sampleData/engine/history/ancestors/";
+		
+		//test what happens when we pass in the page without the load-as-ancestors properties
+		Page test1 = tester.preserveHistory(page1, currentPageFilename);
+		assertNotNull(test1.getAncestors());
+		assertTrue(test1.getAncestors().isEmpty());
+		assertEquals(1, test1.getVersion());
+		
+		//set up the properties
+		tester.handlePageHistoryProperty("wiki.switch.page-history-preservation", "true");
+		tester.handlePageHistoryProperty("wiki.suffix.page-history-preservation", "[.]#[.]txt");
+		tester.handleMiscellaneousProperties("wiki.0000.page-history-load-as-ancestors.property", "true");
+		tester.handleMiscellaneousProperties("wiki.0000.page-history-load-as-ancestors-dir.property", ancestorpath);
+		tester.handleMiscellaneousProperties("wiki.0000.filepath-hierarchy-ignorable-ancestors.property", ignorable);
+		tester.handleMiscellaneousProperties("wiki.0000.page-history-sortwithtimestamp.property", "true");
+		
+		Page actual = tester.preserveHistory(page1, currentPageFilename);
+		assertNotNull(actual.getAncestors());
+		assertFalse(actual.getAncestors().isEmpty());
+		assertEquals(3, actual.getAncestors().size());
+		assertEquals(4, actual.getVersion());
+		assertEquals("page", actual.getName());
+		assertEquals("Test Current\n", actual.getOriginalText());
+		
+		Vector<VersionPage> ancestors = actual.getAncestors();
+		Page anc0 = ancestors.get(0);
+		assertNotNull(anc0);
+		assertEquals("page", anc0.getName());
+		assertEquals(1, anc0.getVersion());
+		assertTrue(anc0.getFile().getName().endsWith("0.txt"));
+		
+		Page anc1 = ancestors.get(1);
+		assertNotNull(anc1);
+		assertEquals("page", anc1.getName());
+		assertEquals(2, anc1.getVersion());
+		assertTrue(anc1.getFile().getName().endsWith("1.txt"));
+		
+		Page anc2 = ancestors.get(2);
+		assertNotNull(anc2);
+		assertEquals("page", anc2.getName());
+		assertEquals(3, anc2.getVersion());
+		assertTrue(anc2.getFile().getName().endsWith("2.txt"));
+	}
+	
+	
+	public void testPreserveHistories_LoadAsAncestorsConvertPage() throws IOException {
+		//create stub page
+		String currentPageFilename = "page.txt";
+		String path = "sampleData/engine/history/pages/foo/" + currentPageFilename;
+		File file1 = new File(path);
+		Page page1 = new Page(file1);
+		page1.setName("page");
+		String content = FileUtils.readTextFile(file1);
+		page1.setOriginalText(content);
+		page1.setConvertedText(content);
+		String pagePath = file1.getPath();
+        if (pagePath.lastIndexOf(File.separator) >= 0) 
+        	pagePath = pagePath.substring(0, pagePath.lastIndexOf(File.separator));
+		else pagePath = "";
+        page1.setPath(pagePath);
+        List<String> input = new ArrayList<String>();
+        input.add("Test.0001.test.java-regex=Test{replace-with}Testing");
+        List<Converter> converters = tester.createConverters(input);
+
+        //path to directories with same file structure
+        String ignorable = "sampleData/engine/history/pages/";
+		String ancestorpath = "sampleData/engine/history/ancestors/";
+		
+		//set up the properties
+		tester.handlePageHistoryProperty("wiki.switch.page-history-preservation", "true");
+		tester.handlePageHistoryProperty("wiki.suffix.page-history-preservation", "[.]#[.]txt");
+		tester.handleMiscellaneousProperties("wiki.0000.page-history-load-as-ancestors.property", "true");
+		tester.handleMiscellaneousProperties("wiki.0000.page-history-load-as-ancestors-dir.property", ancestorpath);
+		tester.handleMiscellaneousProperties("wiki.0000.filepath-hierarchy-ignorable-ancestors.property", ignorable);
+		tester.handleMiscellaneousProperties("wiki.0000.page-history-sortwithtimestamp.property", "true");
+		tester.preserveHistory(page1, currentPageFilename);
+		
+		List<Page> pages = new Vector<Page>();
+		pages.add(page1);  
+
+		assertTrue(tester.convertPages(pages, converters));
+		Page actual = pages.get(0);
+		
+		assertNotNull(actual.getAncestors());
+		assertFalse(actual.getAncestors().isEmpty());
+		assertEquals("Testing Current\n", actual.getOriginalText());
+		
+		Vector<VersionPage> ancestors = (Vector<VersionPage>) actual.getAncestors();
+		Page anc0 = ancestors.get(0);
+		assertNotNull(anc0);
+		assertEquals("Testing 0\n", anc0.getOriginalText());
+		
+		Page anc1 = ancestors.get(1);
+		assertNotNull(anc1);
+		assertEquals("Testing 1\n", anc1.getOriginalText());
+		
+		Page anc2 = ancestors.get(2);
+		assertNotNull(anc2);
+		assertEquals("Testing 2\n", anc2.getOriginalText());
+	}
+	
+	public void testPreserveHistories_LoadAsAncestorsGZipProp() throws IOException {
+		//create stub page
+		String currentPageFilename = "page.txt";
+		String path = "sampleData/engine/history/pages/gzip/" + currentPageFilename;
+		File file1 = new File(path);
+		Page page1 = new Page(file1);
+		page1.setName("page");
+		String content = FileUtils.readTextFile(file1);
+		page1.setOriginalText(content);
+		page1.setConvertedText(content);
+		String pagePath = file1.getPath();
+        if (pagePath.lastIndexOf(File.separator) >= 0) 
+        	pagePath = pagePath.substring(0, pagePath.lastIndexOf(File.separator));
+		else pagePath = "";
+        page1.setPath(pagePath);
+        List<String> input = new ArrayList<String>();
+        input.add("Test.0001.test.java-regex=Test{replace-with}Testing");
+        List<Converter> converters = tester.createConverters(input);
+
+        //path to directories with same file structure
+        String ignorable = "sampleData/engine/history/pages/";
+		String ancestorpath = "sampleData/engine/history/ancestors/";
+		
+		//set up the properties
+		tester.handlePageHistoryProperty("wiki.switch.page-history-preservation", "true");
+		tester.handlePageHistoryProperty("wiki.suffix.page-history-preservation", "[.]#[.]txt");
+		tester.handleMiscellaneousProperties("wiki.0000.page-history-load-as-ancestors.property", "true");
+		tester.handleMiscellaneousProperties("wiki.0000.page-history-load-as-ancestors-dir.property", ancestorpath);
+		tester.handleMiscellaneousProperties("wiki.0000.filepath-hierarchy-ignorable-ancestors.property", ignorable);
+		tester.handleMiscellaneousProperties("wiki.0000.page-history-load-as-ancestors-isgzip.property", "true");
+		tester.handleMiscellaneousProperties("wiki.0000.page-history-sortwithtimestamp.property", "true");
+		tester.preserveHistory(page1, currentPageFilename);
+		assertFalse(page1.getAncestors().isEmpty());
+		
+		List<Page> pages = new Vector<Page>();
+		pages.add(page1);  
+
+		assertTrue(tester.convertPages(pages, converters));
+		Page actual = pages.get(0);
+		assertEquals("Original\n", actual.getOriginalText());
+		
+		assertNotNull(actual.getAncestors());
+		assertFalse(actual.getAncestors().isEmpty());
+		
+		Vector<VersionPage> ancestors = actual.getAncestors();
+		Page anc0 = ancestors.get(0);
+		assertNotNull(anc0);
+		assertEquals("Tralalala\n", anc0.getOriginalText());
+		
+	}
+	
 	public void testIsHierarchy() {
 		String input = "Mywiki.0001.switch.hierarchy-builder=UseBuilder";
 		String[] inputs = input.split("=");
@@ -3618,6 +3788,39 @@ public class ConverterEngineTest extends TestCase {
 			assertNull(space);
 		} catch (Exception e) { }
 		tester.sendPage(page, null, basesettings);
+		try {
+			SpaceForXmlRpc space = broker.getSpace(settings, spacekey);
+			assertNotNull(space);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		} finally {
+			deleteSpace(spacekey, settings); //cleanup
+		}
+		
+	}
+	
+	public void testCreateSpace_permissions() throws XmlRpcException, IOException {
+		Page page = new Page(null);
+		page.setName("Test1");
+		page.setOriginalText("123");
+		page.setConvertedText("234");
+		String spacekey = "foo";
+		page.setSpacekey(spacekey);
+		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+		ConfluenceServerSettings settings = new ConfluenceServerSettings();
+		String testpropslocation = "test.basic.properties";
+		loadSettingsFromFile(settings, testpropslocation);
+		try {
+			SpaceForXmlRpc space = broker.getSpace(settings, spacekey);
+			assertNull(space);
+		} catch (Exception e) { }
+		
+		tester.handleMiscellaneousProperties("test.001.spaceperms-foo-users.property", 
+				"VIEWSPACE,EDITSPACE,REMOVEPAGE,EDITBLOG,COMMENT,REMOVECOMMENT,CREATEATTACHMENT,EXPORTSPACE,SETSPACEPERMISSIONS");
+		
+		tester.sendPage(page, null, basesettings);
+		//TODO: We don't have a way to test this other than manually, so to test:
+		//put a breakpoint here and examine the space and its permissions
 		try {
 			SpaceForXmlRpc space = broker.getSpace(settings, spacekey);
 			assertNotNull(space);

@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.atlassian.uwc.ui.Page;
+import com.atlassian.uwc.ui.VersionPage;
 
 public class SpaceConverterTest extends TestCase {
 
@@ -142,6 +143,23 @@ public class SpaceConverterTest extends TestCase {
 		File file = new File(path);
 		assertTrue(file.exists());
 		Page page = new Page(file);
+		assertNull(page.getSpacekey());
+		tester.convert(page);
+		assertNotNull(page.getSpacekey());
+		assertEquals(expkey, page.getSpacekey());
+	}
+	
+	public void testConvert_VersionPage() {
+		
+		tester.getProperties().setProperty("space-lala","sampleData/dokuwiki/SampleDokuwiki-InputLists");
+		String path = "sampleData/dokuwiki/SampleDokuwiki-InputLists.txt";
+		String expkey = "tralala";
+		File file = new File(path);
+		assertTrue(file.exists());
+		Page page = new VersionPage(file);
+		Page parent = new Page(new File("sampleData/dokuwiki/SampleDokuwiki-InputBasic.txt"));
+		parent.setSpacekey(expkey);
+		page.setParent(parent);
 		assertNull(page.getSpacekey());
 		tester.convert(page);
 		assertNotNull(page.getSpacekey());

@@ -93,8 +93,24 @@ public class Page implements Comparable {
     private boolean isPersonalSpace = false;
     private String personalSpaceUsername = null;
     
+    /**
+     * If the page history framework is using the load-as-ancestors properties, then we load the ancestor versions of
+     * the page into this object. Useful for interacting more easily with existing hierarchies.
+     */
+    private Vector<VersionPage> ancestors;
     
     /**
+     * confluence entity id. useful for updating blogs.
+     */
+    private String id;
+    
+    /**
+     * set by the engine, used by the compareTo method 
+     */
+    private boolean sortWithTimestamp = false;
+
+
+	/**
      * Basic constructor. Creates a page with an empty path.
      * @param file The file to be converted.
      */
@@ -145,8 +161,9 @@ public class Page implements Comparable {
 		
 		//order by name - if name is the same, in order by version
 		int compareValue = (nameA.compareTo(nameB));
-		if (compareValue == 0) 
-			compareValue = versionA - versionB;
+		if (compareValue == 0) { 
+			if (!sortWithTimestamp) compareValue = versionA - versionB;
+		}
 		
 		return compareValue;
 	}
@@ -280,6 +297,11 @@ public class Page implements Comparable {
     	if (latest == null) return 1;
     	return latest;
     }
+    
+
+	public int getLatestVersion() {
+		return getLatestVersion(getName());
+	}
 
 	public Set<String> getLabels() {
 		return labels;
@@ -433,4 +455,45 @@ public class Page implements Comparable {
 		this.personalSpaceUsername = username;
 	}
 
+	public void addAncestor(VersionPage ancestor) {
+		getAncestors().add(ancestor);
+	}
+	
+	public Vector<VersionPage> getAncestors() {
+		if (this.ancestors == null)
+			this.ancestors = new Vector<VersionPage>();
+		return this.ancestors;
+	}
+
+	public void setParent(Page page) {
+		throw new IllegalStateException("Use VersionPage if you wish to set the parent.");
+	}
+	public Page getParent() {
+		return null;
+	}
+	public boolean sameTimestampAndContent(Page page) {
+		boolean content = (this.getConvertedText() != null 
+				&& this.getConvertedText().equals(page.getConvertedText()));
+		boolean timeisnull = (this.getTimestamp() == null && page.getTimestamp() == null);
+		boolean time = (this.getTimestamp() != null 
+				&& page.getTimestamp() != null 
+				&& this.getTimestamp().getTime() == page.getTimestamp().getTime());
+		return content && (timeisnull || time);
+	}
+    
+    public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public boolean isSortWithTimestamp() {
+		return sortWithTimestamp;
+	}
+
+	public void setSortWithTimestamp(boolean sortWithTimestamp) {
+		this.sortWithTimestamp = sortWithTimestamp;
+	}
 }

@@ -11,6 +11,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 import com.atlassian.uwc.ui.FileUtils;
 import com.atlassian.uwc.ui.Page;
+import com.atlassian.uwc.ui.VersionPage;
 
 public class HierarchyLinkConverterTest extends TestCase {
 
@@ -35,6 +36,11 @@ public class HierarchyLinkConverterTest extends TestCase {
 		tester.getProperties().setProperty("filepath-hierarchy-ignorable-ancestors", HierarchyTitleConverterTest.PAGESDIR);
 	}
 
+	
+	protected void tearDown() {
+		tester.getProperties().setProperty("page-history-load-as-ancestors-dir", "");
+	}
+	
 	public void testConvertLink() {
 		String input, expected, actual;
 		input = "[[drink:start]]\n" + 
@@ -150,6 +156,20 @@ public class HierarchyLinkConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 
+	}
+	
+	public void testConvertWithMetaTitle_Ancestor() throws IOException {
+		tester.getProperties().setProperty("page-history-load-as-ancestors-dir", "/Users/laura/Code/Git/uwc/sampleData/dokuwiki/junit_resources/attic/");
+		String input, expected, actual;
+		input = "[[.:foo]]\n" +
+				"[[:foo:bar]]\n";
+		expected = "[xyz:Foo Tralala]\n" +
+				"[xyz:Harumph BAr]\n";
+		tester.getProperties().setProperty("filepath-hierarchy-ignorable-ancestors", "/Users/laura/Code/Git/uwc/sampleData/dokuwiki/junit_resources/pages");
+		String pretendthispagepath = "/Users/laura/Code/Git/uwc/sampleData/dokuwiki/junit_resources/pages/test.txt";
+		actual = tester.convertLink(input, "", "xyz", pretendthispagepath);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
 	}
 
 

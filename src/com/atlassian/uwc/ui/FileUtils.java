@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.zip.GZIPInputStream;
 
 /**
  * A couple of random file functions that are used by the engine.
@@ -64,6 +65,22 @@ public class FileUtils {
     	return readTextFile(inputFile, charset);
     }
     
+    public static String readGzipFile(File file) throws IOException {
+    	FileInputStream fis = new FileInputStream(file);
+    	GZIPInputStream gis = new GZIPInputStream(fis);
+        InputStreamReader isr = new InputStreamReader(gis);
+        BufferedReader reader = new BufferedReader(isr);
+
+        StringBuffer contents = new StringBuffer();
+        String line;
+        String separator = System.getProperty("line.separator");
+        while (( line = reader.readLine()) != null){
+          contents.append(line).append(separator);
+        }
+        fis.close();
+        isr.close();
+        return contents.toString();
+    }
 
     /**
      * Creates or truncates a file and then writes a string to it.

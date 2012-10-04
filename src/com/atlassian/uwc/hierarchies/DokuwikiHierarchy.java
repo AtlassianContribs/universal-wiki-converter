@@ -139,15 +139,30 @@ public class DokuwikiHierarchy extends FilepathHierarchy {
 		else if (!parent.getPage().getSpacekey().equals(spacekey)) {
 			log.debug("...parent.getPage().getSpacekey: " + parent.getPage().getSpacekey() + "... and spacekey: " + spacekey);
 			log.debug("Copying branch to new parent because of spacekey: " + node.getName());
-			HierarchyNode newparent = new HierarchyNode();
-			newparent.setName(parent.getName());
-			Page page = createPage(parent.getName());
-			page.setSpacekey(spacekey);
-			parent.removeChild(node);
-			newparent.addChild(node);
-			parent.getParent().addChild(newparent);
+
+			copyBranch(node, spacekey, parent);
+			
 		}
 		return node;
+	}
+
+
+	public void copyBranch(HierarchyNode node, String spacekey,
+			HierarchyNode parent) {
+		HierarchyNode newparent = new HierarchyNode();
+		newparent.setName(parent.getName());
+		Page newparentpage = createPage(parent.getName());
+		newparentpage.setSpacekey(spacekey);
+		if (parent.getPage().getOriginalText() != null) 
+			newparentpage.setOriginalText(parent.getPage().getOriginalText());
+		if (parent.getPage().getConvertedText() != null) 
+			newparentpage.setConvertedText(parent.getPage().getConvertedText());
+		newparent.setPage(newparentpage);
+		parent.removeChild(node);
+		newparent.addChild(node);
+		parent.getParent().addChild(newparent);
+		if (parent.getParent().getName() == null) return;
+		copyBranch(newparent, spacekey, parent.getParent());
 	}
 
 	private void setTopNodeBranch(HierarchyNode root, Iterator topiter, HierarchyNode nexttopnode) {

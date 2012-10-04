@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.atlassian.uwc.converters.BaseConverter;
 import com.atlassian.uwc.ui.Page;
+import com.atlassian.uwc.ui.VersionPage;
 
 public abstract class HierarchyTarget extends BaseConverter {
 	Pattern space = Pattern.compile("space-([^-]*)");
@@ -79,16 +80,16 @@ public abstract class HierarchyTarget extends BaseConverter {
 			String tmpMetaFilename = targetMetaFilename;
 			for (int i = parents.length-2;i>=0;i--) {
 				String parent = parents[i];
-				log.debug("HT: parent = '" + parent + "', tmpMetaFilename:'" + tmpMetaFilename + "'");
+//				log.debug("HT: parent = '" + parent + "', tmpMetaFilename:'" + tmpMetaFilename + "'");
 				if (parent.toLowerCase().equals(target.toLowerCase())) continue;
 				if ("".equals(parent)) continue;
 				if (tmpMetaFilename != null) {
 					Matcher metaFinder = metaFile.matcher(tmpMetaFilename);
 					if (metaFinder.find()) {
 						String parentMetaFilename = metaFinder.replaceFirst(".meta");
-						log.debug("HT: parentMetaFilename: '" +  parentMetaFilename + "'");
+//						log.debug("HT: parentMetaFilename: '" +  parentMetaFilename + "'");
 						String tmpparent = HierarchyTitleConverter.getMetaTitle(parentMetaFilename);
-						log.debug("HT: tmpparent: '" +  tmpparent + "'");
+//						log.debug("HT: tmpparent: '" +  tmpparent + "'");
 						if (tmpparent != null && !"".equals(tmpparent)) parent = tmpparent;
 						tmpMetaFilename = parentMetaFilename; //in case we have to go again
 					}
@@ -132,18 +133,21 @@ public abstract class HierarchyTarget extends BaseConverter {
 
 	protected String getCurrentPath(Page page) {
 		String ignorable = getProperties().getProperty("filepath-hierarchy-ignorable-ancestors", "");
+		if (page instanceof VersionPage) {
+			ignorable = getProperties().getProperty("page-history-load-as-ancestors-dir", "");
+		}
 		String full = page.getPath();
 		if (full == null) return null;
 		return full.replaceAll("\\Q"+ignorable + "\\E", "");
 	}
 
 	protected String getMetaFilename(String path, String filetype) {
-		String metadir = getProperties().getProperty("meta-dir", null);
-		if (metadir == null) {
-			return null;
-		}
 		String ignorable = getProperties().getProperty("filepath-hierarchy-ignorable-ancestors", null);
 		if (ignorable == null) {
+			return null;
+		}
+		String metadir = getProperties().getProperty("meta-dir", null);
+		if (metadir == null) {
 			return null;
 		}
 		String relative = path.replaceFirst("\\Q" + ignorable + "\\E", "");
@@ -153,6 +157,14 @@ public abstract class HierarchyTarget extends BaseConverter {
 		if (!relative.startsWith(File.separator) && !metadir.endsWith(File.separator))
 			relative = File.separator + relative;
 		return metadir + relative;
+	}
+
+	public String getRelativePath(Page page) {
+		String path = page.getFile().getPath();
+		if (page instanceof VersionPage)
+			path = page.getParent().getFile().getPath();
+		log.debug("HierarchyTarget: relative path = " + path);
+		return path;
 	}
 	
 }

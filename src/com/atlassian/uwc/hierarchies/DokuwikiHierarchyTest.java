@@ -263,6 +263,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		nodes0.addAll(top);
 		String[] exp = {"Drink", "Food", "Food"};
 		testNodeResults(nodes0, exp);
+		testNodeHasSpace(nodes0);
 		
 		//needs more than one level of parent to avoid collision
 		HierarchyNode drink1 = getNode("Drink", nodes0);
@@ -274,9 +275,18 @@ public class DokuwikiHierarchyTest extends TestCase {
 		String[] exp2 = {"Juice", "Water"};
 		testNodeResults(fruitnodes1, exp2);
 
-		HierarchyNode pie = getNode("Food", nodes0);
-		Vector<HierarchyNode> tmpchildren = new Vector<HierarchyNode>(pie.getChildren());
-		pie = getNode("Pie", tmpchildren);
+		HierarchyNode food1 = getNode("Food", nodes0, 0); //get the first one
+		HierarchyNode food2 = getNode("Food", nodes0, 1); //get the second one
+		Vector<HierarchyNode> tmpchildren = new Vector<HierarchyNode>(food1.getChildren());
+		HierarchyNode pie1 = getNode("Pie", tmpchildren);
+		HierarchyNode pie = pie1;
+		HierarchyNode food = food2;
+		if (pie1 == null) { //order is undefined so we have to check and switch if necessary
+			tmpchildren = new Vector<HierarchyNode>(food2.getChildren());
+			HierarchyNode pie2 = getNode("Pie", tmpchildren);
+			pie = pie2;
+			food = food1;
+		}
 		assertNotNull(pie);
 		assertEquals(3, pie.getChildren().size());
 		Vector<HierarchyNode> pienodes = new Vector<HierarchyNode>();
@@ -293,8 +303,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		String[] expfruit = {"Fruit Apple"};
 		testNodeResults(fruitnodes2, expfruit);
 		
-		HierarchyNode food = getNode("Food", nodes0, 1); //get the second one
-		assertNotNull(food);
+		assertNotNull(food); //use earlier set food
 		assertEquals(2, food.getChildren().size());
 		Vector<HierarchyNode> foodnodes = new Vector<HierarchyNode>();
 		foodnodes.addAll(food.getChildren());
@@ -380,6 +389,14 @@ public class DokuwikiHierarchyTest extends TestCase {
 //		
 //	}
 	
+	private void testNodeHasSpace(Vector<HierarchyNode> nodes) {
+		for (HierarchyNode node : nodes) {
+			assertNotNull("node is null: " + node.getName(), node);
+			assertNotNull("node's page is null: " + node.getName(), node.getPage());
+			assertNotNull("node's spacekey is null: " + node.getName(), node.getPage().getSpacekey());
+		}
+	}
+
 	public void testBuildHierarchy_fixBranchNames() {
 		Properties props = tester.getProperties();
 		props.setProperty("spacekey", "food");

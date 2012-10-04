@@ -17,6 +17,10 @@ public class SpaceConverter extends HierarchyTarget {
 	@Override
 	public void convert(Page page) {
 		String path = page.getFile().getPath();
+		if (page.getParent() != null && page.getParent().getSpacekey() != null) {
+			page.setSpacekey(page.getParent().getSpacekey());
+			return;
+		}
 		String ancestors = getProperties().getProperty("filepath-hierarchy-ignorable-ancestors", "");
 		if (path.startsWith(ancestors)) path = path.replaceFirst("\\Q"+ancestors+"\\E", "");
 		log.debug("Path after removing ancestors = " + path);

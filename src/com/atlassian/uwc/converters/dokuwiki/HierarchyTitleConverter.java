@@ -9,11 +9,15 @@ import org.apache.log4j.Logger;
 
 import com.atlassian.uwc.ui.FileUtils;
 import com.atlassian.uwc.ui.Page;
+import com.atlassian.uwc.ui.VersionPage;
 
 public class HierarchyTitleConverter extends DokuwikiUserDate {
 
 	static Logger log = Logger.getLogger(HierarchyTitleConverter.class);
 	public void convert(Page page) {
+		if (page instanceof VersionPage) { //we'll address this in the engine
+			return;
+		}
 		String name = page.getName();
 		//check the metadata for a title
 		name = getMetaTitle(page);

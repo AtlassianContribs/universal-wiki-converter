@@ -11,12 +11,13 @@ import org.apache.log4j.Logger;
 import com.atlassian.uwc.converters.BaseConverter;
 import com.atlassian.uwc.ui.FileUtils;
 import com.atlassian.uwc.ui.Page;
+import com.atlassian.uwc.ui.VersionPage;
 
 public class DokuwikiUserDate extends HierarchyTarget {
 
 	Logger log = Logger.getLogger(this.getClass());
 	public void convert(Page page) {
-		String changeFilepath = createChangeFilename(page.getFile().getPath());
+		String changeFilepath = createChangeFilename(page);
 		if (changeFilepath == null) {
 			log.warn("Could not handle user and date data. Check filepath-hierarchy-ignorable-ancestors amd meta-dir settings. Skipping");
 			return;
@@ -36,22 +37,40 @@ public class DokuwikiUserDate extends HierarchyTarget {
 			return;
 		}
 		//not preserving history at this time
-		String lastline = getLastLine(changeContent);
-		ChangeData data = getData(lastline);
+		String line = "";
+		if (page instanceof VersionPage) {
+			line = getHistoryLine(changeContent, page.getTimestamp());
+		}
+		else 
+			line = getLastLine(changeContent);
+		ChangeData data = getData(line);
 		if (data == null) {
 			log.warn("changes content was malformed in file: " + changeFilepath + ". Skipping.");
 			return;
 		}
-		long timestring = Long.parseLong(data.timestamp);
-		Date date = new Date(timestring*1000); //multiply x 1000 because the Date interface is in milliseconds
-		page.setTimestamp(date);
+		if (!(page instanceof VersionPage)) { //VersionPage already has timestamp set
+			long timestring = Long.parseLong(data.timestamp);
+			Date date = new Date(timestring*1000); //multiply x 1000 because the Date interface is in milliseconds
+			log.debug("User Date Converter - setting timestamp: " + data.timestamp);
+			page.setTimestamp(date);
+		}
+		log.debug("User Date Converter - setting author: " + data.user);
 		page.setAuthor(data.user);
 	}
 
-	private String createChangeFilename(String path) {
+	protected String getHistoryLine(String changeContent, Date timestamp) {
+		String epoch = (timestamp.getTime()/1000)+"";
+		Pattern p = Pattern.compile("(?<=^|\n)"+epoch+"[^\n]+");
+		Matcher m = p.matcher(changeContent);
+		if (m.find()) return m.group();
+		else log.debug("Could not get history line for timestamp: " + epoch);
+		return getLastLine(changeContent);
+	}
+
+	protected String createChangeFilename(Page page) {
+		String path = getRelativePath(page);
 		return getMetaFilename(path, ".changes");
 	}
-	
 
 	Pattern lastline = Pattern.compile("[^\n]*$");
 	private String getLastLine(String input) {

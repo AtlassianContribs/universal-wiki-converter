@@ -13,12 +13,19 @@ import com.atlassian.uwc.ui.Page;
 
 public class HierarchyLinkConverter extends HierarchyTarget {
 
+	private String origPageTitle;
 	Logger log = Logger.getLogger(this.getClass());
 	public void convert(Page page) {
+		log.debug("Link Conversion --- Start");
 		String input = page.getOriginalText();
-		String converted = convertLink(input, getCurrentPath(page), getSpacekey(page), page.getFile().getPath());
+		origPageTitle = page.getName();
+		String current = getCurrentPath(page);
+		String spacekey = getSpacekey(page);
+		log.debug("current: '" + current + "' spacekey: '" + spacekey + "'");
+		String relativePath = getRelativePath(page);
+		String converted = convertLink(input, current, spacekey, relativePath);
 		page.setConvertedText(converted);
-
+		log.debug("Link Conversion --- Completed");
 	}
 	
 	public String getSpacekey(Page page) {
@@ -43,6 +50,7 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 		while (linkFinder.find()) {
 			found = true;
 			String target = linkFinder.group(1);
+			log.debug("link target orig: " + target);
 			String alias = null;
 			if (target.startsWith("\\\\")) continue; //UNC link
 			if (target.contains("|")) {
@@ -50,6 +58,9 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 				target = parts[0];
 				alias = parts[1];
 			}
+			//FIXME anchors? we're not ready to transform these, so just get rid of the anchor part
+			if (target.contains("#")) target = target.replaceAll("#[^|]*", "");
+			log.debug("target: '" + target + "' and alias: '" + alias + "'");
 			//remove any opening colons (:namespace:page)
 			target = target.trim();
 			if (!isExternal(target)) {
@@ -57,9 +68,11 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 					target = target.replaceAll("^[.]*", "");
 					if (currentPath != null && !currentPath.equals(currentSpacekey)) { //need to add hierarchy in
 						String pre = currentPath.replaceAll("\\/", ":");
+//						log.debug("pre = " +pre);
 						if (pre.endsWith(".txt")) {
 							pre = pre.replaceFirst("[.]txt$", "");
 							String sibling = target.replaceFirst(":[^:]+$", "");
+//							log.debug("sibling = " +sibling);
 							if (pre.endsWith(sibling)) {
 								target = target.replaceFirst("^:[^:]+:", "");
 							}
@@ -76,8 +89,8 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 				}
 				if (allspaces.contains(targetPart1)) 
 					containsSpace = true;
-				log.debug("--LinkConverter");
-				log.debug("targetPart1 =" + targetPart1);
+//				log.debug("--LinkConverter");
+//				log.debug("targetPart1 =" + targetPart1);
 				//get rid of unnecessary links to start 
 				//(start page content will be moved to parent in DokuwikiHierarchy
 				//unless the start page is a top level page in the space)
@@ -89,10 +102,11 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 				String hierarchy = target; //save for later
 				//is there a meta title to be used?
 //				log.debug("pagepath = " + pagepath);
-				String metaFilename = getMetaFilename(pagepath, ".meta");
+				String origMetaFilename = getMetaFilename(pagepath, ".meta");
+				String metaFilename = origMetaFilename;
 //				log.debug("isOne = " + isOne + ", target = " + target + ", metaFilename = " + metaFilename);
 				metaFilename = getTargetMetaFilename(target, metaFilename, isOne);
-				log.debug("metaFilename = " + metaFilename);
+//				log.debug("metaFilename = " + metaFilename);
 				String metatitle = HierarchyTitleConverter.getMetaTitle(metaFilename);
 				log.debug("metatitle = " + metatitle);
 				//get confluence page name and fix the case to match HierarchyTitleConverter
@@ -104,9 +118,9 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 				//fix collisions
 				String linkSpacekey = currentSpacekey;
 				targetPart1 = targetPart1.replaceAll(":+", File.separator);
-				log.debug("containsSpace: " + containsSpace + ", " +
-						"ns: "+ namespaces.containsKey(targetPart1)
-						+", tp1: '" + targetPart1+"'");
+//				log.debug("containsSpace: " + containsSpace + ", " +
+//						"ns: "+ namespaces.containsKey(targetPart1)
+//						+", tp1: '" + targetPart1+"'");
 				if (!containsSpace && namespaces.containsKey(targetPart1)) {
 					linkSpacekey = namespaces.get(targetPart1); 
 					log.debug("linkSpacekey = " + linkSpacekey);
@@ -118,6 +132,7 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 				//add spacekey to target if necessary
 				if (!target.contains(":") || containsSpace) 
 					target = linkSpacekey + ":" + target;
+				blogLinkReport(namespaces, targetPart1, origMetaFilename, spacekey, target);
 				log.debug("link target = " + target);
 			}
 			//build complete link
@@ -136,6 +151,24 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 	}
 	
 	
+	private void blogLinkReport(HashMap<String, String> namespaces,
+			String ns, String pageMetaFilename,
+			String spacekey, String linktarget) {
+		if (namespaces.containsKey(ns)) {
+			String nsString = getProperties().getProperty("blog-namespaces", null);
+			if (BlogConverter.namespaceIsBlog(ns, nsString)) {
+				String pagetitle = HierarchyTitleConverter.getMetaTitle(pageMetaFilename);
+				if (pagetitle == null || "".equals(pagetitle)) 
+					pagetitle = origPageTitle;
+				pagetitle = HierarchyTitleConverter.fixTitle(pagetitle); 
+				log.info("Blog Link Report - page: '" + pagetitle + "' " +
+						"in space: '" + spacekey + "' " +
+						"linking to: '" + linktarget + "'");
+			}
+		}
+		
+	}
+
 	protected String getTargetMetaFilename(String target, String metaFilename, boolean isOne) {
 		target=target.replaceAll(":+", File.separator);
 		if (!target.startsWith(File.separator)) target = File.separator + target;

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -91,6 +92,7 @@ public class ConverterEngine implements FeedbackHandler {
 	private static final String ORPHAN_ATTACHMENTS_PAGE_TITLE="Orphan attachments";
 	private static final String DEFAULT_ATTACHMENT_UPLOAD_COMMENT = "Added by UWC, the Universal Wiki Converter";
 	public static final String PROPKEY_ENGINE_SAVES_TO_DISK = "engine-saves-to-disk";	
+	private static final String PROPKEY_SPACEPERMS = "spaceperms";
 	
 	/* START FIELDS */
 	public boolean running = false; //Methods check this to see if the conversion needs to be cancelled
@@ -875,8 +877,20 @@ public class ConverterEngine implements FeedbackHandler {
      * </ul>
      */
     protected Page preserveHistory(Page page, String filename) {
-    	//get suffix
-    	String suffix = getPageHistorySuffix(); 
+    	if (loadOnAncestors()) {
+    		addAncestors(page);
+    		if (!page.getAncestors().isEmpty()) {
+    			page.setVersion(page.getLatestVersion()+1);
+    			log.debug("Current page version: " + page.getVersion());
+    		}
+    		return page;
+    	}
+    	return identifyHistoryOnePage(page, filename);
+	}
+
+	public Page identifyHistoryOnePage(Page page, String filename) {
+		//get suffix
+		String suffix = getPageHistorySuffix(); 
     	if (suffix == null) {
     		log.error("Error attempting to preserve history: Page history suffix is Null.");
     		return page;
@@ -898,12 +912,69 @@ public class ConverterEngine implements FeedbackHandler {
     	if (suffixReplacer.find()) {
     		String pagename = suffixReplacer.group(1);
     		String versionString = suffixReplacer.group(2);
-    		int version = Integer.parseInt(versionString);
     		page.setName(pagename); //set name before version so latestversion data is properly set in Page
-    		page.setVersion(version);
+    		if (Boolean.parseBoolean(this.miscProperties.getProperty("page-history-sortwithtimestamp", "false"))) 
+    			page.setTimestamp(new Date(Long.parseLong(versionString)*1000));
+    		else
+    			page.setVersion(Integer.parseInt(versionString));
     	}
     	return page;
 	}
+    
+    /* Page History Load on Ancestors methods - START */
+	private boolean loadOnAncestors() {
+		return Boolean.parseBoolean(this.miscProperties.getProperty("page-history-load-as-ancestors", "false"));
+	}
+
+	private void addAncestors(Page page) {
+		String ancestorDir = this.miscProperties.getProperty("page-history-load-as-ancestors-dir", null);
+		if (ancestorDir == null) {
+			log.warn("page-history-load-as-ancestors-dir must be set. Cannot add ancestors.");
+			return;
+		}
+		String relPath = getPageRelativePath(page);
+		if (!ancestorDir.endsWith(File.separator) && !relPath.startsWith(File.separator)) 
+			ancestorDir += File.separator;
+		String ancestorPath = ancestorDir + relPath;
+		File dir = new File(ancestorPath);
+		File[] allFiles = dir.listFiles();
+		for (File file : allFiles) {
+			String filename = file.getName();
+			Page newPage = new VersionPage(file);
+			newPage.setParent(page); 
+			newPage = identifyHistoryOnePage(newPage, filename);
+			if (newPage.getName() == null) continue;
+			if (newPage.getName().equalsIgnoreCase(page.getName().replaceFirst("[.][^.]+$", ""))) {
+				newPage.setName(page.getName()); //we need them to have the same name for latestversion to work
+				log.debug("Found ancestor page: " + newPage.getFile().getPath());
+				newPage.setPath(getPath(newPage.getFile().getPath()));
+				page.addAncestor((VersionPage) newPage);
+			}
+		}
+		if (!page.getAncestors().isEmpty() &&
+				Boolean.parseBoolean(this.miscProperties.getProperty("page-history-sortwithtimestamp", "false"))) {
+			if (Boolean.parseBoolean(this.miscProperties.getProperty("page-history-load-as-ancestors-lastiscurrent", "false"))) {
+				page.getAncestors().remove(page.getAncestors().lastElement());//remove the last ancestor if its the same as current
+			}
+			for (int i = 1; i < page.getAncestors().size(); i++) {
+				VersionPage version = page.getAncestors().get(i);
+				version.setVersion(version.getLatestVersion()+1);
+//				log.debug("version latest version: " + version.getLatestVersion() + " (" + version.getName()+ " )");
+			}
+//			log.debug("page latest version: " + page.getLatestVersion() + " (" + page.getName()+ " )");
+			page.setSortWithTimestamp(true); //affects sorting of collections of pages (including hierarchies)
+		}
+		
+	}
+	
+	protected String getPageRelativePath(Page page) {
+		String ignorable = this.miscProperties.getProperty("filepath-hierarchy-ignorable-ancestors", "");
+		String full = page.getPath();
+		if (full == null) return null;
+		return full.replaceAll("\\Q"+ignorable + "\\E", "");
+	}
+	/* Page History Load on Ancestors methods - END */
+	
 
 	/**
 	 * gets the pagename given the pagepath
@@ -928,7 +999,7 @@ public class ConverterEngine implements FeedbackHandler {
 	 * @param converters
 	 * @return true if conversion of all pages succeeded
 	 */
-	protected boolean convertPages(List<Page> pages, List<Converter> converters) {
+	protected boolean convertPages(List pages, List<Converter> converters) {
 		return convertPages(pages, converters, "Converting pages...");
 	}
 	
@@ -976,13 +1047,16 @@ public class ConverterEngine implements FeedbackHandler {
         		this.feedback = Feedback.CANCELLED;
         		return false;
         	}
+            if (page.getAncestors() != null && !page.getAncestors().isEmpty()) {
+            	convertPages(page.getAncestors(), converters);
+            }
         }
 		//still more bookkeeping
 		conversionBookkeepingEndAll(pages, converters);
 		return result;
 		
 	}
-
+	
 	/**
 	 * make some log entries about the time it took to convert a page
 	 * @param startTimeStamp
@@ -1049,19 +1123,10 @@ public class ConverterEngine implements FeedbackHandler {
 		else if (page.getOriginalText() == null){
 		    try {
 		    	String pageContents = "";
-		    	if (changingEncoding()) {
-		    		String encoding = getEncoding();
-		    		byte[] pagebytes = FileUtils.getBytesFromFile(file);
-		    		try {
-						pageContents = new String(pagebytes, encoding);
-					} catch (UnsupportedEncodingException e) {
-						String baseerror = "Could not encode file with encoding: " + encoding + ".";
-						log.error(baseerror + " Using utf-8.");
-						this.errors.addError(Feedback.BAD_SETTING, baseerror, true);
-						pageContents = new String(pagebytes, "utf-8");
-					}
+		    	if (isGzip() && page instanceof VersionPage) {
+		    		pageContents = getGzipText(file);
 		    	}
-		    	else pageContents = FileUtils.readTextFile(file);
+		    	else pageContents = getAsciiText(file);
 		        page.setOriginalText(pageContents);
 		    } catch (IOException e) {
 		        String message = "Could not read file " + file.getAbsolutePath() + ".\n" +
@@ -1075,6 +1140,36 @@ public class ConverterEngine implements FeedbackHandler {
 			page.setUnchangedSource(page.getOriginalText());
 		}
 		return file;
+	}
+
+	private boolean isGzip() {
+		return Boolean.parseBoolean(this.miscProperties.getProperty("page-history-load-as-ancestors-isgzip", "false"));
+	}
+
+	private String getGzipText(File file) throws IOException {
+		if (changingEncoding()) {
+			log.error("Changing Encoding from Gzip file is not supported yet! Can't change encoding");
+		}
+		return FileUtils.readGzipFile(file);
+	}
+
+	public String getAsciiText(File file) throws IOException,
+			UnsupportedEncodingException {
+		String pageContents;
+		if (changingEncoding()) {
+			String encoding = getEncoding();
+			byte[] pagebytes = FileUtils.getBytesFromFile(file);
+			try {
+				pageContents = new String(pagebytes, encoding);
+			} catch (UnsupportedEncodingException e) {
+				String baseerror = "Could not encode file with encoding: " + encoding + ".";
+				log.error(baseerror + " Using utf-8.");
+				this.errors.addError(Feedback.BAD_SETTING, baseerror, true);
+				pageContents = new String(pagebytes, "utf-8");
+			}
+		}
+		else pageContents = FileUtils.readTextFile(file);
+		return pageContents;
 	}
 
 	private boolean changingEncoding() {
@@ -1244,14 +1339,15 @@ public class ConverterEngine implements FeedbackHandler {
      * @param pages The pages to output.
      * @param spacekey space to which the pages will be written
      */
-    protected void writePages(List<Page> pages, String spacekey) {
+    protected void writePages(List pages, String spacekey) {
     	String note = "Uploading Pages to Confluence...";
 		this.state.updateNote(note);
 		log.info(note);
 		
         int numUploaded = 0;
+        List<Page> casted = (List<Page>) pages;
         // at last, write the pages to Confluence!
-        for (Page page : pages) {
+        for (Page page : casted) {
         	this.state.updateProgress();
         	if (!this.running) {
         		this.feedback = Feedback.CANCELLED;
@@ -1587,6 +1683,7 @@ public class ConverterEngine implements FeedbackHandler {
      * @throws IllegalArgumentException if a confluenceSetting is invalid
      */
     protected String sendPage(Page page, String parentId, UWCUserSettings settings) {
+    	//write current page
     	//XXX why are we setting these up every page. Most of these are global. 
     	//XXX If we set these up earlier in the process, we could do the checkConfluenceSettings call 
     	//(currently in the next sendPage) earlier in the process as well
@@ -1621,6 +1718,44 @@ public class ConverterEngine implements FeedbackHandler {
     		
     	return sendPage(page, parentId, confSettings);
     }
+
+    Pattern spacepermPattern = Pattern.compile("[{]groupname[}](.*?)[{]permissions[}](.*)");
+	private void updateSpacePermissions(ConfluenceServerSettings confSettings) {
+		if (!this.miscProperties.containsKey(PROPKEY_SPACEPERMS)) return;
+
+		String allperms = null;
+		String groupname = null;
+		Vector<String> perms = new Vector<String>();
+		String spaceperms = this.miscProperties.getProperty(PROPKEY_SPACEPERMS);
+		boolean addgroup = Boolean.parseBoolean(this.miscProperties.getProperty("spaceperms-addgroup", "true"));
+		Matcher permsFinder = spacepermPattern.matcher(spaceperms);
+		if (permsFinder.find()) {
+			groupname = permsFinder.group(1);
+			allperms = permsFinder.group(2); 
+			String[] permsArray = allperms.split(",");
+			for (String perm : permsArray) {
+				perms.add(perm);
+			}
+		}
+		if (groupname != null && !perms.isEmpty()) {
+			RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+			try {
+				if (addgroup && !broker.hasGroup(confSettings, groupname)) {
+					log.info("Adding group: " + groupname);
+					broker.addGroup(confSettings, groupname);
+				}
+				log.debug("Updating permissions...");
+				broker.addPermissionsToSpace(confSettings, perms, groupname);
+				log.info("Updated permissions for group: " + groupname + " in space " + confSettings.getSpaceKey());
+			} catch (Exception e) {
+				String message = "Could not update permissions ('"+allperms+"') for groupname: '" + groupname +"'";
+				getErrors().addError(Feedback.REMOTE_API_ERROR,
+						message,
+    					true);
+    			log.error(message,e);
+			}
+		}
+	}
 
 	public ConfluenceServerSettings getConfluenceServerSettings(
 			UWCUserSettings settings) {
@@ -1680,6 +1815,8 @@ public class ConverterEngine implements FeedbackHandler {
     				Vector newspacepages = broker.getAllServerPageSummaries(confSettings, space.getSpaceKey());
     				PageForXmlRpc newhome = (PageForXmlRpc) newspacepages.get(0); //should only be one at this point
     				this.homepages.put(space.getSpaceKey(), newhome.getId());
+    				//check to see if we're setting any permissions
+    				updateSpacePermissions(confSettings);
     			} catch (Exception e) {
         			getErrors().addError(Feedback.BAD_LOGIN, 
         					"Could not create space: " + spacekey +
@@ -1775,6 +1912,7 @@ public class ConverterEngine implements FeedbackHandler {
 		}	
 		
 		//move the page if necessary and you can
+		log.debug("Identifying parent location for page...");
 		String parentid = null;
 		if (pageTable.containsKey("parentId"))
 			parentid = (String) pageTable.get("parentId");
@@ -1785,6 +1923,7 @@ public class ConverterEngine implements FeedbackHandler {
 			}
 			else { //can we find the home page for this space?
 				try {
+					log.debug("Identifying Homepage for spacekey: " + confSettings.spaceKey);
 					SpaceForXmlRpc space = broker.getSpace(confSettings, confSettings.spaceKey);
 					parentid = space.getSpaceParams().get("homePage");
 					this.homepages.put(confSettings.spaceKey, parentid);
@@ -1796,6 +1935,7 @@ public class ConverterEngine implements FeedbackHandler {
 			
 		}
 		if (parentid != null) {
+			log.debug("Attempting to set parent to: " + parentid);
 			try {
 				broker.movePage(confSettings, newPage.getId(), parentid, RemoteWikiBroker.Position.APPEND);
 			} catch (Exception e) {
@@ -1874,6 +2014,10 @@ public class ConverterEngine implements FeedbackHandler {
     	Hashtable pageTable = createPageTable(page, parentId);
      	//check for problems with settings 
     	checkConfluenceSettings(confSettings); //XXX Why are we doing this for every page? 'cause we seem to create the confSettings on a page by page basis?
+    	//write ancestors, if any, first
+    	if (page.getAncestors() != null && !page.getAncestors().isEmpty()) {
+    		pageTable = handleAncestors(page, confSettings, pageTable);
+    	}
     	//send page
     	String id = null;
     	if (page.isBlog()) {
@@ -1891,14 +2035,46 @@ public class ConverterEngine implements FeedbackHandler {
     	//send comments
     	sendComments(page, broker, id, confSettings);
     	//set author
+    	log.debug("Page Version: " + page.getVersion());
     	sendAuthor(page, broker, id, confSettings);
     	//set timestamp
     	sendTimestamp(page, broker, id, confSettings);
     	//return the page id
     	return id;
     }
+
+	private Hashtable handleAncestors(Page page,
+			ConfluenceServerSettings confSettings, Hashtable pageTable) {
+		enforceAncestorTitleAndKey(page.getAncestors(), page.getName(), page.getSpacekey(), page.isBlog());
+		if (page.isBlog()) { //get the blog id to make certain all ancestors and current page are made the same CEO
+			Page first = page.getAncestors().remove(0);
+			String blogid = sendPage(first, null, confSettings);
+			enforceBlogId(page, page.getAncestors(), blogid);
+			pageTable.put("id", blogid);
+		}
+		writePages(page.getAncestors(), settings.getSpace());
+		return pageTable;
+	}
     
-    public String markupToXhtml(String markup) {
+    private void enforceBlogId(Page page, Vector<VersionPage> pages,
+			String blogid) {
+    	page.setId(blogid);
+    	for (VersionPage anc : pages) {
+    		anc.setId(blogid);
+    	}
+	}
+
+	private void enforceAncestorTitleAndKey(Vector<VersionPage> pages,
+			String name, String spacekey, boolean isBlog) {
+		for (VersionPage page : pages) {
+			page.setName(name);
+			page.setSpacekey(spacekey);
+			page.setIsBlog(isBlog);
+		}
+		
+	}
+
+	public String markupToXhtml(String markup) {
     	RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
     	ConfluenceServerSettings confSettings = getConfluenceServerSettings(this.settings);
     	try {
@@ -1937,6 +2113,7 @@ public class ConverterEngine implements FeedbackHandler {
     	table.put("title", page.getName()); 
     	if (parentId != null && !parentId.equals("null")) table.put("parentId", parentId);
     	if (page.getVersion() > 0) table.put("version", page.getVersion() + "");
+    	if (page.isBlog() && page.getId() != null) table.put("id", page.getId());
     	return table;
 	}
 
@@ -2042,7 +2219,7 @@ public class ConverterEngine implements FeedbackHandler {
     			this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
     		}
     	}
-    	else log.debug("Page has no comments."); //DELETE
+//    	else log.debug("Page has no comments."); //DELETE
     }
 
 	public String getContentAsXhtmlFormat(RemoteWikiBroker broker, ConfluenceServerSettings confSettings, String text) throws XmlRpcException, IOException {
@@ -2071,7 +2248,7 @@ public class ConverterEngine implements FeedbackHandler {
 	
 	private void sendTimestamp(Page page, RemoteWikiBroker broker, String id, ConfluenceServerSettings confSettings) {
 		if (page.getTimestamp() != null) {
-			log.debug("Sending timestamp data.");
+			log.debug("Sending timestamp data: " + page.getTimestamp());
 			try {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss:SS"); //XXX Settable?
 				if (this.miscProperties.getProperty("user-timezone", null) != null) {

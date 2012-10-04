@@ -15,11 +15,14 @@ import com.atlassian.uwc.converters.BaseConverter;
 import com.atlassian.uwc.converters.tikiwiki.RegexUtil;
 import com.atlassian.uwc.ui.Comment;
 import com.atlassian.uwc.ui.Page;
+import com.atlassian.uwc.ui.VersionPage;
 
 public class DiscussionConverter extends DokuwikiUserDate {
 
 	@Override
 	public void convert(Page page) {
+		if (page instanceof VersionPage) return;
+//		log.debug("Discussion Conversion --- Start");
 		String input = page.getOriginalText();
 		if (hasDiscussion(input)) {
 			String commentData = getCommentData(page.getFile());
@@ -32,6 +35,7 @@ public class DiscussionConverter extends DokuwikiUserDate {
 				}
 			}
 		}
+		log.debug("Discussion Conversion --- Completed");
 	}
 
 	Pattern discussionP = Pattern.compile("~~DISCUSSION[^~]*~~");

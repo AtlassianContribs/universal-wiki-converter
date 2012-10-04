@@ -25,15 +25,20 @@ public class BlogConverter extends HierarchyTarget {
 
 	protected boolean namespaceIsBlog(String path) {
 		String nsString = getProperties().getProperty("blog-namespaces", null);
-		if (nsString == null) return false;
-		String[] namespaces = nsString.split("::");
+		return namespaceIsBlog(path, nsString);
+	}
+
+	public static boolean namespaceIsBlog(String path, String nsPropString) {
+		if (nsPropString == null) return false;
+		String[] namespaces = nsPropString.split("::");
 		for (String namespace : namespaces) {
 			if (sameNamespace(path, namespace)) return true;
 		}
 		return false;
 	}
+	
 
-	protected boolean sameNamespace(String path, String namespace) {
+	protected static boolean sameNamespace(String path, String namespace) {
 		while (!"".equals(path)) {
 			if (path.endsWith(namespace)) {
 				return true;

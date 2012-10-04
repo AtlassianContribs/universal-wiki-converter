@@ -7,3 +7,4 @@ standalone-confluence/
 *.log
 sampleData/*/*Output*
 output
+tmp/
