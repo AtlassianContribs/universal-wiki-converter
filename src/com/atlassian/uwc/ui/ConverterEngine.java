@@ -104,11 +104,13 @@ public class ConverterEngine implements FeedbackHandler {
 	 */
 	private boolean illegalHandlingEnabled = false; //default = false, as of Confluence 4.2 doesn't appear to be necessary
 	private boolean autoDetectSpacekeys = false; //default = false
-	private HashSet<String> attachedFiles;
+	private HashSet<String> attachedFiles;//attachmentids
+	private HashSet<String> attachedPaths;//attachment file paths
 	
     Logger log = Logger.getLogger(this.getClass());
     // this logger is used to write out totals for the UWC to a seperate file uwc-totals.log
     Logger totalsFileLog = Logger.getLogger("totalsFileLog");
+    Logger attachmentLog = Logger.getLogger("attachmentsLog");
 
     /**
      * The string that directory separators (e.g., / on Unix and \ on Windows) are replaced
@@ -417,8 +419,10 @@ public class ConverterEngine implements FeedbackHandler {
 					if (hierarchyBuilder.getProperties().containsKey("newpagecount"))
 						currenttotal = Integer.parseInt(hierarchyBuilder.getProperties().getProperty("newpagescount"));
 					writeHierarchy(root, currenttotal, settings.getSpace());
+					handleOrphanAttachments();
 				} else { //no hierarchy - just write the pages
 					writePages(allPages, settings.getSpace());
+					handleOrphanAttachments();
 				}
 				//check for namespace collisions and emit errors if found
 				//(after hierarchy has had a chance to make changes)
@@ -951,6 +955,7 @@ public class ConverterEngine implements FeedbackHandler {
 				page.addAncestor((VersionPage) newPage);
 			}
 		}
+		Collections.sort(page.getAncestors());
 		if (!page.getAncestors().isEmpty() &&
 				Boolean.parseBoolean(this.miscProperties.getProperty("page-history-sortwithtimestamp", "false"))) {
 			if (Boolean.parseBoolean(this.miscProperties.getProperty("page-history-load-as-ancestors-lastiscurrent", "false"))) {
@@ -959,9 +964,7 @@ public class ConverterEngine implements FeedbackHandler {
 			for (int i = 1; i < page.getAncestors().size(); i++) {
 				VersionPage version = page.getAncestors().get(i);
 				version.setVersion(version.getLatestVersion()+1);
-//				log.debug("version latest version: " + version.getLatestVersion() + " (" + version.getName()+ " )");
 			}
-//			log.debug("page latest version: " + page.getLatestVersion() + " (" + page.getName()+ " )");
 			page.setSortWithTimestamp(true); //affects sorting of collections of pages (including hierarchies)
 		}
 		
@@ -1371,18 +1374,56 @@ public class ConverterEngine implements FeedbackHandler {
 		        		".";
         this.state.updateNote(message);
         log.info(message);
-        
-        if (this.settings.getUploadOrphanAttachments().equalsIgnoreCase("true"))
-        {
-        	ArrayList <File> orphanAttachments=findOrphanAttachments(this.settings.getAttachmentDirectory());
-        	uploadOrphanAttachments(orphanAttachments);
-        }
+
         
         //attachedFiles is cleared so that if we do another conversion
         //without closing the UWC, it won't think the attachment has already been
         //attached
-        this.attachedFiles = null; 
+        this.attachedFiles = null;
+        this.attachedPaths = null;
     }
+
+    Pattern uploadedPattern = Pattern.compile("Attachment Uploaded: (.*)");
+	public void handleOrphanAttachments() {
+		if (this.settings.getUploadOrphanAttachments().equalsIgnoreCase("true"))
+        {
+			if (this.miscProperties.containsKey("attachments-uploaded-file")) {
+				identifyPreviouslyAttachedPaths(this.miscProperties.getProperty("attachments-uploaded-file"));
+			}
+        	ArrayList <File> orphanAttachments=findOrphanAttachments(this.settings.getAttachmentDirectory());
+        	uploadOrphanAttachments(orphanAttachments);
+        }
+	}
+
+	protected void identifyPreviouslyAttachedPaths(String uploadedpath) {
+		if (uploadedpath != null && !"".equals(uploadedpath)) {
+			File uploadedFile = new File(uploadedpath);
+			if (uploadedFile.exists()) {
+				try {
+					String uploaded = FileUtils.readTextFile(uploadedFile);
+					Matcher fileFinder = uploadedPattern.matcher(uploaded);
+					while (fileFinder.find()) {
+						String alreadyFound = fileFinder.group(1);
+						if (this.attachedPaths == null) this.attachedPaths = new HashSet<String>();
+						this.attachedPaths.add(alreadyFound);
+					}
+				} catch (IOException e) {
+					log.error("Could not open: " + uploadedpath, e);
+				}
+			}
+		}
+	}
+	
+	//for unit testing purposes
+	protected void addAttachedPath(String path) {
+		if (this.attachedPaths == null) this.attachedPaths = new HashSet<String>();
+		this.attachedPaths.add(path);
+	}
+	
+	//for unit testing purposes
+	protected void clearAttachedPath() {
+		this.attachedPaths = null;
+	}
 
 	    
     /******
@@ -1399,8 +1440,9 @@ public class ConverterEngine implements FeedbackHandler {
     			orphanAttachments.addAll(findOrphanAttachments(file.getAbsolutePath()));
     		else if (file.isFile())
     		{
-    			if (alreadyAttached(file.getName()))
+    			if (orphanAlreadyAttached(file))
     				continue;  
+    			log.debug("Found orphan attachment: " + file.getAbsolutePath());
     			orphanAttachments.add(file);
     		}
         }
@@ -1418,7 +1460,7 @@ public class ConverterEngine implements FeedbackHandler {
     		return;
     	
     	Hashtable pageTable = new Hashtable();
-    	pageTable.put("content", "{attachments}");
+    	pageTable.put("content", "");
     	pageTable.put("title", ORPHAN_ATTACHMENTS_PAGE_TITLE); 
     	
     	//create ConfluenceServerSettings object
@@ -1486,6 +1528,7 @@ public class ConverterEngine implements FeedbackHandler {
         }
         else 
         	sendAttachmentRemoteAPI(broker, pageId, confSettings, attachmentRpc, errorMessage);
+        attachmentLog.info("Attachment Uploaded: " + file.getAbsolutePath());
         return attachmentRpc;//for junit tests
     }
 
@@ -2404,7 +2447,11 @@ public class ConverterEngine implements FeedbackHandler {
 			attachedFiles = new HashSet<String>();
 		boolean attached = attachedFiles.contains(attachmentId);
 		
-		if (!attached) attachedFiles.add(attachmentId);
+		if (!attached) {
+			attachedFiles.add(attachmentId);
+			if (attachedPaths == null) attachedPaths = new HashSet<String>();
+			attachedPaths.add(file.getAbsolutePath()); //used with orphan upload checking
+		}
 		else log.debug("Attachment " + filename + " is already attached: Skipping.");
 		
 		return attached;
@@ -2431,6 +2478,11 @@ public class ConverterEngine implements FeedbackHandler {
     	return false;
     
 	}
+    
+    protected boolean orphanAlreadyAttached(File file) {
+    	if (this.attachedPaths == null) return false;
+    	return (this.attachedPaths.contains(file.getAbsolutePath()));
+    }
 
     /**
      * This method determines the mime type of a file. It uses the file

@@ -1590,6 +1590,35 @@ public class ConverterEngineTest extends TestCase {
 		deletePage(title, settings.spaceKey, settings);
 	}
 
+	public void testFindOrphanAttachments() {
+		//add a page via the normal process
+		Page page = new Page(new File("sampleData/engine/SampleEngine-Input1.txt"));
+		File attachment = new File ("sampleData/engine/attachments/cow.jpg");
+		assertFalse(tester.alreadyAttached(page, attachment));
+		File attachment2 = new File("sampleData/engine/attachments/SampleEngine-InputAttachments.txt");
+		tester.addAttachedPath(attachment2.getAbsolutePath());
+		ArrayList<File> actual = tester.findOrphanAttachments("sampleData/engine/attachments");
+		assertNotNull(actual);
+		assertEquals(1, actual.size());
+		assertEquals("test.gif", actual.get(0).getName());
+		
+		assertTrue(tester.orphanAlreadyAttached(attachment));
+		assertTrue(tester.orphanAlreadyAttached(attachment2));
+		assertFalse(tester.orphanAlreadyAttached(new File("sampleData/engine/attachments/test.gif")));
+	}
+	
+	public void testIdentifyPreviouslyAttached() {
+		Page page = new Page(new File("sampleData/engine/SampleEngine-Input1.txt"));
+		File att1 = new File ("sampleData/engine/attachments/cow.jpg");
+		File att2 = new File ("sampleData/engine/attachments/test.gif");
+		File att3 = new File ("sampleData/engine/attachments/SampleEngine-InputAttachments.txt");
+		tester.identifyPreviouslyAttachedPaths("sampleData/engine/orphantest.uwc-attachment-uploaded.log");
+		
+		assertTrue(tester.orphanAlreadyAttached(att1)); 
+		assertTrue(tester.orphanAlreadyAttached(att2)); 
+		assertFalse(tester.orphanAlreadyAttached(att3));
+	}
+	
 	public void testXmlEventsProperties() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		DefaultXmlEvents events = new DefaultXmlEvents();
 		events.clearAll();
@@ -2230,6 +2259,7 @@ public class ConverterEngineTest extends TestCase {
 	}
 	
 	public void testSendAttachmentWebdav() {
+		tester.clearAttachedPath();
 //		fail("Comment this if you've made sure the test confluence has webdav plugin installed");
 		String location = TEST_SETTING_DIR + TEST_PROPS;	
 		UWCUserSettings settings = new UWCUserSettings(location);
@@ -2263,7 +2293,7 @@ public class ConverterEngineTest extends TestCase {
 			startPage = broker.getPage(csettings, id);
 			List<AttachmentForXmlRpc> attachments = broker.getAttachments(csettings, id);
 			assertNotNull(attachments);
-			assertEquals(1, attachments.size());
+			assertEquals(2, attachments.size());
 			assertEquals("cow.jpg", attachments.get(0).getFileName());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2275,6 +2305,7 @@ public class ConverterEngineTest extends TestCase {
 	}
 	
 	public void testSendAttachmentWebdav_QuestionMarkTitle() { //UWC-407
+		tester.clearAttachedPath();
 //		fail("Comment this if you've made sure the test confluence has webdav plugin installed");
 		String location = TEST_SETTING_DIR + TEST_PROPS;	
 		UWCUserSettings settings = new UWCUserSettings(location);
@@ -2309,7 +2340,7 @@ public class ConverterEngineTest extends TestCase {
 			startPage = broker.getPage(csettings, id);
 			List<AttachmentForXmlRpc> attachments = broker.getAttachments(csettings, id);
 			assertNotNull(attachments);
-			assertEquals(1, attachments.size());
+			assertEquals(2, attachments.size());
 			assertEquals("cow.jpg", attachments.get(0).getFileName());
 		} catch (Exception e) {
 			e.printStackTrace();
