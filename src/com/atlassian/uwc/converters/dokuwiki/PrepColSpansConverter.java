@@ -18,7 +18,7 @@ public class PrepColSpansConverter extends BaseConverter {
 		page.setConvertedText(converted);
 	}
 
-	Pattern colspan = Pattern.compile("[|]{2,}");
+	Pattern colspan = Pattern.compile("[|^]{2,}");
 	protected String prep(String input) {
 		input = removeEmptyColspanLines(input);
 		Matcher spanFinder = colspan.matcher(input);
@@ -28,7 +28,7 @@ public class PrepColSpansConverter extends BaseConverter {
 			found = true;
 			String spans = spanFinder.group();
 			int spanlength = spans.length();
-			String replacement = DELIM +TOKENKEY+spanlength+DELIM +"|";
+			String replacement = DELIM +TOKENKEY+spanlength+DELIM +spans.substring(0, 1);
 			replacement = RegexUtil.handleEscapesInReplacement(replacement);
 			spanFinder.appendReplacement(sb, replacement);
 		}

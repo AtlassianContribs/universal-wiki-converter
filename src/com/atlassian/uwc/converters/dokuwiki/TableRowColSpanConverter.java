@@ -19,10 +19,10 @@ public class TableRowColSpanConverter extends BaseConverter {
 		String input = page.getOriginalText();
 		String tmpconverted = convertColspans(input);
 		if (!(page instanceof VersionPage) && !input.equals(tmpconverted)) 
-			log.debug("Colspans detected: " + page.getName());
+			log.debug("Colspans detected: '" + page.getName() + "' in space: " + page.getSpacekey());
 		String converted = convertRowspans(tmpconverted);
 		if (!(page instanceof VersionPage) && !tmpconverted.equals(converted)) 
-			log.debug("Rowspans detected: " + page.getName());
+			log.debug("Rowspans detected: '" + page.getName() + "' in space: " + page.getSpacekey());
 		page.setConvertedText(converted);
 	}
 

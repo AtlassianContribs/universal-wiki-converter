@@ -897,5 +897,97 @@ public class TableRowColSpanConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
+	
+	public void testConvertColSpansWithHeader() {
+		String input, expected, actual;
+		input = "<table><tbody>\n" + 
+				"<tr>\n" + 
+				"<th><p> Head 1 ::UWCTOKENCOLSPANS:6:: </p></th>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<th><p> Row 1 </p></th>\n" + 
+				"<td> Row 2 </td>\n" + 
+				"<td> Row 3 </td>\n" +
+				"<td> Row 4 </td>\n" +
+				"<td> Row 5 </td>\n" +
+				"<td> Row 6 </td>\n" +
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<th><p> :::          </p></th>\n" + 
+				"<td><p> Row 2 </p></td>\n" + 
+				"<td><p> Row 3 </p></td>\n" +
+				"<td><p> Row 4 </p></td>\n" +
+				"<td><p> Row 5 </p></td>\n" +
+				"<td><p> Row 6 </p></td>\n" +
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<th><p> :::          </p></th>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td> Item 6 </td>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<th><p> :::          </p></th>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td> Last 6 </td>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<th><p> Header </p></th>\n" + 
+				"<td><p> Colspan Here ::UWCTOKENCOLSPANS:5::</p></td>\n" + 
+				"</tr>\n" + 
+				"</tbody></table>\n" + 
+				"";
+		expected = "<table><tbody>\n" + 
+				"<tr>\n" + 
+				"<th colspan='6'><p> Head 1  </p></th>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<th><p> Row 1 </p></th>\n" + 
+				"<td> Row 2 </td>\n" + 
+				"<td> Row 3 </td>\n" +
+				"<td> Row 4 </td>\n" +
+				"<td> Row 5 </td>\n" +
+				"<td> Row 6 </td>\n" +
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<th><p> :::          </p></th>\n" +
+				"<td><p> Row 2 </p></td>\n" + 
+				"<td><p> Row 3 </p></td>\n" +
+				"<td><p> Row 4 </p></td>\n" +
+				"<td><p> Row 5 </p></td>\n" +
+				"<td><p> Row 6 </p></td>\n" +
+				"</tr>\n" + 
+				"<tr>\n" +
+				"<th><p> :::          </p></th>\n" +
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td> Item 6 </td>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<th><p> :::          </p></th>\n" +
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td><p>&nbsp;</p></td>\n" + 
+				"<td> Last 6 </td>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<th><p> Header </p></th>\n" + 
+				"<td colspan='5'><p> Colspan Here </p></td>\n" +
+				"</tr>\n" + 
+				"</tbody></table>\n" + 
+				"";
+		actual = tester.convertColspans(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+
 
 }

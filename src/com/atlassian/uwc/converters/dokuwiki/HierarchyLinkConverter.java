@@ -55,8 +55,10 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 			if (target.startsWith("\\\\")) continue; //UNC link
 			if (target.contains("|")) {
 				String[] parts = target.split("\\|");
-				target = parts[0];
-				alias = parts[1];
+				if (parts.length > 1) {
+					target = parts[0];
+					alias = parts[1];
+				}
 			}
 			//FIXME anchors? we're not ready to transform these, so just get rid of the anchor part
 			if (target.contains("#")) target = target.replaceAll("#[^|]*", "");

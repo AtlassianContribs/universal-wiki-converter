@@ -17,10 +17,10 @@ public class PrepColSpansConverterTest extends TestCase {
 	public void testPrep() {
 		String input, expected, actual;
 		input = "^ Header ^ Header ^ Header ^ Header ^ Header ^ Header ^\n" +
-				"^ Header | 2 | 3 | 4 | 5 | 6 |^\n" +
+				"^ Header | 2 | 3 | 4 | 5 | 6 |\n" +
 				"^ Header | next colspans |||||\n";
 		expected ="^ Header ^ Header ^ Header ^ Header ^ Header ^ Header ^\n" +
-				"^ Header | 2 | 3 | 4 | 5 | 6 |^\n" + 
+				"^ Header | 2 | 3 | 4 | 5 | 6 |\n" + 
 				"^ Header | next colspans ::UWCTOKENCOLSPANS:5::|\n";
 		actual = tester.prep(input);
 		assertNotNull(actual);
@@ -96,6 +96,19 @@ public class PrepColSpansConverterTest extends TestCase {
 				"\n" + 
 				"^ H1-2 ^ H2-2^\n" + 
 				"^ Simple table | http://backoffice.do.dev.euc  |\n"; 
+		actual = tester.prep(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testPrepHeader() {
+		String input, expected, actual;
+		input = "^ h1             ^^^^^^ \n" +
+				"^ a1 ^  a2 ^  a3 ^  a4 ^  a5 ^ a6 ^\n" + 
+				"| r1 | r2 | r3 | r4  |r5 |r6 |\n";
+		expected ="^ h1             ::UWCTOKENCOLSPANS:6::^ \n" +
+				"^ a1 ^  a2 ^  a3 ^  a4 ^  a5 ^ a6 ^\n" + 
+				"| r1 | r2 | r3 | r4  |r5 |r6 |\n";
 		actual = tester.prep(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);
