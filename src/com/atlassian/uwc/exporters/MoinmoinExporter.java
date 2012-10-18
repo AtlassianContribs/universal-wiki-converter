@@ -250,7 +250,7 @@ public class MoinmoinExporter implements Exporter {
 			final String filecontens = FileUtils.readTextFile(revlogf, charset);
 			for( String line : filecontens.split("\\n") ){
 				log.debug("read line of revisions file: " + line);
-				String[] s = line.split("\\t",-1);
+				String[] s = line.split("\\t",9);
 				
 				RevInfo r = new RevInfo();
 				
