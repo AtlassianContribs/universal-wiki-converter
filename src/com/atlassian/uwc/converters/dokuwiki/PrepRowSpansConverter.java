@@ -31,6 +31,13 @@ public class PrepRowSpansConverter extends BaseConverter {
 		while (rowspanFinder.find()) {
 			found = true;
 			String table = rowspanFinder.group();
+			//remove everything before the last table
+			String parts[] = trimTable(table);
+			String pre = "";
+			if (parts.length > 1) {
+				pre = parts[0];
+				table = parts[1];
+			}
 			//how many columns
 			int numcols = getNumCols(table);
 			//Look for a cell without the signal. Does the one following have it?
@@ -38,7 +45,7 @@ public class PrepRowSpansConverter extends BaseConverter {
 				//for each :::, if the one above is not :::, put the token?
 				table = handleColumn(i, table);
 			}
-			table = RegexUtil.handleEscapesInReplacement(table);
+			table = RegexUtil.handleEscapesInReplacement(pre + table);
 			rowspanFinder.appendReplacement(sb, table);
 		}
 		if (found) {
@@ -48,6 +55,15 @@ public class PrepRowSpansConverter extends BaseConverter {
 		return input;
 	}
 	
+	Pattern lastTable = Pattern.compile("^(.*?(?:(?:\n|[^|^])\n))([|^].*)", Pattern.DOTALL);
+	protected String[] trimTable(String input) {
+		Matcher lastFinder = lastTable.matcher(input);
+		if (lastFinder.find()) {
+			return new String[] {lastFinder.group(1),lastFinder.group(2)};
+		}
+		return new String[] {input};
+	}
+
 	String cellstring = "[|^][^|^]*";
 	Pattern cell = Pattern.compile(cellstring);
 	protected String handleColumn(int i, String input) {

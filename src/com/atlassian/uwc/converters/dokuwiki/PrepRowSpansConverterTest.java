@@ -185,4 +185,57 @@ public class PrepRowSpansConverterTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 	
+	public void testExample3() {
+		String input, expected, actual;
+		input = "Given the following:\n" + 
+				"\n" + 
+				"^ 1    | 2               |\n" + 
+				"^ 1   | 2 |\n" + 
+				"^ 1 | 2                     |\n" + 
+				"\n" + 
+				"tralala:\n" + 
+				"\n" + 
+				"^ 1           ^ 2 ^ 3 ^ 4 ^\n" + 
+				"| a | b | c | !!! |\n" + 
+				"| a | b | c |::: |\n" + 
+				"| a | b | c | end |\n" + 
+				"";
+		expected = "Given the following:\n" + 
+				"\n" + 
+				"^ 1    | 2               |\n" + 
+				"^ 1   | 2 |\n" + 
+				"^ 1 | 2                     |\n" + 
+				"\n" + 
+				"tralala:\n" + 
+				"\n" + 
+				"^ 1           ^ 2 ^ 3 ^ 4 ^\n" + 
+				"| a | b | c | !!! ::UWCTOKENROWSPANS:2::|\n" + 
+				"| a | b | c |::: |\n" + 
+				"| a | b | c | end |\n" + 
+				"";
+		actual = tester.prep(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testTrimTable() {
+		String input, expected, actual;
+		input = "^ 1    | 2               |\n" + 
+				"^ 1   | 2 |\n" + 
+				"^ 1 | 2                     |\n" + 
+				"\n" + 
+				"tralala:\n" + 
+				"\n" + 
+				"^ 1           ^ 2 ^ 3 ^ 4 ^\n" + 
+				"| a | b | c | !!! ::UWCTOKENROWSPANS:2::|\n" + 
+				"| a | b | c |::: |\n" + 
+				"| a | b | c | end |\n";
+		expected = "^ 1           ^ 2 ^ 3 ^ 4 ^\n" + 
+				"| a | b | c | !!! ::UWCTOKENROWSPANS:2::|\n" + 
+				"| a | b | c |::: |\n" + 
+				"| a | b | c | end |\n";
+		actual = tester.trimTable(input)[1];
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 }
