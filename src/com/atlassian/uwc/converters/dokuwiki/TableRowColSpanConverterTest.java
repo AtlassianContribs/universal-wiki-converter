@@ -130,7 +130,7 @@ public class TableRowColSpanConverterTest extends TestCase {
 				"<th><p> Head 6 </p></th>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
-				"<th><p> Row 1 </p></th>\n" + 
+				"<th><p> Row 1 ::UWCTOKENROWSPANS:4::</p></th>\n" + 
 				"<td> Row 2 </td>\n" + 
 				"<td> Row 3 </td>\n" +
 				"<td> Row 4 </td>\n" +
@@ -233,7 +233,7 @@ public class TableRowColSpanConverterTest extends TestCase {
 				"</tr>\n" + 
 				"<tr>\n" + 
 				"<td><p> Row 4 Col 1    </p></td>\n" + 
-				"<td><p> this cell spans vertically </p></td>\n" + 
+				"<td><p> this cell spans vertically ::UWCTOKENROWSPANS:3::</p></td>\n" + 
 				"<td><p> Row 4 Col 3        </p></td>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
@@ -255,7 +255,7 @@ public class TableRowColSpanConverterTest extends TestCase {
 				"<td><p> Row 8 some colspan (note the double pipe) ::UWCTOKENCOLSPANS:3::</p></td>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
-				"<td><p> Row 9 Col 1    </p></td>\n" + 
+				"<td><p> Row 9 Col 1    ::UWCTOKENROWSPANS:3::</p></td>\n" + 
 				"<td><p> Row 9 Col 2     </p></td>\n" + 
 				"<td><p> Row 9 Col 3        </p></td>\n" + 
 				"</tr>\n" + 
@@ -360,7 +360,7 @@ public class TableRowColSpanConverterTest extends TestCase {
 				"</tr>\n" + 
 				"<tr>\n" + 
 				"<td><p> Row 4 Col 1    </p></td>\n" + 
-				"<td><p> this cell spans vertically </p></td>\n" + 
+				"<td><p> this cell spans vertically ::UWCTOKENROWSPANS:3::</p></td>\n" + 
 				"<td><p> Row 4 Col 3        </p></td>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
@@ -384,7 +384,7 @@ public class TableRowColSpanConverterTest extends TestCase {
 				"<td><p> Row 8 Col 3</p></td>\n" +
 				"</tr>\n" + 
 				"<tr>\n" + 
-				"<td><p> Row 9 Col 1    </p></td>\n" + 
+				"<td><p> Row 9 Col 1    ::UWCTOKENROWSPANS:3::</p></td>\n" + 
 				"<td><p> Row 9 Col 2     </p></td>\n" + 
 				"<td><p> Row 9 Col 3        </p></td>\n" + 
 				"</tr>\n" + 
@@ -481,8 +481,8 @@ public class TableRowColSpanConverterTest extends TestCase {
 				"</tr>\n" +
 				"<tr>\n" + 
 				"<td><p> Row 1 Col 1    </p></td>\n" + 
-				"<td><p> Row 1 Col 2     </p></td>\n" + 
-				"<td><p> Row 1 Col 3        </p></td>\n" + 
+				"<td><p> Row 1 Col 2     ::UWCTOKENROWSPANS:4::</p></td>\n" + 
+				"<td><p> Row 1 Col 3        ::UWCTOKENROWSPANS:3::</p></td>\n" + 
 				"</tr>\n" +
 				"<tr>\n" + 
 				"<td><p> Row 2 Col 1    </p></td>\n" + 
@@ -559,7 +559,7 @@ public class TableRowColSpanConverterTest extends TestCase {
 				"</tr>\n" + 
 				"<tr>\n" + 
 				"<td><p> Row 4 Col 1    </p></td>\n" + 
-				"<td><p> this cell spans vertically </p></td>\n" + 
+				"<td><p> this cell spans vertically ::UWCTOKENROWSPANS:3::</p></td>\n" + 
 				"<td><p> Row 4 Col 3        </p></td>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
@@ -581,7 +581,7 @@ public class TableRowColSpanConverterTest extends TestCase {
 				"<td><p> Row 8 some colspan (note the double pipe) ::UWCTOKENCOLSPANS:3::</p></td>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
-				"<td><p> Row 9 Col 1    </p></td>\n" + 
+				"<td><p> Row 9 Col 1    ::UWCTOKENROWSPANS:3::</p></td>\n" + 
 				"<td><p> Row 9 Col 2     </p></td>\n" + 
 				"<td><p> Row 9 Col 3        </p></td>\n" + 
 				"</tr>\n" + 
@@ -605,8 +605,8 @@ public class TableRowColSpanConverterTest extends TestCase {
 				"</tr>\n" + 
 				"<tr>\n" + 
 				"<td><p> Row 1 Col 1    </p></td>\n" + 
-				"<td><p> Row 1 Col 2     </p></td>\n" + 
-				"<td><p> Row 1 Col 3        </p></td>\n" + 
+				"<td><p> Row 1 Col 2     ::UWCTOKENROWSPANS:4::</p></td>\n" + 
+				"<td><p> Row 1 Col 3        ::UWCTOKENROWSPANS:3::</p></td>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
 				"<td><p> Row 2 Col 1    </p></td>\n" + 
@@ -727,9 +727,9 @@ public class TableRowColSpanConverterTest extends TestCase {
 				"<th><p> h4                </p></th>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
-				"<td><p> foo           </p></td>\n" + 
+				"<td><p> foo           ::UWCTOKENROWSPANS:2::</p></td>\n" + 
 				"<td><p> bar               </p></td>\n" + 
-				"<td><p> baz      </p></td>\n" + 
+				"<td><p> baz      ::UWCTOKENROWSPANS:2::</p></td>\n" + 
 				"<td><p> tralala          </p></td>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
@@ -783,12 +783,12 @@ public class TableRowColSpanConverterTest extends TestCase {
 				"<th><p> h6 </p></th>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
-				"<td><p> thin        </p></td>\n" + 
+				"<td><p> thin        ::UWCTOKENROWSPANS:2::</p></td>\n" + 
 				"<td><p> man </p></td>\n" + 
-				"<td><p> starring </p></td>\n" + 
+				"<td><p> starring ::UWCTOKENROWSPANS:2::</p></td>\n" + 
 				"<td><p> myrna </p></td>\n" + 
-				"<td><p> loy  </p></td>\n" + 
-				"<td><p> tralalala  </p></td>\n" + 
+				"<td><p> loy  ::UWCTOKENROWSPANS:2::</p></td>\n" + 
+				"<td><p> tralalala  ::UWCTOKENROWSPANS:2::</p></td>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
 				"<td><p> :::           </p></td>\n" + 
@@ -799,12 +799,12 @@ public class TableRowColSpanConverterTest extends TestCase {
 				"<td><p> :::             </p></td>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
-				"<td><p> foo         </p></td>\n" + 
+				"<td><p> foo         ::UWCTOKENROWSPANS:2::</p></td>\n" + 
 				"<td><p> bar     </p></td>\n" + 
-				"<td><p> arg</p></td>\n" + 
+				"<td><p> arg::UWCTOKENROWSPANS:2::</p></td>\n" + 
 				"<td><p> this </p></td>\n" + 
-				"<td><p> is </p></td>\n" + 
-				"<td><p> annoying </p></td>\n" + 
+				"<td><p> is ::UWCTOKENROWSPANS:2::</p></td>\n" + 
+				"<td><p> annoying ::UWCTOKENROWSPANS:2::</p></td>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
 				"<td><p> :::           </p></td>\n" + 
@@ -815,12 +815,12 @@ public class TableRowColSpanConverterTest extends TestCase {
 				"<td><p> :::             </p></td>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
-				"<td><p> 1      </p></td>\n" + 
+				"<td><p> 1      ::UWCTOKENROWSPANS:2::</p></td>\n" + 
 				"<td><p> 2    </p></td>\n" + 
-				"<td><p> 3   </p></td>\n" + 
+				"<td><p> 3   ::UWCTOKENROWSPANS:2::</p></td>\n" + 
 				"<td><p> 4  </p></td>\n" + 
-				"<td><p> 5 </p></td>\n" + 
-				"<td><p> 6  </p></td>\n" + 
+				"<td><p> 5 ::UWCTOKENROWSPANS:2::</p></td>\n" + 
+				"<td><p> 6  ::UWCTOKENROWSPANS:2::</p></td>\n" + 
 				"</tr>\n" + 
 				"<tr>\n" + 
 				"<td><p> :::           </p></td>\n" + 
@@ -990,4 +990,137 @@ public class TableRowColSpanConverterTest extends TestCase {
 	}
 
 
+	
+	public void testConvertMoreRowSpanTroubles() {
+		String input, expected, actual;
+		input = "<table><tbody>\n" + 
+				"<tr>\n" + 
+				"<th><p> HEADER         ::UWCTOKENCOLSPANS:6::</p></th>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<th><p> h1       </p></th>\n" + 
+				"<th><p> h2                                                </p></th>\n" + 
+				"<th><p> h3                             </p></th>\n" + 
+				"<th><p> h4                                        </p></th>\n" + 
+				"<th><p> h5                        </p></th>\n" + 
+				"<th><p> h6        </p></th>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<td><p> r1c1        ::UWCTOKENROWSPANS:3::</p></td>\n" + 
+				"<td><p> r1c2     </p></td>\n" + 
+				"<td><p> r1c3     ::UWCTOKENROWSPANS:3::</p></td>\n" + 
+				"<td><p> r1c4  </p></td>\n" + 
+				"<td><p> r1c5  ::UWCTOKENROWSPANS:3::</p></td>\n" + 
+				"<td><p> r1c6  ::UWCTOKENROWSPANS:3::</p></td>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<td><p> :::           </p></td>\n" + 
+				"<td><p> r2c2          </p></td>\n" + 
+				"<td><p> :::                                       </p></td>\n" + 
+				"<td><p> r2c4        </p></td>\n" + 
+				"<td><p> :::                               </p></td>\n" + 
+				"<td><p> :::             </p></td>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<td><p> :::           </p></td>\n" + 
+				"<td><p> r3c2          </p></td>\n" + 
+				"<td><p> :::                                       </p></td>\n" + 
+				"<td><p>r3c4</p></td>\n" + 
+				"<td><p> :::                               </p></td>\n" + 
+				"<td><p> :::             </p></td>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<td><p> r4c1         ::UWCTOKENROWSPANS:3::</p></td>\n" + 
+				"<td><p> r4c2     </p></td>\n" + 
+				"<td><p> r4c3     ::UWCTOKENROWSPANS:3::</p></td>\n" + 
+				"<td><p> r4c4  </p></td>\n" + 
+				"<td><p> r4c5  ::UWCTOKENROWSPANS:3::</p></td>\n" + 
+				"<td><p> r4c6  ::UWCTOKENROWSPANS:3::</p></td>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<td><p> :::           </p></td>\n" + 
+				"<td><p> r2c2          </p></td>\n" + 
+				"<td><p> :::                                       </p></td>\n" + 
+				"<td><p> r2c4        </p></td>\n" + 
+				"<td><p> :::                               </p></td>\n" + 
+				"<td><p> :::             </p></td>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<td><p> :::           </p></td>\n" + 
+				"<td><p> r3c2          </p></td>\n" + 
+				"<td><p> :::                                       </p></td>\n" + 
+				"<td><p>r3c4</p></td>\n" + 
+				"<td><p> :::                               </p></td>\n" + 
+				"<td><p> :::             </p></td>\n" + 
+				"</tr>\n" + 
+				"</table>\n" + 
+				"";
+		expected = "<table><tbody>\n" + 
+				"<tr>\n" + 
+				"<th colspan='6'><p> HEADER         </p></th>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<th><p> h1       </p></th>\n" + 
+				"<th><p> h2                                                </p></th>\n" + 
+				"<th><p> h3                             </p></th>\n" + 
+				"<th><p> h4                                        </p></th>\n" + 
+				"<th><p> h5                        </p></th>\n" + 
+				"<th><p> h6        </p></th>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<td rowspan='3'><p> r1c1        </p></td>\n" + 
+				"<td><p> r1c2     </p></td>\n" + 
+				"<td rowspan='3'><p> r1c3     </p></td>\n" + 
+				"<td><p> r1c4  </p></td>\n" + 
+				"<td rowspan='3'><p> r1c5  </p></td>\n" + 
+				"<td rowspan='3'><p> r1c6  </p></td>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" +
+				"\n" + 
+				"<td><p> r2c2          </p></td>\n" +
+				"\n" +
+				"<td><p> r2c4        </p></td>\n" +
+				"\n" +
+				"\n" +
+				"</tr>\n" + 
+				"<tr>\n" +
+				"\n" +
+				"<td><p> r3c2          </p></td>\n" +
+				"\n" +
+				"<td><p>r3c4</p></td>\n" +
+				"\n" +
+				"\n" +
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"<td rowspan='3'><p> r4c1         </p></td>\n" + 
+				"<td><p> r4c2     </p></td>\n" + 
+				"<td rowspan='3'><p> r4c3     </p></td>\n" + 
+				"<td><p> r4c4  </p></td>\n" + 
+				"<td rowspan='3'><p> r4c5  </p></td>\n" + 
+				"<td rowspan='3'><p> r4c6  </p></td>\n" + 
+				"</tr>\n" + 
+				"<tr>\n" +
+				"\n" + 
+				"<td><p> r2c2          </p></td>\n" +
+				"\n" +
+				"<td><p> r2c4        </p></td>\n" +
+				"\n" +
+				"\n" +
+				"</tr>\n" + 
+				"<tr>\n" +
+				"\n" +
+				"<td><p> r3c2          </p></td>\n" +
+				"\n" +
+				"<td><p>r3c4</p></td>\n" +
+				"\n" +
+				"\n" +
+				"</tr>\n" + 
+				"</table>\n";
+		Page page = new Page(null);
+		page.setOriginalText(input);
+		tester.convert(page);
+		actual = page.getConvertedText();
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 }
