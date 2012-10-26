@@ -238,4 +238,28 @@ public class PrepRowSpansConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
+	
+	public void testNeedToTrim() {
+		String input, expected, actual;
+		input = "^ 1    | 2               |\n" + 
+				"^ 1   | 2 |\n" + 
+				"^ 1 | 2                     |\n" + 
+				"\n" + 
+				"tralala:\n" + 
+				"\n" + 
+				"^ 1           ^ 2 ^ 3 ^ 4 ^\n" + 
+				"| a | b | c | !!!|\n" + 
+				"| a | b | c |::: |\n" + 
+				"| a | b | c | end |\n";
+		
+		assertTrue(tester.needToTrim(input));
+		
+		input = "tralala:\n" + 
+				"\n" + 
+				"^ 1           ^ 2 ^ 3 ^ 4 ^\n" + 
+				"| a | b | c | !!!|\n" + 
+				"| a | b | c |::: |\n" + 
+				"| a | b | c | end |\n";
+		assertFalse(tester.needToTrim(input));
+	}
 }

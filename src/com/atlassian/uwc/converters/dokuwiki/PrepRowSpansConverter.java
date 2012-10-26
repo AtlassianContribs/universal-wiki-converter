@@ -32,11 +32,13 @@ public class PrepRowSpansConverter extends BaseConverter {
 			found = true;
 			String table = rowspanFinder.group();
 			//remove everything before the last table
-			String parts[] = trimTable(table);
 			String pre = "";
-			if (parts.length > 1) {
-				pre = parts[0];
-				table = parts[1];
+			if (needToTrim(table)) {
+				String parts[] = trimTable(table);
+				if (parts.length > 1) {
+					pre = parts[0];
+					table = parts[1];
+				}
 			}
 			//how many columns
 			int numcols = getNumCols(table);
@@ -55,6 +57,12 @@ public class PrepRowSpansConverter extends BaseConverter {
 		return input;
 	}
 	
+	Pattern moreThanOneTable = Pattern.compile("[|^]\n([^|^]|\n).*?[|^]", Pattern.DOTALL);
+	protected boolean needToTrim(String input) {
+		Matcher finder = moreThanOneTable.matcher(input);
+		return finder.find();
+	}
+
 	Pattern lastTable = Pattern.compile("^(.*?(?:(?:\n|[^|^])\n))([|^].*)", Pattern.DOTALL);
 	protected String[] trimTable(String input) {
 		Matcher lastFinder = lastTable.matcher(input);
