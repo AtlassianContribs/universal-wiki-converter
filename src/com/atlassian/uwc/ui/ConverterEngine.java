@@ -415,9 +415,8 @@ public class ConverterEngine implements FeedbackHandler {
 					}
 					//build the hierarchy
 					HierarchyNode root = hierarchyBuilder.buildHierarchy(allPages);
-					int currenttotal = allPages.size();
-					if (hierarchyBuilder.getProperties().containsKey("newpagecount"))
-						currenttotal = Integer.parseInt(hierarchyBuilder.getProperties().getProperty("newpagescount"));
+					int currenttotal = root.countDescendants()-1; //-1 for the null root;
+					log.debug("number of nodes in the hierarchy = " + root.countDescendants());
 					writeHierarchy(root, currenttotal, settings.getSpace());
 					handleOrphanAttachments();
 				} else { //no hierarchy - just write the pages
@@ -1343,9 +1342,14 @@ public class ConverterEngine implements FeedbackHandler {
      * @param spacekey space to which the pages will be written
      */
     protected void writePages(List pages, String spacekey) {
-    	String note = "Uploading Pages to Confluence...";
-		this.state.updateNote(note);
-		log.info(note);
+    	writePages(pages, spacekey, true);
+    }
+    protected void writePages(List pages, String spacekey, boolean logging) {
+    	if (logging) {
+    		String note = "Uploading Pages to Confluence...";
+    		this.state.updateNote(note);
+    		log.info(note);
+    	}
 		
         int numUploaded = 0;
         List<Page> casted = (List<Page>) pages;
@@ -1358,7 +1362,7 @@ public class ConverterEngine implements FeedbackHandler {
         	}
             if (sendPage(page, null, this.settings) == null) continue;
             numUploaded++;
-            if ((numUploaded % 10) == 0) {
+            if (logging && (numUploaded % 10) == 0) {
                 String message = "Uploaded " + numUploaded + 
                 	" out of " + pages.size() + 
                 	" page"+ (numUploaded==1?"":"s") +
@@ -1368,12 +1372,14 @@ public class ConverterEngine implements FeedbackHandler {
             }
         }
         
-        String message = "Uploaded " + numUploaded + 
-		        		" out of " + pages.size() + 
-		        		" page"+ (numUploaded==1?"":"s") +
-		        		".";
-        this.state.updateNote(message);
-        log.info(message);
+        if (logging) {
+        	String message = "Uploaded " + numUploaded + 
+        			" out of " + pages.size() + 
+        			" page"+ (numUploaded==1?"":"s") +
+        			".";
+        	this.state.updateNote(message);
+        	log.info(message);
+        }
 
         
         //attachedFiles is cleared so that if we do another conversion
@@ -2095,7 +2101,8 @@ public class ConverterEngine implements FeedbackHandler {
 			enforceBlogId(page, page.getAncestors(), blogid);
 			pageTable.put("id", blogid);
 		}
-		writePages(page.getAncestors(), settings.getSpace());
+		if (page.getAncestors() != null) log.info("Number of ancestors for page '"+page.getName()+"': " + page.getAncestors().size());
+		writePages(page.getAncestors(), settings.getSpace(), false);
 		return pageTable;
 	}
     
