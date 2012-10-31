@@ -399,38 +399,43 @@ public class ConverterEngine implements FeedbackHandler {
 				allPages = sortByHistory(allPages);
 			}
 			
-	    	//upload pages, if the user approves
-			if (sendToConfluence && this.running) {
-				if (hierarchyHandler == HierarchyHandler.HIERARCHY_BUILDER && hierarchyBuilder != null) {
-					//tell the hierarchy builder about the page histories framework
-					//do this here so that we're sure the page histories properties are set
-					if (hierarchyBuilder.getProperties() != null) { 
-						hierarchyBuilder.getProperties().setProperty("switch."+NONCONVERTERTYPE_PAGEHISTORYPRESERVATION, isHandlingPageHistories()+"");
-						if (getPageHistorySuffix() != null)	
-							hierarchyBuilder.getProperties().setProperty("suffix."+NONCONVERTERTYPE_PAGEHISTORYPRESERVATION, getPageHistorySuffix());
-					}
-					//tell the hierarchy some other information
-					if (hierarchyBuilder.getProperties() != null) {
-						hierarchyBuilder.getProperties().setProperty("spacekey", settings.getSpace());
-					}
-					//build the hierarchy
-					HierarchyNode root = hierarchyBuilder.buildHierarchy(allPages);
-					int currenttotal = root.countDescendants()-1; //-1 for the null root;
-					log.debug("number of nodes in the hierarchy = " + root.countDescendants());
+			if (hierarchyHandler == HierarchyHandler.HIERARCHY_BUILDER && hierarchyBuilder != null) {
+				//tell the hierarchy builder about the page histories framework
+				//do this here so that we're sure the page histories properties are set
+				if (hierarchyBuilder.getProperties() != null) { 
+					hierarchyBuilder.getProperties().setProperty("switch."+NONCONVERTERTYPE_PAGEHISTORYPRESERVATION, isHandlingPageHistories()+"");
+					if (getPageHistorySuffix() != null)	
+						hierarchyBuilder.getProperties().setProperty("suffix."+NONCONVERTERTYPE_PAGEHISTORYPRESERVATION, getPageHistorySuffix());
+				}
+				//tell the hierarchy some other information
+				if (hierarchyBuilder.getProperties() != null) {
+					hierarchyBuilder.getProperties().setProperty("spacekey", settings.getSpace());
+				}
+				//build the hierarchy
+				HierarchyNode root = hierarchyBuilder.buildHierarchy(allPages);
+				int currenttotal = root.countDescendants()-1; //-1 for the null root;
+				log.debug("number of nodes in the hierarchy = " + root.countDescendants());
+				//upload pages, if the user approves
+				if (sendToConfluence && this.running) { //check here so that hierarchy can impact collisions without upload
 					writeHierarchy(root, currenttotal, settings.getSpace());
 					handleOrphanAttachments();
-				} else { //no hierarchy - just write the pages
+				}
+				else if (!sendToConfluence){
+					log.debug("Send To Confluence setting turned off. --> Not uploading pages.");
+				}
+			} else { //no hierarchy
+				if (sendToConfluence && this.running) {//check here so that hierarchy can impact collisions without upload
 					writePages(allPages, settings.getSpace());
 					handleOrphanAttachments();
 				}
-				//check for namespace collisions and emit errors if found
-				//(after hierarchy has had a chance to make changes)
-				listCollisions(allPages);
+				else if (!sendToConfluence){
+					log.debug("Send To Confluence setting turned off. --> Not uploading pages.");
+				}
+			}
 
-			}
-			else if (!sendToConfluence){
-				log.debug("Send To Confluence setting turned off. --> Not uploading pages.");
-			}
+			//check for namespace collisions and emit errors if found
+			//(after hierarchy has had a chance to make changes)
+			listCollisions(allPages);
     	}	
     	log.info("Conversion Complete");
     }
@@ -1286,9 +1291,7 @@ public class ConverterEngine implements FeedbackHandler {
 			log.debug("Checking for collisions: " + page1.getName() + " and " + page2.getName());
 			String collision = "";
 			//if each page lower cased is the same
-			if (getCollisionComparisonString(page1).equals(getCollisionComparisonString(page2))
-					&& page1.getVersion() == page2.getVersion() //and same page history version
-				) {
+			if (colliding(page1, page2)) {
 				if (getCollisionComparisonString(page1).equals(getCollisionComparisonString(last))) { //already have one for this name
 					String latestPath = getPagePath(page2);
 					String current = collisions.remove(collisions.size()-1);
@@ -1309,6 +1312,27 @@ public class ConverterEngine implements FeedbackHandler {
 		}
     	return collisions;
     }
+
+	protected boolean colliding(Page page1, Page page2) {
+		boolean name = getCollisionComparisonString(page1).equals(getCollisionComparisonString(page2));
+		boolean version = page1.getVersion() == page2.getVersion();
+		
+		boolean space = false;
+		if (page1.getSpacekey() != null) { 
+			space = page1.getSpacekey().equals(page2.getSpacekey());
+		}
+		else if (page2.getSpacekey() != null) {
+			space = page2.getSpacekey().equals(page1.getSpacekey());
+		}
+		else if (page1.getSpacekey() == null && page2.getSpacekey() == null) 
+			space = true;
+		
+		boolean path = !getPagePath(page1).equals(getPagePath(page2));
+		return name
+				&& version //and same page history version
+				&& space// and same space
+				&& path; // but not the same path
+	}
 
 	/**
 	 * @param page
