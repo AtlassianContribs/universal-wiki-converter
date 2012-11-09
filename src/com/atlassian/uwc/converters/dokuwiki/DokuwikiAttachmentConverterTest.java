@@ -146,4 +146,13 @@ public class DokuwikiAttachmentConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}
+	
+	public void testAltCase() {
+		File file = new File("sampleData/dokuwiki/sampledokuwiki-inputbasic.txt");
+		File actual = tester.altCase(file);
+		String expected = "SampleDokuwiki-InputBasic.txt";
+		assertNotNull(actual);
+		assertEquals(expected, actual.getName());
+		assertTrue(actual.exists());
+	}
 }

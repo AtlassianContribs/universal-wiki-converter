@@ -8,6 +8,8 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import com.atlassian.uwc.ui.Page;
 
 /**
@@ -22,6 +24,8 @@ public class HierarchyNode {
     private Set<HierarchyNode> children;
     private static Comparator childrenComparator;
 
+    Logger log = Logger.getLogger(this.getClass());
+    
     public HierarchyNode() {
     }
 
@@ -68,13 +72,17 @@ public class HierarchyNode {
         }
         if (children != null && children.contains(child)) {
             children.remove(child);
+            log.debug("Removed: '" + child.getName() + "' from " + this.getName());
             if (children.size() == 0) {
                 children = null;
             }
             child.setParent(null);
         }
+        else {
+        	log.debug("Unable to remove this child: " + child.getName());
+        }
     }
-
+    
     /**
      * Returns the parent of this node.
      * @return The parent of this node, or <code>null</code> if
@@ -217,4 +225,21 @@ public class HierarchyNode {
         i++;
         return i;
     }
+    
+    public String toString() {
+    	return treeAsString(this);
+    }
+    private String treeAsString(HierarchyNode node) {
+		return treeAsString(node.getChildren(), "");
+	}
+
+	private String treeAsString(Set<HierarchyNode> children, String delim) {
+		String msg = "";
+		for (HierarchyNode child : children) {
+			String newdelim = delim + " .";
+			msg += newdelim + child.getName() + "\n";
+			msg += treeAsString(child.getChildren(), newdelim);
+		}
+		return msg;
+	}
 }

@@ -141,7 +141,7 @@ public abstract class HierarchyTarget extends BaseConverter {
 		return full.replaceAll("\\Q"+ignorable + "\\E", "");
 	}
 
-	protected String getMetaFilename(String path, String filetype) {
+	public String getMetaFilename(String path, String filetype) {
 		String ignorable = getProperties().getProperty("filepath-hierarchy-ignorable-ancestors", null);
 		if (ignorable == null) {
 			return null;
@@ -166,5 +166,5 @@ public abstract class HierarchyTarget extends BaseConverter {
 		log.debug("HierarchyTarget: relative path = " + path);
 		return path;
 	}
-	
+		
 }

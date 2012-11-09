@@ -164,7 +164,14 @@ public class Page implements Comparable {
 		if (compareValue == 0) { 
 			if (!sortWithTimestamp) compareValue = versionA - versionB;
 		}
+		//if these are the same, double check file path in case the filename is the same
+		if (compareValue == 0) {
+			String pathA = this.path;
+			String pathB = b.getPath();
+			compareValue = pathA.compareTo(pathB);
+		}
 		
+		//NOTE: If we return 0, only one of these objects will win in a Set that is sorted with this method.
 		return compareValue;
 	}
 

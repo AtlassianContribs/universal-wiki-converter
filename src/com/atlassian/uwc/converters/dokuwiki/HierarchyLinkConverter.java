@@ -86,8 +86,10 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 				//figure out if we've already got the space represented
 				String targetPart1 = target.replaceFirst(":[^:]+$", "");
 				boolean containsSpace = false;
-				if (namespaces.containsKey(target.replaceAll(":", "/"))) {
-					targetPart1 = target;
+//				log.debug("targetPart1 = " + targetPart1);
+				String nsFromTarget = findNSFromTarget(namespaces, target);
+				if (nsFromTarget != null) {
+					targetPart1 = nsFromTarget;
 				}
 				if (allspaces.contains(targetPart1)) 
 					containsSpace = true;
@@ -99,8 +101,6 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 				boolean isOne = (onecolon.matcher(target)).matches();
 				if (!(containsSpace && isOne)) 
 					target = target.replaceFirst(":start$", "");
-				if (containsSpace) //remove the space from the target for now
-					target = target.replaceFirst("\\Q"+targetPart1+"\\E:", "");
 				String hierarchy = target; //save for later
 				//is there a meta title to be used?
 //				log.debug("pagepath = " + pagepath);
@@ -150,6 +150,16 @@ public class HierarchyLinkConverter extends HierarchyTarget {
 			return sb.toString();
 		}
 		return input;
+	}
+
+	protected String findNSFromTarget(HashMap<String, String> namespaces, String target) {
+		target = target.replaceAll(":", "/");
+		while (!"".equals(target)) {
+			if (namespaces.containsKey(target)) { return target; }
+			if (target.contains("/")) target = target.replaceAll("[/][^/]*$", "");
+			else return null;
+		}
+		return null;
 	}
 	
 	

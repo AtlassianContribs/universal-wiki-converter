@@ -38,6 +38,9 @@ public class DokuwikiAttachmentConverter extends HierarchyImageConverter {
 				String dokupath = partsFinder.group(1);
 				String fileRelPath = createRelativePath(dokupath, relpath);
 				File file = new File(attdir + File.separator + fileRelPath);
+				if (!file.exists()) {
+					file = altCase(file);
+				}
 				candidates.add(file);
 				replacement = file.getName();
 				Matcher typeFinder = type.matcher(file.getName());
@@ -66,6 +69,25 @@ public class DokuwikiAttachmentConverter extends HierarchyImageConverter {
 			return sb.toString();
 		}
 		return input;
+	}
+
+	protected File altCase(File file) {
+		String name = file.getName();
+		File parent = file.getParentFile();
+		if (parent == null || !parent.exists()) {
+			log.warn("File probably does not exist: " + file.getAbsolutePath());
+			return file; 
+		}
+		File[] files = parent.listFiles();
+		if (files == null) {
+			log.warn("File probably does not exist: " + file.getAbsolutePath());
+			return file;
+		}
+		for (File realFile : files) {
+			if (name.equalsIgnoreCase(realFile.getName())) return realFile; 
+		}
+		log.warn("File probably does not exist: " + file.getAbsolutePath());
+		return file;
 	}
 
 	private String getSizeData(Matcher partsFinder) {

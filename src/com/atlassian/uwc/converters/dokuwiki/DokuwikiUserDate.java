@@ -32,8 +32,7 @@ public class DokuwikiUserDate extends HierarchyTarget {
 		try {
 			changeContent = FileUtils.readTextFile(changeFile);
 		} catch (IOException e) {
-			log.error("Could not read changes file: " + changeFilepath +". Skipping.");
-			e.printStackTrace();
+			log.error("Could not read changes file: " + changeFilepath +". Skipping.", e);
 			return;
 		}
 		//not preserving history at this time

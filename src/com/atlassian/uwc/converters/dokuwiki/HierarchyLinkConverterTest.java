@@ -131,15 +131,22 @@ public class HierarchyLinkConverterTest extends TestCase {
 
 	public void testConvertWithPageByPageSpaces_2() {
 		tester.getProperties().setProperty("space-lala","ns/tada");
+		tester.getProperties().setProperty("space-foo","ns/tada/other");
 		Page page = new Page(new File(HierarchyTitleConverterTest.PAGESDIR+"/SampleDokuwiki-InputTitle.txt"));
 		page.setOriginalText("[[.:home]]\n" +
-				"[[ns:tada]]\n");
+				"[[ns:tada]]\n" +
+				"[[ns:tada:subchild]]\n" +
+				"[[ns:tada:other:subchild]]\n" +
+				"[[ns:tada:other:sub:subsubchild]]\n");
 		String spacekey = "otherspace";
 		page.setSpacekey(spacekey);//default spacekey is 'food'
 		tester.convert(page);
 		String actual = page.getConvertedText();
 		String expected = "[" + spacekey + ":Home]\n" + //this one users the current home
-				"[lala:Tada]\n"; //this one uses the mapping (drink points to food)
+				"[lala:Tada]\n" +
+				"[lala:Subchild]\n" +
+				"[foo:Subchild]\n" +
+				"[foo:Subsubchild]\n"; //this one uses the mapping (drink points to food)
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 	}

@@ -67,7 +67,7 @@ import com.atlassian.uwc.ui.listeners.TestSettingsListener;
  * possibly some other method in the future)
  */
 public class ConverterEngine implements FeedbackHandler {
-    
+
 
 	/* START CONSTANTS */
 	private static final int NUM_REQ_CONVERTERS = 2;
@@ -93,10 +93,10 @@ public class ConverterEngine implements FeedbackHandler {
 	private static final String DEFAULT_ATTACHMENT_UPLOAD_COMMENT = "Added by UWC, the Universal Wiki Converter";
 	public static final String PROPKEY_ENGINE_SAVES_TO_DISK = "engine-saves-to-disk";	
 	private static final String PROPKEY_SPACEPERMS = "spaceperms";
-	
+
 	/* START FIELDS */
 	public boolean running = false; //Methods check this to see if the conversion needs to be cancelled
-	
+
 	/**
 	 * used to disable check for illegal names and links. 
 	 * We want to allow users to override this so they can handle it themselves
@@ -106,48 +106,48 @@ public class ConverterEngine implements FeedbackHandler {
 	private boolean autoDetectSpacekeys = false; //default = false
 	private HashSet<String> attachedFiles;//attachmentids
 	private HashSet<String> attachedPaths;//attachment file paths
-	
-    Logger log = Logger.getLogger(this.getClass());
-    // this logger is used to write out totals for the UWC to a seperate file uwc-totals.log
-    Logger totalsFileLog = Logger.getLogger("totalsFileLog");
-    Logger attachmentLog = Logger.getLogger("attachmentsLog");
 
-    /**
-     * The string that directory separators (e.g., / on Unix and \ on Windows) are replaced
-     * with in page titles.
-     * This is used by DokuWikiLinkConverter too.
-     */
-    public static final String CONFLUENCE_SEPARATOR = " -- ";
+	Logger log = Logger.getLogger(this.getClass());
+	// this logger is used to write out totals for the UWC to a seperate file uwc-totals.log
+	Logger totalsFileLog = Logger.getLogger("totalsFileLog");
+	Logger attachmentLog = Logger.getLogger("attachmentsLog");
 
-    protected enum HierarchyHandler {
-    	DEFAULT, 			//no hierarchy handling
-    	HIERARCHY_BUILDER,	//hierarchyBuilder handles 
-    	PAGENAME_HIERARCHIES//hierarchy maintained in pagename
-    }
-    private HierarchyHandler hierarchyHandler = HierarchyHandler.DEFAULT; 
-    
-    /**
-     * The mapping from file name extension to mime type that is used when sending
-     * attachments to Confluence.
-     * NOTE: static so that other files can get access to this easily.
-     */
-    private static MimetypesFileTypeMap mimeTypes;
+	/**
+	 * The string that directory separators (e.g., / on Unix and \ on Windows) are replaced
+	 * with in page titles.
+	 * This is used by DokuWikiLinkConverter too.
+	 */
+	public static final String CONFLUENCE_SEPARATOR = " -- ";
 
-    /**
-     * This is the location of the mime type mapping file. For details on the file format,
-     * refer to the link below.
-     *
-     * @see javax.activation.MimetypesFileTypeMap
-     */
-    public final static String mimetypeFileLoc = "conf" + File.separator + "mime.types";
+	protected enum HierarchyHandler {
+		DEFAULT, 			//no hierarchy handling
+		HIERARCHY_BUILDER,	//hierarchyBuilder handles 
+		PAGENAME_HIERARCHIES//hierarchy maintained in pagename
+	}
+	private HierarchyHandler hierarchyHandler = HierarchyHandler.DEFAULT; 
 
-    /**
-     * This field is set if a hierarchy builder "converter" is used. The field controls the
-     * way in which pages are added/updated in Confluence. If hierarchyBuilder is <code>null</code>, all
-     * pages are added as top-level pages in the selected space. Otherwise, the hierarchy builder is
-     * called on to create a page hierarchy, and the engine will insert the pages correspondingly.
-     */
-    private HierarchyBuilder hierarchyBuilder = null;
+	/**
+	 * The mapping from file name extension to mime type that is used when sending
+	 * attachments to Confluence.
+	 * NOTE: static so that other files can get access to this easily.
+	 */
+	private static MimetypesFileTypeMap mimeTypes;
+
+	/**
+	 * This is the location of the mime type mapping file. For details on the file format,
+	 * refer to the link below.
+	 *
+	 * @see javax.activation.MimetypesFileTypeMap
+	 */
+	public final static String mimetypeFileLoc = "conf" + File.separator + "mime.types";
+
+	/**
+	 * This field is set if a hierarchy builder "converter" is used. The field controls the
+	 * way in which pages are added/updated in Confluence. If hierarchyBuilder is <code>null</code>, all
+	 * pages are added as top-level pages in the selected space. Otherwise, the hierarchy builder is
+	 * called on to create a page hierarchy, and the engine will insert the pages correspondingly.
+	 */
+	private HierarchyBuilder hierarchyBuilder = null;
 	private UWCUserSettings settings;
 	private State state;
 	private Properties miscProperties = new Properties(); //instantiate this here - UWC-293
@@ -165,72 +165,72 @@ public class ConverterEngine implements FeedbackHandler {
 
 	private int newNodes;
 
-    HashMap<String, Converter> converterCacheMap = new HashMap<String, Converter>();
+	HashMap<String, Converter> converterCacheMap = new HashMap<String, Converter>();
 	private long startTotalConvertTime;
-	
+
 	//Error handlers
 	private ConverterErrors errors = new ConverterErrors();
 	private boolean hadConverterErrors;
 	private HashMap<String, String> homepages = new HashMap<String, String>();
 
 	/* START CONSTRUCTORS */
-    
-    /**
-     * This default constructor initializes the mime types.
-     */
-    public ConverterEngine() {
-        try {
-            mimeTypes = new MimetypesFileTypeMap(new FileInputStream(mimetypeFileLoc));
-        } catch (FileNotFoundException e) {
-            String note = "Couldn't load mime types!";
-            log.error(note, e);
-            this.errors.addError(Feedback.BAD_SETTINGS_FILE, note, false);
-        }
-        totalsFileLog.setAdditivity(false);
-    }
-    
-    /* START METHODS */
 
-    /**
-     * converts the files with the converterstrings, and hooks any feedback into the given ui
-     * @param inputPages pages from the filesystem to be converted
-     * @param converterStrings list of converters as strings which will be run on the pages
-     * @param sendToConfluence true if the pages should be uploaded to confluence
-     * @param wikitype The wiki type that's being converted into Confluence, ex: Mediawiki
-     */
-    public void convert(List<File> inputPages, List<String> converterStrings, UWCUserSettings settings) {
-    	//setup
-    	this.running = true;
+	/**
+	 * This default constructor initializes the mime types.
+	 */
+	public ConverterEngine() {
+		try {
+			mimeTypes = new MimetypesFileTypeMap(new FileInputStream(mimetypeFileLoc));
+		} catch (FileNotFoundException e) {
+			String note = "Couldn't load mime types!";
+			log.error(note, e);
+			this.errors.addError(Feedback.BAD_SETTINGS_FILE, note, false);
+		}
+		totalsFileLog.setAdditivity(false);
+	}
+
+	/* START METHODS */
+
+	/**
+	 * converts the files with the converterstrings, and hooks any feedback into the given ui
+	 * @param inputPages pages from the filesystem to be converted
+	 * @param converterStrings list of converters as strings which will be run on the pages
+	 * @param sendToConfluence true if the pages should be uploaded to confluence
+	 * @param wikitype The wiki type that's being converted into Confluence, ex: Mediawiki
+	 */
+	public void convert(List<File> inputPages, List<String> converterStrings, UWCUserSettings settings) {
+		//setup
+		this.running = true;
 		resetFeedback();
 		resetErrorHandlers();
 		resetHierarchy();
-    	
+
 		//settings
 		boolean sendToConfluence = Boolean.parseBoolean(settings.getSendToConfluence());
-    	this.settings = settings;
-    	if (!this.running) {
-    		this.feedback = Feedback.CANCELLED;
-    		return;
-    	}
-    	
-    	//convert
+		this.settings = settings;
+		if (!this.running) {
+			this.feedback = Feedback.CANCELLED;
+			return;
+		}
+
+		//convert
 		convert(inputPages, converterStrings, sendToConfluence, settings.getPattern());
-		
+
 		//cleanup
 		if (this.feedback == Feedback.NONE)
 			this.feedback = Feedback.OK;
 		this.running = false;
-    }
-    
-    /**
-     * cancels the conversion
-     */
-    public void cancel() {
+	}
+
+	/**
+	 * cancels the conversion
+	 */
+	public void cancel() {
 		String message = "Engine - Sending Cancel Signal";
-    	log.debug(message);
+		log.debug(message);
 		this.state.updateNote(message);
-    	this.running = false;
-    }
+		this.running = false;
+	}
 
 	/**
 	 * gets a new State object.
@@ -245,12 +245,12 @@ public class ConverterEngine implements FeedbackHandler {
 		//inputPages includes directories which are counted as 1 object in the inputPages list, and
 		//converterStrings includes non-converter properties. So, for now we'll use a default value to set up
 		//the state.
-//    	int steps = 
-//    		getNumberOfSteps(
-//    				inputPages, 
-//    				converterStrings, 
-//    				Boolean.parseBoolean(settings.getSendToConfluence())
-//    				);
+		//    	int steps = 
+		//    		getNumberOfSteps(
+		//    				inputPages, 
+		//    				converterStrings, 
+		//    				Boolean.parseBoolean(settings.getSendToConfluence())
+		//    				);
 		return getState(settings);
 	}
 
@@ -296,7 +296,7 @@ public class ConverterEngine implements FeedbackHandler {
 	private int getNumberOfSteps(int pages, int converters, boolean sendToConfluence) {
 		return getNumberOfSteps(pages, converters, converters, sendToConfluence);
 	}
-	
+
 	/**
 	 * Counts the number of steps needed to do an entire conversion from start to finish.
 	 * Used with progress monitor
@@ -323,16 +323,16 @@ public class ConverterEngine implements FeedbackHandler {
 	private int getNumberOfSteps(int files, int pages, int properties, int converters, boolean sendToConfluence) {
 		int numReqConverters = isIllegalHandlingEnabled()?NUM_REQ_CONVERTERS:0;
 		int steps = 
-			properties + 					//1. initialize converters (handles both converter and non-converter properties)
-			files + 						//2. create page objects (uses the original list of chosen file objects)
-			(converters * pages) +			//3. convert the files (uses the number of page objects)
-			(numReqConverters) +			//4. create required converters (2, right now)
-			(numReqConverters * pages) + 	//5. convert with required converters (2, right now)
-			pages + 						//6. save the files
-			(sendToConfluence?pages:0);		//7. upload pages if sendToConfluence
+				properties + 					//1. initialize converters (handles both converter and non-converter properties)
+				files + 						//2. create page objects (uses the original list of chosen file objects)
+				(converters * pages) +			//3. convert the files (uses the number of page objects)
+				(numReqConverters) +			//4. create required converters (2, right now)
+				(numReqConverters * pages) + 	//5. convert with required converters (2, right now)
+				pages + 						//6. save the files
+				(sendToConfluence?pages:0);		//7. upload pages if sendToConfluence
 		return steps;
 	}
-	
+
 	/**
 	 * converts the given pages using the given converterStrings, and sends the pages
 	 * to Confluence, if sendToConfluence is true.
@@ -345,60 +345,60 @@ public class ConverterEngine implements FeedbackHandler {
 	}
 
 	/**
-     * converts the given pages not filtered out with the given filterPattern
-     * using the given converterStrings, and sends the pages to Confluence, 
-     * if sendToConfluence is true
-     * @param pages
-     * @param converterStrings
-     * @param sendToConfluence 
-     * @param filterPattern ignores files with this filter pattern
-     */
-    public void convert(List<File> pages, List<String> converterStrings, boolean sendToConfluence, String filterPattern) {
-    	log.info("Starting conversion.");
-    	
-    	initConversion();
-    	
-    	//create converters
-    	ArrayList<Converter> converters = createConverters(converterStrings);
+	 * converts the given pages not filtered out with the given filterPattern
+	 * using the given converterStrings, and sends the pages to Confluence, 
+	 * if sendToConfluence is true
+	 * @param pages
+	 * @param converterStrings
+	 * @param sendToConfluence 
+	 * @param filterPattern ignores files with this filter pattern
+	 */
+	public void convert(List<File> pages, List<String> converterStrings, boolean sendToConfluence, String filterPattern) {
+		log.info("Starting conversion.");
 
-    	//create page objects - Recurse through directories, adding all files
-    	FileFilter filter = createFilter(filterPattern);
-    	List<Page> allPages = createPages(filter, pages);
-    	
-    	//fix progressbar max, which is dependent on the previous two lists
-    	int steps = getNumberOfSteps(pages.size(), allPages.size(), converterStrings.size(), converters.size(), sendToConfluence);
-    	this.state.updateMax(steps);
-    	
-    	
-    	//convert the files
-    	if (convertPages(allPages, converters)) {
-    		//in case converting the pages disqualified some pages, we need to break if there are no pages left
-    		if (allPages.size() < 1) {
-    			String message = "All pages submitted were disqualified for various reasons. Could not complete conversion.";
+		initConversion();
+
+		//create converters
+		ArrayList<Converter> converters = createConverters(converterStrings);
+
+		//create page objects - Recurse through directories, adding all files
+		FileFilter filter = createFilter(filterPattern);
+		List<Page> allPages = createPages(filter, pages);
+
+		//fix progressbar max, which is dependent on the previous two lists
+		int steps = getNumberOfSteps(pages.size(), allPages.size(), converterStrings.size(), converters.size(), sendToConfluence);
+		this.state.updateMax(steps);
+
+
+		//convert the files
+		if (convertPages(allPages, converters)) {
+			//in case converting the pages disqualified some pages, we need to break if there are no pages left
+			if (allPages.size() < 1) {
+				String message = "All pages submitted were disqualified for various reasons. Could not complete conversion.";
 				log.warn(message);
 				this.errors.addError(Feedback.CONVERTER_ERROR, message, true);
 				this.state.updateMax(this.state.getStep()); //complete progress bar, prematurely
 				return;
-    		}
-    		//in case converting the pages disqualified some pages, we need to recompute progressbarmax
-    		steps = getNumberOfSteps(pages.size(), allPages.size(), converterStrings.size(), converters.size(), sendToConfluence);
-    		if (steps != this.state.getMax()) this.state.updateMax(steps);
-    		
-    		// do final required conversions. This step is seperate, due to state saving issues
-    		convertWithRequiredConverters(allPages);
+			}
+			//in case converting the pages disqualified some pages, we need to recompute progressbarmax
+			steps = getNumberOfSteps(pages.size(), allPages.size(), converterStrings.size(), converters.size(), sendToConfluence);
+			if (steps != this.state.getMax()) this.state.updateMax(steps);
 
-        	//save pages if engine-saves-to-disk property is true. Useful for debugging.
-    		//We are making this opt-in because users that don't need it will get a speed boost with fewer disk calls
-    		if (Boolean.parseBoolean(this.miscProperties.getProperty(PROPKEY_ENGINE_SAVES_TO_DISK, "false")))
-    				savePages(allPages, filterPattern);
-    		else log.debug("Engine Saves To Disk setting turned off.");
-			
+			// do final required conversions. This step is seperate, due to state saving issues
+			convertWithRequiredConverters(allPages);
+
+			//save pages if engine-saves-to-disk property is true. Useful for debugging.
+			//We are making this opt-in because users that don't need it will get a speed boost with fewer disk calls
+			if (Boolean.parseBoolean(this.miscProperties.getProperty(PROPKEY_ENGINE_SAVES_TO_DISK, "false")))
+				savePages(allPages, filterPattern);
+			else log.debug("Engine Saves To Disk setting turned off.");
+
 			//handling page histories and not sorting on create
 			if (isHandlingPageHistories() && 
 					!(isPageHistorySortOnCreate())) {
 				allPages = sortByHistory(allPages);
 			}
-			
+
 			if (hierarchyHandler == HierarchyHandler.HIERARCHY_BUILDER && hierarchyBuilder != null) {
 				//tell the hierarchy builder about the page histories framework
 				//do this here so that we're sure the page histories properties are set
@@ -417,7 +417,13 @@ public class ConverterEngine implements FeedbackHandler {
 				log.debug("number of nodes in the hierarchy = " + root.countDescendants());
 				//upload pages, if the user approves
 				if (sendToConfluence && this.running) { //check here so that hierarchy can impact collisions without upload
-					writeHierarchy(root, currenttotal, settings.getSpace());
+					if (Boolean.parseBoolean(this.miscProperties.getProperty("onlyorphans", "false"))) {
+						log.debug("Orphan attachments only.");
+						noteAttachments(root);
+					} 
+					else {
+						writeHierarchy(root, currenttotal, settings.getSpace());
+					}
 					handleOrphanAttachments();
 				}
 				else if (!sendToConfluence){
@@ -436,61 +442,85 @@ public class ConverterEngine implements FeedbackHandler {
 			//check for namespace collisions and emit errors if found
 			//(after hierarchy has had a chance to make changes)
 			listCollisions(allPages);
-    	}	
-    	log.info("Conversion Complete");
-    }
+			clearAttachedFileList();
+		}	
+		log.info("Conversion Complete");
+	}
+
+	private void noteAttachments(HierarchyNode root) {
+		if (root.getPage() != null) {
+			log.debug("ORPHANDEBUG node: " + root.getPage().getName());
+			for (Attachment attachment : root.getPage().getAllAttachmentData()) {
+				alreadyAttached(root.getPage(), attachment.getFile());
+				if (root.getPage().getAncestors() != null) {
+					for (VersionPage ancestor : root.getPage().getAncestors()) {
+						for (Attachment ancAtt : ancestor.getAllAttachmentData()) {
+							log.debug("VERSION ORPHANDEBUG: " + ancestor.getName() + ": " + ancAtt.getFile().getName());
+							alreadyAttached(ancestor, ancAtt.getFile());
+						}
+					}
+				}
+			}
+		}
+		if (!root.getChildren().isEmpty()) {
+			for (HierarchyNode child : root.getChildren()) {
+				noteAttachments(child);
+			}
+		}
+
+	}
 
 	protected boolean isPageHistorySortOnCreate() {
 		return Boolean.parseBoolean(this.miscProperties.getProperty("page-history-sortoncreate", "true"));
 	}
 
-    /**
-     * handle any cleanup
-     */
-    protected void initConversion() {
+	/**
+	 * handle any cleanup
+	 */
+	protected void initConversion() {
 		this.miscProperties.clear();
 	}
 
 	/**
-     * Instantiate all the converterStrings
-     *
-     * @param converterStrings a list of converter strings of the form "key=value"
-     * @return a list of converters
-     */
-    public ArrayList<Converter> createConverters(List<String> converterStrings) {
-    	return createConverters(converterStrings, true);
-    }
-    public ArrayList<Converter> createConverters(List<String> converterStrings, boolean runningState) {
-    	String message = "Initializing Converters...";
+	 * Instantiate all the converterStrings
+	 *
+	 * @param converterStrings a list of converter strings of the form "key=value"
+	 * @return a list of converters
+	 */
+	public ArrayList<Converter> createConverters(List<String> converterStrings) {
+		return createConverters(converterStrings, true);
+	}
+	public ArrayList<Converter> createConverters(List<String> converterStrings, boolean runningState) {
+		String message = "Initializing Converters...";
 		if (runningState) this.state.updateNote(message);
 		log.info(message);
-		
-        new DefaultXmlEvents().clearAll(); 	//everytime this method is called, have a clean slate of events
-        
-        ArrayList<Converter> converters = new ArrayList<Converter>(); 
-        this.numNonConverterProperties = 0; 
-        for (String converterStr : converterStrings) {
-        	if (runningState) this.state.updateProgress();
-        	if (runningState && !this.running) {
-        		this.feedback = Feedback.CANCELLED;
-        		return null;
-        	}
-            Converter converter;
-            if (isNonConverterProperty(converterStr)) {
-            	this.numNonConverterProperties++;
-            	handleNonConverterProperty(converterStr);
-            	continue;
-            } 
-        	converter = getConverterFromString(converterStr);
-        	if (converter == null) {
-        		continue;
-        	}
-        	converters.add(converter);
-        }
-        if (runningState) addDefaultMiscProperties();
-        
-        return converters;
-    }
+
+		new DefaultXmlEvents().clearAll(); 	//everytime this method is called, have a clean slate of events
+
+		ArrayList<Converter> converters = new ArrayList<Converter>(); 
+		this.numNonConverterProperties = 0; 
+		for (String converterStr : converterStrings) {
+			if (runningState) this.state.updateProgress();
+			if (runningState && !this.running) {
+				this.feedback = Feedback.CANCELLED;
+				return null;
+			}
+			Converter converter;
+			if (isNonConverterProperty(converterStr)) {
+				this.numNonConverterProperties++;
+				handleNonConverterProperty(converterStr);
+				continue;
+			} 
+			converter = getConverterFromString(converterStr);
+			if (converter == null) {
+				continue;
+			}
+			converters.add(converter);
+		}
+		if (runningState) addDefaultMiscProperties();
+
+		return converters;
+	}
 
 	/**
 	 * coverts pages with required converters
@@ -508,33 +538,33 @@ public class ConverterEngine implements FeedbackHandler {
 			converters = createOneConverter(illegallinksConvStr);
 			convertPages(pages, converters, "Checking for links to illegal pagenames.");
 		} 
-    }
-    
-    /**
-     * converts the list of pages with the given converter
-     * @param pages list of pages to be converted
-     * @param useUI set this to false if you do not want the associated GUI elements
-     * to be updated. This is useful for unit testing.
-     */
-    protected void convertWithRequiredConverters(List<Page> pages, boolean useUI) {
-    	//XXX used only by the junit tests
-    	
-    	//create pagename converter and convert with it
+	}
+
+	/**
+	 * converts the list of pages with the given converter
+	 * @param pages list of pages to be converted
+	 * @param useUI set this to false if you do not want the associated GUI elements
+	 * to be updated. This is useful for unit testing.
+	 */
+	protected void convertWithRequiredConverters(List<Page> pages, boolean useUI) {
+		//XXX used only by the junit tests
+
+		//create pagename converter and convert with it
 		String pagenameConvStr = REQUIRED_CONVERTER_ILLEGAL_NAMES;
 		ArrayList<Converter> converters = createOneConverter(pagenameConvStr);
-    	convertPages(pages, converters, "Checking for illegal pagenames.");
-    	
-    	//get the state hashtable
-    	IllegalPageNameConverter  pagenameConverter = (IllegalPageNameConverter) converters.remove(0);
-    	HashSet<String> illegalNames =  pagenameConverter.getIllegalPagenames();
-    	
-    	//create linkname converter and convert with it
+		convertPages(pages, converters, "Checking for illegal pagenames.");
+
+		//get the state hashtable
+		IllegalPageNameConverter  pagenameConverter = (IllegalPageNameConverter) converters.remove(0);
+		HashSet<String> illegalNames =  pagenameConverter.getIllegalPagenames();
+
+		//create linkname converter and convert with it
 		String illegallinksConvStr = REQUIRED_CONVERTER_ILLEGAL_LINKS;
-    	converters = createOneConverter(illegallinksConvStr);
-    	IllegalLinkNameConverter linknameConverter = (IllegalLinkNameConverter) converters.get(0);
-    	linknameConverter.setIllegalPagenames(illegalNames);
-    	convertPages(pages, converters, "Checking for links to illegal pagenames.");
-    }
+		converters = createOneConverter(illegallinksConvStr);
+		IllegalLinkNameConverter linknameConverter = (IllegalLinkNameConverter) converters.get(0);
+		linknameConverter.setIllegalPagenames(illegalNames);
+		convertPages(pages, converters, "Checking for links to illegal pagenames.");
+	}
 
 	/**
 	 * creates the arraylist of converters when only one converter is needed
@@ -548,267 +578,270 @@ public class ConverterEngine implements FeedbackHandler {
 		ArrayList<Converter> converters = createConverters(converterStrings);
 		return converters;
 	}
-    
+
 	/**
-     * Instantiates a converter from a correctly formatted String.
-     * <p/>
-     * Note: This method is now only called once per converter -- first all converters
-     * are created, then all pages, then all converters are run on all pages.
-     *
-     * @param converterStr A string of the form "name.keyword=parameters". The
-     *  keyword is used to create the correct type of converter, and the parameters
-     *  are then passed to the converter. Finally, the "name.keyword" part is set as
-     *  the key in the converter, mainly for debugging purposes. 
-     * @return converter or null if no converter can be parsed/instantiated
-     */
-    public Converter getConverterFromString(String converterStr) {
-        Converter converter;
-        int equalLoc = converterStr.indexOf("=");
-        String key = converterStr.substring(0, equalLoc);
-        String value = converterStr.substring(equalLoc + 1);
-        try {
-            if (key.indexOf(CONVERTERTYPE_CLASS) >= 0) {
-                converter = getConverterClassFromCache(value);
-            } else if (key.indexOf(CONVERTERTYPE_PERL) >= 0) {
-                converter = PerlConverter.getPerlConverter(value);
-                converter.setValue(value);
-            } else if (key.indexOf(CONVERTERTYPE_JAVAREGEXTOKEN) >= 0) {
-                converter = JavaRegexAndTokenizerConverter.getConverter(value);
-                converter.setValue(value);
-            } else if (key.indexOf(CONVERTERTYPE_JAVAREGEX) >= 0) {
-                converter = JavaRegexConverter.getConverter(value);
-                converter.setValue(value);
-            } else if (key.indexOf(CONVERTERTYPE_TWIKICLEANER) >= 0) {
-                //converter = getConverterClassFromCache(value);
-                converter = TWikiRegexConverterCleanerWrapper.getTWikiRegexConverterCleanerWrapper(value);
-                converter.setValue(value);
-            } else { 
-                String note = "Converter ignored -- name pattern not recognized: " + key;
+	 * Instantiates a converter from a correctly formatted String.
+	 * <p/>
+	 * Note: This method is now only called once per converter -- first all converters
+	 * are created, then all pages, then all converters are run on all pages.
+	 *
+	 * @param converterStr A string of the form "name.keyword=parameters". The
+	 *  keyword is used to create the correct type of converter, and the parameters
+	 *  are then passed to the converter. Finally, the "name.keyword" part is set as
+	 *  the key in the converter, mainly for debugging purposes. 
+	 * @return converter or null if no converter can be parsed/instantiated
+	 */
+	public Converter getConverterFromString(String converterStr) {
+		Converter converter;
+		int equalLoc = converterStr.indexOf("=");
+		String key = converterStr.substring(0, equalLoc);
+		String value = converterStr.substring(equalLoc + 1);
+		try {
+			if (key.indexOf(CONVERTERTYPE_CLASS) >= 0) {
+				converter = getConverterClassFromCache(value);
+			} else if (key.indexOf(CONVERTERTYPE_PERL) >= 0) {
+				converter = PerlConverter.getPerlConverter(value);
+				converter.setValue(value);
+			} else if (key.indexOf(CONVERTERTYPE_JAVAREGEXTOKEN) >= 0) {
+				converter = JavaRegexAndTokenizerConverter.getConverter(value);
+				converter.setValue(value);
+			} else if (key.indexOf(CONVERTERTYPE_JAVAREGEX) >= 0) {
+				converter = JavaRegexConverter.getConverter(value);
+				converter.setValue(value);
+			} else if (key.indexOf(CONVERTERTYPE_TWIKICLEANER) >= 0) {
+				//converter = getConverterClassFromCache(value);
+				converter = TWikiRegexConverterCleanerWrapper.getTWikiRegexConverterCleanerWrapper(value);
+				converter.setValue(value);
+			} else { 
+				String note = "Converter ignored -- name pattern not recognized: " + key;
 				this.errors.addError(Feedback.BAD_PROPERTY, note, true);
 				log.error(note);
-                return null;
-            }
-            converter.setProperties(this.miscProperties);
-            if (converter instanceof RequiresEngineConverter) {
-            	((RequiresEngineConverter) converter).setEngine(this);
-            }
-        } catch (ClassNotFoundException e) {
-            this.errors.addError(Feedback.BAD_CONVERTER_CLASS, "Converter ignored -- the Java class " + value + " was not found", true);
-            return null;
-        } catch (IllegalAccessException e) {
-            this.errors.addError(Feedback.BAD_CONVERTER_CLASS, "Converter ignored -- there was a problem creating a converter object", true);
-            return null;
-        } catch (InstantiationException e) {
-            this.errors.addError(Feedback.BAD_CONVERTER_CLASS, "Converter ignored -- there was a problem creating the Java class " + value, true);
-            return null;
-        } catch (ClassCastException e) {
-            this.errors.addError(Feedback.BAD_CONVERTER_CLASS, "Converter ignored -- the Java class " + value +
-                    " must implement the " + Converter.class.getName() + " interface!", true);
-            return null;
-        }
-        converter.setKey(key);
-        return converter;
-    }
-
-    /**
-     * handles necessary state changes for expected properties 
-     * that were set in the converter properties file.
-     * expected nonconverter properties include hierarchy builder properties
-     * and page history preservation properties
-     * @param converterStr should be a line from the converter properties file
-     * Example:
-     * MyWiki.0001.someproperty.somepropertytype=setting
-     * <br/>
-     * where somepropertytype is an expected property type:
-     * <br/>
-     * NONCONVERTERTYPE_HIERARCHYBUILDER or NONCONVERTERTYPE_PAGEHISTORYPRESERVATION
-     * or NONCONVERTERTYPE_ILLEGALHANDLING
-     * or NONCONVERTERTYPE_AUTODETECTSPACEKEYS
-     * or NONCONVERTERTYPE_FILTERS
-     * or NONCONVERTERTYPE_MISCPROPERTIES
-     */
-    protected void handleNonConverterProperty(String converterStr) {
-    	int equalLoc = converterStr.indexOf("=");
-        String key = converterStr.substring(0, equalLoc);
-        String value = converterStr.substring(equalLoc + 1);
-        String parent = "";
-        try {
-	    	if (key.indexOf(NONCONVERTERTYPE_HIERARCHYBUILDER) >= 0) {
-	    		if (isHierarchySwitch(key))
-	    			setHierarchyHandler(value);
-	    		else {
-					parent = HierarchyBuilder.class.getName(); 
-		            Class c;
-						c = Class.forName(value);
-		            HierarchyBuilder hierarchy = (HierarchyBuilder) c.newInstance();
-		            hierarchyBuilder = hierarchy;
-		            this.hierarchyBuilder.setProperties(this.miscProperties);
-	    		}
-	    	}
-	    	else if (key.endsWith(NONCONVERTERTYPE_PAGEHISTORYPRESERVATION)) {
-	    		handlePageHistoryProperty(key, value);
-	    	}
-	    	else if (key.endsWith(NONCONVERTERTYPE_ILLEGALHANDLING)) {
-	    		handleIllegalHandling(key, value);
-	    	}
-	    	else if (key.endsWith(NONCONVERTERTYPE_AUTODETECTSPACEKEYS)) {
-	    		handleAutoDetectSpacekeys(key, value);
-	    	}
-	    	else if (key.endsWith(NONCONVERTERTYPE_MISCPROPERTIES)) {
-	    		handleMiscellaneousProperties(key, value);
-	    	}
-	    	else if (key.endsWith(NONCONVERTERTYPE_FILTERS)) {
-	    		parent = FileFilter.class.getName();
-	    		handleFilters(key, value);
-	    	}
-	    	else if (key.endsWith(NONCONVERTERTYPE_XMLEVENT)) {
-	    		handleXmlEvents(key, value);
-	    	}
-        } catch (ClassNotFoundException e) { 
-            String message = "Property ignored -- the Java class " + value + " was not found";
-            log.error(message);
-			this.errors.addError(Feedback.BAD_PROPERTY, message, true);
-        } catch (IllegalAccessException e) {
-            String message = "Property ignored -- there was a problem creating the Java class: " + value +
-            	".\n" +
-            	"Note: A necessary method's permissions were too restrictive. Check the constructor. ";
-            log.error(message);
-			this.errors.addError(Feedback.BAD_PROPERTY, message, true);
-        } catch (InstantiationException e) {
-            String message = "Property ignored -- there was a problem creating the Java class " + value +
-            	".\n" +
-            	"Note: The class cannot be instantiated as it is abstract or is an interface.";
-            log.error(message);
-			this.errors.addError(Feedback.BAD_PROPERTY, message, true);
-        } catch (ClassCastException e) { 
-			String message = "Property ignored -- the Java class " + value +
-			                    " must implement the " + parent + " interface!";
-            log.error(message);
-			this.errors.addError(Feedback.BAD_PROPERTY, message, true);
-        } catch (IllegalArgumentException e) {
-        	String message = "Property ignored -- property value was not in expected format.";
-        	log.error(message);
-        	this.errors.addError(Feedback.BAD_PROPERTY, message, true);
-        }
-    }
-    
-    /**
-     * at long last making some performance enhancements
-     * here we are creating an object cache which should help a bit
-     *
-     * @param key A string representing the converter (actually the part after the
-     *        equals sign of the converter string).
-     * @return
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     */
-    private Converter getConverterClassFromCache(String key) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        Converter converter = converterCacheMap.get(key);
-        if (converter == null) {
-            Class c = Class.forName(key);
-            converter = (Converter) c.newInstance();
-            converterCacheMap.put(key, converter);
-        }
-        return converter;
-    }
-
-    /**
-     * creates file filter.
-     * If we have no filter values, returns null.
-     * If we have at least one filter value, uses the FilterChain class
-     * to create FileFilter that will handle all of the filter requirements.
-     * There are two types of supported filters: Class filters, and endswith filters.
-     * Class filters are fully resolved class names for classes that implement FileFilter.
-     * Endswith filters are text strings that the end of the filename must conform to.
-     * If there are more than one filter invoked, the following will be used to resolve 
-     * which files to accept: Only pages that all class filters accept as long as 
-     * any endswith filter accepts as well will be included. (Class filters are ANDed. 
-     * Endswith filters are ORed.) Example: If you had two endswiths, and a class: ".txt",
-     * ".xml", and NoSvnFilter, then .txt and .xml files that the NoSvnFilter accepts 
-     * will be included.
-     * @return FileFilter or null
-     */
-    protected FileFilter createFilter(final String pattern) {
-    	Set<String> values = getFilterValues();
-		if (pattern != null && !"".equals(pattern)) 
-    		values.add(pattern);
-
-    	if (values.isEmpty()) return null;
-    	
-    	FilterChain chain = new FilterChain(values, this.miscProperties);
-    	return chain.getFilter();
-    }
-    
-    /**
-     * Creates PageForXmlRpcOld objects for all the files in inputPages.
-     *
-     * @param filter file filter to be used to filter input pages, or null, if no such filter should be used
-     * @param inputPages   A list of files and directories that Pages should be created for.
-     * @return A list of PageForXmlRpcOld objects for all files matching the pattern in the settings.
-     */
-    protected List<Page> createPages(FileFilter filter, List<File> inputPages) {
-       	String message = "Initializing Pages...";
-		this.state.updateNote(message);
-		log.info(message);
-    	
-        List<Page> allPages = new LinkedList<Page>();
-
-        for (File fileOrDir : inputPages) {
-        	this.state.updateProgress();
-            List<Page> pages = recurse(fileOrDir, filter);
-            setupPages(fileOrDir, pages);
-            allPages.addAll(pages);
-        }
-        
-        if (isHandlingPageHistories() && isPageHistorySortOnCreate()) {
-        	return sortByHistory(allPages);
-        }
-        return allPages;
-    }
+				return null;
+			}
+			converter.setProperties(this.miscProperties);
+			if (converter instanceof RequiresEngineConverter) {
+				((RequiresEngineConverter) converter).setEngine(this);
+			}
+		} catch (ClassNotFoundException e) {
+			this.errors.addError(Feedback.BAD_CONVERTER_CLASS, "Converter ignored -- the Java class " + value + " was not found", true);
+			return null;
+		} catch (IllegalAccessException e) {
+			this.errors.addError(Feedback.BAD_CONVERTER_CLASS, "Converter ignored -- there was a problem creating a converter object", true);
+			return null;
+		} catch (InstantiationException e) {
+			this.errors.addError(Feedback.BAD_CONVERTER_CLASS, "Converter ignored -- there was a problem creating the Java class " + value, true);
+			return null;
+		} catch (ClassCastException e) {
+			this.errors.addError(Feedback.BAD_CONVERTER_CLASS, "Converter ignored -- the Java class " + value +
+					" must implement the " + Converter.class.getName() + " interface!", true);
+			return null;
+		}
+		converter.setKey(key);
+		return converter;
+	}
 
 	/**
-     * Recurses through a directory structure and adds all files in it matching the filter.
-     * Called by createPages.
-     *
-     * @param fileOrDir A directory or file. Must not be <code>null</code>.
-     * @param filter    the filter to use when selecting files
-     * @return A list with PageForXmlRpcOld objects for all the matching files in the directory and its subdirectories
-     */
-    private List<Page> recurse(File fileOrDir, FileFilter filter) {
-        assert fileOrDir != null;
-        List<Page> result = new LinkedList<Page>();
-        if (fileOrDir.isFile()) {									//it's a file AND
-        	if (filter == null || filter.accept(fileOrDir)) {		//there's no filter OR the filter accepts the file
-        		PageSplitter splitter = getPageSplitter();
-        		if (splitter == null)
-        			result.add(new Page(fileOrDir));
-        		else 
-        			result.addAll(splitter.split(fileOrDir));
-        	}
-            else 
-            	log.debug("Filtering out filename: " + fileOrDir.getName());
-        } else if (fileOrDir.isDirectory()) {
-            File[] files = fileOrDir.listFiles(filter);
-            for (File file : files) {
-                result.addAll(recurse(file, filter));
-            }
-        }
-        else { //some other problem
-        	String message = "Could not find file: '" +
-			        			fileOrDir.getAbsolutePath() +
-			        			"'.\n" +
-			        			"Check existence and permissions.";
+	 * handles necessary state changes for expected properties 
+	 * that were set in the converter properties file.
+	 * expected nonconverter properties include hierarchy builder properties
+	 * and page history preservation properties
+	 * @param converterStr should be a line from the converter properties file
+	 * Example:
+	 * MyWiki.0001.someproperty.somepropertytype=setting
+	 * <br/>
+	 * where somepropertytype is an expected property type:
+	 * <br/>
+	 * NONCONVERTERTYPE_HIERARCHYBUILDER or NONCONVERTERTYPE_PAGEHISTORYPRESERVATION
+	 * or NONCONVERTERTYPE_ILLEGALHANDLING
+	 * or NONCONVERTERTYPE_AUTODETECTSPACEKEYS
+	 * or NONCONVERTERTYPE_FILTERS
+	 * or NONCONVERTERTYPE_MISCPROPERTIES
+	 */
+	protected void handleNonConverterProperty(String converterStr) {
+		int equalLoc = converterStr.indexOf("=");
+		String key = converterStr.substring(0, equalLoc);
+		String value = converterStr.substring(equalLoc + 1);
+		String parent = "";
+		try {
+			if (key.indexOf(NONCONVERTERTYPE_HIERARCHYBUILDER) >= 0) {
+				if (isHierarchySwitch(key))
+					setHierarchyHandler(value);
+				else {
+					parent = HierarchyBuilder.class.getName(); 
+					Class c;
+					c = Class.forName(value);
+					HierarchyBuilder hierarchy = (HierarchyBuilder) c.newInstance();
+					hierarchyBuilder = hierarchy;
+					this.hierarchyBuilder.setProperties(this.miscProperties);
+				}
+			}
+			else if (key.endsWith(NONCONVERTERTYPE_PAGEHISTORYPRESERVATION)) {
+				handlePageHistoryProperty(key, value);
+			}
+			else if (key.endsWith(NONCONVERTERTYPE_ILLEGALHANDLING)) {
+				handleIllegalHandling(key, value);
+			}
+			else if (key.endsWith(NONCONVERTERTYPE_AUTODETECTSPACEKEYS)) {
+				handleAutoDetectSpacekeys(key, value);
+			}
+			else if (key.endsWith(NONCONVERTERTYPE_MISCPROPERTIES)) {
+				handleMiscellaneousProperties(key, value);
+			}
+			else if (key.endsWith(NONCONVERTERTYPE_FILTERS)) {
+				parent = FileFilter.class.getName();
+				handleFilters(key, value);
+			}
+			else if (key.endsWith(NONCONVERTERTYPE_XMLEVENT)) {
+				handleXmlEvents(key, value);
+			}
+		} catch (ClassNotFoundException e) { 
+			String message = "Property ignored -- the Java class " + value + " was not found";
+			log.error(message);
+			this.errors.addError(Feedback.BAD_PROPERTY, message, true);
+		} catch (IllegalAccessException e) {
+			String message = "Property ignored -- there was a problem creating the Java class: " + value +
+					".\n" +
+					"Note: A necessary method's permissions were too restrictive. Check the constructor. ";
+			log.error(message);
+			this.errors.addError(Feedback.BAD_PROPERTY, message, true);
+		} catch (InstantiationException e) {
+			String message = "Property ignored -- there was a problem creating the Java class " + value +
+					".\n" +
+					"Note: The class cannot be instantiated as it is abstract or is an interface.";
+			log.error(message);
+			this.errors.addError(Feedback.BAD_PROPERTY, message, true);
+		} catch (ClassCastException e) { 
+			String message = "Property ignored -- the Java class " + value +
+					" must implement the " + parent + " interface!";
+			log.error(message);
+			this.errors.addError(Feedback.BAD_PROPERTY, message, true);
+		} catch (IllegalArgumentException e) {
+			String message = "Property ignored -- property value was not in expected format.";
+			log.error(message);
+			this.errors.addError(Feedback.BAD_PROPERTY, message, true);
+		}
+	}
+
+	/**
+	 * at long last making some performance enhancements
+	 * here we are creating an object cache which should help a bit
+	 *
+	 * @param key A string representing the converter (actually the part after the
+	 *        equals sign of the converter string).
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 */
+	private Converter getConverterClassFromCache(String key) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+		Converter converter = converterCacheMap.get(key);
+		if (converter == null) {
+			Class c = Class.forName(key);
+			converter = (Converter) c.newInstance();
+			converterCacheMap.put(key, converter);
+		}
+		return converter;
+	}
+
+	/**
+	 * creates file filter.
+	 * If we have no filter values, returns null.
+	 * If we have at least one filter value, uses the FilterChain class
+	 * to create FileFilter that will handle all of the filter requirements.
+	 * There are two types of supported filters: Class filters, and endswith filters.
+	 * Class filters are fully resolved class names for classes that implement FileFilter.
+	 * Endswith filters are text strings that the end of the filename must conform to.
+	 * If there are more than one filter invoked, the following will be used to resolve 
+	 * which files to accept: Only pages that all class filters accept as long as 
+	 * any endswith filter accepts as well will be included. (Class filters are ANDed. 
+	 * Endswith filters are ORed.) Example: If you had two endswiths, and a class: ".txt",
+	 * ".xml", and NoSvnFilter, then .txt and .xml files that the NoSvnFilter accepts 
+	 * will be included.
+	 * @return FileFilter or null
+	 */
+	protected FileFilter createFilter(final String pattern) {
+		Set<String> values = getFilterValues();
+		if (pattern != null && !"".equals(pattern)) 
+			values.add(pattern);
+
+		if (values.isEmpty()) return null;
+
+		FilterChain chain = new FilterChain(values, this.miscProperties);
+		return chain.getFilter();
+	}
+
+	/**
+	 * Creates PageForXmlRpcOld objects for all the files in inputPages.
+	 *
+	 * @param filter file filter to be used to filter input pages, or null, if no such filter should be used
+	 * @param inputPages   A list of files and directories that Pages should be created for.
+	 * @return A list of PageForXmlRpcOld objects for all files matching the pattern in the settings.
+	 */
+	protected List<Page> createPages(FileFilter filter, List<File> inputPages) {
+		String message = "Initializing Pages...";
+		this.state.updateNote(message);
+		log.info(message);
+
+		List<Page> allPages = new LinkedList<Page>();
+
+		for (File fileOrDir : inputPages) {
+			this.state.updateProgress();
+			List<Page> pages = recurse(fileOrDir, filter);
+			setupPages(fileOrDir, pages);
+			allPages.addAll(pages);
+		}
+
+		log.debug("Number of page inputs (all): " + allPages.size());
+		if (isHandlingPageHistories() && isPageHistorySortOnCreate()) {
+			List<Page> sorted = sortByHistory(allPages);
+			log.debug("Number of page inputs (sorted): " + sorted.size());
+			return sorted;
+		}
+		return allPages;
+	}
+
+	/**
+	 * Recurses through a directory structure and adds all files in it matching the filter.
+	 * Called by createPages.
+	 *
+	 * @param fileOrDir A directory or file. Must not be <code>null</code>.
+	 * @param filter    the filter to use when selecting files
+	 * @return A list with PageForXmlRpcOld objects for all the matching files in the directory and its subdirectories
+	 */
+	private List<Page> recurse(File fileOrDir, FileFilter filter) {
+		assert fileOrDir != null;
+		List<Page> result = new LinkedList<Page>();
+		if (fileOrDir.isFile()) {									//it's a file AND
+			if (filter == null || filter.accept(fileOrDir)) {		//there's no filter OR the filter accepts the file
+				PageSplitter splitter = getPageSplitter();
+				if (splitter == null)
+					result.add(new Page(fileOrDir));
+				else 
+					result.addAll(splitter.split(fileOrDir));
+			}
+			else 
+				log.debug("Filtering out filename: " + fileOrDir.getName());
+		} else if (fileOrDir.isDirectory()) {
+			File[] files = fileOrDir.listFiles(filter);
+			for (File file : files) {
+				result.addAll(recurse(file, filter));
+			}
+		}
+		else { //some other problem
+			String message = "Could not find file: '" +
+					fileOrDir.getAbsolutePath() +
+					"'.\n" +
+					"Check existence and permissions.";
 			log.warn(message);
 			this.errors.addError(Feedback.BAD_FILE, message, true);
-        }
-        return result;
-    }
+		}
+		return result;
+	}
 
-    private PageSplitter getPageSplitter() {
-    	String classname = this.miscProperties.getProperty("pagesplitter", null);
-    	if (classname == null) return null;
-    	Class c;
+	private PageSplitter getPageSplitter() {
+		String classname = this.miscProperties.getProperty("pagesplitter", null);
+		if (classname == null) return null;
+		Class c;
 		try {
 			c = Class.forName(classname);
 		} catch (ClassNotFoundException e) {
@@ -827,29 +860,30 @@ public class ConverterEngine implements FeedbackHandler {
 	}
 
 	/**
-     * Set the names of the pages and performs any other setup needed. Called by recurse().
-     * If the user selected a directory and this file is inside it, the base directory's
-     * path is removed and the rest is used as the page name.
-     * <p/>
-     * Any directory separators are replaced with the constant CONFLUENCE_SEPARATOR.
-     *
-     * @param baseDir The directory that the top-level documents are in
-     * @param pages A list of pages to set up
-     */
-    protected void setupPages(File baseDir, List<Page> pages) {
-        String basepath = baseDir.getParentFile().getPath() + File.separator;
-        int baselength = basepath.length();
+	 * Set the names of the pages and performs any other setup needed. Called by recurse().
+	 * If the user selected a directory and this file is inside it, the base directory's
+	 * path is removed and the rest is used as the page name.
+	 * <p/>
+	 * Any directory separators are replaced with the constant CONFLUENCE_SEPARATOR.
+	 *
+	 * @param baseDir The directory that the top-level documents are in
+	 * @param pages A list of pages to set up
+	 */
+	protected void setupPages(File baseDir, List<Page> pages) {
+		String basepath = baseDir.getParentFile().getPath() + File.separator;
+		int baselength = basepath.length();
 
-        for (Page page : pages) {
-            String pagePath = page.getFile().getPath();
-            String pageName = getPagename(pagePath.substring(baselength));
-            //Strip the file name from the path.
-            String path = getPath(pagePath);
-            page.setPath(path);
-            page.setName(pageName);
-            if (isHandlingPageHistoriesFromFilename()) preserveHistory(page, pageName);
-        }
-    }
+		for (Page page : pages) {
+			String pagePath = page.getFile().getPath();
+			String pageName = getPagename(pagePath.substring(baselength));
+			log.debug("New page: " + pageName + " -> " + pagePath);
+			//Strip the file name from the path.
+			String path = getPath(pagePath);
+			page.setPath(path);
+			page.setName(pageName);
+			if (isHandlingPageHistoriesFromFilename()) preserveHistory(page, pageName);
+		}
+	}
 
 	/**
 	 * figures out path var for Page based on complete path to page's file
@@ -859,77 +893,77 @@ public class ConverterEngine implements FeedbackHandler {
 	private String getPath(String pagePath) {
 		int fileNameStart = pagePath.lastIndexOf(File.separator);
 		if (fileNameStart >= 0) {
-		    pagePath = pagePath.substring(0, fileNameStart);
+			pagePath = pagePath.substring(0, fileNameStart);
 		} else {
-		    pagePath = "";
+			pagePath = "";
 		}
 		return pagePath;
 	}
 
-    /**
-     * uses the filename to set the version and name of the given page
-     * so that the history is preserved in the conversion. Note:
-     * uses the pageHistorySuffix which is set by the handlePageHistoryProperty 
-     * method
-     * @param page object that will be changed to reflect pagename and version of given filename 
-     * @param filename should use the pageHistorySuffix to indicate version and pagename:
-     * <br/>
-     * if pageHistorySuffix is -#.txt
-     * <br/>
-     * then filename should be something like: pagename-2.txt
-     * @return Page with changed name and version
-     * Will return passed page with no changes if:
-     * <ul>
-     * <li>suffix is null</li>
-     * <li> suffix has no numerical indicator (#)</li>
-     * </ul>
-     */
-    protected Page preserveHistory(Page page, String filename) {
-    	if (loadOnAncestors()) {
-    		addAncestors(page);
-    		if (!page.getAncestors().isEmpty()) {
-    			page.setVersion(page.getLatestVersion()+1);
-    			log.debug("Current page version: " + page.getVersion());
-    		}
-    		return page;
-    	}
-    	return identifyHistoryOnePage(page, filename);
+	/**
+	 * uses the filename to set the version and name of the given page
+	 * so that the history is preserved in the conversion. Note:
+	 * uses the pageHistorySuffix which is set by the handlePageHistoryProperty 
+	 * method
+	 * @param page object that will be changed to reflect pagename and version of given filename 
+	 * @param filename should use the pageHistorySuffix to indicate version and pagename:
+	 * <br/>
+	 * if pageHistorySuffix is -#.txt
+	 * <br/>
+	 * then filename should be something like: pagename-2.txt
+	 * @return Page with changed name and version
+	 * Will return passed page with no changes if:
+	 * <ul>
+	 * <li>suffix is null</li>
+	 * <li> suffix has no numerical indicator (#)</li>
+	 * </ul>
+	 */
+	protected Page preserveHistory(Page page, String filename) {
+		if (loadOnAncestors()) {
+			addAncestors(page);
+			if (!page.getAncestors().isEmpty()) {
+				page.setVersion(page.getLatestVersion()+1);
+				log.debug("Current page version: " + page.getVersion());
+			}
+			return page;
+		}
+		return identifyHistoryOnePage(page, filename);
 	}
 
 	public Page identifyHistoryOnePage(Page page, String filename) {
 		//get suffix
 		String suffix = getPageHistorySuffix(); 
-    	if (suffix == null) {
-    		log.error("Error attempting to preserve history: Page history suffix is Null.");
-    		return page;
-    	}
-    	//create regex for filename based on the suffix
-    	Matcher hashFinder = hashPattern.matcher(suffix);
-    	String suffixReplaceRegex = "";
-    	if (hashFinder.find()) {
-    		suffixReplaceRegex = hashFinder.replaceAll("(\\\\d+)");
-    		suffixReplaceRegex = "(.*)" + suffixReplaceRegex;
-    	} 
-    	else {
-    		log.error("Error attempting to preserve history: Suffix is invalid. Must contain '#'.");
-    		return page;
-    	}
-    	//get the version and name
-    	Pattern suffixReplacePattern = Pattern.compile(suffixReplaceRegex);
-    	Matcher suffixReplacer = suffixReplacePattern.matcher(filename);
-    	if (suffixReplacer.find()) {
-    		String pagename = suffixReplacer.group(1);
-    		String versionString = suffixReplacer.group(2);
-    		page.setName(pagename); //set name before version so latestversion data is properly set in Page
-    		if (Boolean.parseBoolean(this.miscProperties.getProperty("page-history-sortwithtimestamp", "false"))) 
-    			page.setTimestamp(new Date(Long.parseLong(versionString)*1000));
-    		else
-    			page.setVersion(Integer.parseInt(versionString));
-    	}
-    	return page;
+		if (suffix == null) {
+			log.error("Error attempting to preserve history: Page history suffix is Null.");
+			return page;
+		}
+		//create regex for filename based on the suffix
+		Matcher hashFinder = hashPattern.matcher(suffix);
+		String suffixReplaceRegex = "";
+		if (hashFinder.find()) {
+			suffixReplaceRegex = hashFinder.replaceAll("(\\\\d+)");
+			suffixReplaceRegex = "(.*)" + suffixReplaceRegex;
+		} 
+		else {
+			log.error("Error attempting to preserve history: Suffix is invalid. Must contain '#'.");
+			return page;
+		}
+		//get the version and name
+		Pattern suffixReplacePattern = Pattern.compile(suffixReplaceRegex);
+		Matcher suffixReplacer = suffixReplacePattern.matcher(filename);
+		if (suffixReplacer.find()) {
+			String pagename = suffixReplacer.group(1);
+			String versionString = suffixReplacer.group(2);
+			page.setName(pagename); //set name before version so latestversion data is properly set in Page
+			if (Boolean.parseBoolean(this.miscProperties.getProperty("page-history-sortwithtimestamp", "false"))) 
+				page.setTimestamp(new Date(Long.parseLong(versionString)*1000));
+			else
+				page.setVersion(Integer.parseInt(versionString));
+		}
+		return page;
 	}
-    
-    /* Page History Load on Ancestors methods - START */
+
+	/* Page History Load on Ancestors methods - START */
 	private boolean loadOnAncestors() {
 		return Boolean.parseBoolean(this.miscProperties.getProperty("page-history-load-as-ancestors", "false"));
 	}
@@ -971,9 +1005,21 @@ public class ConverterEngine implements FeedbackHandler {
 			}
 			page.setSortWithTimestamp(true); //affects sorting of collections of pages (including hierarchies)
 		}
-		
+		if (this.miscProperties.containsKey("page-history-maxversions")) { //useful for debugging
+			String maxString = this.miscProperties.getProperty("page-history-maxversions", null);
+			int max = Integer.parseInt(maxString);
+			if (max <= page.getAncestors().size()) {
+				log.debug("number of ancestors: " + page.getAncestors().size());
+				int actmax = page.getAncestors().size();
+				for (int i = actmax-1; i >=max; i--) {
+					page.getAncestors().remove(i);
+				}
+				log.debug("after limiting, number of ancestors: " + page.getAncestors().size());
+			}
+		}
+
 	}
-	
+
 	protected String getPageRelativePath(Page page) {
 		String ignorable = this.miscProperties.getProperty("filepath-hierarchy-ignorable-ancestors", "");
 		String full = page.getPath();
@@ -981,7 +1027,7 @@ public class ConverterEngine implements FeedbackHandler {
 		return full.replaceAll("\\Q"+ignorable + "\\E", "");
 	}
 	/* Page History Load on Ancestors methods - END */
-	
+
 
 	/**
 	 * gets the pagename given the pagepath
@@ -992,14 +1038,14 @@ public class ConverterEngine implements FeedbackHandler {
 		String pageName = "";
 		if (hierarchyHandler == HierarchyHandler.DEFAULT ||
 				hierarchyHandler == HierarchyHandler.HIERARCHY_BUILDER) {
-		    pageName = pagePath.substring(pagePath.lastIndexOf(File.separator) + 1);
+			pageName = pagePath.substring(pagePath.lastIndexOf(File.separator) + 1);
 		} else if (hierarchyHandler == HierarchyHandler.PAGENAME_HIERARCHIES) {
 			String quotedSeparator = Pattern.quote(File.separator);
 			pageName = pagePath.replaceAll(quotedSeparator, CONFLUENCE_SEPARATOR);
 		}
 		return pageName;
 	}
-	
+
 	/**
 	 * converts the given pages with the given converts
 	 * @param pages
@@ -1009,7 +1055,7 @@ public class ConverterEngine implements FeedbackHandler {
 	protected boolean convertPages(List pages, List<Converter> converters) {
 		return convertPages(pages, converters, "Converting pages...");
 	}
-	
+
 	/**
 	 * converts the given pages with the given converters
 	 * @param pages
@@ -1021,49 +1067,48 @@ public class ConverterEngine implements FeedbackHandler {
 		boolean result = true;
 		this.state.updateNote(note);
 		log.info(note);
-		
+
 		this.startTotalConvertTime = (new Date()).getTime();
-		
 		//go through each page
 		for (Iterator<Page> iter = pages.iterator(); iter.hasNext();) {
 			if (!this.running) {
 				this.feedback = Feedback.CANCELLED;
 				return false;
 			}
-			
+
 			Page page = iter.next();
 
 			//some bookkeeping
 			long startTimeStamp = conversionBookkeepingNextPage(page);
 
-            //get the file's contents
-			
+			//get the file's contents
+
 			if (page.getOriginalText() == null || "".equals(page.getOriginalText())) {
-	            File file = getFileContents(page);
-	            if (file == null) {
-	            	iter.remove(); //get rid of this page from the iterator.
-	            	continue;
-	            }
+				File file = getFileContents(page);
+				if (file == null) {
+					iter.remove(); //get rid of this page from the iterator.
+					continue;
+				}
 			} //else we used a PageSplitter to set the original text, so we can go straight to conversion
-            
-            //convert the page
-            convertPage(converters, page);
-            //more bookkeeping
-            conversionBookkeepingEndThisPage(startTimeStamp);
-            if (!this.running) {
-        		this.feedback = Feedback.CANCELLED;
-        		return false;
-        	}
-            if (page.getAncestors() != null && !page.getAncestors().isEmpty()) {
-            	convertPages(page.getAncestors(), converters);
-            }
-        }
+
+			//convert the page
+			convertPage(converters, page);
+			//more bookkeeping
+			conversionBookkeepingEndThisPage(startTimeStamp);
+			if (!this.running) {
+				this.feedback = Feedback.CANCELLED;
+				return false;
+			}
+			if (page.getAncestors() != null && !page.getAncestors().isEmpty()) {
+				convertPages(page.getAncestors(), converters);
+			}
+		}
 		//still more bookkeeping
 		conversionBookkeepingEndAll(pages, converters);
 		return result;
-		
+
 	}
-	
+
 	/**
 	 * make some log entries about the time it took to convert a page
 	 * @param startTimeStamp
@@ -1086,11 +1131,11 @@ public class ConverterEngine implements FeedbackHandler {
 		String baseMessage = "::: total time to convert files: "+ totalTimeToConvert+ " seconds.";
 		log.info(baseMessage);
 		String message = baseMessage +
-						"For " +
-						pages.size() +
-						" pages and using " +
-						converters.size() +
-						" converters.";
+				"For " +
+				pages.size() +
+				" pages and using " +
+				converters.size() +
+				" converters.";
 		totalsFileLog.info(message);
 	}
 
@@ -1123,25 +1168,25 @@ public class ConverterEngine implements FeedbackHandler {
 				file = new File(path);
 			}
 			else {
-		        log.warn("No file was set for page " + page.getName() + ". Skipping page.");
-		        return null;
+				log.warn("No file was set for page " + page.getName() + ". Skipping page.");
+				return null;
 			}
 		}
 		else if (page.getOriginalText() == null){
-		    try {
-		    	String pageContents = "";
-		    	if (isGzip() && page instanceof VersionPage) {
-		    		pageContents = getGzipText(file);
-		    	}
-		    	else pageContents = getAsciiText(file);
-		        page.setOriginalText(pageContents);
-		    } catch (IOException e) {
-		        String message = "Could not read file " + file.getAbsolutePath() + ".\n" +
-							        			"Check existence and permissions.";
-		        log.error(message);
+			try {
+				String pageContents = "";
+				if (isGzip() && page instanceof VersionPage) {
+					pageContents = getGzipText(file);
+				}
+				else pageContents = getAsciiText(file);
+				page.setOriginalText(pageContents);
+			} catch (IOException e) {
+				String message = "Could not read file " + file.getAbsolutePath() + ".\n" +
+						"Check existence and permissions.";
+				log.error(message);
 				this.errors.addError(Feedback.BAD_FILE, message, true);
-		        return null;
-		    }
+				return null;
+			}
 
 			// Save the true source since the original will get modified in convert.
 			page.setUnchangedSource(page.getOriginalText());
@@ -1161,7 +1206,7 @@ public class ConverterEngine implements FeedbackHandler {
 	}
 
 	public String getAsciiText(File file) throws IOException,
-			UnsupportedEncodingException {
+	UnsupportedEncodingException {
 		String pageContents;
 		if (changingEncoding()) {
 			String encoding = getEncoding();
@@ -1187,7 +1232,7 @@ public class ConverterEngine implements FeedbackHandler {
 
 	private String getEncoding() {
 		if (this.miscProperties != null)
-			 return this.miscProperties.getProperty("encoding", "utf-8");
+			return this.miscProperties.getProperty("encoding", "utf-8");
 		return "utf-8";
 	}
 
@@ -1202,90 +1247,90 @@ public class ConverterEngine implements FeedbackHandler {
 			page.setConvertedText(page.getOriginalText()); //in case empty converter list
 
 		for (Converter converter : converters) {
-		    try {
-		    	this.state.updateProgress();
-		    	if (this.settings != null) {
-		    		converter.setAttachmentDirectory(this.settings.getAttachmentDirectory());
-		    	}
-		    	else {
-		    		//for backwards compatibility with v2
-		    		ConfluenceSettingsForm confSettings = UWCForm2.getInstance().getConfluenceSettingsForm();
-		    		converter.setAttachmentDirectory(confSettings.getAttachmentDirectory());
-		    	}
-		        converter.convert(page);
-		        // Need to reset originalText here because each converted expects
-		        // to start with the result of previous conversions.
-		        page.setOriginalText(page.getConvertedText());
-		    } catch (Exception e) {
-		        String note = "Exception thrown by converter " + converter.getKey() +
-						                " on page " + page.getName() + ". Continuing with next converter.";
-		        log.error(note, e);
+			try {
+				this.state.updateProgress();
+				if (this.settings != null) {
+					converter.setAttachmentDirectory(this.settings.getAttachmentDirectory());
+				}
+				else {
+					//for backwards compatibility with v2
+					ConfluenceSettingsForm confSettings = UWCForm2.getInstance().getConfluenceSettingsForm();
+					converter.setAttachmentDirectory(confSettings.getAttachmentDirectory());
+				}
+				converter.convert(page);
+				// Need to reset originalText here because each converted expects
+				// to start with the result of previous conversions.
+				page.setOriginalText(page.getConvertedText());
+			} catch (Exception e) {
+				String note = "Exception thrown by converter " + converter.getKey() +
+						" on page " + page.getName() + ". Continuing with next converter.";
+				log.error(note, e);
 				this.errors.addError(Feedback.CONVERTER_ERROR, note, true);
-		    }
-		    if (converter.getErrors().hasErrors()) {
-		    	this.hadConverterErrors = true;
-		    	this.state.updateNote(converter.getErrors().getFeedbackWindowErrorMessages());
-		    }
+			}
+			if (converter.getErrors().hasErrors()) {
+				this.hadConverterErrors = true;
+				this.state.updateNote(converter.getErrors().getFeedbackWindowErrorMessages());
+			}
 		}
-		
+
 		return page;
 	}
 
-    /**
-     * Write pages to disk. They are saved to the directory output/output below the
-     * current working directory.
-     *
-     * @param pages The pages to save
-     * @param pattern This file name extension is appended
-     *        to each page name to create the file name.
-     */
-    private void savePages(List<Page> pages, String pattern) {
-    	String message = "Saving Pages to Filesystem";
+	/**
+	 * Write pages to disk. They are saved to the directory output/output below the
+	 * current working directory.
+	 *
+	 * @param pages The pages to save
+	 * @param pattern This file name extension is appended
+	 *        to each page name to create the file name.
+	 */
+	private void savePages(List<Page> pages, String pattern) {
+		String message = "Saving Pages to Filesystem";
 		this.state.updateNote(message);
 		log.info(message);
-        
-    	FileUtils.createOutputDirIfNeeded();
-        
-    	String outputDirName = UWCGuiModel.getOutputDir();
-        log.debug("Output Directory = " + outputDirName);
 
-        File outputDir = new File(outputDirName);
-        if (!outputDir.exists() && !outputDir.mkdir()) {
-            String dirfailMessage = "Directory creation failed for directory " + outputDirName;
-            log.error(Feedback.BAD_OUTPUT_DIR + ": " + dirfailMessage);
+		FileUtils.createOutputDirIfNeeded();
+
+		String outputDirName = UWCGuiModel.getOutputDir();
+		log.debug("Output Directory = " + outputDirName);
+
+		File outputDir = new File(outputDirName);
+		if (!outputDir.exists() && !outputDir.mkdir()) {
+			String dirfailMessage = "Directory creation failed for directory " + outputDirName;
+			log.error(Feedback.BAD_OUTPUT_DIR + ": " + dirfailMessage);
 			this.errors.addError(Feedback.BAD_OUTPUT_DIR, dirfailMessage, true);
-        }
-        
-        for (Page page : pages) {
-        	if (!this.running) {
-        		this.feedback = Feedback.CANCELLED;
-        		return;
-        	}
-        	this.state.updateProgress();
-            String outputFileLoc = outputDirName + File.separator + page.getName() + pattern;
-            FileUtils.writeFile(page.getConvertedText(), outputFileLoc);
-        }
-    }
-    
-    protected Vector listCollisions(List<Page> pages) {
-    	Vector<String> collisions = new Vector<String>();
-    	//check to see if "off" property is present
-    	if (this.miscProperties != null && 
-    			this.miscProperties.containsKey("list-collisions") &&
-    			!Boolean.parseBoolean(this.miscProperties.getProperty("list-collisions"))) {
-    		log.debug("Namespace Collisions Feature turned off.");
-    		return collisions;
-    	}
-    	//sort
-    	Vector<Page> sorted = new Vector<Page>();
-    	sorted.addAll(pages);
-    	AsciiVersionComparator version = new AsciiVersionComparator();
-    	Collections.sort(sorted, version);
-    	//look for collisions
-    	Page last = new Page(null);
-    	last.setName("");
-    	last.setPath("");
-    	for (int i = 1; i < sorted.size(); i++) {
+		}
+
+		for (Page page : pages) {
+			if (!this.running) {
+				this.feedback = Feedback.CANCELLED;
+				return;
+			}
+			this.state.updateProgress();
+			String outputFileLoc = outputDirName + File.separator + page.getName() + pattern;
+			FileUtils.writeFile(page.getConvertedText(), outputFileLoc);
+		}
+	}
+
+	protected Vector listCollisions(List<Page> pages) {
+		Vector<String> collisions = new Vector<String>();
+		//check to see if "off" property is present
+		if (this.miscProperties != null && 
+				this.miscProperties.containsKey("list-collisions") &&
+				!Boolean.parseBoolean(this.miscProperties.getProperty("list-collisions"))) {
+			log.debug("Namespace Collisions Feature turned off.");
+			return collisions;
+		}
+		//sort
+		Vector<Page> sorted = new Vector<Page>();
+		sorted.addAll(pages);
+		AsciiVersionComparator version = new AsciiVersionComparator();
+		Collections.sort(sorted, version);
+		//look for collisions
+		Page last = new Page(null);
+		last.setName("");
+		last.setPath("");
+		for (int i = 1; i < sorted.size(); i++) {
 			Page page1 = (Page) sorted.get(i-1);
 			Page page2 = (Page) sorted.get(i);
 			log.debug("Checking for collisions: " + page1.getName() + " and " + page2.getName());
@@ -1299,7 +1344,7 @@ public class ConverterEngine implements FeedbackHandler {
 				}
 				else { //starting here
 					collision = getPagePath(page1) + page1.getName() + ", " +
-								getPagePath(page2) + page2.getName();
+							getPagePath(page2) + page2.getName();
 				}
 				collisions.add(collision);
 				last = page1;
@@ -1310,13 +1355,13 @@ public class ConverterEngine implements FeedbackHandler {
 				this.log.error(error);
 			}
 		}
-    	return collisions;
-    }
+		return collisions;
+	}
 
 	protected boolean colliding(Page page1, Page page2) {
 		boolean name = getCollisionComparisonString(page1).equals(getCollisionComparisonString(page2));
 		boolean version = page1.getVersion() == page2.getVersion();
-		
+
 		boolean space = false;
 		if (page1.getSpacekey() != null) { 
 			space = page1.getSpacekey().equals(page2.getSpacekey());
@@ -1326,7 +1371,7 @@ public class ConverterEngine implements FeedbackHandler {
 		}
 		else if (page1.getSpacekey() == null && page2.getSpacekey() == null) 
 			space = true;
-		
+
 		boolean path = !getPagePath(page1).equals(getPagePath(page2));
 		return name
 				&& version //and same page history version
@@ -1354,75 +1399,77 @@ public class ConverterEngine implements FeedbackHandler {
 	private String getPagePath(Page page) {
 		return (page.getPath().endsWith(File.separator)?
 				page.getPath():
-				page.getPath()+File.separator);
+					page.getPath()+File.separator);
 	}
-    
-    /**
-     * Writes the pages to Confluence. If the process takes more than three seconds,
-     * a progress monitor will be displayed so that the user can see that something is
-     * indeed happening.
-     *
-     * @param pages The pages to output.
-     * @param spacekey space to which the pages will be written
-     */
-    protected void writePages(List pages, String spacekey) {
-    	writePages(pages, spacekey, true);
-    }
-    protected void writePages(List pages, String spacekey, boolean logging) {
-    	if (logging) {
-    		String note = "Uploading Pages to Confluence...";
-    		this.state.updateNote(note);
-    		log.info(note);
-    	}
-		
-        int numUploaded = 0;
-        List<Page> casted = (List<Page>) pages;
-        // at last, write the pages to Confluence!
-        for (Page page : casted) {
-        	this.state.updateProgress();
-        	if (!this.running) {
-        		this.feedback = Feedback.CANCELLED;
-        		return;
-        	}
-            if (sendPage(page, null, this.settings) == null) continue;
-            numUploaded++;
-            if (logging && (numUploaded % 10) == 0) {
-                String message = "Uploaded " + numUploaded + 
-                	" out of " + pages.size() + 
-                	" page"+ (numUploaded==1?"":"s") +
-                	".";
-                this.state.updateNote(message);
-                log.info(message);
-            }
-        }
-        
-        if (logging) {
-        	String message = "Uploaded " + numUploaded + 
-        			" out of " + pages.size() + 
-        			" page"+ (numUploaded==1?"":"s") +
-        			".";
-        	this.state.updateNote(message);
-        	log.info(message);
-        }
 
-        
-        //attachedFiles is cleared so that if we do another conversion
-        //without closing the UWC, it won't think the attachment has already been
-        //attached
-        this.attachedFiles = null;
-        this.attachedPaths = null;
-    }
+	/**
+	 * Writes the pages to Confluence. If the process takes more than three seconds,
+	 * a progress monitor will be displayed so that the user can see that something is
+	 * indeed happening.
+	 *
+	 * @param pages The pages to output.
+	 * @param spacekey space to which the pages will be written
+	 */
+	protected void writePages(List pages, String spacekey) {
+		writePages(pages, spacekey, true);
+	}
+	protected void writePages(List pages, String spacekey, boolean logging) {
+		if (logging) {
+			String note = "Uploading Pages to Confluence...";
+			this.state.updateNote(note);
+			log.info(note);
+		}
 
-    Pattern uploadedPattern = Pattern.compile("Attachment Uploaded: (.*)");
+		int numUploaded = 0;
+		List<Page> casted = (List<Page>) pages;
+		// at last, write the pages to Confluence!
+		for (Page page : casted) {
+			this.state.updateProgress();
+			if (!this.running) {
+				this.feedback = Feedback.CANCELLED;
+				return;
+			}
+			if (sendPage(page, null, this.settings) == null) continue;
+			numUploaded++;
+			if (logging && (numUploaded % 10) == 0) {
+				String message = "Uploaded " + numUploaded + 
+						" out of " + pages.size() + 
+						" page"+ (numUploaded==1?"":"s") +
+						".";
+				this.state.updateNote(message);
+				log.info(message);
+			}
+		}
+
+		if (logging) {
+			String message = "Uploaded " + numUploaded + 
+					" out of " + pages.size() + 
+					" page"+ (numUploaded==1?"":"s") +
+					".";
+			this.state.updateNote(message);
+			log.info(message);
+		}
+	}
+
+	protected void clearAttachedFileList() {
+		//attachedFiles is cleared so that if we do another conversion
+		//without closing the UWC, it won't think the attachment has already been
+		//attached
+		log.debug("Clearing Attached Filelist for next run.");
+		this.attachedFiles = null;
+		this.attachedPaths = null;
+	}
+
+	Pattern uploadedPattern = Pattern.compile("Attachment Uploaded: (.*)");
 	public void handleOrphanAttachments() {
 		if (this.settings.getUploadOrphanAttachments().equalsIgnoreCase("true"))
-        {
+		{
 			if (this.miscProperties.containsKey("attachments-uploaded-file")) {
 				identifyPreviouslyAttachedPaths(this.miscProperties.getProperty("attachments-uploaded-file"));
 			}
-        	ArrayList <File> orphanAttachments=findOrphanAttachments(this.settings.getAttachmentDirectory());
-        	uploadOrphanAttachments(orphanAttachments);
-        }
+			ArrayList <File> orphanAttachments=findOrphanAttachments(this.settings.getAttachmentDirectory());
+			uploadOrphanAttachments(orphanAttachments);
+		}
 	}
 
 	protected void identifyPreviouslyAttachedPaths(String uploadedpath) {
@@ -1443,124 +1490,124 @@ public class ConverterEngine implements FeedbackHandler {
 			}
 		}
 	}
-	
+
 	//for unit testing purposes
 	protected void addAttachedPath(String path) {
 		if (this.attachedPaths == null) this.attachedPaths = new HashSet<String>();
 		this.attachedPaths.add(path);
 	}
-	
+
 	//for unit testing purposes
 	protected void clearAttachedPath() {
 		this.attachedPaths = null;
 	}
 
-	    
-    /******
-     * to find all orphan attachment files
-     * @param dirName
-     * @return
-     */
-    protected ArrayList<File> findOrphanAttachments(String dirName)
-    {
-    	ArrayList<File> orphanAttachments=new ArrayList<File>();
-    	File directory=new File(dirName);
-    	for (File file : directory.listFiles()) {
-    		if (file.isDirectory())
-    			orphanAttachments.addAll(findOrphanAttachments(file.getAbsolutePath()));
-    		else if (file.isFile())
-    		{
-    			if (orphanAlreadyAttached(file))
-    				continue;  
-    			log.debug("Found orphan attachment: " + file.getAbsolutePath());
-    			orphanAttachments.add(file);
-    		}
-        }
-    	
-    	return orphanAttachments;
-    	
-    	
-    }
-    /**
-     * to upload the orphan attachment files to wiki.
-     */
-    protected void uploadOrphanAttachments(ArrayList<File> orphanAttachments)
-    {
-    	if (orphanAttachments == null || orphanAttachments.size() == 0)
-    		return;
-    	
-    	Hashtable pageTable = new Hashtable();
-    	pageTable.put("content", "");
-    	pageTable.put("title", ORPHAN_ATTACHMENTS_PAGE_TITLE); 
-    	
-    	//create ConfluenceServerSettings object
-    	ConfluenceServerSettings confSettings = new ConfluenceServerSettings();
-    	confSettings.login = settings.getLogin();
-    	confSettings.password = settings.getPassword();
-    	confSettings.url = settings.getUrl(); 
-    	confSettings.spaceKey = settings.getSpace();
-    	confSettings.truststore = settings.getTruststore();
-    	confSettings.trustpass = settings.getTrustpass();
-    	confSettings.trustallcerts = settings.getTrustall();
-    	
-    	RemoteWikiBroker broker = RemoteWikiBroker.getInstance();	
-     	//check for problems with settings 
-    	checkConfluenceSettings(confSettings);
-    	//send page
-    	String pageId = sendPage(broker, pageTable, confSettings);
-     	
-    	int total=orphanAttachments.size();
-    	int count=0;
-    	for (File file : orphanAttachments) {
-    		sendAttachment(file, broker, pageId, confSettings);
-    		count++;
-    		if ((count % 10) == 0) {
-                String message = "Uploaded " + count + 
-                	" out of " + total + " orphan attachments.";
-                this.state.updateNote(message);
-                log.info(message);
-            }
-        }
-    	
-    	String message = "Uploaded " + total + " orphan attachments.";
+
+	/******
+	 * to find all orphan attachment files
+	 * @param dirName
+	 * @return
+	 */
+	protected ArrayList<File> findOrphanAttachments(String dirName)
+	{
+		ArrayList<File> orphanAttachments=new ArrayList<File>();
+		File directory=new File(dirName);
+		for (File file : directory.listFiles()) {
+			if (file.isDirectory())
+				orphanAttachments.addAll(findOrphanAttachments(file.getAbsolutePath()));
+			else if (file.isFile())
+			{
+				if (orphanAlreadyAttached(file))
+					continue;  
+				log.debug("Found orphan attachment: " + file.getAbsolutePath());
+				orphanAttachments.add(file);
+			}
+		}
+
+		return orphanAttachments;
+
+
+	}
+	/**
+	 * to upload the orphan attachment files to wiki.
+	 */
+	protected void uploadOrphanAttachments(ArrayList<File> orphanAttachments)
+	{
+		if (orphanAttachments == null || orphanAttachments.size() == 0)
+			return;
+
+		Hashtable pageTable = new Hashtable();
+		pageTable.put("content", "");
+		pageTable.put("title", ORPHAN_ATTACHMENTS_PAGE_TITLE); 
+
+		//create ConfluenceServerSettings object
+		ConfluenceServerSettings confSettings = new ConfluenceServerSettings();
+		confSettings.login = settings.getLogin();
+		confSettings.password = settings.getPassword();
+		confSettings.url = settings.getUrl(); 
+		confSettings.spaceKey = settings.getSpace();
+		confSettings.truststore = settings.getTruststore();
+		confSettings.trustpass = settings.getTrustpass();
+		confSettings.trustallcerts = settings.getTrustall();
+
+		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();	
+		//check for problems with settings 
+		checkConfluenceSettings(confSettings);
+		//send page
+		String pageId = sendPage(broker, pageTable, confSettings);
+
+		int total=orphanAttachments.size();
+		int count=0;
+		for (File file : orphanAttachments) {
+			sendAttachment(file, broker, pageId, confSettings);
+			count++;
+			if ((count % 10) == 0) {
+				String message = "Uploaded " + count + 
+						" out of " + total + " orphan attachments.";
+				this.state.updateNote(message);
+				log.info(message);
+			}
+		}
+
+		String message = "Uploaded " + total + " orphan attachments.";
 		this.state.updateNote(message);
 		log.info(message);
-    	  	
-    }
-    
-    /****
-     * send an attachment file to wiki.
-     * 
-     * @param file
-     * @param broker
-     * @param pageId
-     * @param confSettings
-     * @return the attachment object we sent. used by junit tests
-     */
-    protected AttachmentForXmlRpc sendAttachment(File file, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings) {
-    	return sendAttachment(new Attachment(file), broker, pageId, confSettings);
-    }
-    protected AttachmentForXmlRpc sendAttachment(Attachment attachment, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings)
-    {
-    	File file = attachment.getFile();
-    	AttachmentForXmlRpc attachmentRpc = new AttachmentForXmlRpc();
-        if (tooBig(file) || doesNotExist(file)) 
-        	return null;
-        attachmentRpc.setFileName(attachment.getName()); 
-        attachmentRpc.setFileLocation(file.getAbsolutePath());
-        attachmentRpc.setContentType(determineContentType(file)); //XXX Note: if the filename is different from the file, the content type determining might be foiled
-        attachmentRpc.setComment(attachment.getComment() == null?getAttachmentUploadComment():attachment.getComment());
-        String errorMessage = "Couldn't send attachmentRpc " +
-        		file.getAbsolutePath() + ". Skipping attachmentRpc.";
-        if (usingWebdav()) {
-        	String webdavPath = getWebdavPath();
-        	sendAttachmentWebdav(broker, pageId, confSettings, attachmentRpc, webdavPath, errorMessage);
-        }
-        else 
-        	sendAttachmentRemoteAPI(broker, pageId, confSettings, attachmentRpc, errorMessage);
-        attachmentLog.info("Attachment Uploaded: " + file.getAbsolutePath());
-        return attachmentRpc;//for junit tests
-    }
+
+	}
+
+	/****
+	 * send an attachment file to wiki.
+	 * 
+	 * @param file
+	 * @param broker
+	 * @param pageId
+	 * @param confSettings
+	 * @return the attachment object we sent. used by junit tests
+	 */
+	protected AttachmentForXmlRpc sendAttachment(File file, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings) {
+		return sendAttachment(new Attachment(file), broker, pageId, confSettings);
+	}
+	protected AttachmentForXmlRpc sendAttachment(Attachment attachment, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings)
+	{
+		File file = attachment.getFile();
+		AttachmentForXmlRpc attachmentRpc = new AttachmentForXmlRpc();
+		if (tooBig(file) || doesNotExist(file)) 
+			return null;
+		attachmentRpc.setFileName(attachment.getName()); 
+		attachmentRpc.setFileLocation(file.getAbsolutePath());
+		attachmentRpc.setContentType(determineContentType(file)); //XXX Note: if the filename is different from the file, the content type determining might be foiled
+		attachmentRpc.setComment(attachment.getComment() == null?getAttachmentUploadComment():attachment.getComment());
+		String errorMessage = "Couldn't send attachmentRpc " +
+				file.getAbsolutePath() + ". Skipping attachmentRpc.";
+		if (usingWebdav()) {
+			String webdavPath = getWebdavPath();
+			sendAttachmentWebdav(broker, pageId, confSettings, attachmentRpc, webdavPath, errorMessage);
+		}
+		else 
+			sendAttachmentRemoteAPI(broker, pageId, confSettings, attachmentRpc, errorMessage);
+		attachmentLog.info("Attachment Uploaded: " + file.getAbsolutePath());
+		return attachmentRpc;//for junit tests
+	}
 
 	private String getAttachmentUploadComment() {
 		if (this.miscProperties != null &&
@@ -1590,144 +1637,144 @@ public class ConverterEngine implements FeedbackHandler {
 	}
 
 	private void sendAttachmentWebdav(RemoteWikiBroker broker, String pageId, 
-										ConfluenceServerSettings confSettings, 
-										AttachmentForXmlRpc attachment, String basepath, 
-										String errorMessage) {
+			ConfluenceServerSettings confSettings, 
+			AttachmentForXmlRpc attachment, String basepath, 
+			String errorMessage) {
 		try {
 			Map pagesByIdMap = broker.getAllServerPagesMapById(confSettings, confSettings.spaceKey);
 			String webdavPath = broker.getWebDAVPagePath(confSettings.url, confSettings.spaceKey, pageId, pagesByIdMap, basepath);
 			broker.sendFileViaWebDAV(attachment.getFileLocation(), webdavPath, confSettings.login, confSettings.password);
 		} catch (IOException e) {
-        	log.error(Feedback.BAD_FILE + ": " + errorMessage, e);
-            this.errors.addError(Feedback.BAD_FILE, errorMessage, true);
-        } catch (XmlRpcException e) {
-        	log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage, e);
-            this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
-            if (Pattern.matches(".*?You do not have the permissions.*", e.getMessage())) {
-            	String noPermissionsError = "User '" + confSettings.login + 
-            		"' " +
-            		"does not have permission to attach files to space '" + 
-            		confSettings.spaceKey +
-            		"'.";
-            	log.debug(Feedback.USER_NOT_PERMITTED + ": " + noPermissionsError);
-            	this.errors.addError(Feedback.USER_NOT_PERMITTED, noPermissionsError, true);
-            }
-        }
-		
+			log.error(Feedback.BAD_FILE + ": " + errorMessage, e);
+			this.errors.addError(Feedback.BAD_FILE, errorMessage, true);
+		} catch (XmlRpcException e) {
+			log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage, e);
+			this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
+			if (Pattern.matches(".*?You do not have the permissions.*", e.getMessage())) {
+				String noPermissionsError = "User '" + confSettings.login + 
+						"' " +
+						"does not have permission to attach files to space '" + 
+						confSettings.spaceKey +
+						"'.";
+				log.debug(Feedback.USER_NOT_PERMITTED + ": " + noPermissionsError);
+				this.errors.addError(Feedback.USER_NOT_PERMITTED, noPermissionsError, true);
+			}
+		}
+
 	}
 
 	private void sendAttachmentRemoteAPI(RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings, AttachmentForXmlRpc attachment, String errorMessage) {
 		try {
-            broker.storeAttachment(confSettings, pageId, attachment);
-        } catch (IOException e) {
-        	log.error(Feedback.BAD_FILE + ": " + errorMessage, e);
-            this.errors.addError(Feedback.BAD_FILE, errorMessage, true);
-        } catch (XmlRpcException e) {
-        	log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage, e);
-            this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
-            if (Pattern.matches(".*?You do not have the permissions.*", e.getMessage())) {
-            	String noPermissionsError = "User '" + confSettings.login + 
-            		"' " +
-            		"does not have permission to attach files to space '" + 
-            		confSettings.spaceKey +
-            		"'.";
-            	log.debug(Feedback.USER_NOT_PERMITTED + ": " + noPermissionsError);
-            	this.errors.addError(Feedback.USER_NOT_PERMITTED, noPermissionsError, true);
-            }
-        }
+			broker.storeAttachment(confSettings, pageId, attachment);
+		} catch (IOException e) {
+			log.error(Feedback.BAD_FILE + ": " + errorMessage, e);
+			this.errors.addError(Feedback.BAD_FILE, errorMessage, true);
+		} catch (XmlRpcException e) {
+			log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage, e);
+			this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
+			if (Pattern.matches(".*?You do not have the permissions.*", e.getMessage())) {
+				String noPermissionsError = "User '" + confSettings.login + 
+						"' " +
+						"does not have permission to attach files to space '" + 
+						confSettings.spaceKey +
+						"'.";
+				log.debug(Feedback.USER_NOT_PERMITTED + ": " + noPermissionsError);
+				this.errors.addError(Feedback.USER_NOT_PERMITTED, noPermissionsError, true);
+			}
+		}
 	}
-    /**
-     * Writes a hierarchy of pages to Confluence. The empty nodes (those with page=null) will
-     * not be written if there already exists a page in Confluence. If there is no page at the
-     * corresponding place in Confluence, an empty page will be created.
-     *
-     * Like writePages(), this method will show a progress bar if the hierarchy takes more than
-     * a few seconds to send to Confluence.
-     *
-     * @param root The root of the hierarchy. Note: The root node itself will <strong>NOT</strong> be
-     *        added to Confluence. All it's children will be added as top-level pages in the space.
-     * @param maxProgress used by logging and status messages
-     * @param spacekey space to which the pages will be written
-     */
-    protected void writeHierarchy(HierarchyNode root, int maxProgress, String spacekey) {
-    	String message = "Uploading Pages to Confluence...";
+	/**
+	 * Writes a hierarchy of pages to Confluence. The empty nodes (those with page=null) will
+	 * not be written if there already exists a page in Confluence. If there is no page at the
+	 * corresponding place in Confluence, an empty page will be created.
+	 *
+	 * Like writePages(), this method will show a progress bar if the hierarchy takes more than
+	 * a few seconds to send to Confluence.
+	 *
+	 * @param root The root of the hierarchy. Note: The root node itself will <strong>NOT</strong> be
+	 *        added to Confluence. All it's children will be added as top-level pages in the space.
+	 * @param maxProgress used by logging and status messages
+	 * @param spacekey space to which the pages will be written
+	 */
+	protected void writeHierarchy(HierarchyNode root, int maxProgress, String spacekey) {
+		String message = "Uploading Pages to Confluence...";
 		this.state.updateNote(message);
 		log.info(message);
-		
-        int progressNum = 0;
-        this.newNodes = 0; //this has to be a field, because we're already returning something; 
-        // at last write the pages to Confluence!
-        for (HierarchyNode topLevelPage : root.getChildren()) {
-			   log.debug("writeHierarchy: toplevelpage = " + topLevelPage.getName());
-				log.debug("number of children this toplevelpage has = " + topLevelPage.getChildren().size());
-            progressNum = writeHierarchy(topLevelPage, null, progressNum, maxProgress, spacekey);
-            if (!this.running) {
-        		this.feedback = Feedback.CANCELLED;
-        		return;
-        	}
-        }
-    }
 
-    /**
-     * This is the recursive part of <code>writeHierarchy</code>. Don't call this directly!
-     * Call writeHierarchy(root) instead.
-     *
-     * @param node The current node in the hierarchy
-     * @param parentId The Confluence "page ID" of the parent page
-     * @param progress The number of pages that have been converted so far
-     *        (used to keep the progress monitor updated)
-     * @param spacekey space to which the pages will be written
-     * @return The number of pages converted after this node and all its descendants have been added.
-     */
-    private int writeHierarchy(
-    		HierarchyNode node, 
-    		String parentId, 
-    		int progress, 
-    		int maxProgress, 
-    		String spacekey) {
-    	if (!this.running) {
-    		this.feedback = Feedback.CANCELLED;
-    		return progress;
-    	}
-    	// First upload the page contained in this node
-        Page page = node.getPage();
-        // create missing nodes - like a directory that didn't have a corresponding page
-        if (page == null) {
-            // This node is a "placeholder" because there are pages further down the hierarchy but
-            // for some reason this node was not included in the conversion. Create an empty page.
-            // Note that this page will only be sent to Confluence if there was no page in place before.
-            page = new Page(null);
-            page.setName(node.getName());
-            page.setOriginalText("");
-            page.setConvertedText("");
-            page.setPath(node.getName()); //needed by auto-detect spacekeys feature
+		int progressNum = 0;
+		this.newNodes = 0; //this has to be a field, because we're already returning something; 
+		// at last write the pages to Confluence!
+		for (HierarchyNode topLevelPage : root.getChildren()) {
+			log.debug("writeHierarchy: toplevelpage = " + topLevelPage.getName());
+			log.debug("number of children this toplevelpage has = " + topLevelPage.getChildren().size());
+			progressNum = writeHierarchy(topLevelPage, null, progressNum, maxProgress, spacekey);
+			if (!this.running) {
+				this.feedback = Feedback.CANCELLED;
+				return;
+			}
+		}
+	}
 
-            String message = "Page '" + page.getName() + "' does not exist. Creating it now.";
+	/**
+	 * This is the recursive part of <code>writeHierarchy</code>. Don't call this directly!
+	 * Call writeHierarchy(root) instead.
+	 *
+	 * @param node The current node in the hierarchy
+	 * @param parentId The Confluence "page ID" of the parent page
+	 * @param progress The number of pages that have been converted so far
+	 *        (used to keep the progress monitor updated)
+	 * @param spacekey space to which the pages will be written
+	 * @return The number of pages converted after this node and all its descendants have been added.
+	 */
+	private int writeHierarchy(
+			HierarchyNode node, 
+			String parentId, 
+			int progress, 
+			int maxProgress, 
+			String spacekey) {
+		if (!this.running) {
+			this.feedback = Feedback.CANCELLED;
+			return progress;
+		}
+		// First upload the page contained in this node
+		Page page = node.getPage();
+		// create missing nodes - like a directory that didn't have a corresponding page
+		if (page == null) {
+			// This node is a "placeholder" because there are pages further down the hierarchy but
+			// for some reason this node was not included in the conversion. Create an empty page.
+			// Note that this page will only be sent to Confluence if there was no page in place before.
+			page = new Page(null);
+			page.setName(node.getName());
+			page.setOriginalText("");
+			page.setConvertedText("");
+			page.setPath(node.getName()); //needed by auto-detect spacekeys feature
+
+			String message = "Page '" + page.getName() + "' does not exist. Creating it now.";
 			log.info(message);
 			this.state.updateNote(message);
-            
-            this.newNodes++;
-            this.state.updateMax(this.state.getMax() + 1);
-        }
-        
-        //upload the page
-        String myId = sendPage(page, parentId, this.settings);
-        
-        //some bookkeeping
-        progress++;
-        logProgressMessage(progress, maxProgress);
-        
-        // Then recursively upload all the node's descendants
-        for (HierarchyNode child : node.getChildren()) {
-            progress = writeHierarchy(child, myId, progress, maxProgress, spacekey);
-            if (!this.running) {
-        		this.feedback = Feedback.CANCELLED;
-        		return progress;
-        	}
-        }
-        
-        return progress;
-    }
+
+			this.newNodes++;
+			this.state.updateMax(this.state.getMax() + 1);
+		}
+
+		//upload the page
+		String myId = sendPage(page, parentId, this.settings);
+
+		//some bookkeeping
+		progress++;
+		logProgressMessage(progress, maxProgress);
+
+		// Then recursively upload all the node's descendants
+		for (HierarchyNode child : node.getChildren()) {
+			progress = writeHierarchy(child, myId, progress, maxProgress, spacekey);
+			if (!this.running) {
+				this.feedback = Feedback.CANCELLED;
+				return progress;
+			}
+		}
+
+		return progress;
+	}
 
 	/**
 	 * sends upload progress messages to the feedback window and the log 
@@ -1736,63 +1783,63 @@ public class ConverterEngine implements FeedbackHandler {
 	 */
 	private void logProgressMessage(int current, int max) {
 		this.state.updateProgress();
-        String message = "Uploaded " + current + " out of " + (max + this.newNodes) + " pages.";
-        
-        //more visible note if current is divisible by 10 or last page
-        if ((current % 10) == 0 || current == (max + this.newNodes)) { 
-        	this.state.updateNote(message);
-        	log.info(message);
-        }
-        else { //less visible note for everything else
-        	log.debug(message);
-        }
+		String message = "Uploaded " + current + " out of " + (max + this.newNodes) + " pages.";
+
+		//more visible note if current is divisible by 10 or last page
+		if ((current % 10) == 0 || current == (max + this.newNodes)) { 
+			this.state.updateNote(message);
+			log.info(message);
+		}
+		else { //less visible note for everything else
+			log.debug(message);
+		}
 	}
 
-    /**
-     * sends page, using settings from  the given settings
-     * @param page
-     * @param parentId
-     * @return page id
-     * @throws IllegalArgumentException if a confluenceSetting is invalid
-     */
-    protected String sendPage(Page page, String parentId, UWCUserSettings settings) {
-    	//write current page
-    	//XXX why are we setting these up every page. Most of these are global. 
-    	//XXX If we set these up earlier in the process, we could do the checkConfluenceSettings call 
-    	//(currently in the next sendPage) earlier in the process as well
-    	ConfluenceServerSettings confSettings = getConfluenceServerSettings(settings);
-    	
-    	//check to see if we've assigned a space to the page
-    	if (page.getSpacekey() != null && !"".equals(page.getSpacekey())) { 
-    		confSettings.spaceKey = page.getSpacekey();
-    		String[] spacedata = page.getSpaceData(page.getSpacekey());
-    		String spacename = (spacedata == null || spacedata.length < 1)?page.getSpacekey():spacedata[0];
-    		String spacedesc = (spacedata == null || spacedata.length < 2)?"":spacedata[1];
-    		if (!createSpace(confSettings, spacename, spacedesc, page.isPersonalSpace(), page.getPersonalSpaceUsername())) {
-    			log.warn("Could not create space '" + confSettings.spaceKey + "' assigned to page '" + page.getName() + "'. " +
-    					"Using default space from settings.");
-    			confSettings.spaceKey = settings.getSpace();
-    		}
-    	} // check to see if we're automatically detecting spaces based on the file system
-    	else if (isAutoDetectingSpacekeys()) { 
-    		confSettings.spaceKey = determineSpaceKey(page);
-    		if ("".equals(confSettings.spaceKey) || confSettings.spaceKey == null) {
-    			String error = "Could not find spacekeys. Note: the auto-detect spacekeys" +
-    					" framework is being used. You must choose directories not individual files" +
-    					" for conversion.\nCannot upload files to Confluence. Exiting.";
-    			log.error(error);
-    			this.errors.addError(Feedback.BAD_SPACE, error, true);
-    			this.state.updateProgress(this.state.getMax());
-    			this.running = false;
-    			return "";
-    		}
-    		if (!createSpace(confSettings)) return null;
-    	} //else otherwise use the default (settings based) spacekey
-    		
-    	return sendPage(page, parentId, confSettings);
-    }
+	/**
+	 * sends page, using settings from  the given settings
+	 * @param page
+	 * @param parentId
+	 * @return page id
+	 * @throws IllegalArgumentException if a confluenceSetting is invalid
+	 */
+	protected String sendPage(Page page, String parentId, UWCUserSettings settings) {
+		//write current page
+		//XXX why are we setting these up every page. Most of these are global. 
+		//XXX If we set these up earlier in the process, we could do the checkConfluenceSettings call 
+		//(currently in the next sendPage) earlier in the process as well
+		ConfluenceServerSettings confSettings = getConfluenceServerSettings(settings);
 
-    Pattern spacepermPattern = Pattern.compile("[{]groupname[}](.*?)[{]permissions[}](.*)");
+		//check to see if we've assigned a space to the page
+		if (page.getSpacekey() != null && !"".equals(page.getSpacekey())) { 
+			confSettings.spaceKey = page.getSpacekey();
+			String[] spacedata = page.getSpaceData(page.getSpacekey());
+			String spacename = (spacedata == null || spacedata.length < 1)?page.getSpacekey():spacedata[0];
+			String spacedesc = (spacedata == null || spacedata.length < 2)?"":spacedata[1];
+			if (!createSpace(confSettings, spacename, spacedesc, page.isPersonalSpace(), page.getPersonalSpaceUsername())) {
+				log.warn("Could not create space '" + confSettings.spaceKey + "' assigned to page '" + page.getName() + "'. " +
+						"Using default space from settings.");
+				confSettings.spaceKey = settings.getSpace();
+			}
+		} // check to see if we're automatically detecting spaces based on the file system
+		else if (isAutoDetectingSpacekeys()) { 
+			confSettings.spaceKey = determineSpaceKey(page);
+			if ("".equals(confSettings.spaceKey) || confSettings.spaceKey == null) {
+				String error = "Could not find spacekeys. Note: the auto-detect spacekeys" +
+						" framework is being used. You must choose directories not individual files" +
+						" for conversion.\nCannot upload files to Confluence. Exiting.";
+				log.error(error);
+				this.errors.addError(Feedback.BAD_SPACE, error, true);
+				this.state.updateProgress(this.state.getMax());
+				this.running = false;
+				return "";
+			}
+			if (!createSpace(confSettings)) return null;
+		} //else otherwise use the default (settings based) spacekey
+
+		return sendPage(page, parentId, confSettings);
+	}
+
+	Pattern spacepermPattern = Pattern.compile("[{]groupname[}](.*?)[{]permissions[}](.*)");
 	private void updateSpacePermissions(ConfluenceServerSettings confSettings) {
 		if (!this.miscProperties.containsKey(PROPKEY_SPACEPERMS)) return;
 
@@ -1824,8 +1871,8 @@ public class ConverterEngine implements FeedbackHandler {
 				String message = "Could not update permissions ('"+allperms+"') for groupname: '" + groupname +"'";
 				getErrors().addError(Feedback.REMOTE_API_ERROR,
 						message,
-    					true);
-    			log.error(message,e);
+						true);
+				log.error(message,e);
 			}
 		}
 	}
@@ -1833,90 +1880,90 @@ public class ConverterEngine implements FeedbackHandler {
 	public ConfluenceServerSettings getConfluenceServerSettings(
 			UWCUserSettings settings) {
 		ConfluenceServerSettings confSettings = new ConfluenceServerSettings(); 
-    	confSettings.login = settings.getLogin();
-    	confSettings.password = settings.getPassword();
-    	confSettings.url = settings.getUrl(); 
-    	confSettings.spaceKey = settings.getSpace();
-    	confSettings.truststore = settings.getTruststore();
-    	confSettings.trustpass = settings.getTrustpass();
-    	confSettings.trustallcerts = settings.getTrustall();
+		confSettings.login = settings.getLogin();
+		confSettings.password = settings.getPassword();
+		confSettings.url = settings.getUrl(); 
+		confSettings.spaceKey = settings.getSpace();
+		confSettings.truststore = settings.getTruststore();
+		confSettings.trustpass = settings.getTrustpass();
+		confSettings.trustallcerts = settings.getTrustall();
 		return confSettings;
 	}
-    
-    /**
-     * creates a space for the spacekey in the given settings, if it
-     * doesn't already exist
-     * @param confSettings
-     * @return false if space could not be created
-     */
-    protected boolean createSpace(ConfluenceServerSettings confSettings) {
-    	String spaceName = confSettings.spaceKey;
-    	String description = "This space was auto-generated by the UWC.";
-    	return createSpace(confSettings, spaceName, description, false, null);
-    }
-    /**
-     * creates a space for the spacekey in the given settings, if it doesn't already exist
-     * @param confSettings 
-     * @param name name of space to be created. will not be used, if space already exists
-     * @param description description of space to be created. will not be used if space already exists
-     * @param isPersonalSpace true if space is personal space
-     * @param personalSpaceUsername should be non-null if isPersonalSpace is true. If this condition is not
-     * maintained, will use spacekey in confSettings instead
-     * @return false if space could not be created
-     */
-    protected boolean createSpace(ConfluenceServerSettings confSettings, String name, String description, 
-    		boolean isPersonalSpace, String personalSpaceUsername) {
-    	String spacekey = confSettings.spaceKey;
-    	RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
-    	SpaceForXmlRpc space = broker.createSpace(spacekey, name, description);
-    	if (isPersonalSpace) {
-    		space.setType(SpaceType.PERSONAL);
-    		space.setUsername(personalSpaceUsername);
-    	}
 
-    	try {
-    		// Conf 2.x will throw an exception if the space doesn't exist.
-    		SpaceForXmlRpc space2 = broker.getSpace(confSettings, spacekey); 
-    		// Conf 3.x will not throw an exception but will return null
-    		if (space2 == null) { //Confluence 3.x
-    			String note = "Creating space with spacekey '" + spacekey + "' and name: " + name;
+	/**
+	 * creates a space for the spacekey in the given settings, if it
+	 * doesn't already exist
+	 * @param confSettings
+	 * @return false if space could not be created
+	 */
+	protected boolean createSpace(ConfluenceServerSettings confSettings) {
+		String spaceName = confSettings.spaceKey;
+		String description = "This space was auto-generated by the UWC.";
+		return createSpace(confSettings, spaceName, description, false, null);
+	}
+	/**
+	 * creates a space for the spacekey in the given settings, if it doesn't already exist
+	 * @param confSettings 
+	 * @param name name of space to be created. will not be used, if space already exists
+	 * @param description description of space to be created. will not be used if space already exists
+	 * @param isPersonalSpace true if space is personal space
+	 * @param personalSpaceUsername should be non-null if isPersonalSpace is true. If this condition is not
+	 * maintained, will use spacekey in confSettings instead
+	 * @return false if space could not be created
+	 */
+	protected boolean createSpace(ConfluenceServerSettings confSettings, String name, String description, 
+			boolean isPersonalSpace, String personalSpaceUsername) {
+		String spacekey = confSettings.spaceKey;
+		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+		SpaceForXmlRpc space = broker.createSpace(spacekey, name, description);
+		if (isPersonalSpace) {
+			space.setType(SpaceType.PERSONAL);
+			space.setUsername(personalSpaceUsername);
+		}
+
+		try {
+			// Conf 2.x will throw an exception if the space doesn't exist.
+			SpaceForXmlRpc space2 = broker.getSpace(confSettings, spacekey); 
+			// Conf 3.x will not throw an exception but will return null
+			if (space2 == null) { //Confluence 3.x
+				String note = "Creating space with spacekey '" + spacekey + "' and name: " + name;
 				log.info(note);
-    			this.state.updateNote(note);
-    			try {
-    				broker.addSpace(confSettings, space);
-    				//at some point in Confluence 4.x, the Home page stopped being set to Home, so let's prestore the homepage id
-    				Vector newspacepages = broker.getAllServerPageSummaries(confSettings, space.getSpaceKey());
-    				PageForXmlRpc newhome = (PageForXmlRpc) newspacepages.get(0); //should only be one at this point
-    				this.homepages.put(space.getSpaceKey(), newhome.getId());
-    				//check to see if we're setting any permissions
-    				updateSpacePermissions(confSettings);
-    			} catch (Exception e) {
-        			getErrors().addError(Feedback.BAD_LOGIN, 
-        					"Could not create space: " + spacekey +
-        					" with login: " + confSettings.login +
-        					". That login may not have permission to create spaces.", 
-        					true);
-        			e.printStackTrace();
-        			return false;
-    			}
-    		}
-    	} catch (Exception e) { //Confluence 2.x
-    		try { //exception! So, try adding the space
-    			String note = "Creating space with spacekey '" + spacekey + "' and name: " + name;
+				this.state.updateNote(note);
+				try {
+					broker.addSpace(confSettings, space);
+					//at some point in Confluence 4.x, the Home page stopped being set to Home, so let's prestore the homepage id
+					Vector newspacepages = broker.getAllServerPageSummaries(confSettings, space.getSpaceKey());
+					PageForXmlRpc newhome = (PageForXmlRpc) newspacepages.get(0); //should only be one at this point
+					this.homepages.put(space.getSpaceKey(), newhome.getId());
+					//check to see if we're setting any permissions
+					updateSpacePermissions(confSettings);
+				} catch (Exception e) {
+					getErrors().addError(Feedback.BAD_LOGIN, 
+							"Could not create space: " + spacekey +
+							" with login: " + confSettings.login +
+							". That login may not have permission to create spaces.", 
+							true);
+					e.printStackTrace();
+					return false;
+				}
+			}
+		} catch (Exception e) { //Confluence 2.x
+			try { //exception! So, try adding the space
+				String note = "Creating space with spacekey '" + spacekey + "' and name: " + name;
 				log.info(note);
-    			this.state.updateNote(note);
-    			broker.addSpace(confSettings, space);
-    		} catch (Exception e1) { //something bad happened.
-    			getErrors().addError(Feedback.BAD_LOGIN, 
-    					"Could not create space: " + spacekey +
-    					" with login: " + confSettings.login +
-    					". That login may not have permission to create spaces.", 
-    					true);
-    			e1.printStackTrace();
-    			return false;
-    		}
-    	}
-    	return true;
+				this.state.updateNote(note);
+				broker.addSpace(confSettings, space);
+			} catch (Exception e1) { //something bad happened.
+				getErrors().addError(Feedback.BAD_LOGIN, 
+						"Could not create space: " + spacekey +
+						" with login: " + confSettings.login +
+						". That login may not have permission to create spaces.", 
+						true);
+				e1.printStackTrace();
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -1970,7 +2017,7 @@ public class ConverterEngine implements FeedbackHandler {
 			newPage = broker.storeNewOrUpdatePage(confSettings, confSettings.spaceKey, brokerPage);
 			if (newPage == null || newPage.getPageParams() == null) {
 				String message = "Unknown problem occured while sending page '" + pageTable.get("title") +
-				"'. See atlassian-confluence.log for more details.";
+						"'. See atlassian-confluence.log for more details.";
 				log.error(message);
 				getErrors().addError(Feedback.REMOTE_API_ERROR, message, true);
 				return null;
@@ -1978,12 +2025,13 @@ public class ConverterEngine implements FeedbackHandler {
 		} catch (Exception e) {
 			getErrors().addError(Feedback.REMOTE_API_ERROR, 
 					"The Remote API threw an exception when it tried to upload page: \"" +
-					pageTable.get("title") +
-					"\".", true);
+							pageTable.get("title") +
+							"\".", true);
 			e.printStackTrace();
 			return null;
-		}	
-		
+		}
+		log.debug("Page URL: " + newPage.getUrl());
+
 		//move the page if necessary and you can
 		log.debug("Identifying parent location for page...");
 		String parentid = null;
@@ -2005,22 +2053,22 @@ public class ConverterEngine implements FeedbackHandler {
 					this.homepages.put(confSettings.spaceKey, "-1");
 				}
 			}
-			
+
 		}
 		if (parentid != null) {
 			log.debug("Attempting to set parent to: " + parentid);
 			try {
 				broker.movePage(confSettings, newPage.getId(), parentid, RemoteWikiBroker.Position.APPEND);
 			} catch (Exception e) {
-				log.debug("Could not move page " + pageTable.get("title") + "\n" + e.getMessage() + "\n" +
-							e.getStackTrace()); //could be because Confluence is earlier than 2.9
+				log.error("Could not move page " + pageTable.get("title") + "\n" + e.getMessage() + "\n" +
+						e.getStackTrace()); //could be because Confluence is earlier than 2.9
 			}
 		}
-		
-    	return newPage.getId();
-		
+
+		return newPage.getId();
+
 	}
-	
+
 	/*********
 	 * to send a blog table which has all the attributes for a blog to wiki
 	 * @param broker
@@ -2036,7 +2084,7 @@ public class ConverterEngine implements FeedbackHandler {
 			newPage = broker.storeBlog(confSettings, confSettings.spaceKey, brokerPage);
 			if (newPage == null || newPage.getblogParams() == null) {
 				String message = "Unknown problem occured while sending page '" + pageTable.get("title") +
-				"'. See atlassian-confluence.log for more details.";
+						"'. See atlassian-confluence.log for more details.";
 				log.error(message);
 				getErrors().addError(Feedback.REMOTE_API_ERROR, message, true);
 				return null;
@@ -2044,77 +2092,81 @@ public class ConverterEngine implements FeedbackHandler {
 		} catch (Exception e) {
 			getErrors().addError(Feedback.REMOTE_API_ERROR, 
 					"The Remote API threw an exception when it tried to upload page: \"" +
-					pageTable.get("title") +
-					"\".", true);
+							pageTable.get("title") +
+							"\".", true);
 			e.printStackTrace();
 			return null;
 		}	
-    	return newPage.getId();
+		log.debug("Page URL: " + newPage.getUrl());
+		return newPage.getId();
 	}
-	
-	
+
+
 	protected void checkConfluenceSettings(ConfluenceServerSettings confSettings)
 	{
 		//check for problems with settings 
-    	Feedback testConnectionFeedback = TestSettingsListener.getConnectionFeedback(confSettings, isAutoDetectingSpacekeys());
-    	if (testConnectionFeedback != Feedback.OK) {
-    		String message = TestSettingsListener.getConnectionFeedbackMessage(confSettings, isAutoDetectingSpacekeys());
-    		log.error(message);
-    		this.state.updateNote(message);
-    		throw new IllegalArgumentException(message);
-    	}
-//    	log.info(TestSettingsListener.SUCCESS_MESSAGE_LONG); //this is getting called for every page 
-		
+		Feedback testConnectionFeedback = TestSettingsListener.getConnectionFeedback(confSettings, isAutoDetectingSpacekeys());
+		if (testConnectionFeedback != Feedback.OK) {
+			String message = TestSettingsListener.getConnectionFeedbackMessage(confSettings, isAutoDetectingSpacekeys());
+			log.error(message);
+			this.state.updateNote(message);
+			throw new IllegalArgumentException(message);
+		}
+		//    	log.info(TestSettingsListener.SUCCESS_MESSAGE_LONG); //this is getting called for every page 
+
 	}
 	/**
-     * sends page using the given settings
-     * @param page
-     * @param parentId
-     * @param confSettings
-     * @return page id the confluence page id for the page being stored. Used if
-     * page is new.
-     */
-    protected String sendPage(Page page, String parentId, ConfluenceServerSettings confSettings) {
-    	//create wiki broker
-    	RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
-    	//update page content to be xhtml
-    	if (Boolean.parseBoolean(this.miscProperties.getProperty("engine-markuptoxhtml", "true"))) {
-    		page = pageContentToXhtml(broker, confSettings, page);
-    	} else {
-    		log.debug("Engine: markup to xhtml property set to false");
-    	}
-    	//create page that broker can use
-    	Hashtable pageTable = createPageTable(page, parentId);
-     	//check for problems with settings 
-    	checkConfluenceSettings(confSettings); //XXX Why are we doing this for every page? 'cause we seem to create the confSettings on a page by page basis?
-    	//write ancestors, if any, first
-    	if (page.getAncestors() != null && !page.getAncestors().isEmpty()) {
-    		pageTable = handleAncestors(page, confSettings, pageTable);
-    	}
-    	//send page
-    	String id = null;
-    	if (page.isBlog()) {
-    		log.debug("Attempting to send blog: " + page.getName() + " to space: " + confSettings.spaceKey);
-    		id = sendBlog(broker, pageTable, confSettings);
-    	} else { 
-    		log.debug("Attempting to send page: " + page.getName() + " to space: " + confSettings.spaceKey);
-    		id = sendPage(broker, pageTable, confSettings);
-    	}
-    	if (id == null) return null;
-     	//send attachments
-    	sendAttachments(page, broker, id, confSettings);
-    	//send labels 
-    	sendLabels(page, broker, id, confSettings);
-    	//send comments
-    	sendComments(page, broker, id, confSettings);
-    	//set author
-    	log.debug("Page Version: " + page.getVersion());
-    	sendAuthor(page, broker, id, confSettings);
-    	//set timestamp
-    	sendTimestamp(page, broker, id, confSettings);
-    	//return the page id
-    	return id;
-    }
+	 * sends page using the given settings
+	 * @param page
+	 * @param parentId
+	 * @param confSettings
+	 * @return page id the confluence page id for the page being stored. Used if
+	 * page is new.
+	 */
+	protected String sendPage(Page page, String parentId, ConfluenceServerSettings confSettings) {
+		//create wiki broker
+		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+		//update page content to be xhtml
+		if (Boolean.parseBoolean(this.miscProperties.getProperty("engine-markuptoxhtml", "true"))) {
+			page = pageContentToXhtml(broker, confSettings, page);
+		} else {
+			log.debug("Engine: markup to xhtml property set to false");
+		}
+		//create page that broker can use
+		Hashtable pageTable = createPageTable(page, parentId);
+		//check for problems with settings 
+		checkConfluenceSettings(confSettings); //XXX Why are we doing this for every page? 'cause we seem to create the confSettings on a page by page basis?
+		//write ancestors, if any, first
+		if (page.getAncestors() != null && !page.getAncestors().isEmpty()) {
+			pageTable = handleAncestors(page, confSettings, pageTable);
+		}
+		//send page
+		String id = null;
+		if (!(page instanceof VersionPage) && page.getFile() != null) {
+			log.debug("Original Filepath: " + page.getFile().getAbsolutePath());
+		}
+		if (page.isBlog()) {
+			log.debug("Attempting to send blog: " + page.getName() + " to space: " + confSettings.spaceKey);
+			id = sendBlog(broker, pageTable, confSettings);
+		} else { 
+			log.debug("Attempting to send page: " + page.getName() + " to space: " + confSettings.spaceKey);
+			id = sendPage(broker, pageTable, confSettings);
+		}
+		if (id == null) return null;
+		//send attachments
+		sendAttachments(page, broker, id, confSettings);
+		//send labels 
+		sendLabels(page, broker, id, confSettings);
+		//send comments
+		sendComments(page, broker, id, confSettings);
+		//set author
+		log.debug("Page Version: " + page.getVersion());
+		sendAuthor(page, broker, id, confSettings);
+		//set timestamp
+		sendTimestamp(page, broker, id, confSettings);
+		//return the page id
+		return id;
+	}
 
 	private Hashtable handleAncestors(Page page,
 			ConfluenceServerSettings confSettings, Hashtable pageTable) {
@@ -2129,13 +2181,13 @@ public class ConverterEngine implements FeedbackHandler {
 		writePages(page.getAncestors(), settings.getSpace(), false);
 		return pageTable;
 	}
-    
-    private void enforceBlogId(Page page, Vector<VersionPage> pages,
+
+	private void enforceBlogId(Page page, Vector<VersionPage> pages,
 			String blogid) {
-    	page.setId(blogid);
-    	for (VersionPage anc : pages) {
-    		anc.setId(blogid);
-    	}
+		page.setId(blogid);
+		for (VersionPage anc : pages) {
+			anc.setId(blogid);
+		}
 	}
 
 	private void enforceAncestorTitleAndKey(Vector<VersionPage> pages,
@@ -2145,22 +2197,22 @@ public class ConverterEngine implements FeedbackHandler {
 			page.setSpacekey(spacekey);
 			page.setIsBlog(isBlog);
 		}
-		
+
 	}
 
 	public String markupToXhtml(String markup) {
-    	RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
-    	ConfluenceServerSettings confSettings = getConfluenceServerSettings(this.settings);
-    	try {
+		RemoteWikiBroker broker = RemoteWikiBroker.getInstance();
+		ConfluenceServerSettings confSettings = getConfluenceServerSettings(this.settings);
+		try {
 			return getContentAsXhtmlFormat(broker, confSettings, markup);
-    	} catch (Exception e) {
-    		String errorMessage = "Could not transform wiki content from markup to xhtml.";
-    		log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage);
-    		this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
-    		return null;
-    	}
-    }
-    
+		} catch (Exception e) {
+			String errorMessage = "Could not transform wiki content from markup to xhtml.";
+			log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage);
+			this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
+			return null;
+		}
+	}
+
 	private Page pageContentToXhtml(RemoteWikiBroker broker,
 			ConfluenceServerSettings confSettings, Page page) {
 		try {
@@ -2169,132 +2221,132 @@ public class ConverterEngine implements FeedbackHandler {
 		} catch (Exception e) {
 			String errorMessage = "Could not transform wiki content in page: '"+page.getName()+
 					"' from markup to xhtml.";
-    		log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage);
-    		this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
+			log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage);
+			this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
 		}
 		return page;
 	}
 
 	/**
-     * creates a parameter table with the given page and parentId.
-     * @param page
-     * @param parentId
-     * @return table with Remote API page parameters
-     */
-    private Hashtable createPageTable(Page page, String parentId) {
-    	Hashtable table = new Hashtable();
-    	table.put("content", page.getConvertedText());
-    	table.put("title", page.getName()); 
-    	if (parentId != null && !parentId.equals("null")) table.put("parentId", parentId);
-    	if (page.getVersion() > 0) table.put("version", page.getVersion() + "");
-    	if (page.isBlog() && page.getId() != null) table.put("id", page.getId());
-    	return table;
+	 * creates a parameter table with the given page and parentId.
+	 * @param page
+	 * @param parentId
+	 * @return table with Remote API page parameters
+	 */
+	private Hashtable createPageTable(Page page, String parentId) {
+		Hashtable table = new Hashtable();
+		table.put("content", page.getConvertedText());
+		table.put("title", page.getName()); 
+		if (parentId != null && !parentId.equals("null")) table.put("parentId", parentId);
+		if (page.getVersion() > 0) table.put("version", page.getVersion() + "");
+		if (page.isBlog() && page.getId() != null) table.put("id", page.getId());
+		return table;
 	}
 
-    /**
-     * checks the given page for valid attachments,
-     * and sends them to Confluence using the rwb and the given pageId string as the 
-     * page to be attached to.
-     * 
-     * @param page given page object that might have attachments
-     * @param broker XML-RPC broker which will communicate with Confluence
-     * @param pageId the page the Confluence will attach the attachment to
-     * @param confSettings the confluence user settings needed by the broker to connect to Confluence 
-     */
-    private void sendAttachments(Page page, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings) {
-    	log.debug("Examining attachments for page: " + page.getName());
+	/**
+	 * checks the given page for valid attachments,
+	 * and sends them to Confluence using the rwb and the given pageId string as the 
+	 * page to be attached to.
+	 * 
+	 * @param page given page object that might have attachments
+	 * @param broker XML-RPC broker which will communicate with Confluence
+	 * @param pageId the page the Confluence will attach the attachment to
+	 * @param confSettings the confluence user settings needed by the broker to connect to Confluence 
+	 */
+	private void sendAttachments(Page page, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings) {
+		log.debug("Examining attachments for page: " + page.getName());
 		// Send the attachments
-        for (Attachment attachment : page.getAllAttachmentData()) {
-        	if (alreadyAttached(page, attachment.getFile()))
-        		continue;
-        	sendAttachment(attachment, broker, pageId, confSettings);
-        }
+		for (Attachment attachment : page.getAllAttachmentData()) {
+			if (alreadyAttached(page, attachment.getFile()))
+				continue;
+			sendAttachment(attachment, broker, pageId, confSettings);
+		}
 	}
-    
-    protected void sendLabels(Page page, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings) {
-    	log.debug("Examining labels for page: " + page.getName());
-    	//check to see if we're sending labels for this version of the page
+
+	protected void sendLabels(Page page, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings) {
+		log.debug("Examining labels for page: " + page.getName());
+		//check to see if we're sending labels for this version of the page
 		if (badVersionForSendingLabels(page)) return;
-    	String labels = page.getLabelsAsString();
-    	log.debug("Sending Labels: " + labels);
-    	if (labels == null) 
-    		return;
-    	try {
-    		broker.addLabels(confSettings, labels, pageId);
-    	} catch (Exception e) {
-    		String errorMessage = "Could not add labels '" + labels + "' to page '" + page.getName() +"'";
-    		log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage);
-    		this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
-    	}
-    }
+		String labels = page.getLabelsAsString();
+		log.debug("Sending Labels: " + labels);
+		if (labels == null) 
+			return;
+		try {
+			broker.addLabels(confSettings, labels, pageId);
+		} catch (Exception e) {
+			String errorMessage = "Could not add labels '" + labels + "' to page '" + page.getName() +"'";
+			log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage);
+			this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
+		}
+	}
 
 	private boolean badVersionForSendingLabels(Page page) {
 		int version = page.getVersion();
-    	int latest = Page.getLatestVersion(page.getName());
-    	boolean history = isHandlingPageHistories();
-    	String allVersionsProp = (String) this.miscProperties.get("page-history-allversionlabels");
-    	boolean allVersions = (allVersionsProp != null) && Boolean.parseBoolean(allVersionsProp);
+		int latest = Page.getLatestVersion(page.getName());
+		boolean history = isHandlingPageHistories();
+		String allVersionsProp = (String) this.miscProperties.get("page-history-allversionlabels");
+		boolean allVersions = (allVersionsProp != null) && Boolean.parseBoolean(allVersionsProp);
 		return history && !allVersions && version != latest;
 	}
-    
-    /**
-     * adds page comments to a page in confluence
-     * @param page given page object that might have comments
-     * @param broker XML-RPC broker which will communicate with Confluence
-     * @param pageId the page id for the given page
-     * @param confSettings the confluence user settings needed by the broker to connect to Confluence
-     */
-    protected void sendComments(Page page, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings) {
-    	if (page.hasComments()) {
-    		log.debug("Sending comments for page: " + page.getName());
-    		try {
-    			for (Comment comment : page.getAllCommentData()) {
-    				if (comment == null) {
-    					log.error("Comment was null! SKIPPING");
-    					this.errors.addError(Feedback.CONVERTER_ERROR, "Comment should not be null!", true);
-    					continue; 
-    				}
-    				//create page that broker can use
-    				CommentForXmlRpc brokerComment = new CommentForXmlRpc();
-    				brokerComment.setPageId(pageId);
-    				String commentcontent = comment.text;
-    				if (!comment.isXhtml()) {
+
+	/**
+	 * adds page comments to a page in confluence
+	 * @param page given page object that might have comments
+	 * @param broker XML-RPC broker which will communicate with Confluence
+	 * @param pageId the page id for the given page
+	 * @param confSettings the confluence user settings needed by the broker to connect to Confluence
+	 */
+	protected void sendComments(Page page, RemoteWikiBroker broker, String pageId, ConfluenceServerSettings confSettings) {
+		if (page.hasComments()) {
+			log.debug("Sending comments for page: " + page.getName());
+			try {
+				for (Comment comment : page.getAllCommentData()) {
+					if (comment == null) {
+						log.error("Comment was null! SKIPPING");
+						this.errors.addError(Feedback.CONVERTER_ERROR, "Comment should not be null!", true);
+						continue; 
+					}
+					//create page that broker can use
+					CommentForXmlRpc brokerComment = new CommentForXmlRpc();
+					brokerComment.setPageId(pageId);
+					String commentcontent = comment.text;
+					if (!comment.isXhtml()) {
 						commentcontent = getContentAsXhtmlFormat(broker, confSettings, comment.text);
 					}
-    				brokerComment.setContent(commentcontent);
-    				//upload comment
-    				CommentForXmlRpc uploadedComment = broker.addComment(confSettings, brokerComment);
-    				if (comment.hasCreator()) {
-    					boolean usersMustExist = false;
+					brokerComment.setContent(commentcontent);
+					//upload comment
+					CommentForXmlRpc uploadedComment = broker.addComment(confSettings, brokerComment);
+					if (comment.hasCreator()) {
+						boolean usersMustExist = false;
 						broker.setCreator(confSettings, comment.creator, uploadedComment.getId(), usersMustExist);
 						broker.setLastModifier(confSettings, comment.creator, uploadedComment.getId(), usersMustExist);
-    				}
-    				if (comment.hasTimestamp()) {
-    					broker.setCreateDate(confSettings, comment.timestamp, uploadedComment.getId());
-    					broker.setLastModifiedDate(confSettings, comment.timestamp, uploadedComment.getId());
-    				}
-    			}
-    		} catch (Exception e) {
-    			String errorMessage = null;
-    			if (e.getMessage() == null) {
-    				log.error("Problem with comments!", e);
-    				return;
-    			}
-    			else if (e.getMessage().contains("NotPermittedException")) {
-    				errorMessage = "User is not permitted to add comments to page: " + page.getName() + "'";
-    			}
-    			else if (e.getMessage().contains("does not exist")) {
-    				errorMessage = "Cannot add comments to the page because it does not exist: " + page.getName();
-    			}
-    			else {
-    				errorMessage = "Could not send comments to page '" + page.getName() +"'";
-    			}
-    			log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage);
-    			this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
-    		}
-    	}
-//    	else log.debug("Page has no comments."); //DELETE
-    }
+					}
+					if (comment.hasTimestamp()) {
+						broker.setCreateDate(confSettings, comment.timestamp, uploadedComment.getId());
+						broker.setLastModifiedDate(confSettings, comment.timestamp, uploadedComment.getId());
+					}
+				}
+			} catch (Exception e) {
+				String errorMessage = null;
+				if (e.getMessage() == null) {
+					log.error("Problem with comments!", e);
+					return;
+				}
+				else if (e.getMessage().contains("NotPermittedException")) {
+					errorMessage = "User is not permitted to add comments to page: " + page.getName() + "'";
+				}
+				else if (e.getMessage().contains("does not exist")) {
+					errorMessage = "Cannot add comments to the page because it does not exist: " + page.getName();
+				}
+				else {
+					errorMessage = "Could not send comments to page '" + page.getName() +"'";
+				}
+				log.error(Feedback.REMOTE_API_ERROR + ": " + errorMessage);
+				this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
+			}
+		}
+		//    	else log.debug("Page has no comments."); //DELETE
+	}
 
 	public String getContentAsXhtmlFormat(RemoteWikiBroker broker, ConfluenceServerSettings confSettings, String text) throws XmlRpcException, IOException {
 		return broker.convertWikiToStorageFormat(confSettings, text);
@@ -2314,12 +2366,12 @@ public class ConverterEngine implements FeedbackHandler {
 			} catch (Exception e) {
 				String errorMessage = Feedback.REMOTE_API_ERROR + ": Problem setting creator or last modifier data.";
 				log.error(errorMessage);
-    			this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
+				this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	private void sendTimestamp(Page page, RemoteWikiBroker broker, String id, ConfluenceServerSettings confSettings) {
 		if (page.getTimestamp() != null) {
 			log.debug("Sending timestamp data: " + page.getTimestamp());
@@ -2330,7 +2382,7 @@ public class ConverterEngine implements FeedbackHandler {
 					timezone = timezone.trim();
 					dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
 				}
-			    String timestamp = dateFormat.format(page.getTimestamp());
+				String timestamp = dateFormat.format(page.getTimestamp());
 
 				if (page.getVersion() == 1) { //only set the creator if its the first version
 					broker.setCreateDate(confSettings, timestamp, id);
@@ -2340,18 +2392,18 @@ public class ConverterEngine implements FeedbackHandler {
 			} catch (Exception e) {
 				String errorMessage = Feedback.REMOTE_API_ERROR + ": Problem setting create or last modified date.";
 				log.error(errorMessage);
-    			this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
+				this.errors.addError(Feedback.REMOTE_API_ERROR, errorMessage, true);
 				e.printStackTrace();
 			}
 		}
 	}
 
-    
-    /**
-     * @param file
-     * @return true if the given file does not exist on the filesystem.
-     */
-    protected boolean doesNotExist(File file) {
+
+	/**
+	 * @param file
+	 * @return true if the given file does not exist on the filesystem.
+	 */
+	protected boolean doesNotExist(File file) {
 		boolean doesNotExist = !file.exists();
 		if (doesNotExist)
 			log.warn("File '" + file.getPath() + "' does not exist: Skipping");
@@ -2359,16 +2411,16 @@ public class ConverterEngine implements FeedbackHandler {
 	}
 
 	/**
-     * @param file
-     * @return true if file size is too big
-     */
-    protected boolean tooBig(File file) {
-    	
-    	if (!file.exists()) return false;
+	 * @param file
+	 * @return true if file size is too big
+	 */
+	protected boolean tooBig(File file) {
+
+		if (!file.exists()) return false;
 		int length = (int) file.length();
-		
+
 		String maxString = getMaxAttachmentSizeString();
-		
+
 		int maxBytes = getAsBytes(maxString);
 		if (maxBytes < 0) return false;
 		boolean tooBig = length > maxBytes;
@@ -2392,83 +2444,83 @@ public class ConverterEngine implements FeedbackHandler {
 	}
 
 	/**
-     * @param fileLocation location of properties file
+	 * @param fileLocation location of properties file
 	 * @return a Properties object containing confluence settings
-     */
-    protected Properties loadProperties(String fileLocation) {
-    	/* most of this code grabbed from ConfluenceSettingsForm.populateConfluenceSettings*/
-    	Properties properties = new Properties();
-        File confSettings = new File(fileLocation);
-        if (confSettings.exists()) {
-            // load properties file
-            FileInputStream fis;
-            try {
-                fis = new FileInputStream(fileLocation);
+	 */
+	protected Properties loadProperties(String fileLocation) {
+		/* most of this code grabbed from ConfluenceSettingsForm.populateConfluenceSettings*/
+		Properties properties = new Properties();
+		File confSettings = new File(fileLocation);
+		if (confSettings.exists()) {
+			// load properties file
+			FileInputStream fis;
+			try {
+				fis = new FileInputStream(fileLocation);
 				properties.load(fis);
-                fis.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return properties;
-    }
-
-    /**
-     * calculates the number of bytes the given maxString represents
-     * @param maxString file size described as a String.
-     * Example: 5B, 5K, 5M, 5G, etc.
-     * @return as Bytes.
-     * Respectively: 5, 5120, 5242880, 5368709120
-     */
-    protected int getAsBytes(String maxString) {
-    	String maxRegex = "^(\\d+)(\\D)";
-    	if (maxString == null || "".equals(maxString)) 
-    		return -1;
-    	
-    	int power, num = 0;
-    	String numString, unitString = null;
-    	if (Pattern.matches("^\\d+$", maxString)) {
-    		unitString = "B";
-    		numString = maxString;
-    	}
-    	else {
-	    	numString = maxString.replaceFirst(maxRegex, "$1");
-	    	unitString = maxString.replaceFirst(maxRegex, "$2");
-    	}
-    	try {
-    		num = Integer.parseInt(numString);
-    	} catch (NumberFormatException e) {
-    		String message = PROP_ATTACHMENT_SIZE_MAX + " setting is malformed.\n" +
-    				"Setting must be formatted like so: [number][unit], where unit is\n" +
-    				"one of the following: B, K, M, G. No max attachment size set.";
-    		log.error(message);
-    		return -1;
-    	}
-    	unitString = unitString.toUpperCase();
-    	char unit = unitString.toCharArray()[0]; //first char in that string
-		
-    	switch (unit) {
-			case ('B'): power = 0;break;
-			case ('K'): power = 1;break;
-			case ('M'): power = 2;break;
-			case ('G'): power = 3;break;
-			default: return -1;
+				fis.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		
+		return properties;
+	}
+
+	/**
+	 * calculates the number of bytes the given maxString represents
+	 * @param maxString file size described as a String.
+	 * Example: 5B, 5K, 5M, 5G, etc.
+	 * @return as Bytes.
+	 * Respectively: 5, 5120, 5242880, 5368709120
+	 */
+	protected int getAsBytes(String maxString) {
+		String maxRegex = "^(\\d+)(\\D)";
+		if (maxString == null || "".equals(maxString)) 
+			return -1;
+
+		int power, num = 0;
+		String numString, unitString = null;
+		if (Pattern.matches("^\\d+$", maxString)) {
+			unitString = "B";
+			numString = maxString;
+		}
+		else {
+			numString = maxString.replaceFirst(maxRegex, "$1");
+			unitString = maxString.replaceFirst(maxRegex, "$2");
+		}
+		try {
+			num = Integer.parseInt(numString);
+		} catch (NumberFormatException e) {
+			String message = PROP_ATTACHMENT_SIZE_MAX + " setting is malformed.\n" +
+					"Setting must be formatted like so: [number][unit], where unit is\n" +
+					"one of the following: B, K, M, G. No max attachment size set.";
+			log.error(message);
+			return -1;
+		}
+		unitString = unitString.toUpperCase();
+		char unit = unitString.toCharArray()[0]; //first char in that string
+
+		switch (unit) {
+		case ('B'): power = 0;break;
+		case ('K'): power = 1;break;
+		case ('M'): power = 2;break;
+		case ('G'): power = 3;break;
+		default: return -1;
+		}
+
 		int multiplier = (int) Math.pow(1024, power);
 		int value = num * multiplier;
 		return value;
 	}
 
 	/**
-     * @param page
-     * @param file
-     * @return true if a particular page already has a particular
-     * file attached.
-     */
-    protected boolean alreadyAttached(Page page, File file) {
+	 * @param page
+	 * @param file
+	 * @return true if a particular page already has a particular
+	 * file attached.
+	 */
+	protected boolean alreadyAttached(Page page, File file) {
 		String pagename = page.getName();
 		String filename = file.getName();
 		boolean isblog = page.isBlog();
@@ -2477,167 +2529,167 @@ public class ConverterEngine implements FeedbackHandler {
 		if (attachedFiles == null) 
 			attachedFiles = new HashSet<String>();
 		boolean attached = attachedFiles.contains(attachmentId);
-		
+
 		if (!attached) {
 			attachedFiles.add(attachmentId);
 			if (attachedPaths == null) attachedPaths = new HashSet<String>();
 			attachedPaths.add(file.getAbsolutePath()); //used with orphan upload checking
 		}
 		else log.debug("Attachment " + filename + " is already attached: Skipping.");
-		
+
 		return attached;
 	}
-    
-    /**
-     * to check if the file has been attached with any pages.
-     * @param fileName
-     * @return
-     */    
-    protected boolean alreadyAttached(String fileName) {
-    	if (this.attachedFiles == null || this.attachedFiles.isEmpty())
-    		return false;
-    	Iterator <String>it=attachedFiles.iterator();
-    	while (it.hasNext())
-    	{
-    		String item=it.next();
-    		int index=item.lastIndexOf(fileName);
-    		if (index < 0)
-    			continue;
-    		if (item.length() - index == fileName.length())
-    			return true;		
-    	}
-    	return false;
-    
-	}
-    
-    protected boolean orphanAlreadyAttached(File file) {
-    	if (this.attachedPaths == null) return false;
-    	return (this.attachedPaths.contains(file.getAbsolutePath()));
-    }
 
-    /**
-     * This method determines the mime type of a file. It uses the file
-     * conf/mime.types to map from the file name extension
-     * to a mime type. The mime type file should be read into the
-     * mimeTypes field before this method is called.
-     *
-     * @param file The file object
-     * @return the mime type of the file.
-     */
-    public static String determineContentType(File file) {
-        if (mimeTypes != null) {
-            return mimeTypes.getContentType(file);
-        } 
-        //else assume it's an image
-        String filename = file.getName();
-        int extensionStart = filename.lastIndexOf(".");
-        if (extensionStart >= 0) {
-            String extension = filename.substring(extensionStart + 1);
-            return "image/" + extension;
-        }
-        // Hmm... No extension. Assume it's a text file.
-        return "text/plain";
-    }
-    
-    Pattern switchPattern = Pattern.compile("switch");
-    Pattern suffixPattern = Pattern.compile("suffix");
-    private boolean handlingPageHistories = false;
+	/**
+	 * to check if the file has been attached with any pages.
+	 * @param fileName
+	 * @return
+	 */    
+	protected boolean alreadyAttached(String fileName) {
+		if (this.attachedFiles == null || this.attachedFiles.isEmpty())
+			return false;
+		Iterator <String>it=attachedFiles.iterator();
+		while (it.hasNext())
+		{
+			String item=it.next();
+			int index=item.lastIndexOf(fileName);
+			if (index < 0)
+				continue;
+			if (item.length() - index == fileName.length())
+				return true;		
+		}
+		return false;
+
+	}
+
+	protected boolean orphanAlreadyAttached(File file) {
+		if (this.attachedPaths == null) return false;
+		return (this.attachedPaths.contains(file.getAbsolutePath()));
+	}
+
+	/**
+	 * This method determines the mime type of a file. It uses the file
+	 * conf/mime.types to map from the file name extension
+	 * to a mime type. The mime type file should be read into the
+	 * mimeTypes field before this method is called.
+	 *
+	 * @param file The file object
+	 * @return the mime type of the file.
+	 */
+	public static String determineContentType(File file) {
+		if (mimeTypes != null) {
+			return mimeTypes.getContentType(file);
+		} 
+		//else assume it's an image
+		String filename = file.getName();
+		int extensionStart = filename.lastIndexOf(".");
+		if (extensionStart >= 0) {
+			String extension = filename.substring(extensionStart + 1);
+			return "image/" + extension;
+		}
+		// Hmm... No extension. Assume it's a text file.
+		return "text/plain";
+	}
+
+	Pattern switchPattern = Pattern.compile("switch");
+	Pattern suffixPattern = Pattern.compile("suffix");
+	private boolean handlingPageHistories = false;
 	private String pageHistorySuffix = null;
-    
-    /**
-     * set the page history state to reflect the page history property
-     * and associated value that are passed as arguments
-     * @param key
-     * @param value
-     */
-    protected void handlePageHistoryProperty(String key, String value) {
-    	Matcher switchFinder = switchPattern.matcher(key);
-    	if (switchFinder.find()) {
-    		//the default should be false, so it's ok to just parse the string.
-    		this.handlingPageHistories = Boolean.parseBoolean(value);
-    		return;
-    	}
-    	Matcher suffixFinder = suffixPattern.matcher(key);
-    	if (suffixFinder.find()) {
-    		setPageHistorySuffix(value);
-    		return;
-    	}
-    }
-    
-    protected void handleIllegalHandling(String key, String value) {
-    	boolean enabled = false; //default, confluence 4 doesn't appear to need this
-    	value = value.trim();
-    	if ("false".equals(value))
-    		enabled = false;
-    	illegalHandlingEnabled = enabled;
-    }
-    
-    protected void handleAutoDetectSpacekeys(String key, String value) {
-    	boolean enabled = false; //default
-    	value = value.trim();
-    	if ("true".equals(value)) {
-    		enabled = true;
-    	}
-    	autoDetectSpacekeys = enabled;
-    }
-    
-    Pattern miscPropsPattern = Pattern.compile("" +
-    		"\\w+\\.\\d+\\.([^.]+)\\.property"
-    		);
-    protected Properties handleMiscellaneousProperties(String key, String value) {
-    	Matcher miscKeyFinder = miscPropsPattern.matcher(key);
-    	if (miscKeyFinder.matches()) {
-    		String misckey = miscKeyFinder.group(1);
-    		if (this.miscProperties == null)
-    			this.miscProperties = new Properties();
-    		this.miscProperties.put(misckey, value);
-    		log.debug("Miscellaneous Property set: " + misckey + "=" + value);
-    		return this.miscProperties;
-    	}
-    	String error = "Miscellaneous property was detected, " +
-		    			"but key was invalid. Could not instantiate property: " +
-		    			key + "=" + value;
+
+	/**
+	 * set the page history state to reflect the page history property
+	 * and associated value that are passed as arguments
+	 * @param key
+	 * @param value
+	 */
+	protected void handlePageHistoryProperty(String key, String value) {
+		Matcher switchFinder = switchPattern.matcher(key);
+		if (switchFinder.find()) {
+			//the default should be false, so it's ok to just parse the string.
+			this.handlingPageHistories = Boolean.parseBoolean(value);
+			return;
+		}
+		Matcher suffixFinder = suffixPattern.matcher(key);
+		if (suffixFinder.find()) {
+			setPageHistorySuffix(value);
+			return;
+		}
+	}
+
+	protected void handleIllegalHandling(String key, String value) {
+		boolean enabled = false; //default, confluence 4 doesn't appear to need this
+		value = value.trim();
+		if ("false".equals(value))
+			enabled = false;
+		illegalHandlingEnabled = enabled;
+	}
+
+	protected void handleAutoDetectSpacekeys(String key, String value) {
+		boolean enabled = false; //default
+		value = value.trim();
+		if ("true".equals(value)) {
+			enabled = true;
+		}
+		autoDetectSpacekeys = enabled;
+	}
+
+	Pattern miscPropsPattern = Pattern.compile("" +
+			"\\w+\\.\\d+\\.([^.]+)\\.property"
+			);
+	protected Properties handleMiscellaneousProperties(String key, String value) {
+		Matcher miscKeyFinder = miscPropsPattern.matcher(key);
+		if (miscKeyFinder.matches()) {
+			String misckey = miscKeyFinder.group(1);
+			if (this.miscProperties == null)
+				this.miscProperties = new Properties();
+			this.miscProperties.put(misckey, value);
+			log.debug("Miscellaneous Property set: " + misckey + "=" + value);
+			return this.miscProperties;
+		}
+		String error = "Miscellaneous property was detected, " +
+				"but key was invalid. Could not instantiate property: " +
+				key + "=" + value;
 		log.error(error);
 		this.errors.addError(Feedback.BAD_PROPERTY, error, true);
 		return this.miscProperties;
-    }
-    
-    private void addDefaultMiscProperties() {
-    	handleMiscellaneousProperties("Testing.1234.spacekey.property", this.settings.getSpace());
-    }
-    
-    protected void handleFilters(String key, String value) throws InstantiationException, IllegalAccessException {
-    	log.debug("filter property = " + value);
-    	getFilterValues().add(value);
-    }
+	}
+
+	private void addDefaultMiscProperties() {
+		handleMiscellaneousProperties("Testing.1234.spacekey.property", this.settings.getSpace());
+	}
+
+	protected void handleFilters(String key, String value) throws InstantiationException, IllegalAccessException {
+		log.debug("filter property = " + value);
+		getFilterValues().add(value);
+	}
 
 	private Set<String> getFilterValues() {
 		if (this.filterValues == null)
 			this.filterValues = new HashSet<String>();
 		return this.filterValues;
 	}
-    
-    /**
-     * sets up .xmlevent properties
-     * @param key must end in .xmlevent
-     * @param value must follow this format:
-     * <tt>
-     * {tag}tagname{class}classname
-     * </tt>
-     * where tagname is the xml tag to associate the event with (b, for bold)
-     * and classname is the parser that will manage the events for that tag.
-     * tagname can contain a comma-delimited list of tags. For example:
-     * {tag}h1, h2, h3{class}com.example.HeaderParser
-     */
-    private void handleXmlEvents(String key, String value) {
-    	String tag = getXmlEventTag(value);
-    	String classname = getXmlEventClassname(value);
-    	String[] tags = tag.split(",");
-    	for (String onetag : tags) {
-    		onetag = onetag.trim();
+
+	/**
+	 * sets up .xmlevent properties
+	 * @param key must end in .xmlevent
+	 * @param value must follow this format:
+	 * <tt>
+	 * {tag}tagname{class}classname
+	 * </tt>
+	 * where tagname is the xml tag to associate the event with (b, for bold)
+	 * and classname is the parser that will manage the events for that tag.
+	 * tagname can contain a comma-delimited list of tags. For example:
+	 * {tag}h1, h2, h3{class}com.example.HeaderParser
+	 */
+	private void handleXmlEvents(String key, String value) {
+		String tag = getXmlEventTag(value);
+		String classname = getXmlEventClassname(value);
+		String[] tags = tag.split(",");
+		for (String onetag : tags) {
+			onetag = onetag.trim();
 			addOneXmlEvent(onetag, classname);
 		}
-    }
+	}
 
 	/**
 	 * adds one xml event object to the events handler, such that the classname becomes 
@@ -2649,8 +2701,8 @@ public class ConverterEngine implements FeedbackHandler {
 	 */
 	private void addOneXmlEvent(String tag, String classname) {
 		if (this.miscProperties.containsKey("xmlevents")) {
-    		Class eventsClass;
-    		String xmleventsclass = this.miscProperties.getProperty("xmlevents");
+			Class eventsClass;
+			String xmleventsclass = this.miscProperties.getProperty("xmlevents");
 			try {
 				eventsClass = Class.forName(xmleventsclass);
 			} catch (ClassNotFoundException e) {
@@ -2660,7 +2712,7 @@ public class ConverterEngine implements FeedbackHandler {
 				this.miscProperties.remove("xmlevents");
 				eventsClass = DefaultXmlEvents.class; //try setting the DefaultXmlEvents
 			}
-    		XmlEvents events = null;
+			XmlEvents events = null;
 			try {
 				events = (XmlEvents) eventsClass.newInstance();
 				events.addEvent(tag, classname); //call the custom events class
@@ -2672,13 +2724,13 @@ public class ConverterEngine implements FeedbackHandler {
 				this.miscProperties.remove("xmlevents");
 				//continue to DefaultXmlEvents.addEvent below
 			}
-    	}
+		}
 		new DefaultXmlEvents().addEvent(tag, classname);
 	}
-    
-    Pattern xmleventClassPattern = Pattern.compile("" +
-    		"\\{class\\}(.*)");
-    protected String getXmlEventClassname(String value) {
+
+	Pattern xmleventClassPattern = Pattern.compile("" +
+			"\\{class\\}(.*)");
+	protected String getXmlEventClassname(String value) {
 		Matcher finder = xmleventClassPattern.matcher(value);
 		if (finder.find()) {
 			return finder.group(1);
@@ -2686,8 +2738,8 @@ public class ConverterEngine implements FeedbackHandler {
 		throw new IllegalArgumentException(XMLEVENT_PROP_ERROR);
 	}
 
-    Pattern xmleventTagPattern = Pattern.compile("" +
-    		"\\{tag\\}([^}]+)\\{class\\}");
+	Pattern xmleventTagPattern = Pattern.compile("" +
+			"\\{tag\\}([^}]+)\\{class\\}");
 	protected String getXmlEventTag(String value) {
 		Matcher finder = xmleventTagPattern.matcher(value);
 		if (finder.find()) {
@@ -2697,79 +2749,79 @@ public class ConverterEngine implements FeedbackHandler {
 	}
 
 	/**
-     * @param key
-     * @return true if the given key is the switch to turn on the 
-     * Hierarchy framework
-     */
-    protected boolean isHierarchySwitch(String key) {
-    	Matcher switchFinder = switchPattern.matcher(key);
-    	return switchFinder.find();
-    }
-    
-    /**
-     * determines if the given string represents an allowed 
-     * non converter property: (hierarchy builder, page history preserver,
-     * illegalname handler, autodetect spacekeys)
-     * @param input represents an entire converter/property string. For example:
-     * <br/>
-     * Wiki.0011.somefilename.propertytype=something
-     * @return true if it's an expected/allowed non converter property
-     */
-    public boolean isNonConverterProperty(String input) {
-    	String converterTypes = 
-    				"(" +
-    					"(" + 
-    						NONCONVERTERTYPE_HIERARCHYBUILDER + 
-    					")" + 
-    					"|" +
-    					"(" + 
-    						NONCONVERTERTYPE_PAGEHISTORYPRESERVATION + 
-    					")" +
-    					"|" +
-    					"(" + 
-							NONCONVERTERTYPE_ILLEGALHANDLING + 
+	 * @param key
+	 * @return true if the given key is the switch to turn on the 
+	 * Hierarchy framework
+	 */
+	protected boolean isHierarchySwitch(String key) {
+		Matcher switchFinder = switchPattern.matcher(key);
+		return switchFinder.find();
+	}
+
+	/**
+	 * determines if the given string represents an allowed 
+	 * non converter property: (hierarchy builder, page history preserver,
+	 * illegalname handler, autodetect spacekeys)
+	 * @param input represents an entire converter/property string. For example:
+	 * <br/>
+	 * Wiki.0011.somefilename.propertytype=something
+	 * @return true if it's an expected/allowed non converter property
+	 */
+	public boolean isNonConverterProperty(String input) {
+		String converterTypes = 
+				"(" +
+						"(" + 
+						NONCONVERTERTYPE_HIERARCHYBUILDER + 
+						")" + 
+						"|" +
+						"(" + 
+						NONCONVERTERTYPE_PAGEHISTORYPRESERVATION + 
 						")" +
-    					"|" +
-    					"(" + 
-							NONCONVERTERTYPE_AUTODETECTSPACEKEYS + 
+						"|" +
+						"(" + 
+						NONCONVERTERTYPE_ILLEGALHANDLING + 
+						")" +
+						"|" +
+						"(" + 
+						NONCONVERTERTYPE_AUTODETECTSPACEKEYS + 
 						")" +
 						"|" +
 						"(" +
-							NONCONVERTERTYPE_FILTERS + 
+						NONCONVERTERTYPE_FILTERS + 
 						")" +
 						"|" +
 						"(" +
-							NONCONVERTERTYPE_MISCPROPERTIES +
+						NONCONVERTERTYPE_MISCPROPERTIES +
 						")" +
 						"|" +
 						"(" +
-							NONCONVERTERTYPE_XMLEVENT +
+						NONCONVERTERTYPE_XMLEVENT +
 						")" +
-    				")";
-    	String converterPattern = "[-\\w\\d.]+?" + converterTypes + "=" + ".*";
-    	return input.matches(converterPattern);
-    }
-    /**
-     * @return true if the converter should handle page histories
-     */
-    public boolean isHandlingPageHistories() {
-    	return this.handlingPageHistories;
-    }
-    
-    /**
-     * @return true if the converter should handle page histories
-     */
-    public boolean isHandlingPageHistoriesFromFilename() {
-    	return this.handlingPageHistories && this.pageHistorySuffix != null;
-    }
-    
-    /**
-     * @return the current page history suffix
-     */
-    public String getPageHistorySuffix() {
-    	return this.pageHistorySuffix;
-    }
-    
+						")";
+		String converterPattern = "[-\\w\\d.]+?" + converterTypes + "=" + ".*";
+		return input.matches(converterPattern);
+	}
+	/**
+	 * @return true if the converter should handle page histories
+	 */
+	public boolean isHandlingPageHistories() {
+		return this.handlingPageHistories;
+	}
+
+	/**
+	 * @return true if the converter should handle page histories
+	 */
+	public boolean isHandlingPageHistoriesFromFilename() {
+		return this.handlingPageHistories && this.pageHistorySuffix != null;
+	}
+
+	/**
+	 * @return the current page history suffix
+	 */
+	public String getPageHistorySuffix() {
+		return this.pageHistorySuffix;
+	}
+
 	/**
 	 * sorts the given list of pages.
 	 * Note: sorting will take into account page name 
@@ -2779,10 +2831,16 @@ public class ConverterEngine implements FeedbackHandler {
 	 */
 	protected List<Page> sortByHistory(List<Page> pages) {
 		this.state.updateNote("Sorting Pages by Page History");
+		log.debug("num of pages: " + pages.size());
 		List<Page> sortedPages = new ArrayList<Page>();
 		Set<Page> sorted = new TreeSet<Page>();
 		sorted.addAll(pages); //sort them and get rid of non-unique pages
 		sortedPages.addAll(sorted); //turn them back into a list
+		if (log.isDebugEnabled()) {
+			for (Page page : sorted) {
+				log.debug("Sorted pages: " + page.getFile().getName());
+			}
+		}
 		return sortedPages;
 	}
 
@@ -2823,7 +2881,7 @@ public class ConverterEngine implements FeedbackHandler {
 	protected HierarchyHandler getHierarchyHandler() {
 		return hierarchyHandler;
 	}
-	
+
 	/**
 	 * sets how the hierarchy framework is to be used. 
 	 * @param input "UseBuilder", "UsePagenames", or "Default". 
@@ -2848,7 +2906,7 @@ public class ConverterEngine implements FeedbackHandler {
 	public void resetFeedback() {
 		this.feedback = Feedback.NONE;
 	}
-	
+
 	/**
 	 * clears state relating to the error handling
 	 */
@@ -2856,7 +2914,7 @@ public class ConverterEngine implements FeedbackHandler {
 		this.errors.clear();
 		this.hadConverterErrors = false;
 	}
-	
+
 	/**
 	 * clears state relating to the hierarchy framework
 	 */
@@ -2864,21 +2922,21 @@ public class ConverterEngine implements FeedbackHandler {
 		this.hierarchyBuilder = null;
 		this.hierarchyHandler = HierarchyHandler.DEFAULT;
 	}
-	
+
 	/**
 	 * @return object contains information relating to errors triggered during the conversion
 	 */
 	public ConverterErrors getErrors() {
 		return this.errors;
 	}
-	
+
 	/**
 	 * @return true if the conversion has generated errors
 	 */
 	public boolean hadConverterErrors() {
 		return this.hadConverterErrors;
 	}
-	
+
 	/**
 	 * setter
 	 * @param running
@@ -2886,7 +2944,7 @@ public class ConverterEngine implements FeedbackHandler {
 	protected void setRunning(boolean running) {
 		this.running = running; //used in junit
 	}
-	
+
 	/**
 	 * setter
 	 * @param settings
@@ -2895,7 +2953,7 @@ public class ConverterEngine implements FeedbackHandler {
 		this.settings = settings; //used in junit
 	}
 
-	
+
 	/**
 	 * @return true if the illegal handling (names and links) should occur. 
 	 * false if it should be disabled
@@ -2903,22 +2961,22 @@ public class ConverterEngine implements FeedbackHandler {
 	public boolean isIllegalHandlingEnabled() {
 		return illegalHandlingEnabled;
 	}
-	
+
 	public boolean isAutoDetectingSpacekeys() {
 		return autoDetectSpacekeys;
 	}
-	
+
 	public class AsciiVersionComparator implements Comparator {
-	      public int compare(Object a, Object b) {
-	    	  Page pa = (Page) a;
-	    	  Page pb = (Page) b;
-	    	  String sa = pa.getName().toLowerCase();
-	    	  String sb = pb.getName().toLowerCase();
-	    	  int ascii = sa.compareTo(sb);
-	    	  int sav = pa.getVersion();
-	    	  int sbv = pb.getVersion();
-	    	  int version = sbv - sav;
-	    	  return ascii - version;
-	      }
+		public int compare(Object a, Object b) {
+			Page pa = (Page) a;
+			Page pb = (Page) b;
+			String sa = pa.getName().toLowerCase();
+			String sb = pb.getName().toLowerCase();
+			int ascii = sa.compareTo(sb);
+			int sav = pa.getVersion();
+			int sbv = pb.getVersion();
+			int version = sbv - sav;
+			return ascii - version;
+		}
 	}
 }
