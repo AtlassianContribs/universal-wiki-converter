@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import java.util.Vector;
 
 import junit.framework.TestCase;
@@ -13,7 +12,6 @@ import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import com.atlassian.uwc.converters.jotspot.TitleConverter;
 import com.atlassian.uwc.filters.NoSvnFilter;
 import com.atlassian.uwc.ui.Page;
 
@@ -80,7 +78,7 @@ public class FilepathHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 		
-		Set<HierarchyNode> level1ChildSet = actual.getChildren();
+		Collection<HierarchyNode> level1ChildSet = actual.getChildren();
 		assertEquals(2, level1ChildSet.size());
 		Vector<HierarchyNode> level1Children = new Vector<HierarchyNode>();
 		level1Children.addAll(level1ChildSet);
@@ -127,7 +125,7 @@ public class FilepathHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 		
-		Set<HierarchyNode> level1ChildSet = actual.getChildren();
+		Collection<HierarchyNode> level1ChildSet = actual.getChildren();
 		assertEquals(2, level1ChildSet.size());
 		Vector<HierarchyNode> level1Children = new Vector<HierarchyNode>();
 		level1Children.addAll(level1ChildSet);
@@ -175,7 +173,7 @@ public class FilepathHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 		
-		Set<HierarchyNode> level1ChildSet = actual.getChildren();
+		Collection<HierarchyNode> level1ChildSet = actual.getChildren();
 		assertEquals(2, level1ChildSet.size());
 		Vector<HierarchyNode> level1Children = new Vector<HierarchyNode>();
 		level1Children.addAll(level1ChildSet);
@@ -600,7 +598,7 @@ public class FilepathHierarchyTest extends TestCase {
 		HierarchyNode root = tester.buildHierarchy(pages);
 		assertNotNull(root);
 		assertEquals(6, root.countDescendants());
-		Set<HierarchyNode> level1 = root.getChildren();
+		Collection<HierarchyNode> level1 = root.getChildren();
 		assertNotNull(level1);
 		assertEquals(2, level1.size());
 		for (HierarchyNode lvl1Node : level1) {
@@ -611,7 +609,7 @@ public class FilepathHierarchyTest extends TestCase {
 			else if ("Drink.txt".equals(lvl1Node.getName())) fail("Still have Drink node");
 			else if ("Comestibles".equals(lvl1Node.getName())) {
 				assertEquals(3, lvl1Node.countDescendants());
-				Set<HierarchyNode> level2 = lvl1Node.getChildren();
+				Collection<HierarchyNode> level2 = lvl1Node.getChildren();
 				assertNotNull(level2);
 				assertEquals(2, level2.size());
 				for (HierarchyNode lvl2Node : level2) {
@@ -622,7 +620,7 @@ public class FilepathHierarchyTest extends TestCase {
 			}
 			else if ("Liquid".equals(lvl1Node.getName())) {
 				assertEquals(2, lvl1Node.countDescendants());
-				Set<HierarchyNode> level2 = lvl1Node.getChildren();
+				Collection<HierarchyNode> level2 = lvl1Node.getChildren();
 				assertNotNull(level2);
 				assertEquals(1, level2.size());
 				for (HierarchyNode lvl2Node : level2) {
@@ -648,19 +646,19 @@ public class FilepathHierarchyTest extends TestCase {
 		HierarchyNode root = tester.buildHierarchy(pages);
 		assertNotNull(root);
 		assertEquals(6, root.countDescendants());
-		Set<HierarchyNode> level1 = root.getChildren();
+		Collection<HierarchyNode> level1 = root.getChildren();
 		assertNotNull(level1);
 		assertEquals(1, level1.size());
 		for (HierarchyNode lvl1Node : level1) {
 			assertNotNull(lvl1Node);
 			if (lvl1Node.getName().endsWith("_subpages")) fail("Still have subpages dir node.");
 			assertEquals(5, lvl1Node.countDescendants());
-			Set<HierarchyNode> level2 = lvl1Node.getChildren();
+			Collection<HierarchyNode> level2 = lvl1Node.getChildren();
 			assertNotNull(level2);
 			assertEquals(1, level2.size());
 			for (HierarchyNode lvl2Node : level2) {
 					if (lvl2Node.getName().endsWith("_subpages")) fail("Still have subpages dir node.");
-					Set<HierarchyNode> level3 = lvl2Node.getChildren();
+					Collection<HierarchyNode> level3 = lvl2Node.getChildren();
 					assertNotNull(level3);
 					assertEquals(3, level3.size());
 			}
@@ -701,7 +699,7 @@ public class FilepathHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 
-		Set<HierarchyNode> level1ChildSet = actual.getChildren();
+		Collection<HierarchyNode> level1ChildSet = actual.getChildren();
 		assertEquals(1, level1ChildSet.size());
 		assertEquals("sampleData.txt", level1ChildSet.iterator().next().getName());
 		
@@ -771,7 +769,7 @@ public class FilepathHierarchyTest extends TestCase {
 		HierarchyNode rootnode = tester.buildHierarchy(pages);
 
 		assertNull(rootnode.getPage());
-		Set<HierarchyNode> actualrootnodeSet = rootnode.getChildren();
+		Collection<HierarchyNode> actualrootnodeSet = rootnode.getChildren();
 		HierarchyNode actualRootNode = null;
 		for (HierarchyNode next : actualrootnodeSet) {
 			actualRootNode = next;
@@ -781,7 +779,7 @@ public class FilepathHierarchyTest extends TestCase {
 		assertNotNull(actualRoot);
 		assertEquals("Root", actualRoot.getName());
 		
-		Set<HierarchyNode> children = actualRootNode.getChildren();
+		Collection<HierarchyNode> children = actualRootNode.getChildren();
 		for (HierarchyNode childnode : children) {
 			Page childpage = childnode.getPage();
 			assertNotNull(childpage);

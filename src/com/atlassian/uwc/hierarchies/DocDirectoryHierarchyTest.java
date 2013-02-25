@@ -1,8 +1,8 @@
 package com.atlassian.uwc.hierarchies;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Properties;
-import java.util.Set;
 import java.util.Vector;
 
 import junit.framework.TestCase;
@@ -10,7 +10,6 @@ import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import com.atlassian.uwc.filters.NoSvnFilter;
 import com.atlassian.uwc.ui.Page;
 
 public class DocDirectoryHierarchyTest extends TestCase {
@@ -49,7 +48,7 @@ public class DocDirectoryHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 		
-		Set<HierarchyNode> children1 = actual.getChildren();
+		Collection<HierarchyNode> children1 = actual.getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
@@ -60,7 +59,7 @@ public class DocDirectoryHierarchyTest extends TestCase {
 		File file = (File) object;
 		assertTrue("test.txt".equals(file.getName()));
 		
-		Set<HierarchyNode> children2 = nodes1.get(0).getChildren();
+		Collection<HierarchyNode> children2 = nodes1.get(0).getChildren();
 		assertEquals(3, children2.size());
 		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
 		nodes2.addAll(children2);
@@ -76,7 +75,7 @@ public class DocDirectoryHierarchyTest extends TestCase {
 				assertTrue("test1.txt".equals(filea.getName())||
 						"test2.txt".equals(filea.getName())
 						);
-				Set<HierarchyNode> children3 = node.getChildren();
+				Collection<HierarchyNode> children3 = node.getChildren();
 				assertEquals(1, children3.size());
 				Vector<HierarchyNode> nodes3 = new Vector<HierarchyNode>();
 				nodes3.addAll(children3);
@@ -123,7 +122,7 @@ public class DocDirectoryHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 		
-		Set<HierarchyNode> children1 = actual.getChildren();
+		Collection<HierarchyNode> children1 = actual.getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
@@ -152,7 +151,7 @@ public class DocDirectoryHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 		
-		Set<HierarchyNode> children1 = actual.getChildren();
+		Collection<HierarchyNode> children1 = actual.getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
@@ -183,7 +182,7 @@ public class DocDirectoryHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 		
-		Set<HierarchyNode> children1 = actual.getChildren();
+		Collection<HierarchyNode> children1 = actual.getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
@@ -194,7 +193,7 @@ public class DocDirectoryHierarchyTest extends TestCase {
 		File file = (File) object;
 		assertTrue("test.txt".equals(file.getName()));
 		
-		Set<HierarchyNode> children2 = nodes1.get(0).getChildren();
+		Collection<HierarchyNode> children2 = nodes1.get(0).getChildren();
 		assertEquals(2, children2.size());
 		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
 		nodes2.addAll(children2);

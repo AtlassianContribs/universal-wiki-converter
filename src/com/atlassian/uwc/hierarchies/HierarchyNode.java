@@ -1,10 +1,13 @@
 package com.atlassian.uwc.hierarchies;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,8 +24,9 @@ public class HierarchyNode {
     private String name;
     private Page page;
     private HierarchyNode parent;
-    private Set<HierarchyNode> children;
+    private Collection<HierarchyNode> children;
     private static Comparator childrenComparator;
+    private static boolean childrenAsList = false;
 
     Logger log = Logger.getLogger(this.getClass());
     
@@ -66,20 +70,21 @@ public class HierarchyNode {
      *
      * @param child The child to be removed. Must not be <code>null</code>.
      */
-    public void removeChild(HierarchyNode child) {
+    public boolean removeChild(HierarchyNode child) {
         if (child == null) {
             throw new IllegalArgumentException("The parameter must not be null!");
         }
-        if (children != null && children.contains(child)) {
-            children.remove(child);
+        if (getChildren().remove(child)) {
             log.debug("Removed: '" + child.getName() + "' from " + this.getName());
             if (children.size() == 0) {
                 children = null;
             }
             child.setParent(null);
+            return true;
         }
         else {
         	log.debug("Unable to remove this child: " + child.getName());
+        	return false;
         }
     }
     
@@ -101,9 +106,12 @@ public class HierarchyNode {
      * @return A set of child nodes, or an empty set if
      *         this node has no children.
      */
-    public Set<HierarchyNode> getChildren() {
+    public Collection<HierarchyNode> getChildren() {
     	if (this.children == null) {
-    		if (childrenComparator == null)
+    		if (childrenAsList) {
+    			this.children = new Vector<HierarchyNode>();
+    		}
+    		else if (childrenComparator == null)
     			this.children = new HashSet<HierarchyNode>();
     		else //if you want to be able to control the child sort order
     			this.children = new TreeSet<HierarchyNode>(childrenComparator);
@@ -120,7 +128,7 @@ public class HierarchyNode {
         return children == null ? null : children.iterator();
     }
 
-    public void setChildren(Set<HierarchyNode> children) {
+    public void setChildren(Collection<HierarchyNode> children) {
         this.children = children;
     }
     
@@ -226,14 +234,14 @@ public class HierarchyNode {
         return i;
     }
     
-    public String toString() {
-    	return treeAsString(this);
-    }
-    private String treeAsString(HierarchyNode node) {
+//    public String toString() {
+//    	return treeAsString(this);
+//    }
+    public String treeAsString(HierarchyNode node) {
 		return treeAsString(node.getChildren(), "");
 	}
 
-	private String treeAsString(Set<HierarchyNode> children, String delim) {
+	private String treeAsString(Collection<HierarchyNode> children, String delim) {
 		String msg = "";
 		for (HierarchyNode child : children) {
 			String newdelim = delim + " .";
@@ -241,5 +249,9 @@ public class HierarchyNode {
 			msg += treeAsString(child.getChildren(), newdelim);
 		}
 		return msg;
+	}
+	
+	public static void childrenAsList(boolean aslist) {
+		childrenAsList = aslist;
 	}
 }

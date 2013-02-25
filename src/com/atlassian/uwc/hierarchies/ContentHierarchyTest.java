@@ -4,9 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.util.Collection;
 import java.util.Properties;
-import java.util.Set;
 import java.util.Vector;
 
 import junit.framework.TestCase;
@@ -49,13 +48,13 @@ public class ContentHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 
-		Set<HierarchyNode> children1 = actual.getChildren();
+		Collection<HierarchyNode> children1 = actual.getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
 		assertTrue((nodes1.get(0)).getName().equals("Plants"));
 
-		Set<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
+		Collection<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
 		assertEquals(2, children2.size());
 		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
 		nodes2.addAll(children2);
@@ -74,7 +73,7 @@ public class ContentHierarchyTest extends TestCase {
 			treenode = nodes2.get(1);
 		}
 		
-		Set<HierarchyNode> treechildren = treenode.getChildren();
+		Collection<HierarchyNode> treechildren = treenode.getChildren();
 		assertEquals(2, treechildren.size());
 		Vector<HierarchyNode> trees = new Vector<HierarchyNode>();
 		trees.addAll(treechildren);
@@ -83,7 +82,7 @@ public class ContentHierarchyTest extends TestCase {
 		assertTrue((trees.get(1)).getName().equals("Chestnut") ||
 				(trees.get(1)).getName().equals("Pine"));
 		
-		Set<HierarchyNode> flowerchildren = flowernode.getChildren();
+		Collection<HierarchyNode> flowerchildren = flowernode.getChildren();
 		assertEquals(3, flowerchildren.size());
 		Vector<HierarchyNode> flowers = new Vector<HierarchyNode>();
 		flowers.addAll(flowerchildren);
@@ -128,19 +127,19 @@ public class ContentHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 
-		Set<HierarchyNode> home = actual.getChildren();
+		Collection<HierarchyNode> home = actual.getChildren();
 		assertEquals(1, home.size());
 		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
 		nodes0.addAll(home);
 		assertTrue((nodes0.get(0)).getName().equals("Home"));
 		
-		Set<HierarchyNode> children1 = nodes0.get(0).getChildren();
+		Collection<HierarchyNode> children1 = nodes0.get(0).getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
 		assertTrue((nodes1.get(0)).getName().equals("Plants"));
 
-		Set<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
+		Collection<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
 		assertEquals(2, children2.size());
 		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
 		nodes2.addAll(children2);
@@ -159,7 +158,7 @@ public class ContentHierarchyTest extends TestCase {
 			treenode = nodes2.get(1);
 		}
 		
-		Set<HierarchyNode> treechildren = treenode.getChildren();
+		Collection<HierarchyNode> treechildren = treenode.getChildren();
 		assertEquals(2, treechildren.size());
 		Vector<HierarchyNode> trees = new Vector<HierarchyNode>();
 		trees.addAll(treechildren);
@@ -168,7 +167,7 @@ public class ContentHierarchyTest extends TestCase {
 		assertTrue((trees.get(1)).getName().equals("Chestnut") ||
 				(trees.get(1)).getName().equals("Pine"));
 		
-		Set<HierarchyNode> flowerchildren = flowernode.getChildren();
+		Collection<HierarchyNode> flowerchildren = flowernode.getChildren();
 		assertEquals(3, flowerchildren.size());
 		Vector<HierarchyNode> flowers = new Vector<HierarchyNode>();
 		flowers.addAll(flowerchildren);
@@ -208,13 +207,13 @@ public class ContentHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 
-		Set<HierarchyNode> children1 = actual.getChildren();
+		Collection<HierarchyNode> children1 = actual.getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
 		assertTrue((nodes1.get(0)).getName().equals("Plants"));
 
-		Set<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
+		Collection<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
 		assertEquals(3, children2.size());
 		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
 		nodes2.addAll(children2);
@@ -232,7 +231,7 @@ public class ContentHierarchyTest extends TestCase {
 			if (node.getName().equals("Plants_Nuts")) nutnode = node;
 		}
 		
-		Set<HierarchyNode> treechildren = treenode.getChildren();
+		Collection<HierarchyNode> treechildren = treenode.getChildren();
 		assertEquals(2, treechildren.size());
 		Vector<HierarchyNode> trees = new Vector<HierarchyNode>();
 		trees.addAll(treechildren);
@@ -241,7 +240,7 @@ public class ContentHierarchyTest extends TestCase {
 		assertTrue((trees.get(1)).getName().equals("Plants_Trees_Chestnut") ||
 				(trees.get(1)).getName().equals("Plants_Trees_Pine"));
 		
-		Set<HierarchyNode> flowerchildren = flowernode.getChildren();
+		Collection<HierarchyNode> flowerchildren = flowernode.getChildren();
 		assertEquals(3, flowerchildren.size());
 		Vector<HierarchyNode> flowers = new Vector<HierarchyNode>();
 		flowers.addAll(flowerchildren);
@@ -255,7 +254,7 @@ public class ContentHierarchyTest extends TestCase {
 				(flowers.get(2)).getName().equals("Plants_Flowers_Daisy") ||
 				(flowers.get(2)).getName().equals("Plants_Flowers_Orchid"));
 		
-		Set<HierarchyNode> nutchildren = nutnode.getChildren();
+		Collection<HierarchyNode> nutchildren = nutnode.getChildren();
 		assertEquals(2, nutchildren.size());
 		Vector<HierarchyNode> nuts = new Vector<HierarchyNode>();
 		nuts.addAll(nutchildren);
@@ -296,13 +295,13 @@ public class ContentHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 
-		Set<HierarchyNode> children1 = actual.getChildren();
+		Collection<HierarchyNode> children1 = actual.getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
 		assertTrue((nodes1.get(0)).getName().equals("Plants"));
 
-		Set<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
+		Collection<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
 		assertEquals(3, children2.size());
 		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
 		nodes2.addAll(children2);
@@ -320,7 +319,7 @@ public class ContentHierarchyTest extends TestCase {
 			if (node.getName().equals("Nuts")) nutnode = node;
 		}
 		
-		Set<HierarchyNode> treechildren = treenode.getChildren();
+		Collection<HierarchyNode> treechildren = treenode.getChildren();
 		assertEquals(2, treechildren.size());
 		Vector<HierarchyNode> trees = new Vector<HierarchyNode>();
 		trees.addAll(treechildren);
@@ -329,7 +328,7 @@ public class ContentHierarchyTest extends TestCase {
 		assertTrue((trees.get(1)).getName().equals("Chestnut") ||
 				(trees.get(1)).getName().equals("Pine"));
 		
-		Set<HierarchyNode> flowerchildren = flowernode.getChildren();
+		Collection<HierarchyNode> flowerchildren = flowernode.getChildren();
 		assertEquals(3, flowerchildren.size());
 		Vector<HierarchyNode> flowers = new Vector<HierarchyNode>();
 		flowers.addAll(flowerchildren);
@@ -343,7 +342,7 @@ public class ContentHierarchyTest extends TestCase {
 				(flowers.get(2)).getName().equals("Daisy") ||
 				(flowers.get(2)).getName().equals("Orchid"));
 		
-		Set<HierarchyNode> nutchildren = nutnode.getChildren();
+		Collection<HierarchyNode> nutchildren = nutnode.getChildren();
 		assertEquals(2, nutchildren.size());
 		Vector<HierarchyNode> nuts = new Vector<HierarchyNode>();
 		nuts.addAll(nutchildren);
@@ -376,13 +375,13 @@ public class ContentHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 
-		Set<HierarchyNode> children1 = actual.getChildren();
+		Collection<HierarchyNode> children1 = actual.getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
 		assertTrue((nodes1.get(0)).getName().equals("Plants"));
 
-		Set<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
+		Collection<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
 		assertEquals(2, children2.size());
 		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
 		nodes2.addAll(children2);
@@ -397,7 +396,7 @@ public class ContentHierarchyTest extends TestCase {
 			if (node.getName().equals("Plants Nuts")) nutnode = node;
 		}
 		
-		Set<HierarchyNode> flowerchildren = flowernode.getChildren();
+		Collection<HierarchyNode> flowerchildren = flowernode.getChildren();
 		assertEquals(2, flowerchildren.size());
 		Vector<HierarchyNode> flowers = new Vector<HierarchyNode>();
 		flowers.addAll(flowerchildren);
@@ -406,7 +405,7 @@ public class ContentHierarchyTest extends TestCase {
 		assertTrue((flowers.get(1)).getName().equals("Plants Flowers Rose") ||
 				(flowers.get(1)).getName().equals("Plants Flowers Orchid"));
 		
-		Set<HierarchyNode> nutchildren = nutnode.getChildren();
+		Collection<HierarchyNode> nutchildren = nutnode.getChildren();
 		assertEquals(1, nutchildren.size());
 		Vector<HierarchyNode> nuts = new Vector<HierarchyNode>();
 		nuts.addAll(nutchildren);
@@ -447,13 +446,13 @@ public class ContentHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 
-		Set<HierarchyNode> children1 = actual.getChildren();
+		Collection<HierarchyNode> children1 = actual.getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
 		assertTrue((nodes1.get(0)).getName().equals("Plants"));
 
-		Set<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
+		Collection<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
 		assertEquals(1, children2.size());
 		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
 		nodes2.addAll(children2);
@@ -461,7 +460,7 @@ public class ContentHierarchyTest extends TestCase {
 
 		HierarchyNode treenode = nodes2.get(0); 
 		
-		Set<HierarchyNode> treechildren = treenode.getChildren();
+		Collection<HierarchyNode> treechildren = treenode.getChildren();
 		assertEquals(5, treechildren.size());
 		Vector<HierarchyNode> trees = new Vector<HierarchyNode>();
 		trees.addAll(treechildren);
@@ -518,19 +517,19 @@ public class ContentHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 
-		Set<HierarchyNode> home = actual.getChildren();
+		Collection<HierarchyNode> home = actual.getChildren();
 		assertEquals(1, home.size());
 		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
 		nodes0.addAll(home);
 		assertTrue((nodes0.get(0)).getName().equals("Home"));
 		
-		Set<HierarchyNode> children1 = nodes0.get(0).getChildren();
+		Collection<HierarchyNode> children1 = nodes0.get(0).getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
 		assertTrue((nodes1.get(0)).getName().equals("Plants"));
 
-		Set<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
+		Collection<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
 		assertEquals(1, children2.size());
 		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
 		nodes2.addAll(children2);
@@ -538,7 +537,7 @@ public class ContentHierarchyTest extends TestCase {
 
 		HierarchyNode treenode = nodes2.get(0); 
 		
-		Set<HierarchyNode> treechildren = treenode.getChildren();
+		Collection<HierarchyNode> treechildren = treenode.getChildren();
 		assertEquals(5, treechildren.size());
 		Vector<HierarchyNode> trees = new Vector<HierarchyNode>();
 		trees.addAll(treechildren);
@@ -593,7 +592,7 @@ public class ContentHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 
-		Set<HierarchyNode> children1 = actual.getChildren();
+		Collection<HierarchyNode> children1 = actual.getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
@@ -631,13 +630,13 @@ public class ContentHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 
-		Set<HierarchyNode> children1 = actual.getChildren();
+		Collection<HierarchyNode> children1 = actual.getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
 		assertTrue((nodes1.get(0)).getName().equals("Plants"));
 
-		Set<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
+		Collection<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
 		assertEquals(1, children2.size());
 		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
 		nodes2.addAll(children2);
@@ -645,7 +644,7 @@ public class ContentHierarchyTest extends TestCase {
 
 		HierarchyNode treenode = nodes2.get(0); 
 		
-		Set<HierarchyNode> treechildren = treenode.getChildren();
+		Collection<HierarchyNode> treechildren = treenode.getChildren();
 		assertEquals(5, treechildren.size());
 		Vector<HierarchyNode> trees = new Vector<HierarchyNode>();
 		trees.addAll(treechildren);
@@ -808,13 +807,13 @@ public class ContentHierarchyTest extends TestCase {
 		assertNull(actual.getParent());
 		assertNotNull(actual.getChildren());
 
-		Set<HierarchyNode> children1 = actual.getChildren();
+		Collection<HierarchyNode> children1 = actual.getChildren();
 		assertEquals(1, children1.size());
 		Vector<HierarchyNode> nodes1 = new Vector<HierarchyNode>();
 		nodes1.addAll(children1);
 		assertTrue((nodes1.get(0)).getName().equals("TestPage"));
 
-		Set<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
+		Collection<HierarchyNode> children2 = (nodes1.get(0)).getChildren();
 		assertEquals(3, children2.size());
 		Vector<HierarchyNode> nodes2 = new Vector<HierarchyNode>();
 		nodes2.addAll(children2);
@@ -824,7 +823,7 @@ public class ContentHierarchyTest extends TestCase {
 
 		HierarchyNode parent0node = nodes2.get(2); 
 		
-		Set<HierarchyNode> p0children = parent0node.getChildren();
+		Collection<HierarchyNode> p0children = parent0node.getChildren();
 		assertEquals(2, p0children.size());
 		Vector<HierarchyNode> p0 = new Vector<HierarchyNode>();
 		p0.addAll(p0children);

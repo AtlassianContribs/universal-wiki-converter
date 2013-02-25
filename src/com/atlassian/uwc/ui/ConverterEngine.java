@@ -2145,11 +2145,12 @@ public class ConverterEngine implements FeedbackHandler {
 		if (!(page instanceof VersionPage) && page.getFile() != null) {
 			log.debug("Original Filepath: " + page.getFile().getAbsolutePath());
 		}
+		String tmpspacekey = (page.getSpacekey()!=null)?page.getSpacekey():confSettings.spaceKey;
 		if (page.isBlog()) {
-			log.debug("Attempting to send blog: " + page.getName() + " to space: " + confSettings.spaceKey);
+			log.debug("Attempting to send blog: " + page.getName() + " to space: " + tmpspacekey);
 			id = sendBlog(broker, pageTable, confSettings);
 		} else { 
-			log.debug("Attempting to send page: " + page.getName() + " to space: " + confSettings.spaceKey);
+			log.debug("Attempting to send page: " + page.getName() + " to space: " + tmpspacekey);
 			id = sendPage(broker, pageTable, confSettings);
 		}
 		if (id == null) return null;
@@ -2545,22 +2546,22 @@ public class ConverterEngine implements FeedbackHandler {
 	 * @param fileName
 	 * @return
 	 */    
-	protected boolean alreadyAttached(String fileName) {
-		if (this.attachedFiles == null || this.attachedFiles.isEmpty())
-			return false;
-		Iterator <String>it=attachedFiles.iterator();
-		while (it.hasNext())
-		{
-			String item=it.next();
-			int index=item.lastIndexOf(fileName);
-			if (index < 0)
-				continue;
-			if (item.length() - index == fileName.length())
-				return true;		
-		}
-		return false;
-
-	}
+//	protected boolean alreadyAttached(String fileName) {
+//		if (this.attachedFiles == null || this.attachedFiles.isEmpty())
+//			return false;
+//		Iterator <String>it=attachedFiles.iterator();
+//		while (it.hasNext())
+//		{
+//			String item=it.next();
+//			int index=item.lastIndexOf(fileName);
+//			if (index < 0)
+//				continue;
+//			if (item.length() - index == fileName.length())
+//				return true;		
+//		}
+//		return false;
+//
+//	}
 
 	protected boolean orphanAlreadyAttached(File file) {
 		if (this.attachedPaths == null) return false;

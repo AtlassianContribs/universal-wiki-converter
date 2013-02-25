@@ -1,9 +1,8 @@
 package com.atlassian.uwc.hierarchies;
 
 import java.io.File;
-import java.util.Comparator;
+import java.util.Collection;
 import java.util.Properties;
-import java.util.Set;
 import java.util.Vector;
 
 import junit.framework.TestCase;
@@ -39,7 +38,7 @@ public class FilenameHierarchyTest extends TestCase {
 		HierarchyNode actual = tester.buildHierarchy(pages);
 		assertNotNull(actual);
 		
-		Set<HierarchyNode> nodes = actual.getChildren();
+		Collection<HierarchyNode> nodes = actual.getChildren();
 		assertNotNull(nodes);
 		assertEquals(1, nodes.size());
 		for (HierarchyNode root : nodes) {
@@ -62,7 +61,7 @@ public class FilenameHierarchyTest extends TestCase {
 		HierarchyNode actual = tester.buildHierarchy(pages);
 		assertNotNull(actual);
 		
-		Set<HierarchyNode> nodes = actual.getChildren();
+		Collection<HierarchyNode> nodes = actual.getChildren();
 		assertNotNull(nodes);
 		assertEquals(1, nodes.size());
 		for (HierarchyNode root : nodes) {
@@ -89,7 +88,7 @@ public class FilenameHierarchyTest extends TestCase {
 		HierarchyNode actual = tester.buildHierarchy(pages);
 		assertNotNull(actual);
 		
-		Set<HierarchyNode> nodes = actual.getChildren();
+		Collection<HierarchyNode> nodes = actual.getChildren();
 		assertNotNull(nodes);
 		assertEquals(1, nodes.size());
 		for (HierarchyNode root : nodes) {
@@ -122,7 +121,7 @@ public class FilenameHierarchyTest extends TestCase {
 		HierarchyNode actual = tester.buildHierarchy(pages);
 		assertNotNull(actual);
 		
-		Set<HierarchyNode> nodes = actual.getChildren();
+		Collection<HierarchyNode> nodes = actual.getChildren();
 		assertNotNull(nodes);
 		assertEquals(1, nodes.size());
 		for (HierarchyNode root : nodes) {
@@ -244,7 +243,7 @@ public class FilenameHierarchyTest extends TestCase {
 		pages.add(page);
 	}
 	
-	private Vector<HierarchyNode> asVector(Set<HierarchyNode> children) {
+	private Vector<HierarchyNode> asVector(Collection<HierarchyNode> children) {
 		Vector<HierarchyNode> nodes = new Vector<HierarchyNode>();
 		nodes.addAll(children);
 		return nodes;

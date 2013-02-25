@@ -43,7 +43,7 @@ public class SpaceConverter extends HierarchyTarget {
 			//remove deepest portion of the path
 			tmppath = removeDeepest(tmppath);
 		}
-		
+		log.debug("spacekey set to: " + page.getSpacekey());
 	}
 	
 	static Pattern filetype = Pattern.compile("[.]\\w+$");

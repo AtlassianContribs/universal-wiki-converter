@@ -137,6 +137,7 @@ public class HierarchyLinkConverterTest extends TestCase {
 				"[[ns:tada]]\n" +
 				"[[ns:tada:subchild]]\n" +
 				"[[ns:tada:other:subchild]]\n" +
+				"[[ns:tada:Other:subchild]]\n" +
 				"[[ns:tada:other:sub:subsubchild]]\n");
 		String spacekey = "otherspace";
 		page.setSpacekey(spacekey);//default spacekey is 'food'
@@ -145,6 +146,7 @@ public class HierarchyLinkConverterTest extends TestCase {
 		String expected = "[" + spacekey + ":Home]\n" + //this one users the current home
 				"[lala:Tada]\n" +
 				"[lala:Subchild]\n" +
+				"[foo:Subchild]\n" +
 				"[foo:Subchild]\n" +
 				"[foo:Subsubchild]\n"; //this one uses the mapping (drink points to food)
 		assertNotNull(actual);

@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.Set;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -215,7 +214,7 @@ public class SmfHierarchy extends MetaHierarchy {
 				Boolean.parseBoolean(this.getProperties().getProperty(PROPKEY_COMMENTS))) {
 			Vector<HierarchyNode> topicNodes = getTopicNodes(root);
 			for (HierarchyNode topic : topicNodes) {
-				Set<HierarchyNode> children = topic.getChildren();
+				Collection<HierarchyNode> children = topic.getChildren();
 				for (Iterator iter = children.iterator(); iter.hasNext();) {
 					HierarchyNode reply = (HierarchyNode) iter.next();
 					String comment = createComment(reply.getName());

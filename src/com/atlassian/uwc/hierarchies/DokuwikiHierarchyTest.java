@@ -56,7 +56,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		assertNull(root.getParent());
 		assertNotNull(root.getChildren());
 		
-		Set<HierarchyNode> top = root.getChildren();
+		Collection<HierarchyNode> top = root.getChildren();
 		assertEquals(5, top.size());
 		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
 		nodes0.addAll(top);
@@ -142,7 +142,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		assertNull(root.getParent());
 		assertNotNull(root.getChildren());
 		
-		Set<HierarchyNode> top = root.getChildren();
+		Collection<HierarchyNode> top = root.getChildren();
 		assertEquals(5, top.size());
 		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
 		nodes0.addAll(top);
@@ -188,7 +188,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		assertNull(root.getParent());
 		assertNotNull(root.getChildren());
 		
-		Set<HierarchyNode> top = root.getChildren();
+		Collection<HierarchyNode> top = root.getChildren();
 		assertEquals(5, top.size());
 		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
 		nodes0.addAll(top);
@@ -257,7 +257,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		assertNull(root.getParent());
 		assertNotNull(root.getChildren());
 		
-		Set<HierarchyNode> top = root.getChildren();
+		Collection<HierarchyNode> top = root.getChildren();
 		assertEquals(3, top.size());
 		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
 		nodes0.addAll(top);
@@ -336,7 +336,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 //		assertNull(root.getParent());
 //		assertNotNull(root.getChildren());
 //		
-//		Set<HierarchyNode> top = root.getChildren();
+//		Collection<HierarchyNode> top = root.getChildren();
 //		assertEquals(6, top.size());
 //		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
 //		nodes0.addAll(top);
@@ -426,7 +426,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		assertNull(root.getParent());
 		assertNotNull(root.getChildren());
 		
-		Set<HierarchyNode> top = root.getChildren();
+		Collection<HierarchyNode> top = root.getChildren();
 		assertEquals(5, top.size());
 		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
 		nodes0.addAll(top);
@@ -479,7 +479,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		assertNull(root.getParent());
 		assertNotNull(root.getChildren());
 		
-		Set<HierarchyNode> top = root.getChildren();
+		Collection<HierarchyNode> top = root.getChildren();
 		assertEquals(2, top.size());
 		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
 		nodes0.addAll(top);
@@ -558,7 +558,7 @@ public class DokuwikiHierarchyTest extends TestCase {
 		assertNull(root.getParent());
 		assertNotNull(root.getChildren());
 		
-		Set<HierarchyNode> top = root.getChildren();
+		Collection<HierarchyNode> top = root.getChildren();
 		assertEquals(2, top.size());
 		Vector<HierarchyNode> nodes0 = new Vector<HierarchyNode>();
 		nodes0.addAll(top);

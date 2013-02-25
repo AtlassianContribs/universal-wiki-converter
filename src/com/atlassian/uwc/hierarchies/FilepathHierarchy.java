@@ -173,7 +173,7 @@ public class FilepathHierarchy implements HierarchyBuilder {
 		log.debug("...... checking parent '" + parent.getName() + "' has relationship with '" + childname + "'");
 		boolean relationship = false;
 		
-		Set<HierarchyNode> children = parent.getChildren();
+		Collection<HierarchyNode> children = parent.getChildren();
 		if (children == null || children.isEmpty()) {
 			log.debug("...... -> parent has no children");
 			return false;
@@ -226,7 +226,7 @@ public class FilepathHierarchy implements HierarchyBuilder {
 	 */
 	protected HierarchyNode getChildNode(HierarchyNode parent, String childname) {
 		log.debug("...... Getting child node with name: " + childname);
-		Set<HierarchyNode> children = parent.getChildren();
+		Collection<HierarchyNode> children = (Collection<HierarchyNode>) parent.getChildren();
 		if (children == null || children.isEmpty()) {
 			log.debug("...... -> parent has no children. Returning null.");
 			return null;
