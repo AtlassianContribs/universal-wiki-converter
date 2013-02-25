@@ -1,6 +1,7 @@
 package com.atlassian.uwc.converters.mediawiki;
 
 import java.util.Properties;
+import java.util.Stack;
 
 import junit.framework.TestCase;
 
@@ -9,6 +10,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 import com.atlassian.uwc.converters.LeadingSpacesBaseConverter;
 import com.atlassian.uwc.ui.Page;
+import com.atlassian.uwc.util.TokenMap;
 
 public class LeadingSpacesConverterTest extends TestCase {
 
@@ -17,6 +19,10 @@ public class LeadingSpacesConverterTest extends TestCase {
 	protected void setUp() throws Exception {
 		tester = new LeadingSpacesConverter();
 		PropertyConfigurator.configure("log4j.properties");
+		Properties properties = new Properties();
+		//old behavior for purposes of not having to update the tests
+		properties.setProperty(LeadingSpacesConverter.PROPKEY_TOKENIZE, "false"); 
+		tester.setProperties(properties);
 	}
 
 	public void testConvertPage() {
@@ -40,7 +46,7 @@ public class LeadingSpacesConverterTest extends TestCase {
 	}
 	
 	public void testConvertPage_codedelim() {
-		Properties props = new Properties();
+		Properties props = tester.getProperties();
 		props.setProperty("leading-spaces-delim", "code");
 		tester.setProperties(props);
 		String input, expected, actual;
@@ -64,7 +70,7 @@ public class LeadingSpacesConverterTest extends TestCase {
 	
 
 	public void testConvertPage_startsatbeginning() {
-		Properties props = new Properties();
+		Properties props = tester.getProperties();
 		props.setProperty("leading-spaces-delim", "code");
 		tester.setProperties(props);
 		String input, expected, actual;
@@ -101,7 +107,7 @@ public class LeadingSpacesConverterTest extends TestCase {
 	}
 	
 	public void testIgnoreListsWithBold() {
-		Properties props = new Properties();
+		Properties props = tester.getProperties();
 		props.setProperty("leading-spaces-delim", "code");
 		props.setProperty("leading-spaces-noformat", "false");
 		tester.setProperties(props);
@@ -113,6 +119,79 @@ public class LeadingSpacesConverterTest extends TestCase {
 				"* *[Something & Another]*\n" + 
 				"";
 		expected = input;
+		Page page = new Page(null);
+		page.setOriginalText(input);
+		page.setConvertedText(input);
+		tester.convert(page);
+		actual = page.getConvertedText();
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	public void testConvertPage_tokenized() {
+		tester.getProperties().clear(); //is same as: props.setProperty(LeadingSpacesConverter.PROPKEY_TOKENIZE, "true"); \
+		Properties props = tester.getProperties();
+		props.setProperty("leading-spaces-delim", "code");
+
+		tester.setProperties(props);
+		String input, expected, actual;
+		input = "  abc\n" +
+				"  def\n";
+		String startswith = "\n" + 
+						"~UWCTOKENSTART~";
+		String endswith = "~UWCTOKENEND~\n";
+		Page page = new Page(null);
+		page.setOriginalText(input);
+		page.setConvertedText(input);
+		tester.convert(page);
+		actual = page.getConvertedText();
+		assertNotNull(actual);
+		assertTrue(actual, actual.startsWith(startswith));
+		assertTrue(actual, actual.endsWith(endswith));
+		
+		expected = "\n" +
+				"{code}\n" +
+				"  abc\n" +
+				"  def\n" +
+				"{code}\n";
+		Stack<String> keys = TokenMap.getKeys();
+		assertNotNull(keys);
+		assertFalse(keys.isEmpty());
+		String detokenizeText = TokenMap.detokenizeText(actual);
+		assertNotNull(actual);
+		assertEquals(expected, detokenizeText);
+	}
+	public void testConvertPage_problem1() {
+		Properties props = tester.getProperties();
+		props.setProperty("leading-spaces-delim", "code");
+		tester.setProperties(props);
+		String input, expected, actual;
+		input = "Tralala\n" + 
+				"\n" + 
+				" asldkjas: http://lakdjlaskjd/\n" + 
+				" aslkdjasd:  http://amsdkjahsd/\n" + 
+				"\n" + 
+				" <problem>\n" + 
+				" \n" + 
+				"  <ok>\n" + 
+				"  </ok>\n" + 
+				"";
+		expected = "Tralala\n" + 
+				"\n" + 
+				"{code}\n" + 
+				" asldkjas: http://lakdjlaskjd/\n" + 
+				" aslkdjasd:  http://amsdkjahsd/\n" + 
+				"{code}\n" + 
+				"\n" + 
+				"{code}\n" + 
+				" <problem>\n" + 
+				"{code}\n" + 
+				" \n" + 
+				"{code}\n" + 
+				"  <ok>\n" + 
+				"  </ok>\n" + 
+				"{code}\n" + 
+				"";
 		Page page = new Page(null);
 		page.setOriginalText(input);
 		page.setConvertedText(input);

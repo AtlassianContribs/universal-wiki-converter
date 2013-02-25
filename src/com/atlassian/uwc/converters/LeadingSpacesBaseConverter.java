@@ -16,7 +16,7 @@ public abstract class LeadingSpacesBaseConverter extends BaseConverter {
 	protected String initialspacedelim = " ";
 	private String newline = "\n";
 	private String noNewlines = "[^\n]+";
-	private String optNoSpace = "([^ ]?)";
+	private String optNoSpace = "(?=[^ ]?)";
 	private String leadingSpaceLine = "(" + initialspacedelim + noNewlines + newline + ")";
 	private String manyLeadingSpaceLines = "(" + leadingSpaceLine + "+)";
 	private String regex = "(?:\n|^)" + manyLeadingSpaceLines + optNoSpace;
@@ -49,8 +49,9 @@ public abstract class LeadingSpacesBaseConverter extends BaseConverter {
 	
 	public String getReplacement(String delim, String enddelim) {
 		return "\n" + delim +
-				"\n$1" + enddelim + 
-				"\n$3";
+				"\n$1" + enddelim +
+				"\n";
+//				"\n$3";
 	}
 	
 	public String getReplacementLoopUtil(String delim, String enddelim) {

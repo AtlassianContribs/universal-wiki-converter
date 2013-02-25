@@ -37,16 +37,6 @@ public class EscapeBracesConverter extends BaseConverter {
 	private String tokenize(String input, String value) {
 		return tokenize(input, value, "");
 	}
-	private String tokenize(String input, String value, String type) {
-		Converter converter = JavaRegexAndTokenizerConverter.getConverter(value);
-		Page page = new Page(null);
-		page.setOriginalText(input);
-		converter.convert(page);
-		if (input != null && !input.equals(page.getConvertedText())) {
-			log.debug("EscapeBraces: tokenized " + type + " content");
-		}
-		return page.getConvertedText();
-	}
 
 	protected String tokenizeMath(String input) {
 		return tokenize(input, "(<math>.*?<\\/math>){replace-multiline-with}$1", "math");

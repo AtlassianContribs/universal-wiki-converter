@@ -4,7 +4,9 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import com.atlassian.uwc.converters.twiki.JavaRegexAndTokenizerConverter;
 import com.atlassian.uwc.ui.ConverterErrors;
+import com.atlassian.uwc.ui.Page;
 import com.atlassian.uwc.ui.listeners.FeedbackHandler;
 
 /**
@@ -107,4 +109,23 @@ public abstract class BaseConverter implements Converter, FeedbackHandler {
     public void setProperties(Properties properties) {
     	this.properties = properties;
     }
+    
+    /**
+     * convenience method for tokenizing content within a converter
+     * @param input content to be search/replaced 
+     * @param value tokenization property value, same as in properties file. Looks like: 
+     * (<math>.*?<\\/math>){replace-multiline-with}$1
+     * @param type text describing the type of token, used in debug log messages
+     * @return tokenized content
+     */
+    public String tokenize(String input, String value, String type) {
+		Converter converter = JavaRegexAndTokenizerConverter.getConverter(value);
+		Page page = new Page(null);
+		page.setOriginalText(input);
+		converter.convert(page);
+		if (input != null && !input.equals(page.getConvertedText())) {
+			log.debug("Tokenized " + type + " content");
+		}
+		return page.getConvertedText();
+	}
 }
