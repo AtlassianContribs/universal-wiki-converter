@@ -1010,7 +1010,8 @@ public class XmlConverterTest extends TestCase {
 			fail("Missing file?");
 		}
 	}
-	
+
+
 	private String parse(String input) {
 		Page page = new Page(null);
 		page.setOriginalText(input);

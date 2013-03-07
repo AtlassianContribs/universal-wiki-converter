@@ -119,4 +119,33 @@ public class DefinitionListTest extends TestCase {
 		assertEquals(expected, actual);
 		
 	}
+	
+	public void testNoDefList() { //we'll do this case in a seperate converter
+		String input, expected, actual;
+		input = "Before\n" +
+				"\n" +
+				";asdfk\n" +
+				";sdkf\n" +
+				"\n" +
+				"After\n" +
+				"{panel: title=Something}\n" +
+				"tralala\n" +
+				"{panel}\n" +
+				";asd\n" +
+				"";
+		expected = "Before\n" +
+				"\n" +
+				";asdfk\n" +
+				";sdkf\n" +
+				"\n" +
+				"After\n" +
+				"{panel: title=Something}\n" +
+				"tralala\n" +
+				"{panel}\n" +
+				";asd\n" +
+				"";
+		actual = tester.convertDefList(input);
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
 }

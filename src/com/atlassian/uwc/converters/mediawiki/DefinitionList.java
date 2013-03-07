@@ -21,6 +21,7 @@ public class DefinitionList extends BaseConverter {
 			":([^\n]+)" +
 			"((\n:[^\n]+)*)"
 			);
+	Pattern newlineInMiddle = Pattern.compile("\n\\S");
 	protected String convertDefList(String input) {
 		Matcher defListFinder = definitionList.matcher(input);
 		StringBuffer sb = new StringBuffer();
@@ -28,8 +29,10 @@ public class DefinitionList extends BaseConverter {
 		while (defListFinder.find()) {
 			found = true;
 			String pre = defListFinder.group(1);
-			String word = defListFinder.group(2).trim();
+			String word = defListFinder.group(2);
+			if (newlineInMiddle.matcher(word).find()) continue; 
 			if (word.endsWith("\n")) word = word.substring(0, word.length()-1);
+			word = word.trim();
 			String definition = defListFinder.group(3);
 			definition = cleanWS(definition);
 			String optDefs = defListFinder.group(4);

@@ -123,6 +123,7 @@ public class XmlConverter extends BaseConverter {
 	 * @return the resulting output
 	 */
 	private String parse(String input, XMLReader reader, DefaultXmlParser parser) {
+		if (input == null || "".equals(input.trim())) return "";
 		InputSource source = new InputSource(new StringReader(input));
 		System.setProperty( "http.agent", getUserAgent());
 		try {

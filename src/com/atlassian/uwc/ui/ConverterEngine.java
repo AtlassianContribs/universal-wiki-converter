@@ -2236,6 +2236,7 @@ public class ConverterEngine implements FeedbackHandler {
 	 */
 	private Hashtable createPageTable(Page page, String parentId) {
 		Hashtable table = new Hashtable();
+		if (page.getConvertedText() == null) page.setConvertedText("");
 		table.put("content", page.getConvertedText());
 		table.put("title", page.getName()); 
 		if (parentId != null && !parentId.equals("null")) table.put("parentId", parentId);

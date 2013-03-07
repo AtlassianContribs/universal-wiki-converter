@@ -83,7 +83,7 @@ import com.atlassian.uwc.ui.listeners.WikiIsExportableListener;
 public class UWCForm3 {
 
 	//CONSTANTS
-	protected static final String UWC_DOC_URL = "https://studio.plugins.atlassian.com/wiki/display/UWC/";
+	protected static final String UWC_DOC_URL = "https://migrations.atlassian.net/wiki/display/UWC/";
 	private static final String DEFAULT_DIR_LABEL = "Attachments";
 	public static final String UWC_DOC_WEBSITE = UWC_DOC_URL + "Universal+Wiki+Converter";
 	private static final String PASSWORD_TOOLTIP = "The password to the Confluence user account being used in the Login field.";
