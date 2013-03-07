@@ -10,3 +10,4 @@ To run the newly built UWC
 * chmod a+x *sh
 * ./run_uwc_devel.sh
 
+Documentation here: https://migrations.atlassian.net/wiki/display/UWC/Universal+Wiki+Converter
