@@ -9,7 +9,7 @@ To run the newly built UWC
 * chmod a+x *sh
 * ./run_uwc_devel.sh
 
-Documentation here: https://migrations.atlassian.net/wiki/display/UWC/Universal+Wiki+Converter
+More details and documentation is here: https://migrations.atlassian.net/wiki/display/UWC/Universal+Wiki+Converter
 
 Note: you do not need to build the UWC to run it, just if you're doing development work on it. 
 
