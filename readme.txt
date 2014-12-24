@@ -20,8 +20,7 @@ This code is open source and is up to date with Atlassian's latest storage forma
 As such, we like to say this is a tool, not always the end-to-end solution or silver bullet. Wiki formats are 
 varied - and so please understand that the UWC will get you further along- but there could be some post-processing or scripts or other things to also assist in the process. 
 
-We do provide ongoing small and big support for migrations, depending on needs. Email us at info@appfusions.com and let us know what you are trying to do and we can see if we can help you!  
+We do provide ongoing small and big support for migrations, depending on needs. Email us at info@appfusions.com and let us know what you are trying to do and we can see if we can help you!  We have many client references too.
 
-Please also refer to the [http://www.appfusions.com/display/Dashboard/Wiki+Migration+Checklist](http://www.appfusions.com/display/Dashboard/Wiki+Migration+Checklist) to educate yourself on what is invoived in a migration. The checklist is not to suggest that all content elements are problematic. They aren't. But some are, and not always the same between different flavors of wikis that are being migrated from. 
+Please also refer to the Wiki Migration Checklist (http://www.appfusions.com/display/Dashboard/Wiki+Migration+Checklist) to educate yourself on what is invoived in a migration. The checklist is not to suggest that all content elements are problematic. They aren't. But some are, and not always the same between different flavors of wikis that are being migrated from. 
 
-We have many references too.
