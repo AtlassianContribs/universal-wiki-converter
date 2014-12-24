@@ -15,14 +15,13 @@ Note: you do not need to build the UWC to run it, just if you're doing developme
 
 ==
 
-This code is open source and is no longer actively maintained  - but the latest release was for Confluence 4.3.7 
-which is the latest storage format of Atlassian Confluence (introduced in Confluence 4). You can create a staging 
-server to 4.3.7, and run against that, and then upgrade easy enough. That said however, there are *many* flavors 
-of FROM wiki's for a conversion tool, and so this is a tool, not always the end-to-end solution. Wiki formats are 
-varied - and so please understand that the UWC will get you further along- but there could be some post-processing 
-or scripts or other things to also assist in the process. 
+This code is open source and is up to date with Atlassian's latest storage format of Atlassian Confluence (introduced in Confluence 4). We successfully user/run the UWC for Confluence 5.X releases, however, there are *many* flavors and versions of MIGRATE_FROM wikis. 
 
-We do provide ongoing small and big support for migrations, depending on needs. Email us at info@appfusions.com 
-and let us know what you are trying to do and we can see if we can help you!  
+As such, we like to say this is a tool, not always the end-to-end solution or silver bullet. Wiki formats are 
+varied - and so please understand that the UWC will get you further along- but there could be some post-processing or scripts or other things to also assist in the process. 
 
-We have references too.
+We do provide ongoing small and big support for migrations, depending on needs. Email us at info@appfusions.com and let us know what you are trying to do and we can see if we can help you!  
+
+Please also refer to the [http://www.appfusions.com/display/Dashboard/Wiki+Migration+Checklist](http://www.appfusions.com/display/Dashboard/Wiki+Migration+Checklist) to educate yourself on what is invoived in a migration. The checklist is not to suggest that all content elements are problematic. They aren't. But some are, and not always the same between different flavors of wikis that are being migrated from. 
+
+We have many references too.
