@@ -152,7 +152,7 @@
 
     <target name="compile.module.uwc.production" description="compile module(s) uwc production classes">
         <mkdir dir="${uwc.output.classes.dir}"/>
-        <javac2 destdir="${uwc.output.classes.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+        <javac2 source="1.6" target="1.6" encoding="ISO-8859-1" destdir="${uwc.output.classes.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
                 memoryMaximumSize="${compiler.max.memory}" fork="true" executable="${module.jdk.home.uwc}/bin/javac">
             <compilerarg line="${compiler.args.uwc}"/>
             <bootclasspath refid="uwc.module.bootclasspath"/>
