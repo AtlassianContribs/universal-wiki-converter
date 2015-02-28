@@ -23,7 +23,7 @@ import javax.swing.border.Border;
 
 import org.apache.log4j.PropertyConfigurator;
 
-import com.atlassian.uwc.ui.State.Type;
+import com.atlassian.uwc.ui.State.StateType;
 import com.atlassian.uwc.ui.listeners.FeedbackCanceller;
 import com.atlassian.uwc.ui.listeners.FeedbackHandler;
 
@@ -288,12 +288,12 @@ public class FeedbackWindow extends SupportWindow implements FeedbackHandler, Ob
 	 */
 	public void update(Observable stateObs, Object methodObj) {
 		State state;
-		Type method;
+		StateType method;
 		CastProblem problem = CastProblem.NOT_STATE;
 		try {
 			state = (State) stateObs;
 			problem = CastProblem.NOT_TYPE; //state cast didn't fail; let's try methodObj. Used by ClassCastException catch block 
-			method = (State.Type) methodObj;
+			method = (StateType) methodObj;
 		} catch (ClassCastException e) {
 			String problemStr = (problem == CastProblem.NOT_STATE)
 					?
@@ -317,8 +317,8 @@ public class FeedbackWindow extends SupportWindow implements FeedbackHandler, Ob
 	 * @param method indicates what type of update is occurring, only NOTE updates will 
 	 * affect the textarea
 	 */
-	private void updateFeedbackTextArea(State state, Type method) {
-		if (method == State.Type.NOTE) { 
+	private void updateFeedbackTextArea(State state, StateType method) {
+		if (method == State.StateType.NOTE) { 
 			String text = state.getNote();
 			text = jTextFeedbackDisplay.getText() + "\n" + text;
 			this.jTextFeedbackDisplay.setText(text );
@@ -333,12 +333,12 @@ public class FeedbackWindow extends SupportWindow implements FeedbackHandler, Ob
 	 * @param method indicate what type of update is occurring.
 	 * Only step and max updates will affect the progress bar
 	 */
-	private synchronized void updateProgressBar(State state, Type method) {
-		if (method == State.Type.STEP) {
+	private synchronized void updateProgressBar(State state, StateType method) {
+		if (method == State.StateType.STEP) {
 			int val = getStep(state);
 			jProgressBar.setValue(val);
 		}
-		else if (method == State.Type.MAX) {
+		else if (method == State.StateType.MAX) {
 			int step = state.getStep();
 			int max = state.getMax();
 			clearProgressBar();
