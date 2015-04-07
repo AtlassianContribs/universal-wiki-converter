@@ -248,12 +248,12 @@ public class MindtouchExporterTest extends TestCase {
 						"<p>Testing</p>\n" + 
 						"<div id=\"section_5\"><span id=\"Header_5\" /><h6 class=\"editable\">Header 5</h6>\n" + 
 						"<p>Lorem Ipsum</p>\n" + 
-						"<p>Ê</p>\n" + 
+						"<p>ÃŠ</p>\n" + 
 						"<p>What about Fonts?</p>\n" + 
 						"<p><span style=\"font-family: Courier New;\">Testing Courier</span></p>\n" + 
 						"<p><span style=\"font-family: Times New Roman;\">Times</span></p>\n" + 
 						"<p><span style=\"font-family: Verdana;\">Verdana</span></p>\n" + 
-						"<p>Ê</p>\n" + 
+						"<p>ÃŠ</p>\n" + 
 						"<p>and Font size?</p>\n" + 
 						"<p><span style=\"font-size: xx-small;\">xxsmall</span></p>\n" + 
 						"<p><span style=\"font-size: x-small;\">xsmall</span></p>\n" + 
@@ -262,7 +262,7 @@ public class MindtouchExporterTest extends TestCase {
 						"<p><span style=\"font-size: large;\">large</span></p>\n" + 
 						"<p><span style=\"font-size: x-large;\">xlarge</span></p>\n" + 
 						"<p><span style=\"font-size: xx-large;\">xxlarge</span></p>\n" + 
-						"<p>Ê</p>\n" + 
+						"<p>ÃŠ</p>\n" + 
 						"<p>What happens when we mix and match different stuff</p>\n" + 
 						"<p style=\"margin-left: 40px;\"><code><strong>bold indent code</strong></code></p>\n" + 
 						"<p><span style=\"font-family: Courier New;\"><span style=\"font-size: x-large;\">Courier xlarge</span></span></p>\n" + 

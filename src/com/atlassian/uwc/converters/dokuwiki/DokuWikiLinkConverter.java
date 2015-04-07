@@ -125,12 +125,12 @@ public class DokuWikiLinkConverter extends BaseConverter {
         assert linkTarget != null;
 
         linkTarget = linkTarget.replaceAll("\\\\", "/");
-/*        linkTarget = linkTarget.replaceAll("¿", "%C3%A5");
-        linkTarget = linkTarget.replaceAll("¿", "%C3%A4");
-        linkTarget = linkTarget.replaceAll("¿", "%C3%B6");
-        linkTarget = linkTarget.replaceAll("¿", "%C3%85");
-        linkTarget = linkTarget.replaceAll("¿", "%C3%84");
-        linkTarget = linkTarget.replaceAll("¿", "%C3%96");
+/*        linkTarget = linkTarget.replaceAll("Â¿", "%C3%A5");
+        linkTarget = linkTarget.replaceAll("Â¿", "%C3%A4");
+        linkTarget = linkTarget.replaceAll("Â¿", "%C3%B6");
+        linkTarget = linkTarget.replaceAll("Â¿", "%C3%85");
+        linkTarget = linkTarget.replaceAll("Â¿", "%C3%84");
+        linkTarget = linkTarget.replaceAll("Â¿", "%C3%96");
         linkTarget = linkTarget.replaceAll(" ", "+");
 */
         if (linkTarget.startsWith("file:")) {

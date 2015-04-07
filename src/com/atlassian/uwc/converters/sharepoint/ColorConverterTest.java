@@ -661,8 +661,8 @@ public class ColorConverterTest extends TestCase {
 				"<td rowspan=\"1\" colspan=\"1\"><font color=\"#00ff00\">r1c2</font></td>" +
 				"</tr>" +
 				"<tr>" +
-				"<td colspan=\"1\" style=\"background-color:rgb(255, 215, 0)\" rowspan=\"1\">Œær2c1</td>" +
-				"<td colspan=\"1\" rowspan=\"1\"><font size=\"6\">r2c2</font>Œæ</td>" +
+				"<td colspan=\"1\" style=\"background-color:rgb(255, 215, 0)\" rowspan=\"1\">ÂŒÃ¦r2c1</td>" +
+				"<td colspan=\"1\" rowspan=\"1\"><font size=\"6\">r2c2</font>ÂŒÃ¦</td>" +
 				"</tr>" +
 				"</tbody></table>\n" + 
 				"</html>";
@@ -674,8 +674,8 @@ public class ColorConverterTest extends TestCase {
 				"</tr>" +
 				"<tr>" +
 				"<td colspan=\"1\" rowspan=\"1\">" +
-				"{panel:bgColor=#ffd700}Œær2c1{panel}</td>" +
-				"<td colspan=\"1\" rowspan=\"1\"><font size=\"6\">r2c2</font>Œæ</td>" +
+				"{panel:bgColor=#ffd700}ÂŒÃ¦r2c1{panel}</td>" +
+				"<td colspan=\"1\" rowspan=\"1\"><font size=\"6\">r2c2</font>ÂŒÃ¦</td>" +
 				"</tr>" +
 				"</tbody></table>\n" + 
 				"</html>";

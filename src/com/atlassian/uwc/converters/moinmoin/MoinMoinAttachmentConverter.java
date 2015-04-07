@@ -224,7 +224,7 @@ public class MoinMoinAttachmentConverter extends BaseConverter {
         String linkPage = null;
 
         if (filePath.contains("/")) {
-            log.debug(filePath + " inneh�ll /!");
+            log.debug(filePath + " innehï¿½ll /!");
             // This is a link to an attachment on some other page.
             // Get the page name and file name from the path
             String path = filePath.substring(0, filePath.lastIndexOf("/"));
@@ -234,7 +234,7 @@ public class MoinMoinAttachmentConverter extends BaseConverter {
         } else {
             // This is a link to an attachment on this page. We need to
             // move the attachment to Confluence!
-            log.debug(filePath + " inneh�ll INTE /!");
+            log.debug(filePath + " innehï¿½ll INTE /!");
 
             String pagename = page.getName();
             // Remove the extension, if present

@@ -184,11 +184,11 @@ public class MoinMoinAttachmentConverterTest extends TestCase {
     }
 
     public void testConvertPageNameToUnicode() {
-		assertEquals("é",
+		assertEquals("Ã©",
 				MoinMoinAttachmentConverter.convertPageNameToUnicode("(c3a9)"));
-		assertEquals("JeanBaptisteCatté",
+		assertEquals("JeanBaptisteCattÃ©",
 				MoinMoinAttachmentConverter.convertPageNameToUnicode("JeanBaptisteCatt(c3a9)"));
-		assertEquals("Jérôme_Topczenski",
+		assertEquals("JÃ©rÃ´me_Topczenski",
 				MoinMoinAttachmentConverter.convertPageNameToUnicode("J(c3a9)r(c3b4)me_Topczenski"));
 		assertEquals("WLS_8.1_to_9.0_Migration's_Steps",
 				MoinMoinAttachmentConverter.convertPageNameToUnicode("WLS_8(2e)1_to_9(2e)0_Migration(27)s_Steps"));
