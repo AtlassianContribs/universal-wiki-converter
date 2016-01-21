@@ -16,36 +16,26 @@ public class MathConverterTest extends TestCase {
 
 	public void testConvertMath() {
 		String input, expected, actual;
-		input = "<math>g(x,y)\\,</math>\n" + 
+		input = "<math>\\label{test} g(x,y)\\,</math>\n" +
 				"\n" + 
-				"<math>f(x) = \\int_0^1 e^{-t} g(t) \\, dt.</math>\n" +
+				"Inline math: <math>f(x) = \\int_0^1 e^{-t} g(t) \\, dt.</math>\n" +
 				"\n" +
 				"<math>A_{B} = 100% - 200% + C_{D}</math>\n" + 
 				"\n" + 
 				"";
-		expected = "{latex}\n" +
-				"\\begin{eqnarray}\n" + 
-				"{\n" + 
-				"g(x,y)\\,\n" + 
-				"}\n" + 
+		expected = "{mathblock:anchor=test}\n" +
+				"\\begin{eqnarray}\n" +
+				"g(x,y)\\,\n" +
 				"\\end{eqnarray}\n" + 
-				"{latex}\n" + 
+				"{mathblock}\n" +
 				"\n" + 
-				"{latex}\n" + 
-				"\\begin{eqnarray}\n" + 
-				"{\n" + 
-				"f(x) = \\int_0^1 e^{-t} g(t) \\, dt.\n" + 
-				"}\n" + 
-				"\\end{eqnarray}\n" + 
-				"{latex}\n" + 
+				"Inline math: {mathinline}f(x) = \\int_0^1 e^{-t} g(t) \\, dt.{mathinline}\n" +
 				"\n" +
-				"{latex}\n" + 
-				"\\begin{eqnarray}\n" + 
-				"{\n" + 
-				"A_{B} = 100\\% - 200\\% + C_{D}\n" + 
-				"}\n" + 
+				"{mathblock}\n" +
+				"\\begin{eqnarray}\n" +
+				"A_{B} = 100\\% - 200\\% + C_{D}\n" +
 				"\\end{eqnarray}\n" + 
-				"{latex}\n" + 
+				"{mathblock}\n" +
 				"\n";
 		actual = tester.convertMath(input);
 		assertNotNull(actual);

@@ -738,7 +738,7 @@ public class CleanConverterTest extends TestCase {
 		String input = "<div class=\"ms-wikicontent\"><div class=ExternalClass6401589625F24EB681A45DBE6B1A1B3E>\n" + 
 				"<h3 class=ExternalClassCCAFF3FAA0E340529C5A6A3E0B18184B><font face=Arial>xxxxxx</font></h3>\n" + 
 				"<p class=ExternalClassCCAFF3FAA0E340529C5A6A3E0B18184B><strong><em><font face=Arial>xxxxxx</font></em></strong></p><font size=3>\n" + 
-				"<p class=ExternalClassCCAFF3FAA0E340529C5A6A3E0B18184B><span style=\"color:black\"><font face=Arial size=2>xxxxxx<a href=\"xxxxxx\">xxxxxx</a>Êxxxxxx</font></span></p>\n" + 
+				"<p class=ExternalClassCCAFF3FAA0E340529C5A6A3E0B18184B><span style=\"color:black\"><font face=Arial size=2>xxxxxx<a href=\"xxxxxx\">xxxxxx</a>ÃŠxxxxxx</font></span></p>\n" + 
 				"<p class=ExternalClassCCAFF3FAA0E340529C5A6A3E0B18184B><span style=\"color:black\"><font face=Arial size=2>xxxxxx &quot;xxxxxx&quot; xxxxxx </font></span></p>\n" + 
 				"<p class=ExternalClassCCAFF3FAA0E340529C5A6A3E0B18184B><span style=\"color:black\"><font face=Arial size=2>xxxxxx</font></span></p>\n" + 
 				"<p class=ExternalClassCCAFF3FAA0E340529C5A6A3E0B18184B><font face=Arial></font></font></p>\n" + 
@@ -748,7 +748,7 @@ public class CleanConverterTest extends TestCase {
 				"<p class=ExternalClassCCAFF3FAA0E340529C5A6A3E0B18184B><span style=\"color:black\"><font face=Arial size=2>xxxxxx</font></span></p>\n" + 
 				"<div class=ExternalClassCCAFF3FAA0E340529C5A6A3E0B18184B>\n" + 
 				"<ul type=disc>\n" + 
-				"<li class=MsoNormal style=\"margin:0in 0in 0pt;color:black;tab-stops:list .5in\"><font face=Arial size=2>xxxxxx</a>Ê</font></li>\n" + 
+				"<li class=MsoNormal style=\"margin:0in 0in 0pt;color:black;tab-stops:list .5in\"><font face=Arial size=2>xxxxxx</a>ÃŠ</font></li>\n" + 
 				"<li class=MsoNormal style=\"margin:0in 0in 0pt;color:black;tab-stops:list .5in\"><font face=Arial size=2>xxxxxx</font></li>\n" + 
 				"<li class=MsoNormal style=\"margin:0in 0in 0pt;color:black;tab-stops:list .5in\"><font face=Arial size=2>xxxxxx</font></li>\n" + 
 				"<li class=MsoNormal style=\"margin:0in 0in 0pt;color:black;tab-stops:list .5in\"><font face=Arial size=2>xxxxxx</font></li>\n" + 
@@ -824,7 +824,7 @@ public class CleanConverterTest extends TestCase {
 				"<p><i><span style=\"color:black\"><font face=Arial size=2>xxxxxx</font></span></i></p>\n" + 
 				"<ul>\n" + 
 				"<li>\n" + 
-				"<div class=MsoNormal style=\"margin:0in 0in 0pt\"><span style=\"color:black\"><font face=Arial size=2>xxxxxx<span>Ê </span>xxxxxx</font></span></div></li></ul>\n" + 
+				"<div class=MsoNormal style=\"margin:0in 0in 0pt\"><span style=\"color:black\"><font face=Arial size=2>xxxxxx<span>ÃŠ </span>xxxxxx</font></span></div></li></ul>\n" + 
 				"<p><i><span style=\"color:black\"><font face=Arial size=2>xxxxxx</font></span></i></p>\n" + 
 				"<ul>\n" + 
 				"<li><span style=\"color:black\"><font face=Arial size=2>xxxxxx</font></span></li></ul>\n" + 
@@ -1400,7 +1400,7 @@ public class CleanConverterTest extends TestCase {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String string = " ";
+		String string = "Â ";
 		byte[] bytes = null;
 		try {
 			bytes = string.getBytes("ascii");
@@ -1525,7 +1525,7 @@ public class CleanConverterTest extends TestCase {
 		assertNotNull(actual);
 		assertEquals(expected, actual);
 		
-		String weirdchar = " ";
+		String weirdchar = "Â ";
 		input = "<p class=MsoNormal style=\"margin:0in 0in 0pt;text-align:justify\"><span style=\"font-size:12pt\"><font face=\"Times New Roman\">abc <span style=\"font-size:12pt;font-family:\'Times New Roman\'\">def (<span style=\"font-size:12pt;font-family:\'Times New Roman\'\">xxxxxx</span>)" + weirdchar + " xxxxxx<span>" + weirdchar + "  </span>xxxxxx</span></font></span></p>\n";
 		expected = "<html><p style=\"margin:0in 0in 0pt;text-align:justify\"><span style=\"font-size:12pt\"><font face=\"Times New Roman\">abc <span style=\"font-size:12pt;font-family:&apos;Times New Roman&apos;\">def (<span style=\"font-size:12pt;font-family:&apos;Times New Roman&apos;\">xxxxxx</span>) xxxxxx xxxxxx</span></font></span></p></html>"; 
 		actual = tester.clean(input);

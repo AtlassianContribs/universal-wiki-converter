@@ -73,8 +73,8 @@ public class TableConverterTest extends TestCase {
 							"<td rowspan=\"1\" colspan=\"1\">{color:#00ff00}r1c2{color}</td>" +
 						"</tr>" +
 						"<tr>" +
-							"<td colspan=\"1\" rowspan=\"1\">{panel:bgColor=#ffd700}Œær2c1{panel}</td>" +
-							"<td colspan=\"1\" rowspan=\"1\">h2. r2c2Œæ</td>" +
+							"<td colspan=\"1\" rowspan=\"1\">{panel:bgColor=#ffd700}ÂŒÃ¦r2c1{panel}</td>" +
+							"<td colspan=\"1\" rowspan=\"1\">h2. r2c2ÂŒÃ¦</td>" +
 						"</tr>" +
 					"</tbody></table>\n" + 
 				"</html>";
@@ -100,7 +100,7 @@ public class TableConverterTest extends TestCase {
 						"</tr>" +
 						"<tr>" +
 							"<td colspan=\"1\" rowspan=\"1\">\n" + 
-							"* Œæa\n" + 
+							"* ÂŒÃ¦a\n" + 
 							"* b\n" + 
 							"* c\n" + 
 							"\n" + 
@@ -108,16 +108,16 @@ public class TableConverterTest extends TestCase {
 							"<td colspan=\"1\" rowspan=\"1\">\n" + 
 							"# one\n" + 
 							"# two\n" + 
-							"## threeŒæ\n" + 
+							"## threeÂŒÃ¦\n" + 
 							"\n" + 
 							"</td>" +
 							"<td colspan=\"1\" rowspan=\"1\">\n" + 
-							"* Œæone\n" + 
+							"* ÂŒÃ¦one\n" + 
 							"# b\n" + 
 							"* c\n" + 
 							"\n" + 
 							"</td>" +
-							"<td colspan=\"1\" rowspan=\"1\">Œæ</td>" +
+							"<td colspan=\"1\" rowspan=\"1\">ÂŒÃ¦</td>" +
 						"</tr>" +
 					"</tbody></table>" + 
 				"</html>";

@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
  */
 public class State extends Observable {
 
-	public enum Type {
+	public enum StateType {
 		NOTE,
 		STEP,
 		MAX
@@ -67,7 +67,7 @@ public class State extends Observable {
 	public void updateNote(String note) {
 		this.note = note;
 		setChanged();
-		notifyObservers(Type.NOTE);
+		notifyObservers(StateType.NOTE);
 	}
 	
 	/**
@@ -87,7 +87,7 @@ public class State extends Observable {
 	public void updateProgress(int amount) {
 		step += amount;
 		setChanged();
-		notifyObservers(Type.STEP);
+		notifyObservers(StateType.STEP);
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class State extends Observable {
 	public void updateMax(int max) {
 		this.maxSteps = max;
 		setChanged();
-		notifyObservers(Type.MAX);
+		notifyObservers(StateType.MAX);
 	}
 	
 	/**

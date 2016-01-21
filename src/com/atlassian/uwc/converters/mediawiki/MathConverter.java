@@ -15,7 +15,8 @@ public class MathConverter extends BaseConverter {
 		page.setConvertedText(converted);
 	}
 
-	Pattern math = Pattern.compile("<math>(.*?)<\\/math>", Pattern.DOTALL);
+	Pattern math = Pattern.compile("<math>(.*?)<\\/math>(?=(..|.$|$))", Pattern.DOTALL);
+	Pattern label = Pattern.compile("\\\\label{(\\w+)}", Pattern.DOTALL);
 	protected String convertMath(String input) {
 		Matcher mathFinder = math.matcher(input);
 		StringBuffer sb = new StringBuffer();
@@ -24,11 +25,41 @@ public class MathConverter extends BaseConverter {
 			found = true;
 			String mathbits = mathFinder.group(1);
 			mathbits = escapePercents(mathbits);
-			String replacement = "{latex}\n" +
-					"\\begin{eqnarray}\n" +
-					"{\n" + mathbits +"\n}\n" +
-					"\\end{eqnarray}\n" +
-					"{latex}";
+
+			int len = sb.length();
+			boolean newlinesBefore = (len==0) ||
+					((len==1) && (sb.substring(0,1).equals("\n")))
+					|| (sb.substring(len-2,len).equals("\n\n"));
+
+			String after = mathFinder.group(2);
+			len = after.length();
+			boolean newlinesAfter = (len==0) ||
+					((len==1) && (after.equals("\n")))
+					|| (after.equals("\n\n"));
+
+			String replacement;
+			if (newlinesBefore && newlinesAfter) {
+				// Looks line a mathblock
+
+				String anchor = "";
+				Matcher labelFinder = label.matcher(mathbits);
+				if (labelFinder.find()) {
+					anchor = labelFinder.group(1).trim();
+					replacement = labelFinder.replaceAll(" ");
+				}
+				if (!anchor.isEmpty()) {
+					anchor = ":anchor="+anchor;
+				}
+
+				replacement = "{mathblock"+anchor+"}\n" +
+						"\\begin{eqnarray}\n" +
+						mathbits +"\n" +
+						"\\end{eqnarray}\n" +
+						"{mathblock}";
+			} else {
+				replacement = "{mathinline}" + mathbits + "{mathinline}";
+			}
+
 			replacement = RegexUtil.handleEscapesInReplacement(replacement);
 			mathFinder.appendReplacement(sb, replacement);
 		}

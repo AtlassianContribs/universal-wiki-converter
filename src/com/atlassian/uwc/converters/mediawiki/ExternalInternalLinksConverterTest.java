@@ -122,7 +122,7 @@ public class ExternalInternalLinksConverterTest extends TestCase {
 		input = "[abc|https://mw.wiki.org/index.php/Image:foobar" +
 				"%E5%BC%80.docx" +
 				"]\n";
-		expected = "[abc|^foobar开.docx]\n";
+		expected = "[abc|^foobarå¼.docx]\n";
 		actual = tester.convertExternalInternalLinks(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);

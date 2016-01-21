@@ -38,7 +38,7 @@ public class ImageAttachmentConverter extends BaseConverter {
             // TODO: This pattern needs to be more generic!
             // Unfortunately, the following does not work:
             // pattern = compiler.compile("!\\s*[^\\n\\r\\|!]+?\\s*[\\|!]");
-            pattern = compiler.compile("!(\\s*[a-zA-Z0-9Â‰ˆ≈ƒ÷%+.:/\\\\_-]+?\\s*)(\\|[^\\!]*)?!");
+            pattern = compiler.compile("!(\\s*[a-zA-Z0-9√•√§√∂√Ö√Ñ√ñ%+.:/\\\\_-]+?\\s*)(\\|[^\\!]*)?!");
         } catch (MalformedPatternException e) {
             log.error("Bad pattern.", e);
             return;

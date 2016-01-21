@@ -186,7 +186,7 @@ public class XmlCleanerTest extends TestCase {
 		entity +
 		"After</content>\n" + 
 		"</xwikidoc>\n";
-		expected = "Before After"; //XXX the ' ' space in this string is not a typical space. 
+		expected = "Before√äAfter"; //XXX the ' ' space in this string is not a typical space. 
 		actual = tester.cleanXml(input);
 		assertNotNull(actual);
 		assertEquals(expected, actual);

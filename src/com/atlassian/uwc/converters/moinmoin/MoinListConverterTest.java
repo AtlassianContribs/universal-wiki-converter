@@ -144,7 +144,7 @@ public class MoinListConverterTest extends TestCase {
 			" * hallo" + LSEP +
 			"  * hallo" + LSEP +
 			"   * hallo" + LSEP +
-			" *Fett* aber glücklich" + LSEP +
+			" *Fett* aber glÃ¼cklich" + LSEP +
 			" * hallo" + LSEP +
 			" * hallo" + LSEP;
 		
@@ -152,7 +152,7 @@ public class MoinListConverterTest extends TestCase {
 			" * hallo" + LSEP +
 			" ** hallo" + LSEP +
 			" *** hallo" + LSEP +
-			" *Fett* aber glücklich" + LSEP +
+			" *Fett* aber glÃ¼cklich" + LSEP +
 			" * hallo" + LSEP +
 			" * hallo" + LSEP;
 		
