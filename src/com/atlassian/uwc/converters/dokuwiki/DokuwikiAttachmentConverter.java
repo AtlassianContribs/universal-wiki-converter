@@ -18,7 +18,7 @@ public class DokuwikiAttachmentConverter extends HierarchyImageConverter {
 		page.setConvertedText(converted);
 	}
 
-	Pattern attachment = Pattern.compile("(?s)\\{\\{(.*?)\\}\\}");
+	Pattern attachment = Pattern.compile("(?s)\\{.\\{(.*?)\\}\\}");
 	Pattern parts = Pattern.compile("([^|?]+)(?:([?|])(.*))?");
 	Pattern type = Pattern.compile(".*?[.]([^.]+)$");
 	private String convertAttachments(Page page) {
