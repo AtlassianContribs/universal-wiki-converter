@@ -16,7 +16,7 @@ public class MathConverter extends BaseConverter {
 	}
 
 	Pattern math = Pattern.compile("<math>(.*?)<\\/math>(?=(..|.$|$))", Pattern.DOTALL);
-	Pattern label = Pattern.compile("\\\\label{(\\w+)}", Pattern.DOTALL);
+	Pattern label = Pattern.compile("\\\\label\\{(\\w+)}", Pattern.DOTALL);
 	protected String convertMath(String input) {
 		Matcher mathFinder = math.matcher(input);
 		StringBuffer sb = new StringBuffer();
