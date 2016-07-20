@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="??????" >
+    <!-- do I need a parent -->
+	<!-- is it the same for all pom.xml? -->
+	
+	<modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.atlassian.uwc</groupId>
+    <artifactId>uwc</artifactId>
+    <version>3.13.0</version>
+
+	<properties>
+		<file>uwc.properties</file>
+		
+			<property> file="uwc.properties"</property>
+			<property>environment="env"<property>
+			<property> name="project.jdk.home" value="${env.JAVA_HOME}"</property>
+			
+			<property> name="compiler.args" value=-J-Dorg.xml.sax.driver=org.apache.xerces.parsers.SAXParser"</property>
+			<property> name="compiler.max.memory" value="128m"</property>
+			<patternset> id="ignored.files"</patternset>
+				<exclude> name="**/CVS/**"</exclude>
+				<exclude> name="**/SCCS/**"</exclude>
+				<exclude> name="**/RCS/**"</exclude>
+				<exclude> name="**/rcs/**"</exclude>
+				<exclude> name="**/.DS_Store/**"</exclude>
+				<exclude> name="**/.svn/**"</exclude>
+			</patternset>
+			<patternset> id="compiler.recources"</patternset>
+				<include> name="**/?*.properties"</include>
+				<include> name="**/?*.xml"</include>
+			<include> name="**/?*.gif"</include>
+			<include> name="**/?*.png"</include>
+			<include> name="**/?*.jpeg"</include>
+			<include> name="**/?*.jpg"</include>
+			<include> name="**/?*.html"</include>
+			<include> name="**/?*.dtd"</include>
+			<include> name="**/?*.tld"</include>
+		</patternset>
+
+    <!-- Global Libraries -->
+
+
+    <!-- Application Server Libraries -->
+
+    <!-- Modules -->
+
+
+    <!-- Module uwc -->
+
+    <property name="module.uwc.basedir" value="${basedir}"/>
+
+    <property name="module.jdk.home.uwc" value="${project.jdk.home}"/>
+    <property name="module.jdk.classpath.uwc" value="${project.jdk.classpath}"/>
+
+    <property name="compiler.args.uwc" value="${compiler.args}"/>
+
+    <property name="uwc.output.dir" value="${module.uwc.basedir}/target/uwc"/>
+    <property name="uwc.output.classes.dir" value="${module.uwc.basedir}/target/uwc/classes"/>
+    <property name="uwc.testoutput.dir" value="${module.uwc.basedir}/target/uwc/classes"/>
+    <property name="gen-source-dir" value="${module.uwc.basedir}/gensrc"/>
+    <property name="gen-source-java-dir" value="${gen-source-dir}/java"/>
+    <property name="gen-axis-code-marker-file" value="${gen-source-dir}/.axis-generated"/>
+
+	<dependcies>
+	
+		<!-- https://mvnrepository.com/artifact/org.apache.bcel/bcel -->
+		<dependency>
+			<groupId>org.apache.bcel</groupId>
+			<artifactId>bcel</artifactId>
+			<version>5.2</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.github.adedayo.intellij.sdk/javac2 -->
+		<dependency>
+			<groupId>com.github.adedayo.intellij.sdk</groupId>
+			<artifactId>javac2</artifactId>
+			<version>142.1</version>
+		</dependency>
+
+	</dependcies>
+
+    <!-- The task requires the following libraries from IntelliJ IDEA distribution: -->
+    <!--   javac2.jar; jdom.jar; bcel.jar -->
+    <!-- JDK definitions -->
+    <path id="intellij.classpath">
+        <fileset dir="${module.uwc.basedir}/lib">
+            <include name="bcel.jar"/>
+            <include name="javac2.jar"/>
+            <include name="jdom.jar"/>
+        </fileset>
+    </path>
+    <taskdef name="javac2" classname="com.intellij.uiDesigner.ant.Javac2"
+             classpathref="intellij.classpath"/>
+
+    <path id="uwc.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
+
+    <path id="uwc.module.classpath">
+        <path refid="${module.jdk.classpath.uwc}"/>
+
+        <path refid="intellij.classpath"/>
+
+        <fileset dir="${module.uwc.basedir}/lib">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${module.uwc.basedir}/lib/*.jar"/>
+        <!--<pathelement location="${module.uwc.basedir}/lib/activation.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/axis-ant.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/axis-schema.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/axis.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/commons-discovery-0.2.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/commons-logging-1.0.4.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/jakarta-oro-2.0.8.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/jaxrpc.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/junit.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/log4j-1.2.13.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/mail.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/saaj.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/wsdl4j-1.5.1.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/confluence-remote-java-wrapper-v3.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/lib/*.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/target/wsdl4j-1.5.1.jar"/>-->
+        <!--<pathelement location="${module.uwc.basedir}/target/wsdl4j-1.5.1.jar"/>-->
+
+    </path>
+
+
+    <patternset id="excluded.from.module.uwc">
+        <patternset refid="ignored.files"/>
+    </patternset>
+
+    <patternset id="excluded.from.compilation.uwc">
+        <patternset refid="excluded.from.module.uwc"/>
+    </patternset>
+
+    <path id="uwc.module.sourcepath">
+        <dirset dir="${module.uwc.basedir}">
+            <include name="src"/>
+            <include name="gensrc/java"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile.module.uwc" depends="compile.module.uwc.production,compile.module.uwc.tests"
+            description="compile module(s) uwc"/>
+
+    <target name="compile.module.uwc.production" description="compile module(s) uwc production classes">
+        <mkdir dir="${uwc.output.classes.dir}"/>
+        <javac2 destdir="${uwc.output.classes.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+                memoryMaximumSize="${compiler.max.memory}" fork="true" executable="${module.jdk.home.uwc}/bin/javac" encoding="iso-8859-1">
+            <compilerarg line="${compiler.args.uwc}"/>
+            <bootclasspath refid="uwc.module.bootclasspath"/>
+            <classpath refid="uwc.module.classpath"/>
+            <src refid="uwc.module.sourcepath"/>
+        </javac2>
+
+        <copy todir="${uwc.output.classes.dir}">
+            <fileset dir="${module.uwc.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.uwc.tests" depends="compile.module.uwc.production"
+            description="compile module(s) uwc test classes" unless="skip.tests"/>
+
+    <target name="clean.module.uwc" description="cleanup module">
+        <delete dir="target"/>
+        <delete dir="${uwc.testoutput.dir}"/>
+    </target>
+
+    <target name="init" description="Build initialization">
+        <!-- Perform any build initialization in this target -->
+    </target>
+
+    <target name="clean" depends="clean.module.uwc" description="cleanup all"/>
+
+    <target name="all" depends="init, compile.module.uwc, finish-dist" description="build all"/>
+
+    <target name="finish-dist">
+        <copy todir="${uwc.output.dir}/lib">
+            <fileset dir="lib"/>
+        </copy>
+        <copy todir="${uwc.output.dir}">
+            <fileset dir="bin"/>
+        </copy>
+        <copy todir="${uwc.output.dir}/images">
+            <fileset dir="images"/>
+        </copy>
+        <!-- default properties -->
+        <copy todir="${uwc.output.dir}/conf" overwrite="true">
+            <fileset dir="conf"/>
+        </copy>
+        <!-- but for a generic build - use local properties
+                    note: failonerror is false so that if there's no conf-local
+                   the build can continue merrily on its way
+            -->
+        <copy todir="${uwc.output.dir}/conf" overwrite="true" failonerror="false">
+            <fileset dir="conf-local"/>
+        </copy>
+
+    </target>
+
+    <target name="package" depends="all" description="create the distribution file and place in the dist dir">
+
+        <!-- package with default properties!!-->
+        <copy todir="${uwc.output.dir}/conf" overwrite="true">
+            <fileset dir="conf"/>
+        </copy>
+
+        <delete dir="target/uwc/output"/>
+        <antcall target="CreateExecutableJarFileWithExternalLibrary"/>
+        <mkdir dir="./dist"/>
+        <zip basedir="target" excludes="uwc/classes/**, uwc/lib/**, target/uwc/lib/**" excludesfile="bin/run_uwc_devel.sh" destfile="./dist/uwc.zip"/>
+    </target>
+
+    <target name="CreateExecutableJarFileWithExternalLibrary">
+        <jar destfile="target/uwc/uwc.jar">
+            <zipfileset dir="${module.uwc.basedir}/target/uwc/classes" prefix=""/>            
+
+            <zipfileset src="${module.uwc.basedir}/lib/activation.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/axis-1.2.1.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/axis-jaxrpc-1.2.1.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/axis-saaj-1.2.1.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/bcel.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/commons-codec-1.3.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/commons-discovery-0.2.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/commons-httpclient-3.0.jar"/>
+				<zipfileset src="${module.uwc.basedir}/lib/commons-lang-2.1.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/commons-logging-1.0.4.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/confluence-xmlrpc-wrapper-v5.2.0.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/dom4j-1.4-full.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/forms_rt.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/jakarta-oro-2.0.8.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/javac2.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/jaxrpc.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/jdom.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/junit.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/log4j-1.2.13.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/mail.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/mysql-connector-java-5.0.3-bin.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/saaj.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/sharepoint-wrapper-1.0.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/substance.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/swing-layout-1.0.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/treewrapper.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/Tidy.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/wsdl4j-1.5.1.jar"/>
+            <zipfileset src="${module.uwc.basedir}/lib/xmlrpc-2.0.1.jar"/>
+				<zipfileset src="${module.uwc.basedir}/lib/apache-mime4j-0.6.1.jar"/>
+            <manifest>
+                <attribute name="Main-Class" value="com.atlassian.uwc.ui.UWCForm3"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!--<target name="generate-axis-client-code" unless="axis-uptodate">-->
+    <!--<echo message="==== ========================================"/>-->
+    <!--<echo message="==== generating axis client classes for devel ====="/>-->
+    <!--<echo message="==== =========================================="/>-->
+    <!--<mkdir dir="${gen-source-java-dir}"/>-->
+    <!--<java classname="org.apache.axis.wsdl.WSDL2Java" fork="true">-->
+    <!--<arg line="-p com.atlassian.uwc.soapclient \-\-output ${gen-source-java-dir} ${module.uwc.basedir}/confluenceservice-v1.wsdl"/>-->
+    <!--<classpath>-->
+    <!--<path refid="uwc.module.classpath"/>-->
+    <!--</classpath>-->
+    <!--</java>-->
+    <!--<touch file="${gen-axis-code-marker-file}"/>-->
+    <!--</target>-->
+
+    <target name="run-v2" depends="init,compile.module.uwc" description="Run uwc gui version 2">
+        <java classname="com.atlassian.uwc.ui.UWCForm2" fork="true" dir="${uwc.output.dir}">
+            <classpath>
+                <pathelement location="${uwc.output.classes.dir}"/>
+                <fileset dir="${uwc.output.dir}/lib">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+
+	<target name="package-spoof" description="Create spoof jar for use with APR">
+		<jar jarfile="./dist/uwc-spoof.jar">
+			<fileset dir="./src/etc"/>	
+		</jar>
+	</target>
+
+	<target name="package-nolibs" depends="init, compile.module.uwc" description="Create uwc.jar containing only UWC classes with classpath set to point to lib jars in SAME directory (so we can deploy all webstart resources from same page)">
+		<jar destfile="target/uwc/uwc.jar">
+         <zipfileset dir="${module.uwc.basedir}/target/uwc/classes" prefix=""/>            
+      	<manifest>
+         	<attribute name="main-class" value="com.atlassian.uwc.ui.UWCForm3"/>
+				<attribute name="Class-Path" value="./Tidy.jar ./javac2.jar ./activation.jar ./jaxrpc.jar ./axis-1.2.1.jar ./jdom.jar ./axis-jaxrpc-1.2.1.jar ./junit.jar ./axis-saaj-1.2.1.jar ./log4j-1.2.13.jar ./bcel.jar ./mail.jar ./commons-codec-1.3.jar ./mysql-connector-java-5.0.3-bin.jar ./commons-discovery-0.2.jar ./saaj.jar ./commons-httpclient-3.0.jar ./sharepoint-wrapper-1.0.jar ./commons-logging-1.0.4.jar ./substance.jar ./confluence-xmlrpc-wrapper-v4.07.jar ./swing-layout-1.0.jar ./dom4j-1.4-full.jar ./treewrapper.jar ./forms_rt.jar ./wsdl4j-1.5.1.jar ./jakarta-oro-2.0.8.jar ./xmlrpc-2.0.1.jar"/>
+			</manifest>
+   	</jar>
+	</target>
+
+</project>
