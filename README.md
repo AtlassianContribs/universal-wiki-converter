@@ -14,7 +14,16 @@ To run the newly built UWC
 ## using Maven
 
 ```shell
-$ mvn install:install-file -DgroupId=com.atlassian.confluence -DartifactId=confluence-xmlrpc -Dversion=5.2.0 -Dfile=lib/confluence-xmlrpc-wrapper-v5.2.0.jar -Dpackaging=jar
+$ mvn install:install-file -DgroupId=com.atlassian.confluence \
+                           -DartifactId=confluence-xmlrpc \
+                           -Dversion=5.2.0 \
+                           -Dfile=lib/confluence-xmlrpc-wrapper-v5.2.0.jar \
+                           -Dpackaging=jar
+$ mvn install:install-file -DgroupId=net.antonioshome.swing \
+                           -DartifactId=treewrapper \
+                           -Dversion=1.1.1.1 \
+                           -Dfile=lib/treewrapper.jar \
+                           -Dpackaging=jar
 ```
 
 ## More
