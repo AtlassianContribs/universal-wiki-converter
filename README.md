@@ -24,6 +24,12 @@ mvn install:install-file -DgroupId=net.antonioshome.swing \
                            -Dversion=1.1.1.1 \
                            -Dfile=lib/treewrapper.jar \
                            -Dpackaging=jar
+mvn install:install-file -DgroupId=org.jvnet.substance \
+                           -DartifactId=substance \
+                           -Dversion=2.3final \
+                           -Dfile=lib/substance.jar \
+                           -Dpackaging=jar
+
 ```
 
 ## More

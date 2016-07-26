@@ -140,5 +140,15 @@
     	<artifactId>commons-digester3</artifactId>
     	<version>3.2</version>
 		</dependency>
+		<dependency>
+    	<groupId>net.antonioshome.swing</groupId>
+    	<artifactId>treewrapper</artifactId>
+    	<version>1.1.1.1</version>
+		</dependency>
+		<dependency>
+    	<groupId>org.jvnet.substance</groupId>
+    	<artifactId>substance</artifactId>
+    	<version>2.3final</version>
+		</dependency>
 	</dependencies>
 </project>
